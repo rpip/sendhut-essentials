@@ -1,0 +1,28 @@
+[[source]]
+
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+name = "pypi"
+
+
+[dev-packages]
+
+factory-boy = "*"
+faker = "*"
+
+
+[packages]
+
+dj-database-url = "==0.4.2"
+django-debug-toolbar = "==1.8"
+django-extensions = "==1.7.9"
+django = "==1.11.7"
+"psycopg2" = "==2.7.1"
+gunicorn = "==19.7.1"
+newrelic = "==2.86.3.70"
+werkzeug = "*"
+django-taggit = "*"
+sorl-thumbnail = "*"
+python-decouple = "*"
+whitenoise = "*"
+faker = "*"

@@ -1,0 +1,47 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Sendhut - Delivering Happiness</title>
+    <!-- Custom styles -->
+    <link rel="stylesheet" href="{% static 'dist/css/main.css' %}">
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'images/favicon-16x16' %}">
+  </head>
+  <body>
+    {% include "partials/top_nav.html" %}
+    <main role="main" class="container" id="home">
+      <div class="page-header">
+        <h1 class="bold">What's on the menu?</h1>
+      </div>
+      <div id="content">
+        {% include "partials/lunch_categories.html" %}
+
+        {% include "partials/popular_tags.html" %}
+      </div>
+    </main><!--// main -->
+
+    <section class="page-aside-bottom">
+      <div class="container">
+        {% include "partials/office_lunch_promo.html" %}
+
+        {% include "partials/download_app.html" %}
+      </div>
+    </section>
+
+    {% include "partials/footer.html" %}
+
+    <script src="{% static 'vendor/jquery.js' %}"></script>
+    <script src="{% static 'vendor/popper.js' %}"></script>
+    <script src="{% static 'vendor/bootstrap.js' %}"></script>
+    <script src="{% static 'vendor/scrollPosStyler.js' %}"></script>
+    <script src="{% static 'vendor/holder.js' %}"></script>
+
+    <script src="{% static 'dist/js/app.js' %}"></script>
+    <!-- endbuild -->
+  </body>
+
+</html>

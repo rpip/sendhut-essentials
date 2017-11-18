@@ -1,0 +1,160 @@
+// TODO:
+// https://github.com/mozilla/bedrock/blob/79850bae56d320ed89934028e085db9beba360ea/gulpfile.js
+// https://stackoverflow.com/questions/26085364/is-it-possible-to-configure-gulp-livereload-for-django
+// https://stackoverflow.com/a/37901414
+import gulp from 'gulp';
+import autoprefixer from 'autoprefixer';
+import browserify from 'browserify';
+import watchify from 'watchify';
+import source from 'vinyl-source-stream';
+import buffer from 'vinyl-buffer';
+import eslint from 'gulp-eslint';
+import babelify from 'babelify';
+import uglify from 'gulp-uglify';
+import rimraf from 'rimraf';
+import notify from 'gulp-notify';
+import browserSync, { reload } from 'browser-sync';
+import sourcemaps from 'gulp-sourcemaps';
+import postcss from 'gulp-postcss';
+import rename from 'gulp-rename';
+import nested from 'postcss-nested';
+import vars from 'postcss-simple-vars';
+import extend from 'postcss-simple-extend';
+import cssnano from 'cssnano';
+import htmlReplace from 'gulp-html-replace';
+import imagemin from 'gulp-imagemin';
+import pngquant from 'imagemin-pngquant';
+import runSequence from 'run-sequence';
+import ghPages from 'gulp-gh-pages';
+import sass from 'gulp-sass';
+
+var spawn = require('child_process').spawn;
+
+const paths = {
+  bundle: 'app.js',
+  srcCss: 'styles/**',
+  srcImg: 'images/**',
+  srcLint: ['js/*.js'],
+  dist: 'dist',
+  distCss: 'dist/css',
+  distJs: 'dist/js',
+  distImg: 'dist/images'
+};
+
+const customOpts = {
+  debug: true,
+  cache: {},
+  packageCache: {}
+};
+
+gulp.task('clean', cb => {
+  rimraf('dist', cb);
+});
+
+gulp.task('styles', () => {
+  gulp.src(paths.srcCss)
+    .pipe(rename({
+      extname: '.css'
+    }))
+    .pipe(sourcemaps.init())
+    .pipe(sass({
+      outputStyle: 'compressed'
+    }).on('error', sass.logError))
+    .pipe(postcss([vars, extend, nested, autoprefixer, cssnano]))
+    .pipe(sourcemaps.write('.'))
+    .pipe(gulp.dest(paths.dist))
+    .pipe(reload({
+      stream: true
+    }));
+});
+
+gulp.task('htmlReplace', () => {
+  gulp.src('index.html')
+    .pipe(htmlReplace({
+      css: 'styles/main.css',
+      js: 'js/app.js'
+    }))
+    .pipe(gulp.dest(paths.dist));
+});
+
+gulp.task('images', () => {
+  gulp.src(paths.srcImg)
+    .pipe(imagemin({
+      progressive: true,
+      svgoPlugins: [{
+        removeViewBox: false
+      }],
+      use: [pngquant()]
+    }))
+    .pipe(gulp.dest(paths.distImg));
+});
+
+// Copy vendor files from /node_modules into /vendor
+// NOTE: requires `npm install` before running!
+gulp.task('copy', function() {
+  gulp.src([
+    'node_modules/bootstrap/dist/**/*',
+    '!**/npm.js',
+    '!**/bootstrap-theme.*',
+    '!**/*.map'
+  ]).pipe(gulp.dest('vendor/bootstrap'))
+
+  gulp.src(['node_modules/bootstrap/scss/**/*'])
+    .pipe(gulp.dest('styles/bootstrap'))
+
+  gulp.src([
+    'node_modules/jquery/dist/jquery.js',
+    'node_modules/jquery/dist/jquery.min.js'
+  ]).pipe(gulp.dest('vendor/jquery'))
+
+  gulp.src([
+    'node_modules/popper.js/dist/umd/popper.js',
+    'node_modules/popper.js/dist/umd/popper.min.js'
+  ]).pipe(gulp.dest('vendor/popper'))
+
+  gulp.src(['node_modules/scrollpos-styler/scrollPosStyler.js'])
+    .pipe(gulp.dest('vendor/scrollpos-styler'))
+
+  gulp.src(['node_modules/source-sans-pro/**/*'])
+    .pipe(gulp.dest('vendor/source-sans-pro'))
+});
+
+gulp.task('lint', () => {
+  gulp.src(paths.srcLint)
+    .pipe(eslint())
+    .pipe(eslint.format());
+});
+
+gulp.task('watchTask', () => {
+  gulp.watch(paths.srcCss, ['styles']);
+  gulp.watch(paths.srcLint, ['lint']);
+});
+
+gulp.task('watch', cb => {
+  runSequence('clean', ['watchTask', 'styles', 'lint', 'images'], cb);
+});
+
+gulp.task('serve:backend', function() {
+  var devServerPort = process.env.PORT || 8000;
+  process.env.PYTHONUNBUFFERED = 1;
+  process.env.PYTHONDONTWRITEBITECODE = 1;
+  spawn('python', ['../manage.py', 'runserver', '0.0.0.0:' + devServerPort], {
+    stdio: 'inherit'
+  });
+});
+
+gulp.task('collectstatic', function() {
+  return gulp.src('static/**/*.*')
+    .pipe(changed('/static/'))
+    .pipe(shell([
+      'python ../manage.py collectstatic --noinput --ignore=node_modules'
+    ]));
+});
+
+gulp.task('build', cb => {
+  process.env.NODE_ENV = 'production';
+  runSequence('clean', ['copy', 'styles', 'htmlReplace', 'images'], cb);
+});
+
+// Default task
+gulp.task('default', ['serve:backend', 'watch']);

@@ -1,0 +1,34 @@
+{
+  "_from": "git://github.com/adobe-fonts/source-sans-pro.git#release",
+  "_id": "source-sans-pro@2.20.0",
+  "_inBundle": false,
+  "_integrity": "sha1-LHBW91IJ7SHSMzGtOj2xa+ZkEc4=",
+  "_location": "/source-sans-pro",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "git",
+    "raw": "source-sans-pro@git://github.com/adobe-fonts/source-sans-pro.git#release",
+    "name": "source-sans-pro",
+    "escapedName": "source-sans-pro",
+    "rawSpec": "git://github.com/adobe-fonts/source-sans-pro.git#release",
+    "saveSpec": "git://github.com/adobe-fonts/source-sans-pro.git#release",
+    "fetchSpec": "git://github.com/adobe-fonts/source-sans-pro.git",
+    "gitCommittish": "release"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "git://github.com/adobe-fonts/source-sans-pro.git#b58b28f7d152cd5811593f6a3ce44ab98d7f662c",
+  "_spec": "source-sans-pro@git://github.com/adobe-fonts/source-sans-pro.git#release",
+  "_where": "/Users/yao/dev/sendhut/static",
+  "bugs": {
+    "url": "https://github.com/adobe-fonts/source-sans-pro/issues"
+  },
+  "bundleDependencies": false,
+  "deprecated": false,
+  "description": "Source Sans Pro is a set of OpenType fonts that have been designed to work well in user interface (UI) environments. In addition to a functional OpenType font, this open source project provides all of the source files that were used to build this OpenType font by using the AFDKO makeotf tool.",
+  "homepage": "https://github.com/adobe-fonts/source-sans-pro",
+  "license": "OFL-1.1",
+  "name": "source-sans-pro",
+  "version": "2.20.0"
+}

@@ -1,0 +1,200 @@
+$rem-fallback: true;
+$blue: #00a4db;
+$flinto-blue: #365A87;
+$black: #2e3333;
+$dark: #737373;
+$happy: #ffeae4;
+$grey: #f5f5f5;
+
+$body-color: $black;
+
+@import "../fonts/source-sans-pro/source-sans-pro.css";
+@import "bootstrap/bootstrap";
+@import "_rem";
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  @include rem(font-size, 14px);
+  font-weight: 500;
+  min-height: 75rem;
+  padding-top: 8rem;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.7em;
+  font-family: 'Source Sans Pro', Helvetica, Arial, Lucida, sans-serif;
+  @include rem(margin-bottom, 60px); /* Margin bottom by footer height */
+  /*-apple-system, BlinkMacSystemFont, */
+}
+
+.navbar {
+  @include rem(border-bottom, 1px solid #e6e6e6);
+  background-color: $white;
+
+  #contact-tel {
+    @include rem(line-height, 20px);
+    @include rem(font-size, 15px);
+    li {
+      @include rem(padding-top, 7px);
+      @include rem(padding-right, 10px);
+    }
+  }
+}
+
+.navbar-brand {
+  img {
+    @include rem(height, 25px)
+  }
+  color: #001625;
+
+  .navbar-toggler-icon {
+    color: #000
+  }
+}
+
+.page-header {
+  h1 {
+    @include rem(margin-bottom, 35px)
+  }
+}
+
+
+.card-row {
+  @extend .row;
+  @include rem(padding-bottom, 30px);
+
+  .card {
+    border: none;
+  }
+}
+
+#popular-tags {
+
+  .badge {
+    float: left;
+    @include rem(padding, 10px);
+    padding-left: 0;
+  }
+
+  .tag-row {
+    @include rem(padding-top, 20px);
+
+    .badge {
+      @include rem(font-size, 15px);
+    }
+  }
+}
+
+main {
+  #content {
+    @include rem(padding-bottom, 30px);
+  }
+}
+
+.page-aside-bottom {
+  @extend .container;
+  @include rem(padding-bottom, 30px)
+}
+
+#marketing-business {
+  background-color: $happy;
+
+  #happiness-pitch {
+    @extend .jumbotron;
+    background-color: transparent;
+    @include rem(padding-bottom, 10px);
+
+    .card {
+      background-color: transparent;
+      border: 0;
+    }
+  }
+
+  #signup {
+    background-color: $white;
+    @extend .jumbotron;
+
+    #team-lunch {
+      background: $white url("../images/team-lunch.png") no-repeat top;
+      @include rem(width, 380px);
+      @include rem(height, 250px);
+    }
+  }
+}
+
+#footer-app-download {
+  @include rem(margin-top, 30px);
+  background-color: $grey;
+  @include rem(padding, 6px);
+
+  #always-tap {
+    background: transparent url("../images/meal-always-tap.png") no-repeat top;
+    @include rem(width, 160px);
+    @include rem(height, 160px);
+  }
+
+  .p-20 {
+    @include rem(padding, 14px)
+  }
+}
+
+footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  @include rem(height, 60px); /* Set the fixed height of the footer here */
+  @include rem(line-height, 60px); /* Vertically center the text there */
+  @include rem(border-top, 1px solid $grey);
+
+  ul#footer-nav {
+    margin-bottom: 0;
+  }
+}
+
+/* Breakpoint for small viewport */
+@include media-breakpoint-down(sm) {
+
+  h1, .h1 { font-size: .8 * $h1-font-size; }
+
+  #popular-tags {
+    display: none
+  }
+
+  #always-tap {
+    display: none
+  }
+}
+
+
+// miscellaneous
+.bold {
+  font-weight: bold;
+}
+
+.bg-happy {
+  background-color: $happy;
+}
+
+.icons {
+  text-align: center;
+}
+
+.icon {
+  width: 20px;
+  margin: 7px 9px 9px;
+}
+
+.form-control:focus {
+  border-color: $input-border-color !important;
+  -webkit-box-shadow: none!important;
+  -moz-box-shadow: none!important;
+  box-shadow: none!important;
+}
+
+.badge-happy {
+  @extend .badge;
+  @extend .bg-happy;
+}

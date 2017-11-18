@@ -1,0 +1,72 @@
+# Domains
+- Order
+- Payment
+- Item
+
+blocks
+-------
+- page-header
+- title
+- main
+- stylesheet
+- javascript
+- flash-messages
+- page-aside-bottom
+
+# promote_to_frontpage(item, category)
+
+specials
+----------
+if today special, then expires after after 1pm
+if tomorrow special then display after 1pm
+
+our picks
+-----------
+deals.
+
+variable expirations: local gems, our picks, etc
+
+
+
+class Order(BaseModel):
+
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
+    reference = models.CharField(max_length=6, unique=True)
+
+    class Meta:
+        db_table = "order"
+
+
+class OrderLine(BaseModel):
+
+    item = models.ForeignKey(Item)
+    quantity = models.IntegerField()
+    delivery_date = models.DateField(default=datetime.now().date)
+    extras = models.TextField()
+    # special instructions
+    special_instructions = models.TextField(null=True, blank=True)
+    order = models.ForeignKey(Order)
+
+    class Meta:
+        db_table = "team_member"
+
+
+
+Voucher
+
+- who pays for food
+- set daily limit for the week (or selected days of the week)
+- create different vouchers for different groups. E.g, Andela Snr devs vs trainees
+- can also be open budget voucher. No limits ( default). Works for debozgini
+- individual can prepay for voucher as gift or personal weekly lunch. Great discounts
+send coucher as gift
+use voucher for group orders. Set as split bill or voucher creator pays
+Scan voucher to get lunch
+Lunch pack for students
+
+Class Voucher():
+ payment_mode = prepaid | postpaid
+ payee = user
+ spending_limit = SpendingLimit(selected days or week)
+ redeemers = [users]
+ expires = defaults to always valid. can set specific date to expire
