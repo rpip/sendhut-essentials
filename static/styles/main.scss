@@ -73,17 +73,13 @@ body {
 
 #popular-tags {
 
-  .badge {
-    float: left;
-    @include rem(padding, 10px);
-    padding-left: 0;
-  }
-
   .tag-row {
     @include rem(padding-top, 20px);
 
     .badge {
+      float: left;
       @include rem(font-size, 15px);
+      @include rem(padding, 8px);
     }
   }
 }
