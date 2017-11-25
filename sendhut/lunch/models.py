@@ -1,15 +1,45 @@
 from uuid import uuid4
-from random import choice
 import six
 
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
+from django.utils.text import slugify
 from taggit.managers import TaggableManager
 from djmoney.models.fields import MoneyField
 from sorl.thumbnail import ImageField
 
 from sendhut.utils import sane_repr, image_upload_path
 from sendhut.db import BaseModel
+
+
+class Basket():
+    # TODO(yao): Research reservoir sampling
+    # Food categories
+    LOCAL_GEMS = 1
+    CONTINENTAL = 2
+    OUR_PICKS = 3
+    TODAY_SPECIAL = 4
+    TOMORROW_SPECIAL = 5
+    FRUITS_AND_DRINKS = 6
+
+    FOOD_CATEGORIES = (
+        (LOCAL_GEMS, 'Local gems'),
+        (CONTINENTAL, 'Continental'),
+        (OUR_PICKS, 'Our Picks'),
+        (TODAY_SPECIAL, 'Today\'s Special'),
+        (TOMORROW_SPECIAL, 'Tomorrow\'s Special'),
+        (FRUITS_AND_DRINKS, 'Fruits and Drinks')
+    )
+
+    @classmethod
+    def categories_slugs(cls):
+        return [(x, slugify(y)) for x, y in cls.FOOD_CATEGORIES]
+
+    @classmethod
+    def filter_by_category_slugs(cls, slugs):
+        categories = {v: k for k, v in dict(cls.categories_slugs()).items()}
+        categories = [categories[x] for x in slugs]
+        return Item.objects.filter(categories__contains=[categories])
 
 
 class Partner(BaseModel):
@@ -77,26 +107,14 @@ class Item(BaseModel):
         (PALEO, "Paleo")
     ]
 
-    # Food categories
-    LOCAL_GEMS = 1
-    CONTINENTAL = 2
-    OUR_PICKS = 3
-    TODAY_SPECIAL = 4
-    TOMORROW_SPECIAL = 5
-    FRUITS_AND_DRINKS = 6
-
-    FOOD_CATEGORIES = (
-        (LOCAL_GEMS, 'Local Gems'),
-        (CONTINENTAL, 'Continental'),
-        (OUR_PICKS, 'Our Picks'),
-        (TODAY_SPECIAL, 'Today\'s Special'),
-        (TOMORROW_SPECIAL, 'Tomorrow\'s Special'),
-        (FRUITS_AND_DRINKS, 'Fruits and Drinks')
-    )
-    category = models.IntegerField(
-        choices=FOOD_CATEGORIES,
-        null=True,
-        blank=True
+    categories = ArrayField(
+        models.IntegerField(
+            choices=Basket.FOOD_CATEGORIES,
+            null=True,
+            blank=True
+        ),
+        blank=True,
+        null=True
     )
     menu = models.ForeignKey(Menu, related_name='items')
     name = models.CharField(max_length=60)
@@ -107,14 +125,12 @@ class Item(BaseModel):
             choices=DIETARY_RESTRICTIONS,
             null=True,
             blank=True
-        ))
+        ),
+        null=True,
+        blank=True
+    )
     tags = TaggableManager()
     images = models.ManyToManyField('Image', related_name='items', through='ItemImage')
-
-    @classmethod
-    def get_random_food_category(cls):
-        _ids = [_id for (name, _id) in cls.FOOD_CATEGORIES]
-        return choice(_ids)
 
     class Meta:
         db_table = "item"

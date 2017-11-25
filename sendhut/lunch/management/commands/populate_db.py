@@ -1,12 +1,19 @@
-from random import choice
+from random import choice, shuffle
 from django.core.management.base import BaseCommand, CommandError
 
-from sendhut.lunch.models import Item
+from sendhut.lunch.models import Basket
 from ._factory import (
     UserFactory, ItemFactory,
     MenuFactory, ItemImageFactory, SideMenuFactory,
     SideItemFactory, ImageFactory, PartnerFactory
 )
+
+
+def get_random_food_categories():
+    n = choice(range(1, 4))
+    categories = [k for k, _ in Basket.FOOD_CATEGORIES]
+    shuffle(categories)
+    return categories[:n]
 
 
 class Command(BaseCommand):
@@ -29,10 +36,9 @@ class Command(BaseCommand):
         for index, item in enumerate(items):
             side_menus = SideMenuFactory.create_batch(2, item=item)
             ItemImageFactory.create(item=item, image=choice(images))
-            category = Item.get_random_food_category()
-            item.category = category
-            toss = choice([True, False])
-            if toss:
+            item.categories = get_random_food_categories()
+            item.save()
+            if choice([True, False]):
                 side_menus_nbr = len(side_menus)
                 index = side_menus_nbr-1 if index >= side_menus_nbr else index
                 SideItemFactory.create_batch(
@@ -52,3 +58,8 @@ class Command(BaseCommand):
             self._setup_partner(partner)
 
         self.stdout.write(self.style.SUCCESS("DONE"))
+
+
+
+# create_fixture(partner, menu_config)
+# menu_config = {menu_1: [category, n_items], menu_2: [category, n_items]}

@@ -1,8 +1,7 @@
 from random import choice, shuffle
-from pathlib import Path
+import glob
 
 from django.core.files import File
-from django.conf import settings
 from faker import Faker
 from factory import (
     DjangoModelFactory, lazy_attribute, Sequence,
@@ -72,8 +71,7 @@ FOOD_LOCATIONS = (
 
 
 FOOD_IMAGES = [
-    x.absolute() for x in
-    Path(settings.MEDIA_ROOT, 'food-samples').iterdir()
+    glob.glob('./static/images/fixtures/*/*')[0]
 ]
 
 
