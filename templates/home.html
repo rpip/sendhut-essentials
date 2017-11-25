@@ -1,5 +1,17 @@
 {% extends "base.html" %}
 
+{% block page-header %}
+  <h1 class="bold">What's on the menu?</h1>
+{% endblock %}
+
 {% block content %}
+
+  {% include "partials/lunch_categories.html" %}
+
+  {% include "partials/popular_tags.html" %}
+
+  {% include "partials/office_lunch_promo.html" %}
+
+  {% include "partials/download_app.html" %}
 
 {% endblock %}
