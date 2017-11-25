@@ -1,7 +1,22 @@
+# functionality
+Login via email or phone
+Logout
+Add to cart
+Place order
+Daily reminder
+Browse menu
+Heroku setup
+Intercom
+Payment
+Django admin
+
+
+
 # Domains
 - Order
 - Payment
 - Item
+- Fulfilment
 
 blocks
 -------
@@ -13,18 +28,7 @@ blocks
 - flash-messages
 - page-aside-bottom
 
-# promote_to_frontpage(item, category)
-
-specials
-----------
-if today special, then expires after after 1pm
-if tomorrow special then display after 1pm
-
-our picks
------------
-deals.
-
-variable expirations: local gems, our picks, etc
+# promote_to_frontpage(item, category, expiration=None)
 
 
 

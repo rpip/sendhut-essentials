@@ -9,7 +9,6 @@ echo "----------------------------------------------------------"
 # CREATE EXTENSION postgis;
 
 psql postgres <<EOF
-
   CREATE DATABASE sendhut;
 
   CREATE USER sendhut WITH PASSWORD 'h4ppy!';
@@ -20,9 +19,11 @@ psql postgres <<EOF
 
   ALTER ROLE sendhut SET timezone TO 'UTC';
 
-  GRANT ALL PRIVILEGES ON DATABASE sendhut TO sendhut;
-
   ALTER USER sendhut CREATEDB;
+
+  ALTER DATABASE sendhut OWNER TO sendhut;
+
+  GRANT ALL PRIVILEGES ON DATABASE sendhut TO sendhut;
 EOF
 
 echo "----------------------------------------------------------"

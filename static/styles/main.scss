@@ -61,6 +61,9 @@ body {
   }
 }
 
+img.card-img-top.img-fluid {
+  @include rem(height, 220px);
+}
 
 .card-row {
   @extend .row;
@@ -70,6 +73,7 @@ body {
     border: none;
   }
 }
+
 
 #popular-tags {
 

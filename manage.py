@@ -2,10 +2,12 @@
 import os
 import sys
 
+from decouple import config
+
 
 if __name__ == "__main__":
 
-    env = os.getenv('ENVIRONMENT')
+    env = config('ENVIRONMENT')
     settings = 'sendhut.settings.{}'.format(env)
 
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', settings)

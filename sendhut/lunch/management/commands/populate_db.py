@@ -1,9 +1,9 @@
 from random import choice
 from django.core.management.base import BaseCommand, CommandError
 
-from sendhut.lunch.models import ItemImage
+from sendhut.lunch.models import Item
 from ._factory import (
-    UserFactory, AddressFactory, ItemFactory,
+    UserFactory, ItemFactory,
     MenuFactory, ItemImageFactory, SideMenuFactory,
     SideItemFactory, ImageFactory, PartnerFactory
 )
@@ -12,54 +12,43 @@ from ._factory import (
 class Command(BaseCommand):
     help = 'Populates the database with dummy Sendhut data'
 
+    def _setup_partner(self, partner, menus_nbr=2):
+        self.stdout.write(self.style.SUCCESS("Creating menus"))
+        menus = MenuFactory.create_batch(menus_nbr, partner=partner)
+        for menu in menus:
+            self._setup_partner_menu(menu)
+
+        self.stdout.write(self.style.SUCCESS("Setup done for partner"))
+
+    def _setup_partner_menu(self, menu):
+        self.stdout.write(self.style.SUCCESS("Creating menu items"))
+        items = ItemFactory.create_batch(choice(range(8, 20)), menu=menu)
+
+        self.stdout.write(self.style.SUCCESS("Creating side menus"))
+        images = ImageFactory.create_batch(50)
+        for index, item in enumerate(items):
+            side_menus = SideMenuFactory.create_batch(2, item=item)
+            ItemImageFactory.create(item=item, image=choice(images))
+            category = Item.get_random_food_category()
+            item.category = category
+            toss = choice([True, False])
+            if toss:
+                side_menus_nbr = len(side_menus)
+                index = side_menus_nbr-1 if index >= side_menus_nbr else index
+                SideItemFactory.create_batch(
+                    choice([3, 5]), menu=side_menus[index])
+
+        self.stdout.write(self.style.SUCCESS("Creating side menu items"))
+
     def handle(self, *args, **options):
         # raise CommandError()
         self.stdout.write(self.style.SUCCESS("Creating Partners"))
-        users = UserFactory.create_batch(10)
+        # TODO(yao): Add orders
+        UserFactory.create_batch(10)
 
         self.stdout.write(self.style.SUCCESS("Creating partners"))
-        partners = PartnerFactory.create_batch(3)
+        partners = PartnerFactory.create_batch(10)
+        for partner in partners:
+            self._setup_partner(partner)
 
-        self.stdout.write(self.style.SUCCESS("Creating menus"))
-        menu1 = MenuFactory.create_batch(2, partner=choice(partners))
-        menu2 = MenuFactory.create_batch(4, partner=choice(partners))
-        menu3 = MenuFactory.create_batch(2, partner=choice(partners))
-        menu4 = MenuFactory.create_batch(3, partner=choice(partners))
-        menu5 = MenuFactory.create_batch(2, partner=choice(partners))
-
-        self.stdout.write(self.style.SUCCESS("Creating menu items"))
-        items = ItemFactory.create_batch(choice(range(8, 20)), menu=choice(menu1))
-        items += ItemFactory.create_batch(choice(range(3, 6)), menu=choice(menu1))
-
-        items += ItemFactory.create_batch(choice(range(12, 16)), menu=choice(menu2))
-        items += ItemFactory.create_batch(choice(range(2, 7)), menu=choice(menu2))
-
-        items += ItemFactory.create_batch(choice(range(5, 8)), menu=choice(menu3))
-        items += ItemFactory.create_batch(choice(range(4, 6)), menu=choice(menu3))
-
-        items += ItemFactory.create_batch(choice(range(8, 15)), menu=choice(menu4))
-        items += ItemFactory.create_batch(choice(range(5, 9)), menu=choice(menu4))
-
-        items += ItemFactory.create_batch(choice(range(9, 12)), menu=choice(menu5))
-        items += ItemFactory.create_batch(choice(range(5, 8)), menu=choice(menu5))
-
-        self.stdout.write(self.style.SUCCESS("Creating side menus"))
-        side_menus = []
-        for x in range(0, 10):
-            side_menus += SideMenuFactory.create_batch(2, item=items[x])
-
-        self.stdout.write(self.style.SUCCESS("Creating side menu items"))
-        side_menu_items = []
-        for x in range(0, 10):
-            toss = choice([True, False])
-            if toss:
-                side_menu_items += SideItemFactory.create_batch(choice([3, 5]),
-                                                                menu=side_menus[x])
-
-        images = ImageFactory.create_batch(40)
-        for x in range(0, 30):
-            ItemImageFactory.create(item=items[x], image=images[x])
-
-        self.stdout.write(self.style.SUCCESS("Created {} users".format(len(users))))
-
-        self.stdout.write(self.style.SUCCESS("Created {} items".format(len(items))))
+        self.stdout.write(self.style.SUCCESS("DONE"))

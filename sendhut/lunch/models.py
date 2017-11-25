@@ -1,4 +1,5 @@
 from uuid import uuid4
+from random import choice
 import six
 
 from django.db import models
@@ -75,6 +76,28 @@ class Item(BaseModel):
         (VEGAN, "Vegan"),
         (PALEO, "Paleo")
     ]
+
+    # Food categories
+    LOCAL_GEMS = 1
+    CONTINENTAL = 2
+    OUR_PICKS = 3
+    TODAY_SPECIAL = 4
+    TOMORROW_SPECIAL = 5
+    FRUITS_AND_DRINKS = 6
+
+    FOOD_CATEGORIES = (
+        (LOCAL_GEMS, 'Local Gems'),
+        (CONTINENTAL, 'Continental'),
+        (OUR_PICKS, 'Our Picks'),
+        (TODAY_SPECIAL, 'Today\'s Special'),
+        (TOMORROW_SPECIAL, 'Tomorrow\'s Special'),
+        (FRUITS_AND_DRINKS, 'Fruits and Drinks')
+    )
+    category = models.IntegerField(
+        choices=FOOD_CATEGORIES,
+        null=True,
+        blank=True
+    )
     menu = models.ForeignKey(Menu, related_name='items')
     name = models.CharField(max_length=60)
     description = models.TextField()
@@ -87,6 +110,11 @@ class Item(BaseModel):
         ))
     tags = TaggableManager()
     images = models.ManyToManyField('Image', related_name='items', through='ItemImage')
+
+    @classmethod
+    def get_random_food_category(cls):
+        _ids = [_id for (name, _id) in cls.FOOD_CATEGORIES]
+        return choice(_ids)
 
     class Meta:
         db_table = "item"
