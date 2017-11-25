@@ -92,11 +92,7 @@ main {
   #content {
     @include rem(padding-bottom, 30px);
   }
-}
-
-.page-aside-bottom {
-  @extend .container;
-  @include rem(padding-bottom, 30px)
+  @include rem(margin-bottom, 120px)
 }
 
 #marketing-business {
