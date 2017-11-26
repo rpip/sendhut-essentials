@@ -4,9 +4,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
+    <meta name="description" content="Delivering Happiness | Good ">
     <meta name="author" content="">
-    <title>Sendhut - Delivering Happiness</title>
+    <title>Sendhut | {{ page_title }}</title>
     <!-- Custom styles -->
     <link rel="stylesheet" href="{% static 'dist/css/main.css' %}">
     <link rel="shortcut icon" type="image/x-icon" href="{% static 'images/favicon-16x16' %}">
@@ -15,7 +15,9 @@
     {% include "partials/top_nav.html" %}
     <main role="main" class="container" id="home">
       <div class="page-header">
-        {% block page_header %} {% endblock %}
+        <h1 class="bold">
+          {% block page_header %} {% endblock %}
+        </h1>
       </div>
       <div id="content">
         {% block content %}{% endblock %}
@@ -31,6 +33,12 @@
     <script src="{% static 'vendor/holder.js' %}"></script>
 
     <script src="{% static 'dist/js/app.js' %}"></script>
+
+    <script type="text/javascript">
+      $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+      })
+    </script>
     <!-- endbuild -->
   </body>
 

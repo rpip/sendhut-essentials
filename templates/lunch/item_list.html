@@ -1,1 +1,53 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+{% load lunch_extras %}
+{% load thumbnail %}
+
+{% block page_header %}
+  {{ page_title }}
+{% endblock %}
+
+{% block content %}
+  <div class="row food-list">
+    <div class="container">
+      {% for item in items %}
+        <div class="card">
+          {% thumbnail item.primary_image "310x172" crop="center" as im %}
+          <img class="card-img-top img-fluid"
+               src="{{ im.url }}"
+               alt="{{ item.title }"
+               width="{{ im.width }}"
+               height="{{ im.height }}">
+             {% endthumbnail %}
+
+          <div class="card-body">
+            <h5 class="card-title">{{ item.name }}</h5>
+            <p class="card-text">
+              <div class="row">
+                <div class="container">
+                  <ul class="list-inline float-left">
+                    {% for x in item.dietary_labels %}
+                      <li class="list-inline-item diet-icon diet-{{ x|dietary_label|slugify }}"
+                          data-toggle="tooltip"
+                          data-placement="bottom"
+                          title="{{ x|dietary_label }}">
+                          {{ x|dietary_label|dietary_label_short }}
+                      </li>
+                    {% endfor %}
+                  </ul>
+                  <span class="float-right text-muted">
+                    {{ item.menu.partner.name }}
+                  </span>
+                </div>
+              </div>
+              <div class="row">
+                <div class="container">
+                  <div class="avg-time">{{ item.menu.partner|avg_delivery_time }}</div>
+                </div>
+              </div>
+            </p>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}
