@@ -1,3 +1,4 @@
+from random import choice
 from uuid import uuid4
 import six
 
@@ -32,14 +33,20 @@ class Basket():
     )
 
     @classmethod
-    def categories_slugs(cls):
-        return [(x, slugify(y)) for x, y in cls.FOOD_CATEGORIES]
+    def category_slugs(cls):
+        cats = dict([(x, slugify(y)) for x, y in cls.FOOD_CATEGORIES])
+        return {v: k for k, v in cats.items()}
 
     @classmethod
     def filter_by_category_slugs(cls, slugs):
-        categories = {v: k for k, v in dict(cls.categories_slugs()).items()}
+        categories = cls.category_slugs()
         categories = [categories[x] for x in slugs]
         return Item.objects.filter(categories__contains=[categories])
+
+    @classmethod
+    def format_slug(cls, slug):
+        category_id = cls.category_slugs()[slug]
+        return [v for k, v in cls.FOOD_CATEGORIES if k == category_id][0]
 
 
 class Partner(BaseModel):
@@ -94,17 +101,21 @@ class Menu(BaseModel):
 
 class Item(BaseModel):
 
+    # TODO(yao): Generate thumbnails on save
+
     # dietary restrictions
     GLUTEN_FREE = 0
     DAIRY_FREE = 1
     VEGAN = 2
-    PALEO = 3
+    VEGETARIAN = 3
+    HALAL = 4
 
     DIETARY_RESTRICTIONS = [
         (GLUTEN_FREE, "Gluten Free"),
         (DAIRY_FREE, "Dairy Free"),
         (VEGAN, "Vegan"),
-        (PALEO, "Paleo")
+        (VEGETARIAN, "Vegetarian"),
+        (HALAL, "Halal")
     ]
 
     categories = ArrayField(
@@ -132,6 +143,17 @@ class Item(BaseModel):
     tags = TaggableManager()
     images = models.ManyToManyField('Image', related_name='items', through='ItemImage')
 
+    @classmethod
+    def dietary_label_text(cls, label_id):
+        labels = {k: v for k, v in cls.DIETARY_RESTRICTIONS}
+        return labels[label_id]
+
+    @property
+    def primary_image(self):
+        # TODO(yao): Generate fixtures with primary image
+        im = choice(self.images.all())
+        return im.image
+
     class Meta:
         db_table = "item"
 
@@ -142,6 +164,7 @@ class Image(BaseModel):
 
     image = ImageField(upload_to=image_upload_path)
     thumbnail_path = models.CharField(max_length=200)
+    is_primary = models.BooleanField(default=False)
 
     class Meta:
         db_table = "image"
