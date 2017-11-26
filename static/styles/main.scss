@@ -5,12 +5,23 @@ $black: #2e3333;
 $dark: #737373;
 $happy: #ffeae4;
 $grey: #f5f5f5;
-
 $body-color: $black;
+$font-family-base: 'Source Sans Pro', Helvetica, Arial, Lucida, sans-serif;
 
 @import "../fonts/source-sans-pro/source-sans-pro.css";
 @import "bootstrap/bootstrap";
 @import "_rem";
+
+@mixin circle($width, $border-color:$grey, $bg-color:$white) {
+  width: $width;
+  height: $width;
+  background: $bg-color;
+  border: 1px solid $border-color;
+  color: $border-color;
+  -webkit-border-radius: $width/2;
+  -moz-border-radius: $width/2;
+  border-radius: $width/2;
+}
 
 html {
   position: relative;
@@ -25,9 +36,8 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   line-height: 1.7em;
-  font-family: 'Source Sans Pro', Helvetica, Arial, Lucida, sans-serif;
+  // font-family: 'Source Sans Pro', Helvetica, Arial, Lucida, sans-serif;
   @include rem(margin-bottom, 60px); /* Margin bottom by footer height */
-  /*-apple-system, BlinkMacSystemFont, */
 }
 
 .navbar {
@@ -62,7 +72,7 @@ body {
 }
 
 img.card-img-top.img-fluid {
-  @include rem(height, 220px);
+  @include rem(height, 180px);
 }
 
 .card-row {
@@ -121,6 +131,32 @@ main {
   }
 }
 
+.food-list {
+  .card {
+    border: 0;
+    float: left;
+    @include rem(margin-right, 15px);
+    @include rem(margin-bottom, 10px);
+    @include rem(width, 310px);
+    @include rem(height, 341px);
+
+    .card-body{
+      padding-left: 0;
+    }
+
+    .card-title {
+      @include rem(font-size, 14px);
+    }
+  }
+}
+
+
+.avg-time {
+  display: block;
+}
+
+// FOOTER
+
 #footer-app-download {
   @include rem(margin-top, 30px);
   background-color: $grey;
@@ -165,7 +201,7 @@ footer {
 }
 
 
-// miscellaneous
+// MISCELLANEOUS
 .bold {
   font-weight: bold;
 }
@@ -193,4 +229,20 @@ footer {
 .badge-happy {
   @extend .badge;
   @extend .bg-happy;
+}
+
+.diet-icon {
+  @extend .text-center;
+}
+
+.diet-vegan, .diet-vegetarian {
+  @include circle(24px, $green);
+}
+
+.diet-halal {
+  @include circle(24px, $blue);
+}
+
+.diet-gluten-free, .diet-dairy-free {
+  @include circle(24px, $red);
 }
