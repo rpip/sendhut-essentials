@@ -9,6 +9,7 @@ name = "pypi"
 
 factory-boy = "*"
 faker = "*"
+ipython = "*"
 
 
 [packages]
@@ -22,7 +23,7 @@ gunicorn = "==19.7.1"
 newrelic = "==2.86.3.70"
 werkzeug = "*"
 django-taggit = "*"
-sorl-thumbnail = "*"
+sorl-thumbnail = {git = "git://github.com/jazzband/sorl-thumbnail.git"}
 python-decouple = "*"
 whitenoise = "*"
 faker = "*"
