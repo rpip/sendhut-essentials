@@ -1,10 +1,10 @@
 from random import choice, shuffle
 from django.core.management.base import BaseCommand, CommandError
 
-from sendhut.lunch.models import Basket
+from sendhut.lunch.models import Basket, Item
 from ._factory import (
     UserFactory, ItemFactory,
-    MenuFactory, ItemImageFactory, SideMenuFactory,
+    MenuFactory, SideMenuFactory,
     SideItemFactory, ImageFactory, PartnerFactory
 )
 
@@ -33,9 +33,11 @@ class Command(BaseCommand):
 
         self.stdout.write(self.style.SUCCESS("Creating side menus"))
         images = ImageFactory.create_batch(50)
+        image_ids = [image.id for image in images]
         for index, item in enumerate(items):
             side_menus = SideMenuFactory.create_batch(2, item=item)
-            ItemImageFactory.create(item=item, image=choice(images))
+            # create item images
+            self._create_item_images(item.id, image_ids)
             item.categories = get_random_food_categories()
             item.save()
             if choice([True, False]):
@@ -45,6 +47,16 @@ class Command(BaseCommand):
                     choice([3, 5]), menu=side_menus[index])
 
         self.stdout.write(self.style.SUCCESS("Creating side menu items"))
+
+    def _create_item_images(self, item_id, image_ids):
+        shuffle(image_ids)
+        _images = image_ids[:choice(range(2, 5))]
+        item_to_images = []
+        for _id in _images:
+            item_image = Item.images.through(item_id=item_id, image_id=_id)
+            item_to_images.append(item_image)
+
+        Item.images.through.objects.bulk_create(item_to_images, batch_size=10)
 
     def handle(self, *args, **options):
         # raise CommandError()

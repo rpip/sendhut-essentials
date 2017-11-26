@@ -4,8 +4,8 @@ import glob
 from django.core.files import File
 from faker import Faker
 from factory import (
-    DjangoModelFactory, lazy_attribute, Sequence,
-    SubFactory
+    DjangoModelFactory, SubFactory,
+    LazyFunction, lazy_attribute, Sequence,
 )
 
 from sendhut.accounts.models import User, Address
@@ -68,11 +68,6 @@ FOOD_LOCATIONS = (
     '6.464497, 3.471666',
     '6.438824, 3.442659'
 )
-
-
-FOOD_IMAGES = [
-    glob.glob('./static/images/fixtures/*/*')[0]
-]
 
 
 class UserFactory(DjangoModelFactory):
@@ -138,7 +133,11 @@ class ImageFactory(DjangoModelFactory):
     class Meta:
         model = Image
 
-    image = lazy_attribute(lambda t: File(open(choice(FOOD_IMAGES), 'rb')))
+    def _random_image():
+        images = glob.glob('./static/images/fixtures/*/*')
+        return File(open(choice(images), 'rb'))
+
+    image = LazyFunction(_random_image)
 
 
 class ItemImageFactory(DjangoModelFactory):
