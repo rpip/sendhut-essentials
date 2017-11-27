@@ -99,7 +99,7 @@ gulp.task('vendor', function() {
     'node_modules/bootstrap/dist/js/bootstrap.js',
     'node_modules/scrollpos-styler/scrollPosStyler.js',
     'node_modules/holderjs/holder.js'
-  ]).pipe(gulp.dest('vendor'))
+  ]).pipe(gulp.dest('dist/vendor'))
 
   gulp.src(['node_modules/source-sans-pro/**/*'])
     .pipe(gulp.dest('fonts/source-sans-pro'))

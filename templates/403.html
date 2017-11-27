@@ -2,20 +2,16 @@
 
 {% block title %}Forbidden (403){% endblock %}
 
+{% page_header %}CSRF Verification Failed {% endblock %}
+
 {% block content %}
-<div class="page-header">
-  <h2>{% trans "CSRF Verification Failed" %}</h2>
-</div>
+<p>A required security token was not found or was invalid.</p>
 
-<p>{% trans "A required security token was not found or was invalid." %}</p>
-
-<p>{% trans "If you're continually seeing this issue, try the following:" %}</p>
+<p>If you're continually seeing this issue, try the following:</p>
 
 <ol>
-  <li>{% trans "Clear cookies (at least for Sentry's domain)." %}</li>
-  <li>{% trans "Reload the page you're trying to submit (don't re-submit data)." %}</li>
-  <li>{% trans "Re-enter the information, and submit the form again." %}</li>
+  <li>Clear cookies (at least for Sentry's domain)</li>
+  <li>Reload the page you're trying to submit (don't re-submit data).</li>
+  <li>Re-enter the information, and submit the form again</li>
 </ol>
-
-{% endblock content %}
-{% endraw %}
+{% endblock %}

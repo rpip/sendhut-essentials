@@ -138,9 +138,11 @@ main {
   .card {
     border: 0;
     float: left;
+    cursor: pointer;
     @include rem(margin-right, 15px);
     @include rem(margin-bottom, 10px);
     @include rem(width, 310px);
+    @include rem(height, 320px);
     @include rem(padding, 3px);
     &:hover {
       background-color: $light-grey;
@@ -154,6 +156,11 @@ main {
       @include rem(font-size, 14px);
     }
   }
+}
+
+.item-detail-card {
+  @extend .card;
+  border: 0;
 }
 
 
