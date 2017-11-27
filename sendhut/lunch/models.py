@@ -129,6 +129,7 @@ class Item(BaseModel):
     )
     menu = models.ForeignKey(Menu, related_name='items')
     name = models.CharField(max_length=60)
+    slug = models.CharField(max_length=64)
     description = models.TextField()
     price = MoneyField(max_digits=10, decimal_places=2, default_currency='NGN')
     dietary_labels = ArrayField(
@@ -204,6 +205,7 @@ class SideMenu(BaseModel):
     name = models.CharField(max_length=60)
     item = models.ForeignKey(Item, related_name='side_menus')
     is_required = models.BooleanField(default=False)
+    multi_select = models.BooleanField(default=True)
 
     class Meta:
         db_table = 'side_menu'

@@ -6,14 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="Delivering Happiness | Good ">
     <meta name="author" content="">
-    <title>Sendhut | {{ page_title }}</title>
+    <title>Sendhut | {% block title %} {{ page_title }} {% endblock %}</title>
     <!-- Custom styles -->
-    <link rel="stylesheet" href="{% static 'dist/css/main.css' %}">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
     <link rel="shortcut icon" type="image/x-icon" href="{% static 'images/favicon-16x16' %}">
   </head>
-  <body>
+  <body class="{% block body_class %}{% endblock %}">
     {% include "partials/top_nav.html" %}
-    <main role="main" class="container" id="home">
+    <main role="main" class="container">
       <div class="page-header">
         <h1 class="bold">
           {% block page_header %} {% endblock %}
@@ -32,14 +32,26 @@
     <script src="{% static 'vendor/scrollPosStyler.js' %}"></script>
     <script src="{% static 'vendor/holder.js' %}"></script>
 
-    <script src="{% static 'dist/js/app.js' %}"></script>
+    <script src="{% static 'js/app.js' %}"></script>
 
     <script type="text/javascript">
       $(function () {
-        $('[data-toggle="tooltip"]').tooltip()
+
+      $('[data-toggle="tooltip"]').tooltip();
+      // (".modal .modal-title").html(pageTitle);
+
+      $('.item-popup').on('click',function(){
+        var dataURL = $(this).attr('data-href');
+        $('.modal-body').load(dataURL, function(){
+            $('#item-modal').modal({show: true});
+        });
+      });
+
       })
     </script>
     <!-- endbuild -->
   </body>
+  {% block extra_js %}{% endblock %}
+  {% block extra_css %}{% endblock %}
 
 </html>

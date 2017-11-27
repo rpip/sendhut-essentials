@@ -35,16 +35,14 @@ class Command(BaseCommand):
         images = ImageFactory.create_batch(50)
         image_ids = [image.id for image in images]
         for index, item in enumerate(items):
-            side_menus = SideMenuFactory.create_batch(2, item=item)
+            side_menus = SideMenuFactory.create_batch(choice([2, 3, 4]), item=item)
             # create item images
             self._create_item_images(item.id, image_ids)
             item.categories = get_random_food_categories()
             item.save()
             if choice([True, False]):
-                side_menus_nbr = len(side_menus)
-                index = side_menus_nbr-1 if index >= side_menus_nbr else index
                 SideItemFactory.create_batch(
-                    choice([3, 5]), menu=side_menus[index])
+                    choice([3, 9]), menu=side_menus[choice([0, 1])])
 
         self.stdout.write(self.style.SUCCESS("Creating side menu items"))
 

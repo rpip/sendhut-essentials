@@ -1,0 +1,47 @@
+{% load lunch_extras %}
+{% load thumbnail %}
+
+<div class="item-detail-card">
+  {% thumbnail item.primary_image "585x312" crop="center" as im %}
+  <img class="card-img-top img-fluid"
+       src="{{ im.url }}"
+       alt="{{ item.title }"
+       width="{{ im.width }}"
+       height="{{ im.height }}">
+     {% endthumbnail %}
+
+     <div class="card-body">
+       <h4 class="card-title">{{ item.name }}</h4>
+       <p class="card-text text-muted">{{ item.description }}</p>
+       {% include  "lunch/_dietary_labels.html" with item=item %}
+       <form>
+         {% for menu in item.side_menus.all %}
+           <h5>
+             {{ menu.name }}
+             <span class="text-muted float-right">
+               {% if menu.is_required %} Required {% else %} Optional {% endif %}
+             </span>
+           </h5>
+           {% for side_item in menu.items.all %}
+             <div class="form-check">
+               <label class="form-check-label">
+                 <input
+                   class="form-check-input"
+                   type="{% if menu.multi_select %}checkbox{% else %}radio{% endif %}"
+                   id="{{ side_item.id }}"
+                   name="{{ side_item.id }}" >
+                   {{ side_item.name }}
+               </label>
+               <span class="float-right">{{ side_item.price }}</span>
+             </div>
+           {% endfor %}
+         {% endfor %}
+         <div class="form-group">
+           <label for="special-instructions">Special instructions (Optional)</label>
+           <input type="email" class="form-control" id="special-instructions" p
+                  laceholder="Add note (e.g. allergies, extra spicy, etc.)">
+         </div>
+         <a href="#" class="btn btn-primary float-right">Add to Order - {{ item.price }}</a>
+       </form>
+     </div>
+</div>

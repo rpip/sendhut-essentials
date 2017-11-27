@@ -1,0 +1,18 @@
+{% load lunch_extras %}
+<div class="row">
+  <div class="container">
+    <ul class="list-inline float-left">
+      {% for x in item.dietary_labels %}
+        <li class="list-inline-item diet-icon diet-{{ x|dietary_label|slugify }}"
+            data-toggle="tooltip"
+            data-placement="bottom"
+            title="{{ x|dietary_label }}">
+            {{ x|dietary_label|dietary_label_short }}
+        </li>
+      {% endfor %}
+    </ul>
+    <span class="float-right text-muted">
+      {{ item.menu.partner.name }}
+    </span>
+  </div>
+</div>

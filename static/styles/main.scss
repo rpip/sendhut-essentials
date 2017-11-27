@@ -5,6 +5,7 @@ $black: #2e3333;
 $dark: #737373;
 $happy: #ffeae4;
 $grey: #f5f5f5;
+$light-grey: #F8F8F9;
 $body-color: $black;
 $font-family-base: 'Source Sans Pro', Helvetica, Arial, Lucida, sans-serif;
 
@@ -84,7 +85,6 @@ img.card-img-top.img-fluid {
   }
 }
 
-
 #popular-tags {
 
   .tag-row {
@@ -132,15 +132,21 @@ main {
 }
 
 .food-list {
+  a {
+    color: $black !important;
+  }
   .card {
     border: 0;
     float: left;
     @include rem(margin-right, 15px);
     @include rem(margin-bottom, 10px);
     @include rem(width, 310px);
-    @include rem(height, 341px);
-
+    @include rem(padding, 3px);
+    &:hover {
+      background-color: $light-grey;
+    }
     .card-body{
+      padding: .125rem;
       padding-left: 0;
     }
 
@@ -186,7 +192,7 @@ footer {
   }
 }
 
-/* Breakpoint for small viewport */
+// BREAKPOINT FOR SMALL VIEWPORT
 @include media-breakpoint-down(sm) {
 
   h1, .h1 { font-size: .8 * $h1-font-size; }

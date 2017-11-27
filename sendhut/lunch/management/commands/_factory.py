@@ -157,6 +157,7 @@ class SideMenuFactory(DjangoModelFactory):
     name = choice(SIDE_MENUS)
     item = SubFactory(ItemFactory)
     is_required = choice([True, False])
+    multi_select = choice([True, False])
 
 
 class SideItemFactory(DjangoModelFactory):
