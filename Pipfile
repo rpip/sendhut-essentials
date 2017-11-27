@@ -25,5 +25,4 @@ werkzeug = "*"
 django-taggit = "*"
 sorl-thumbnail = {git = "git://github.com/jazzband/sorl-thumbnail.git"}
 python-decouple = "*"
-whitenoise = "*"
 faker = "*"
