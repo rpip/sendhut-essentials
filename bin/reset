@@ -4,16 +4,16 @@ echo "----------------------------------------------------------"
 echo "Resetting the database..."
 echo "----------------------------------------------------------"
 
-./manage.py reset_db --noinput
+python manage.py reset_db --noinput
 
 echo "----------------------------------------------------------"
 echo "Running migrations..."
 echo "----------------------------------------------------------"
 
-./manage.py migrate
+python manage.py migrate
 
 echo "----------------------------------------------------------"
 echo "Creating fixtures..."
 echo "----------------------------------------------------------"
 
-./manage.py populate_db
+python manage.py populate_db
