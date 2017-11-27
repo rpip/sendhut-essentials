@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class UsersConfig(AppConfig):
-    name = 'users'
-    verbose_name = "Users"
+class AccountsConfig(AppConfig):
+    name = 'sendhut.accounts'
+    verbose_name = "Accounts"
