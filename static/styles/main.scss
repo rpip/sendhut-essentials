@@ -1,5 +1,8 @@
 $rem-fallback: true;
 $blue: #00a4db;
+// $sendhut-blue: #001625;
+//$blue: #1E262B;
+$green: #11aeaa;
 $flinto-blue: #365A87;
 $black: #2e3333;
 $dark: #737373;
@@ -163,10 +166,41 @@ main {
   border: 0;
 }
 
-
 .avg-time {
   display: block;
 }
+
+.cart {
+  @include rem(font-size, 16px);
+
+  .footer {
+    @include rem(font-size, 14px);
+    @include rem(bottom, 100px);
+    @include rem(padding, 5px);
+    position: absolute;
+  }
+
+  .empty-cart-msg {
+    @include rem(font-size, 17px);
+    @include rem(margin-top, 150px);
+    @include rem(padding, 40px);
+  }
+
+  .btn-checkout {
+    @extend .btn;
+    @extend .btn-primary;
+    @extend .btn-lg;
+    margin-top: 30px;
+    margin-bottom: 15px;
+    width: 100%;
+  }
+
+  li.list-group-item {
+    padding-left: 0;
+    border: 0;
+  }
+}
+
 
 // FOOTER
 
@@ -193,7 +227,9 @@ footer {
   @include rem(height, 60px); /* Set the fixed height of the footer here */
   @include rem(line-height, 60px); /* Vertically center the text there */
   @include rem(border-top, 1px solid $grey);
-
+  a {
+    color: $black !important;
+  }
   ul#footer-nav {
     margin-bottom: 0;
   }
@@ -215,6 +251,10 @@ footer {
 
 
 // MISCELLANEOUS
+.btn {
+  cursor: pointer;
+}
+
 .bold {
   font-weight: bold;
 }

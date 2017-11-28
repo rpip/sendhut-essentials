@@ -103,6 +103,10 @@ gulp.task('vendor', function() {
 
   gulp.src(['node_modules/source-sans-pro/**/*'])
     .pipe(gulp.dest('fonts/source-sans-pro'))
+
+  gulp.src(['vendor/slidepanel/**/*'])
+    .pipe(gulp.dest('dist/vendor/slidepanel'))
+
 });
 
 gulp.task('watchTask', () => {

@@ -1,3 +1,4 @@
+from datetime import datetime
 from random import choice
 from uuid import uuid4
 import six
@@ -5,6 +6,7 @@ import six
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
 from django.utils.text import slugify
+from django.conf import settings
 from taggit.managers import TaggableManager
 from djmoney.models.fields import MoneyField
 from sorl.thumbnail import ImageField
@@ -120,12 +122,10 @@ class Item(BaseModel):
 
     categories = ArrayField(
         models.IntegerField(
-            choices=Basket.FOOD_CATEGORIES,
-            null=True,
-            blank=True
+            choices=Basket.FOOD_CATEGORIES
         ),
-        blank=True,
-        null=True
+        default=list,
+        blank=True
     )
     menu = models.ForeignKey(Menu, related_name='items')
     name = models.CharField(max_length=60)
@@ -134,11 +134,9 @@ class Item(BaseModel):
     price = MoneyField(max_digits=10, decimal_places=2, default_currency='NGN')
     dietary_labels = ArrayField(
         models.IntegerField(
-            choices=DIETARY_RESTRICTIONS,
-            null=True,
-            blank=True
+            choices=DIETARY_RESTRICTIONS
         ),
-        null=True,
+        default=list,
         blank=True
     )
     tags = TaggableManager()
@@ -224,3 +222,31 @@ class SideItem(BaseModel):
 
     def __unicode__(self):
         return "%s" % self.name
+
+
+class Order(BaseModel):
+
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
+    reference = models.CharField(max_length=6, unique=True)
+    # TODO(yao)
+    delivery_date = models.DateField(default=datetime.now)
+    # special instructions
+    special_instructions = models.TextField(null=True, blank=True)
+
+    class Meta:
+        db_table = "order"
+
+
+class LineItem(BaseModel):
+
+    item = models.ForeignKey(Item)
+    quantity = models.IntegerField()
+    extras = ArrayField(
+        models.IntegerField(),
+        default=list,
+        blank=True
+    )
+    order = models.ForeignKey(Order)
+
+    class Meta:
+        db_table = "order_line"

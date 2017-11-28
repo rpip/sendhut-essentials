@@ -1,6 +1,8 @@
-from django.shortcuts import get_object_or_404
+from django.views import View
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404, render
 
 from .models import Item, Basket
 
@@ -36,3 +38,15 @@ class FoodDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         context['page_title'] = context['item'].name
         return context
+
+
+class CartView(View):
+
+    def get(self, request):
+        context = {
+            'items': [],
+            'sub_total': 2000,
+            'delivery_fee': 400,
+            'total': 2400
+        }
+        return render(request, 'partials/cart.html', context)
