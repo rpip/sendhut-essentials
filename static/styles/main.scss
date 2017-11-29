@@ -1,14 +1,14 @@
 $rem-fallback: true;
 $blue: #00a4db;
 // $sendhut-blue: #001625;
-//$blue: #1E262B;
+//$blue: #1e262b;
 $green: #11aeaa;
-$flinto-blue: #365A87;
+$flinto-blue: #365a87;
 $black: #2e3333;
 $dark: #737373;
 $happy: #ffeae4;
 $grey: #f5f5f5;
-$light-grey: #F8F8F9;
+$light-grey: #f8f8f9;
 $body-color: $black;
 $font-family-base: 'Source Sans Pro', Helvetica, Arial, Lucida, sans-serif;
 
@@ -127,7 +127,7 @@ main {
     @extend .jumbotron;
 
     #team-lunch {
-      background: $white url("../images/team-lunch.png") no-repeat top;
+      background: $white url(../images/team-lunch.png) no-repeat top;
       @include rem(width, 380px);
       @include rem(height, 250px);
     }
@@ -164,6 +164,23 @@ main {
 .item-detail-card {
   @extend .card;
   border: 0;
+
+  .number-spinner {
+    input {
+      border: 1px solid $grey;
+    }
+    .plus {
+      padding: 18px;
+      background: url(../images/icons/plus.svg) no-repeat;
+      background-color: $grey;
+    }
+
+    .minus {
+      padding: 18px;
+      background: url(../images/icons/minus.svg) no-repeat;
+      background-color: $grey;
+    }
+  }
 }
 
 .avg-time {
@@ -173,6 +190,13 @@ main {
 .cart {
   @include rem(font-size, 16px);
 
+  .close {
+    cursor: pointer;
+    @include rem(font-size, 1.8rem);
+    &:hover {
+      font-weight: bold;
+    }
+  }
   .footer {
     @include rem(font-size, 14px);
     @include rem(bottom, 100px);
@@ -210,7 +234,7 @@ main {
   @include rem(padding, 6px);
 
   #always-tap {
-    background: transparent url("../images/meal-always-tap.png") no-repeat top;
+    background: transparent url(../images/meal-always-tap.png) no-repeat top;
     @include rem(width, 160px);
     @include rem(height, 160px);
   }

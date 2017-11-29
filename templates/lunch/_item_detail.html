@@ -1,3 +1,4 @@
+{% load static %}
 {% load lunch_extras %}
 {% load thumbnail %}
 
@@ -23,24 +24,47 @@
              </span>
            </h5>
            {% for side_item in menu.items.all %}
-             <div class="form-check">
-               <label class="form-check-label">
-                 <input
-                   class="form-check-input"
-                   type="{% if menu.multi_select %}checkbox{% else %}radio{% endif %}"
-                   id="{{ side_item.id }}"
-                   name="{{ side_item.id }}" >
-                   {{ side_item.name }}
-               </label>
-               <span class="float-right">{{ side_item.price }}</span>
-             </div>
+             {% if menu.multi_select %}
+               <div class="form-check">
+                 <label class="form-check-label">
+                   <input
+                     class="form-check-input"
+                     type="checkbox"
+                     id="si-{{ side_item.id }}-{{ forloop.counter }}"
+                     name="si-{{ side_item.id }}-{{ forloop.counter }}"
+                     value="{{ side_item.id }}">
+                     {{ side_item.name }}
+                 </label>
+                 <span class="float-right">{{ side_item.price }}</span>
+               </div>
+             {% else %}
+               <div class="form-check">
+                 <label class="form-check-label">
+                   <input
+                     class="form-check-input"
+                     type="radio"
+                     id="si-{{ side_item.id }}"
+                     name="si-opt-{{ side_menu.id }}"
+                     value="{{ side_item.id }}">
+                     {{ side_item.name }}
+                 </label>
+                 <span class="float-right">{{ side_item.price }}</span>
+               </div>
+             {% endif %}
            {% endfor %}
          {% endfor %}
          <div class="form-group">
            <label for="special-instructions">Special instructions (Optional)</label>
            <input type="email" class="form-control" id="special-instructions" p
-                  laceholder="Add note (e.g. allergies, extra spicy, etc.)">
+                  placeholder="Add note (e.g. allergies, extra spicy, etc.)">
          </div>
+         <hr>
+         <div class="input-group number-spinner mb-2 mr-sm-2 float-left"
+              style="width: 150px; height: 37px">
+              <button class="btn btn-default minus" data-dir="dwn"></button>
+              <input type="text" class="form-control text-center" value="1">
+              <button class="btn btn-default plus" data-dir="up"></button>
+           </div>
          <a href="#" class="btn btn-primary float-right">Add to Order - {{ item.price }}</a>
        </form>
      </div>

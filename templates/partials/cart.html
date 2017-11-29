@@ -18,11 +18,13 @@
     <div>
       {% for i in items %}
         <div>
+          <a href="#">
           <ul>
             <li>{{ item.quantity }}</li>
             <li>{{ item.name }}</li>
             <li>{{ item.price }}</li>
           </ul>
+          </a>
         </div>
       {% endfor %}
     </div>
