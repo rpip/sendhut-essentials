@@ -31,18 +31,21 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS("Creating menu items"))
         items = ItemFactory.create_batch(choice(range(8, 20)), menu=menu)
 
-        self.stdout.write(self.style.SUCCESS("Creating side menus"))
         images = ImageFactory.create_batch(50)
         image_ids = [image.id for image in images]
         for index, item in enumerate(items):
-            side_menus = SideMenuFactory.create_batch(choice([2, 3, 4]), item=item)
             # create item images
             self._create_item_images(item.id, image_ids)
             item.categories = get_random_food_categories()
             item.save()
             if choice([True, False]):
-                SideItemFactory.create_batch(
-                    choice([3, 9]), menu=side_menus[choice([0, 1])])
+                self.stdout.write(self.style.SUCCESS("Creating side menus"))
+                side_menu1 = SideMenuFactory.create(item=item, multi_select=True)
+                side_menu2 = SideMenuFactory.create(item=item, multi_select=False)
+                side_menus = [side_menu1, side_menu2]
+                # populate side menus
+                for side_menu in side_menus:
+                    SideItemFactory.create_batch(choice([3, 7]), menu=side_menu)
 
         self.stdout.write(self.style.SUCCESS("Creating side menu items"))
 
