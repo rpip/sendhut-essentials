@@ -92,23 +92,13 @@
     } else {
       //show the slide panel
       this.expand();
+
       //get the target url
       var href = $(this.$element).attr('data-href');
-
-      //prevent an ajax request if the current URL is the the target URL
-      if (this.$panel.data('slidepanel-loaded') !== href) {
-        //load the content from the target url, and update the panel html
-        $('.inner .wrapper', this.$panel).html('').load(href, function() {
-          //remove the loading indicator
-          base.$panel.removeClass('loading');
-          //set the current loaded URL to the target URL
-          base.$panel.data('slidepanel-loaded', href);
-        });
-      //  the current URL is already loaded
-      } else {
+      $('.inner .wrapper', this.$panel).html('').load(href, function() {
         //remove the loading indicator
-        this.$panel.removeClass('loading');
-      }
+        base.$panel.removeClass('loading');
+      });
     }
     //set the current source element to this element that triggered the load
     this.$panel.data('slidepanel-current', this.$element);

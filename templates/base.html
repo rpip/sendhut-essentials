@@ -31,6 +31,8 @@
     <script src="{% static 'vendor/bootstrap.js' %}"></script>
     <script src="{% static 'vendor/scrollPosStyler.js' %}"></script>
     <script src="{% static 'vendor/holder.js' %}"></script>
+    <script src="{% static 'vendor/js.cookie.js' %}"></script>
+    <script src="{% static 'vendor/jquery.serialize-object.min.js' %}"></script>
     <script src="{% static 'vendor/slidepanel/slidepanel.js' %}"></script>
     <link rel="stylesheet" href="{% static 'vendor/slidepanel/slidepanel.css' %}">
 
@@ -39,7 +41,9 @@
     <script type="text/javascript">
     $(function () {
 
-        $('[data-toggle="tooltip"]').tooltip();
+        $('body').tooltip({
+            selector: '[data-toggle="tooltip"]'
+        });
 
         // item detail modal
         $('.item-popup').on('click',function(){
@@ -55,7 +59,7 @@
             mode: 'overlay'
         });
 
-        // alter cart
+        // item quantity spinner
         $('#item-modal').on('click', '.number-spinner button', function(e){
             e.preventDefault();
             var btn = $(this),
@@ -74,9 +78,42 @@
 
             btn.closest('.number-spinner').find('input').val(newVal);
         });
-    })
+      })
+
     </script>
-    <!-- endbuild -->
+    <script type="text/javascript">
+    var csrftoken = Cookies.get('csrftoken');
+
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+
+    $.ajaxSetup({beforeSend: function(xhr, settings) {
+        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+      }});
+
+    // remove
+    // get
+    // add/update cart
+    $('body').on('click', '#item-modal #add-to-cart', function(e) {
+          e.preventDefault();
+          var item = ($('#item-form').serializeObject())
+          $.ajax({
+          type: "POST",
+          url: '/lunch/cart/',
+          dataType: 'json',
+          contentType: 'application/json',
+          data: JSON.stringify(item),
+          success: function(data, status) {
+             console.log(status);
+             console.log(data);
+          }
+          });
+      });
+    </script>
   </body>
   {% block extra_js %}{% endblock %}
   {% block extra_css %}{% endblock %}

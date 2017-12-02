@@ -15,7 +15,12 @@
        <h4 class="card-title">{{ item.name }}</h4>
        <p class="card-text text-muted">{{ item.description }}</p>
        {% include  "lunch/_dietary_labels.html" with item=item %}
-       <form>
+       <form id="item-form" data-cart-submit>
+         <input type="hidden" name="uuid" value="{{ item.uuid }}" />
+         <input type="hidden" name="partner" value="{{ item.menu.partner.name }}" />
+         <input type="hidden" name="available" value="{{ item.available }}" />
+         <input type="hidden" name="price" value="{{ item.price.amount }}" />
+         <input type="hidden" name="category" value="{{ category }}" />
          {% for menu in item.side_menus.all %}
            <h5>
              {{ menu.name }}
@@ -30,8 +35,7 @@
                    <input
                      class="form-check-input"
                      type="checkbox"
-                     id="si-{{ side_item.id }}-{{ forloop.counter }}"
-                     name="si-{{ side_item.id }}-{{ forloop.counter }}"
+                     name="extras[]"
                      value="{{ side_item.id }}">
                      {{ side_item.name }}
                  </label>
@@ -43,8 +47,7 @@
                    <input
                      class="form-check-input"
                      type="radio"
-                     id="si-{{ side_item.id }}"
-                     name="si-opt-{{ side_menu.id }}"
+                     name="extras[]"
                      value="{{ side_item.id }}">
                      {{ side_item.name }}
                  </label>
@@ -55,17 +58,19 @@
          {% endfor %}
          <div class="form-group">
            <label for="special-instructions">Special instructions (Optional)</label>
-           <input type="email" class="form-control" id="special-instructions" p
+           <input type="text" class="form-control" name="note"
                   placeholder="Add note (e.g. allergies, extra spicy, etc.)">
          </div>
          <hr>
          <div class="input-group number-spinner mb-2 mr-sm-2 float-left"
               style="width: 150px; height: 37px">
               <button class="btn btn-default minus" data-dir="dwn"></button>
-              <input type="text" class="form-control text-center" value="1">
+              <input type="text" class="form-control text-center" name="quantity" value="1">
               <button class="btn btn-default plus" data-dir="up"></button>
-           </div>
-         <a href="#" class="btn btn-primary float-right">Add to Order - {{ item.price }}</a>
+         </div>
+         <button type="submit" class="btn btn-primary float-right" id="add-to-cart">
+           Add to Order - {{ item.price }}
+         </button>
        </form>
      </div>
 </div>

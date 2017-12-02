@@ -11,3 +11,8 @@ def add_item_slug(sender, instance, created, **kwargs):
         slug = '{}-{}'.format(slugify(instance.name), instance.id)
         instance.slug = slug
         instance.save()
+
+
+def payment_notification(sender, **kwargs):
+    # mark order as paid
+    pass

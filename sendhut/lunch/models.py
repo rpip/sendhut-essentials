@@ -13,6 +13,7 @@ from sorl.thumbnail import ImageField
 
 from sendhut.utils import sane_repr, image_upload_path
 from sendhut.db import BaseModel
+from sendhut.accounts.models import Address
 
 
 class Basket():
@@ -141,6 +142,7 @@ class Item(BaseModel):
     )
     tags = TaggableManager()
     images = models.ManyToManyField('Image', related_name='items', through='ItemImage')
+    available = models.BooleanField(default=True)
 
     @classmethod
     def dietary_label_text(cls, label_id):
@@ -210,6 +212,7 @@ class SideMenu(BaseModel):
 
 
 class SideItem(BaseModel):
+    # TODO(yao): rename SideMenu to OptionGroup, SideItem to Option
 
     name = models.CharField(max_length=60)
     price = MoneyField(max_digits=10, decimal_places=2, default_currency='NGN')
@@ -230,23 +233,33 @@ class Order(BaseModel):
     reference = models.CharField(max_length=6, unique=True)
     # TODO(yao)
     delivery_date = models.DateField(default=datetime.now)
+    delivery_address = models.ForeignKey(Address)
     # special instructions
     special_instructions = models.TextField(null=True, blank=True)
+    paid = models.BooleanField(default=False)
+
+    def get_total_cost(self):
+        return sum(item.get_cost() for item in self.items.all())
 
     class Meta:
         db_table = "order"
 
 
-class LineItem(BaseModel):
+class OrderItem(BaseModel):
 
     item = models.ForeignKey(Item)
     quantity = models.IntegerField()
+    price = MoneyField(max_digits=10, decimal_places=2, default_currency='NGN')
+    # TODO(yao): rename extras to Options
     extras = ArrayField(
         models.IntegerField(),
         default=list,
         blank=True
     )
-    order = models.ForeignKey(Order)
+    order = models.ForeignKey(Order, related_name='order_items')
+
+    def get_cost(self):
+        return self.price * self.quantity
 
     class Meta:
-        db_table = "order_line"
+        db_table = "order_item"

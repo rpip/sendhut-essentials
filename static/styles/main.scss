@@ -2,12 +2,15 @@ $rem-fallback: true;
 $blue: #00a4db;
 // $sendhut-blue: #001625;
 //$blue: #1e262b;
-$green: #11aeaa;
-$flinto-blue: #365a87;
-$black: #2e3333;
+//$green: #11aeaa;
+//$flinto-blue: #365a87;
+//$black: #2e3333;
+$black: #231f1a;
 $dark: #737373;
-$happy: #ffeae4;
+//$happy: #faf8f8;
 $grey: #f5f5f5;
+$happy: #ffeae4;
+//$happy: $grey;
 $light-grey: #f8f8f9;
 $body-color: $black;
 $font-family-base: 'Source Sans Pro', Helvetica, Arial, Lucida, sans-serif;
@@ -33,14 +36,13 @@ html {
 }
 
 body {
-  @include rem(font-size, 14px);
-  font-weight: 500;
+  // @include rem(font-size, 16px);
+  // font-weight: 400;
   min-height: 75rem;
   padding-top: 8rem;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   line-height: 1.7em;
-  // font-family: 'Source Sans Pro', Helvetica, Arial, Lucida, sans-serif;
   @include rem(margin-bottom, 60px); /* Margin bottom by footer height */
 }
 
@@ -85,6 +87,24 @@ img.card-img-top.img-fluid {
 
   .card {
     border: none;
+  }
+}
+
+#lunch-categories {
+  a.no-deco {
+    color: $black;
+    text-decoration: none;
+  }
+
+  .card-body {
+    padding-left: 0;
+  }
+
+  .card-img-top {
+    &:hover {
+      opacity: 0.8;
+      filter: alpha(opacity=80); /* For IE8 and earlier */
+    }
   }
 }
 
@@ -155,9 +175,6 @@ main {
       padding-left: 0;
     }
 
-    .card-title {
-      @include rem(font-size, 14px);
-    }
   }
 }
 
@@ -310,6 +327,7 @@ footer {
 
 .diet-icon {
   @extend .text-center;
+  cursor: pointer;
 }
 
 .diet-vegan, .diet-vegetarian {

@@ -98,7 +98,9 @@ gulp.task('vendor', function() {
     'node_modules/popper.js/dist/umd/popper.js',
     'node_modules/bootstrap/dist/js/bootstrap.js',
     'node_modules/scrollpos-styler/scrollPosStyler.js',
-    'node_modules/holderjs/holder.js'
+    'node_modules/holderjs/holder.js',
+    'node_modules/js-cookie/src/js.cookie.js',
+    'node_modules/form-serializer/dist/jquery.serialize-object.min.js'
   ]).pipe(gulp.dest('dist/vendor'))
 
   gulp.src(['node_modules/source-sans-pro/**/*'])
@@ -111,6 +113,7 @@ gulp.task('vendor', function() {
 
 gulp.task('watchTask', () => {
   gulp.watch('styles/main.scss', ['sass', 'images']);
+//gulp.watch('js/app.js', ['js-build']);
 });
 
 gulp.task('lint', () => {
@@ -119,6 +122,7 @@ gulp.task('lint', () => {
     .pipe(eslint.format())
     .pipe(gulp.dest(paths.distJs));
 });
+
 
 gulp.task('build', cb => {
   process.env.NODE_ENV = 'production';
