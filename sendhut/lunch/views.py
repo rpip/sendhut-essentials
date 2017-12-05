@@ -55,6 +55,9 @@ class CartView(View):
 
     def get(self, request):
         # /cart
+        if request.GET.get('clear'):
+            Cart(request).clear()
+
         return render(request, 'partials/cart.html', self._get_cart())
 
     def post(self, request):
@@ -83,3 +86,21 @@ class CartView(View):
             'delivery_fee': delivery_fee,
             'total': total
         }
+
+
+class CheckOutView(View):
+
+    def get(self, request, *args, **kwargs):
+        pass
+
+
+class OrderHistoryView(View):
+
+    def get(self, request, *args, **kwargs):
+        pass
+
+
+class PaymentView(View):
+
+    def get(self, request, *args, **kwargs):
+        pass

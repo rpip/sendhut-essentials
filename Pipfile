@@ -27,3 +27,4 @@ sorl-thumbnail = {git = "git://github.com/jazzband/sorl-thumbnail.git"}
 python-decouple = "*"
 faker = "*"
 simplejson = "*"
+django-widget-tweaks = "*"

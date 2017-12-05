@@ -88,9 +88,12 @@ class Cart:
     A Cart object represents a shopping cart
     """
 
-    def __init__(self, request):
+    def __init__(self, request, items=None):
         """
         Initialize the cart.
+
+        Attempts to load cart from session or adds items from the
+        items parameter passed. Items must list of serialized cart lines.
         """
         self.modified = False
         self.session = request.session
@@ -104,8 +107,13 @@ class Cart:
             def __init__(self, d):
                 self.__dict__ = d
 
+        # cart._state is a list of dictionaries. convert to objects
         for l in [obj(x) for x in cart]:
             self.add(l, l.quantity, l.data)
+
+        if items:
+            for l in [obj(x) for x in items]:
+                self.add(l, l.quantity, l.data)
 
     def add(self, item, quantity=1, data=None, replace=False):
         """

@@ -125,7 +125,6 @@ main {
   #content {
     @include rem(padding-bottom, 30px);
   }
-  @include rem(margin-bottom, 120px)
 }
 
 #marketing-business {
@@ -206,6 +205,8 @@ main {
 
 .cart {
   @include rem(font-size, 16px);
+  overflow-y: scroll;
+  height: 700px;
 
   .close {
     cursor: pointer;
@@ -213,12 +214,6 @@ main {
     &:hover {
       font-weight: bold;
     }
-  }
-  .footer {
-    @include rem(font-size, 14px);
-    @include rem(bottom, 100px);
-    @include rem(padding, 5px);
-    position: absolute;
   }
 
   .empty-cart-msg {
@@ -236,9 +231,12 @@ main {
     width: 100%;
   }
 
-  li.list-group-item {
-    padding-left: 0;
-    border: 0;
+  .cart-line {
+    border-bottom: 1px solid rgba(35, 31, 26, 0.1);
+    @include rem(padding, 10px);
+  }
+  .cart-summary {
+    @include rem(padding-top, 20px);
   }
 }
 
@@ -246,9 +244,8 @@ main {
 // FOOTER
 
 #footer-app-download {
-  @include rem(margin-top, 30px);
   background-color: $grey;
-  @include rem(padding, 6px);
+  @include rem(padding, 20px);
 
   #always-tap {
     background: transparent url(../images/meal-always-tap.png) no-repeat top;

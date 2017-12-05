@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'djmoney',
     'taggit',
     'sorl.thumbnail',
+    'widget_tweaks',
 
     'sendhut.accounts',
     'sendhut.lunch'
@@ -102,6 +103,15 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+AUTHENTICATION_BACKENDS = (
+    'sendhut.auth_backends.UsernamePhoneAuthentication',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+LOGIN_REDIRECT_URL = '/'
+
+LOGOUT_REDIRECT_URL = '/'
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/

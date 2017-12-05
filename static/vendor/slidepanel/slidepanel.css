@@ -12,15 +12,8 @@
             height: 100%;
             margin-top: 55px;
         }
-        .cb_slide_panel.panel_right {
-        }
-        .cb_slide_panel.panel_top, .cb_slide_panel.panel_bottom {
-            height: 278px;
-            width: 100%;
-        }
         .cb_slide_panel .inner {
-            padding: 20px 0 0 20px;
-            width: 248px;
+          padding: 20px 0 0 20px;
         }
         .cb_slide_panel.loading .inner {
             min-height: 300px;
