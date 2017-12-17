@@ -1,8 +1,10 @@
 {% load widget_tweaks %}
 
-{# https://simpleisbetterthancomplex.com/series/2017/09/18/a-complete-beginners-guide-to-django-part-3.html#reusable-forms-templates #}
+{% for hidden in form.hidden_fields %}
+  {{ hidden }}
+{% endfor %}
 
-{% for field in form %}
+{% for field in form.visible_fields %}
   <div class="form-group">
     {{ field.label_tag }}
 

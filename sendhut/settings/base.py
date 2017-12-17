@@ -35,7 +35,8 @@ INSTALLED_APPS = [
     'widget_tweaks',
 
     'sendhut.accounts',
-    'sendhut.lunch'
+    'sendhut.lunch',
+    'sendhut.dashboard'
 ]
 
 MIDDLEWARE = [

@@ -12,6 +12,10 @@ from sendhut.accounts.models import User, Address
 from sendhut.lunch.models import (
     Partner, Menu, Item, SideMenu, SideItem, Image, ItemImage
 )
+from sendhut.dashboard.models import (
+    Company, Employee,
+    AllowanceGroup, Allowance
+)
 
 fake = Faker()
 
@@ -168,3 +172,43 @@ class SideItemFactory(DjangoModelFactory):
     name = lazy_attribute(lambda o: fake.catch_phrase())
     price = choice([1200, 900, 3500, 800, 400, 1400, 1650, 850])
     menu = SubFactory(MenuFactory)
+
+
+class CompanyFactory(DjangoModelFactory):
+
+    class Meta:
+        model = Company
+
+    user = SubFactory(UserFactory)
+    name = lazy_attribute(lambda o: fake.catch_phrase())
+    address = SubFactory(AddressFactory)
+
+
+class EmployeeFactory(DjangoModelFactory):
+
+    class Meta:
+        model = Employee
+
+    user = SubFactory(UserFactory)
+    role = lazy_attribute(lambda o: choice(list(dict(Employee.ROLES).keys())))
+    company = SubFactory(CompanyFactory)
+
+
+class AllowanceFactory(DjangoModelFactory):
+
+    class Meta:
+        model = Allowance
+
+    created_by = SubFactory(UserFactory)
+    frequency = lazy_attribute(lambda o: choice(list(dict(Allowance.FREQUENCY).keys())))
+    limit = lazy_attribute(lambda x: choice([0, 10000, 6000, 20000]))
+    company = SubFactory(CompanyFactory)
+
+
+class AllowanceGroupFactory(DjangoModelFactory):
+
+    class Meta:
+        model = AllowanceGroup
+
+    employee = SubFactory(EmployeeFactory)
+    allowance = SubFactory(AllowanceFactory)

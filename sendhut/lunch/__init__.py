@@ -1,1 +1,1 @@
-default_app_config = 'sendhut.lunch.app.LunchConfig'
+default_app_config = 'sendhut.lunch.apps.LunchConfig'

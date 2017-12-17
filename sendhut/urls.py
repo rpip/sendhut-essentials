@@ -6,6 +6,7 @@ from django.contrib import admin
 
 from sendhut.lunch import urls as lunch_urls
 from sendhut.accounts import urls as account_urls
+from sendhut.dashboard import urls as dashboard_urls
 from .views import (
     HomePageView, AboutPageView,
     LoginView, LogoutView
@@ -18,6 +19,7 @@ urlpatterns = [
     url(r'^about/$', AboutPageView.as_view(), name='about'),
     url(r'^accounts/', include(account_urls, namespace='accounts')),
     url(r'^lunch/', include(lunch_urls, namespace='lunch')),
+    url(r'^business/', include(dashboard_urls, namespace='dashboard')),
     url(r'^admin/', include(admin.site.urls)),
 ]
 

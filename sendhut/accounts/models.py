@@ -13,6 +13,9 @@ class User(AbstractUser, BaseModel):
 
     __repr__ = sane_repr('id')
 
+    class Meta:
+        db_table = 'user'
+
 
 class Address(BaseModel):
     user = models.ForeignKey(User, related_name='addresses')

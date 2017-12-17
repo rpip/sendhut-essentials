@@ -190,7 +190,7 @@ class ItemImage(BaseModel):
 
 class SideMenu(BaseModel):
     """
-    Menu of complimentary dishes or options of the selected food item.
+    Menu of complimentary dishes (sides) for the selected food item.
 
     Exampples:
     - Choice of Dressing (for Grilled Chicken salad)
@@ -202,6 +202,7 @@ class SideMenu(BaseModel):
     - Pizza sizes
     - Soups
     """
+    # TODO(yao): create Options class for options. Separate from 'sides'
     name = models.CharField(max_length=60)
     item = models.ForeignKey(Item, related_name='side_menus')
     is_required = models.BooleanField(default=False)
@@ -231,7 +232,7 @@ class Order(BaseModel):
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
     reference = models.CharField(max_length=6, unique=True)
-    # TODO(yao)
+    # TODO(yao): add helpers for calculating orders
     delivery_date = models.DateField(default=datetime.now)
     delivery_address = models.ForeignKey(Address)
     # special instructions
@@ -249,6 +250,7 @@ class OrderItem(BaseModel):
 
     item = models.ForeignKey(Item)
     quantity = models.IntegerField()
+    # TODO(yao): Add data field as JSONField for order metadata
     price = MoneyField(max_digits=10, decimal_places=2, default_currency='NGN')
     # TODO(yao): rename extras to Options
     extras = ArrayField(

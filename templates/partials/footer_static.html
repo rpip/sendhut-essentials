@@ -1,0 +1,109 @@
+{% load static %}
+<script src="{% static 'vendor/jquery.js' %}"></script>
+<script src="{% static 'vendor/popper.js' %}"></script>
+<script src="{% static 'vendor/bootstrap.js' %}"></script>
+<script src="{% static 'vendor/scrollPosStyler.js' %}"></script>
+<script src="{% static 'vendor/holder.js' %}"></script>
+<script src="{% static 'vendor/js.cookie.js' %}"></script>
+<script src="{% static 'vendor/jquery.serialize-object.min.js' %}"></script>
+<script src="{% static 'vendor/slidepanel/slidepanel.js' %}"></script>
+<link rel="stylesheet" href="{% static 'vendor/slidepanel/slidepanel.css' %}">
+
+<script src="{% static 'js/app.js' %}"></script>
+
+<script type="text/javascript">
+$(function () {
+
+    $('body').tooltip({
+        selector: '[data-toggle="tooltip"]'
+    });
+
+    // item detail modal
+    $('.item-popup').on('click',function(){
+        var dataURL = $(this).attr('data-href');
+        $('.modal-body').load(dataURL, function(){
+            $('#item-modal').modal({show: true});
+        });
+    });
+
+    // side rail cart
+    $('[data-slidepanel]').slidepanel({
+        orientation: 'right',
+        mode: 'overlay'
+    });
+
+    // item quantity spinner
+    $('#item-modal').on('click', '.number-spinner button', function(e){
+        e.preventDefault();
+        var btn = $(this),
+            oldValue = btn.closest('.number-spinner').find('input').val().trim(),
+            newVal = 0;
+
+        if (btn.attr('data-dir') == 'up') {
+            newVal = parseInt(oldValue) + 1;
+        } else {
+            if (oldValue > 1) {
+                newVal = parseInt(oldValue) - 1;
+            } else {
+                newVal = 1;
+            }
+        }
+
+        btn.closest('.number-spinner').find('input').val(newVal);
+    });
+  })
+
+</script>
+<script type="text/javascript">
+/*! Tiny Pub/Sub - v0.7.0 - 2013-01-29
+* https://github.com/cowboy/jquery-tiny-pubsub
+* Copyright (c) 2013 "Cowboy" Ben Alman; Licensed MIT */
+(function($) {
+
+  var o = $({});
+
+  $.subscribe = function() {
+    o.on.apply(o, arguments);
+  };
+
+  $.unsubscribe = function() {
+    o.off.apply(o, arguments);
+  };
+
+  $.publish = function() {
+    o.trigger.apply(o, arguments);
+  };
+
+}(jQuery));
+var csrftoken = Cookies.get('csrftoken');
+
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+
+$.ajaxSetup({beforeSend: function(xhr, settings) {
+    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+        xhr.setRequestHeader("X-CSRFToken", csrftoken);
+    }
+  }});
+
+// remove
+// get
+// add/update cart
+$('body').on('click', '#item-modal #add-to-cart', function(e) {
+      e.preventDefault();
+      var item = ($('#item-form').serializeObject())
+      $.ajax({
+      type: "POST",
+      url: '/lunch/cart/',
+      dataType: 'json',
+      contentType: 'application/json',
+      data: JSON.stringify(item),
+      success: function(data, status) {
+         console.log(status);
+         console.log(data);
+      }
+      });
+  });
+</script>
