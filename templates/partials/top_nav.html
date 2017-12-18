@@ -21,7 +21,6 @@
             <div class="dropdown-menu">
               <a class="dropdown-item" href="#">Order history</a>
               <a class="dropdown-item" href="#">Payments</a>
-              <a class="dropdown-item" href="{% url 'dashboard:home' %}">View business profile</a>
               {% if user.company %}
               <a class="dropdown-item" href="{% url 'dashboard:home' %}">
                 View business profile

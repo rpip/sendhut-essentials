@@ -19,21 +19,18 @@ class Command(BaseCommand):
         for user in business_users:
             self._setup_business_user(user)
 
+        self.stdout.write(self.style.SUCCESS('Stting up admin-biz'))
+        admin = UserFactory.create(email='admin-biz@sendhut.com', username='admin-biz')
+        admin.is_staff = True
+        admin.is_superuser = True
+        admin.set_password('h4ppy!h4ppy!')
+        admin.save()
+        self._setup_business_user(admin)
+
         self.stdout.write(self.style.SUCCESS('DONE'))
 
     def _setup_business_user(self, user):
         company = CompanyFactory.create(user=user)
         employees = EmployeeFactory.create_batch(choice(range(5, 15)), company=company)
-        allowances = AllowanceFactory.create_batch(2, created_by=user, company=company)
-        allowance_groups = []
-        for x in employees:
-            allowance = choice(allowances)
-            _allowance = Allowance.members.through(
-                employee_id=x.id,
-                allowance_id=allowance.id
-            )
-            allowance_groups.append(_allowance)
-
-        AllowanceGroup.objects.bulk_create(allowance_groups, batch_size=100)
         self.stdout.write(self.style.SUCCESS('DONE: Dashboard setup'))
         # TODO(yao): generate employee orders

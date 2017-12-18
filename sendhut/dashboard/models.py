@@ -13,7 +13,15 @@ class Company(BaseModel):
     # TODO(yao): billing info
     user = models.OneToOneField(settings.AUTH_USER_MODEL)
     name = models.CharField(max_length=100)
-    address = models.ForeignKey(Address)
+    address = models.ForeignKey(Address, null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        Employee.objects.create(
+            user=self.user,
+            company=self,
+            role=Employee.ADMIN
+        )
 
     class Meta:
         db_table = 'company'
@@ -36,6 +44,10 @@ class Employee(BaseModel):
         null=True
     )
     company = models.ForeignKey(Company, related_name='employees')
+    allowance = models.ForeignKey('Allowance', related_name='members', null=True, blank=True)
+
+    def role_text(self):
+        return dict(self.ROLES)[self.role]
 
     class Meta:
         db_table = 'employee'
@@ -72,27 +84,15 @@ class Allowance(BaseModel):
     )
     limit = MoneyField(max_digits=10, decimal_places=2, default_currency='NGN')
     company = models.ForeignKey(Company, related_name='allowances')
-    members = models.ManyToManyField(
-        Employee,
-        related_name='allowances',
-        through='AllowanceGroup'
-    )
 
     class Meta:
         db_table = 'allowance'
 
 
-class AllowanceGroup(BaseModel):
-    employee = models.ForeignKey(Employee)
-    allowance = models.ForeignKey(Allowance)
-
-    class Meta:
-        db_table = 'allowance_group'
-
-
 class Invite(BaseModel):
-    invite_token = models.CharField(max_length=32)
-    date_joined = models.DateTimeField(blank=True)
+    token = models.CharField(max_length=32)
+    date_joined = models.DateTimeField(blank=True, null=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
     company = models.ForeignKey(Company, related_name='invited_employees')
 
     @staticmethod

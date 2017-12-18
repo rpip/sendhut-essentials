@@ -13,6 +13,10 @@ class User(AbstractUser, BaseModel):
 
     __repr__ = sane_repr('id')
 
+    @property
+    def is_business_account(self):
+        pass
+
     class Meta:
         db_table = 'user'
 

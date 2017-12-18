@@ -192,6 +192,7 @@ class EmployeeFactory(DjangoModelFactory):
     user = SubFactory(UserFactory)
     role = lazy_attribute(lambda o: choice(list(dict(Employee.ROLES).keys())))
     company = SubFactory(CompanyFactory)
+    allowance = SubFactory(AllowanceFactory)
 
 
 class AllowanceFactory(DjangoModelFactory):
@@ -203,12 +204,3 @@ class AllowanceFactory(DjangoModelFactory):
     frequency = lazy_attribute(lambda o: choice(list(dict(Allowance.FREQUENCY).keys())))
     limit = lazy_attribute(lambda x: choice([0, 10000, 6000, 20000]))
     company = SubFactory(CompanyFactory)
-
-
-class AllowanceGroupFactory(DjangoModelFactory):
-
-    class Meta:
-        model = AllowanceGroup
-
-    employee = SubFactory(EmployeeFactory)
-    allowance = SubFactory(AllowanceFactory)

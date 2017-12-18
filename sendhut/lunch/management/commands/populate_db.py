@@ -62,6 +62,7 @@ class Command(BaseCommand):
         Item.images.through.objects.bulk_create(item_to_images, batch_size=10)
 
     def handle(self, *args, **options):
+        self.stdout.write(self.style.SUCCESS('Creating ADMIN user'))
         # create admin user
         admin = UserFactory.create(email='admin@sendhut.com', username='admin')
         admin.is_staff = True
