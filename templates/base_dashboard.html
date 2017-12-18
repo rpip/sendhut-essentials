@@ -27,6 +27,13 @@
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'dashboard:allowances' %}">Allowances</a>
               </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'dashboard:home' %}">Dashboard home</a>
+              </li>
+              <div class="dropdown-divider"></div>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'home' %}">Go to main website &raquo;</a>
+              </li>
             </ul>
           </nav>
         </div>
@@ -51,12 +58,17 @@
                 </div>
               </div>
             </div>
-            <div id="context-menu clearfix">
+            <div class="clearfix"></div>
+            <div id="context-menu">
               {% block context_menu %}{% endblock %}
             </div>
-          </div>
+          </div> <!--// masthead -->
           <div class="clearfix"></div>
           <div id="content">
+            {% block messages %}
+              {% include "partials/messages.html" %}
+            {% endblock %}
+
             {% block content %}{% endblock %}
           </div>
         </main>
