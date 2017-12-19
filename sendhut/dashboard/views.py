@@ -12,8 +12,8 @@ from django.urls import reverse
 from sendhut import utils
 from sendhut.accounts.models import User
 from sendhut.lunch.models import Item, Order
-from .models import Employee, Company, Invite
-from .forms import EmployeeForm
+from .models import Employee, Company, Invite, Allowance
+from .forms import EmployeeForm, AllowanceForm
 
 
 def home(request):
@@ -47,20 +47,17 @@ def employee_list(request):
     return render(request, template, context)
 
 
-def employee_details(request):
+def employee_details(request, employee_id):
     # info, orders, allowances
+    # Employee.objects.filter
     pass
 
 
 class EmployeeCreate(FormView):
-    template_name = 'dashboard/employee_form.html'
+    template_name = 'dashboard/object_form.html'
     form_class = EmployeeForm
     success_url = '/business/employees'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['page_title'] = 'Add Employee'
-        return context
+    page_title = 'Add Employee'
 
     def form_valid(self, form):
         # TODO(yao): send invitation email/sms
@@ -98,9 +95,54 @@ def accept_invitation(request, token):
     return redirect(reverse('home'))
 
 
-class AllowanceView(View):
-    # list allowances
-    # create, delete, update allowance
-    # add employees
-    # remove employees
+def allowance_details(request):
+    # allowance detail: details + members
+    # TODO(yao): update allowance limit
+    # TODO(yao): link employees to allowance
+    # TODO(yao): unlink employees to allowance
+    pass
+
+
+def allowance_list(request):
+    company = request.user.company
+    template = 'dashboard/allowance_list.html'
+    context = {
+        'page_title': 'Allowances',
+        'allowances': Allowance.objects.filter(company=company)
+    }
+    return render(request, template, context)
+
+
+class AllowanceCreate(FormView):
+    # TODO(yao): link employees to allowance
+    template_name = 'dashboard/allowance_form.html'
+    form_class = AllowanceForm
+    success_url = '/business/allowances'
+    page_title = 'Add Allowance'
+
+    def form_valid(self, form):
+        data = form.cleaned_data
+        member_ids = map(int, form.data.get('employees', []))
+        members = Employee.objects.filter(id__in=member_ids)
+        allowance = Allowance.objects.create(
+            created_by=self.request.user,
+            company=self.request.user.company,
+            **data
+        )
+        allowance.members.add(*members)
+        messages.success(self.request, 'Allowance created')
+        return super().form_valid(form)
+
+    def eligible_employees(self, allowance_id=None):
+        if allowance_id:
+            return Employee.objects.filter(
+                company=self.request.user.company,
+                allowance_id=allowance_id
+            )
+
+        return Employee.objects.filter(company=self.request.user.company)
+
+
+class allowance_delete(View):
+    # unlink allowance from members
     pass

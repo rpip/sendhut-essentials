@@ -3,7 +3,7 @@ from django.db import models
 from django.conf import settings
 from djmoney.models.fields import MoneyField
 
-from sendhut import utils
+from sendhut.utils import sane_repr, generate_token
 from sendhut.db import BaseModel
 from sendhut.accounts.models import Address
 # TODO(yao): add employee, upload csv
@@ -25,6 +25,7 @@ class Company(BaseModel):
 
     class Meta:
         db_table = 'company'
+
 
 
 class Employee(BaseModel):
@@ -65,7 +66,7 @@ class Allowance(BaseModel):
 
     def _generate_random_name():
         fake = Faker()
-        token = utils.generate_token()
+        token = generate_token()
         word = '{}-{}-{}'.format(token, fake.color_name(), fake.street_name())
         return word.replace(' ', '-')
 
@@ -84,6 +85,9 @@ class Allowance(BaseModel):
     )
     limit = MoneyField(max_digits=10, decimal_places=2, default_currency='NGN')
     company = models.ForeignKey(Company, related_name='allowances')
+
+    def frequency_text(self):
+        return dict(self.FREQUENCY)[self.frequency].capitalize()
 
     class Meta:
         db_table = 'allowance'

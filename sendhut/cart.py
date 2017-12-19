@@ -3,7 +3,7 @@ from decimal import Decimal
 
 from django.conf import settings
 
-from sendhut.lunch.models import Item, SideItem
+from sendhut.lunch.models import Item, Option
 
 
 class ItemLine:
@@ -53,12 +53,12 @@ class CartLine(ItemLine):
         if extras:
             extras = list(map(int, extras))
             _extras = []
-            for x in SideItem.objects.filter(id__in=extras):
+            for x in Option.objects.filter(id__in=extras):
                 _extras.append({
                     'uuid': x.uuid,
                     'name': x.name,
                     'price': x.price.amount,
-                    'parent': x.menu.name
+                    'parent': x.group.name
                 })
 
             _extras = [(c, list(cgen)) for c, cgen in

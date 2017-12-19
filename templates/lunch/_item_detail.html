@@ -22,25 +22,25 @@
          <input type="hidden" name="available" value="{{ item.available }}" />
          <input type="hidden" name="price" value="{{ item.price.amount }}" />
          <input type="hidden" name="category" value="{{ category }}" />
-         {% for menu in item.side_menus.all %}
+         {% for opt_group in item.option_groups.all %}
            <h5>
-             {{ menu.name }}
+             {{ opt_group.name }}
              <span class="text-muted float-right">
-               {% if menu.is_required %} Required {% else %} Optional {% endif %}
+               {% if opt_group.is_required %} Required {% else %} Optional {% endif %}
              </span>
            </h5>
-           {% for side_item in menu.items.all %}
-             {% if menu.multi_select %}
+           {% for option in opt_group.options.all %}
+             {% if opt_group.multi_select %}
                <div class="form-check">
                  <label class="form-check-label">
                    <input
                      class="form-check-input"
                      type="checkbox"
                      name="extras[]"
-                     value="{{ side_item.id }}">
-                     {{ side_item.name }}
+                     value="{{ option.id }}">
+                     {{ option.name }}
                  </label>
-                 <span class="float-right">{{ side_item.price }}</span>
+                 <span class="float-right">{{ option.price }}</span>
                </div>
              {% else %}
                <div class="form-check">
@@ -49,10 +49,10 @@
                      class="form-check-input"
                      type="radio"
                      name="extras[]"
-                     value="{{ side_item.id }}">
-                     {{ side_item.name }}
+                     value="{{ option.id }}">
+                     {{ option.name }}
                  </label>
-                 <span class="float-right">{{ side_item.price }}</span>
+                 <span class="float-right">{{ option.price }}</span>
                </div>
              {% endif %}
            {% endfor %}

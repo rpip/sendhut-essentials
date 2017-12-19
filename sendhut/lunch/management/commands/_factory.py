@@ -10,12 +10,11 @@ from factory import (
 
 from sendhut.accounts.models import User, Address
 from sendhut.lunch.models import (
-    Partner, Menu, Item, SideMenu, SideItem, Image, ItemImage
+    Partner, Menu, Item, OptionGroup, Option,
+    Image, ItemImage, OrderItem, Order
 )
-from sendhut.dashboard.models import (
-    Company, Employee,
-    AllowanceGroup, Allowance
-)
+from sendhut.dashboard.models import Company, Employee, Allowance
+
 
 fake = Faker()
 
@@ -153,10 +152,10 @@ class ItemImageFactory(DjangoModelFactory):
     item = SubFactory(Item)
 
 
-class SideMenuFactory(DjangoModelFactory):
+class OptionGroupFactory(DjangoModelFactory):
 
     class Meta:
-        model = SideMenu
+        model = OptionGroup
 
     name = choice(SIDE_MENUS)
     item = SubFactory(ItemFactory)
@@ -164,14 +163,14 @@ class SideMenuFactory(DjangoModelFactory):
     multi_select = choice([True, False])
 
 
-class SideItemFactory(DjangoModelFactory):
+class OptionFactory(DjangoModelFactory):
 
     class Meta:
-        model = SideItem
+        model = Option
 
     name = lazy_attribute(lambda o: fake.catch_phrase())
     price = choice([1200, 900, 3500, 800, 400, 1400, 1650, 850])
-    menu = SubFactory(MenuFactory)
+    group = SubFactory(OptionGroupFactory)
 
 
 class CompanyFactory(DjangoModelFactory):
@@ -182,6 +181,17 @@ class CompanyFactory(DjangoModelFactory):
     user = SubFactory(UserFactory)
     name = lazy_attribute(lambda o: fake.catch_phrase())
     address = SubFactory(AddressFactory)
+
+
+class AllowanceFactory(DjangoModelFactory):
+
+    class Meta:
+        model = Allowance
+
+    created_by = SubFactory(UserFactory)
+    frequency = lazy_attribute(lambda o: choice(list(dict(Allowance.FREQUENCY).keys())))
+    limit = lazy_attribute(lambda x: choice([0, 10000, 6000, 20000]))
+    company = SubFactory(CompanyFactory)
 
 
 class EmployeeFactory(DjangoModelFactory):
@@ -195,12 +205,13 @@ class EmployeeFactory(DjangoModelFactory):
     allowance = SubFactory(AllowanceFactory)
 
 
-class AllowanceFactory(DjangoModelFactory):
+class OrderFactory(DjangoModelFactory):
 
     class Meta:
-        model = Allowance
+        model = Order
 
-    created_by = SubFactory(UserFactory)
-    frequency = lazy_attribute(lambda o: choice(list(dict(Allowance.FREQUENCY).keys())))
-    limit = lazy_attribute(lambda x: choice([0, 10000, 6000, 20000]))
-    company = SubFactory(CompanyFactory)
+
+class OrderItemFactory(DjangoModelFactory):
+
+    class Meta:
+        model = OrderItem

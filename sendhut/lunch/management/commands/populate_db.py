@@ -2,11 +2,11 @@ from random import choice, shuffle
 from django.core.management.base import BaseCommand, CommandError
 
 from sendhut.lunch.models import Basket, Item
-from sendhut.dashboard.models import Allowance, AllowanceGroup
+from sendhut.dashboard.models import Allowance
 from ._factory import (
     UserFactory, ItemFactory,
-    MenuFactory, SideMenuFactory,
-    SideItemFactory, ImageFactory, PartnerFactory,
+    MenuFactory, OptionGroupFactory,
+    OptionFactory, ImageFactory, PartnerFactory,
     CompanyFactory, AllowanceFactory, EmployeeFactory
 )
 
@@ -42,12 +42,12 @@ class Command(BaseCommand):
             item.save()
             if choice([True, False]):
                 self.stdout.write(self.style.SUCCESS('Creating side menus'))
-                side_menu1 = SideMenuFactory.create(item=item, multi_select=True)
-                side_menu2 = SideMenuFactory.create(item=item, multi_select=False)
-                side_menus = [side_menu1, side_menu2]
+                opt_group1 = OptionGroupFactory.create(item=item, multi_select=True)
+                opt_group2 = OptionGroupFactory.create(item=item, multi_select=False)
+                opt_groups = [opt_group1, opt_group2]
                 # populate side menus
-                for side_menu in side_menus:
-                    SideItemFactory.create_batch(choice([3, 7]), menu=side_menu)
+                for opt_group in opt_groups:
+                    OptionFactory.create_batch(choice([3, 7]), group=opt_group)
 
         self.stdout.write(self.style.SUCCESS('Creating side menu items'))
 
@@ -63,12 +63,6 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         self.stdout.write(self.style.SUCCESS('Creating ADMIN user'))
-        # create admin user
-        admin = UserFactory.create(email='admin@sendhut.com', username='admin')
-        admin.is_staff = True
-        admin.is_superuser = True
-        admin.set_password('h4ppy!h4ppy!')
-        admin.save()
 
         # raise CommandError()
         self.stdout.write(self.style.SUCCESS('Creating Partners'))
@@ -87,22 +81,27 @@ class Command(BaseCommand):
         for user in business_users:
             self._setup_business_user(user)
 
+        # create admin user
+        self.stdout.write(self.style.SUCCESS('Setting up admin user'))
+        admin = UserFactory.create(email='admin@sendhut.com', username='admin')
+        admin.is_staff = True
+        admin.is_superuser = True
+        admin.set_password('sendhut2017')
+        admin.save()
+        self._setup_business_user(admin)
+
         self.stdout.write(self.style.SUCCESS('DONE'))
 
     def _setup_business_user(self, user):
         company = CompanyFactory.create(user=user)
         employees = EmployeeFactory.create_batch(choice(range(5, 15)), company=company)
-        allowances = AllowanceFactory.create_batch(2, created_by=user, company=company)
+        allowances = AllowanceFactory.create_batch(choice(range(2, 4)), created_by=user, company=company)
         allowance_groups = []
-        for x in employees:
+        for e in employees:
             allowance = choice(allowances)
-            _allowance = Allowance.members.through(
-                employee_id=x.id,
-                allowance_id=allowance.id
-            )
-            allowance_groups.append(_allowance)
+            e.allowance = allowance
+            e.save()
 
-        AllowanceGroup.objects.bulk_create(allowance_groups, batch_size=100)
         self.stdout.write(self.style.SUCCESS('DONE: Dashboard setup'))
         # TODO(yao): generate employee orders
 

@@ -188,9 +188,9 @@ class ItemImage(BaseModel):
     __repr__ = sane_repr('item', 'image')
 
 
-class SideMenu(BaseModel):
+class OptionGroup(BaseModel):
     """
-    Menu of complimentary dishes (sides) for the selected food item.
+    Menu of complimentary dishes (sides/options) for the selected food item.
 
     Exampples:
     - Choice of Dressing (for Grilled Chicken salad)
@@ -202,25 +202,23 @@ class SideMenu(BaseModel):
     - Pizza sizes
     - Soups
     """
-    # TODO(yao): create Options class for options. Separate from 'sides'
     name = models.CharField(max_length=60)
-    item = models.ForeignKey(Item, related_name='side_menus')
+    item = models.ForeignKey(Item, related_name='option_groups')
     is_required = models.BooleanField(default=False)
     multi_select = models.BooleanField(default=True)
 
     class Meta:
-        db_table = 'side_menu'
+        db_table = 'option_group'
 
 
-class SideItem(BaseModel):
-    # TODO(yao): rename SideMenu to OptionGroup, SideItem to Option
+class Option(BaseModel):
 
     name = models.CharField(max_length=60)
     price = MoneyField(max_digits=10, decimal_places=2, default_currency='NGN')
-    menu = models.ForeignKey(SideMenu, related_name='items')
+    group = models.ForeignKey(OptionGroup, related_name='options')
 
     class Meta:
-        db_table = 'side_item'
+        db_table = 'option'
 
     __repr__ = sane_repr('name', 'price')
 
@@ -250,14 +248,9 @@ class OrderItem(BaseModel):
 
     item = models.ForeignKey(Item)
     quantity = models.IntegerField()
-    # TODO(yao): Add data field as JSONField for order metadata
     price = MoneyField(max_digits=10, decimal_places=2, default_currency='NGN')
-    # TODO(yao): rename extras to Options
-    extras = ArrayField(
-        models.IntegerField(),
-        default=list,
-        blank=True
-    )
+    options = models.ManyToManyField(Option, related_name='related_orders')
+    special_instructions = models.TextField(null=True, blank=True)
     order = models.ForeignKey(Order, related_name='order_items')
 
     def get_cost(self):

@@ -300,6 +300,13 @@ footer {
 
   #content {
     @include rem(padding-top, 100px);
+
+    .tab-content {
+      @include rem(padding-top, 30px);
+      th {
+        border-top: 0;
+      }
+    }
   }
 
   #masthead{
