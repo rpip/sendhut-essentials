@@ -21,6 +21,7 @@
          <input type="hidden" name="partner" value="{{ item.menu.partner.name }}" />
          <input type="hidden" name="available" value="{{ item.available }}" />
          <input type="hidden" name="price" value="{{ item.price.amount }}" />
+         <input type="hidden" name="slug" value="{{ item.slug }}" />
          <input type="hidden" name="category" value="{{ category }}" />
          {% for opt_group in item.option_groups.all %}
            <h5>
@@ -37,7 +38,8 @@
                      class="form-check-input"
                      type="checkbox"
                      name="extras[]"
-                     value="{{ option.id }}">
+                     value="{{ option.id }}"
+                     {% if cart_line and option.id in cart_line.extras %}checked{% endif %}>
                      {{ option.name }}
                  </label>
                  <span class="float-right">{{ option.price }}</span>
@@ -49,7 +51,8 @@
                      class="form-check-input"
                      type="radio"
                      name="extras[]"
-                     value="{{ option.id }}">
+                     value="{{ option.id }}"
+                     {% if cart_line and option.id in cart_line.extras %}checked{% endif %}>
                      {{ option.name }}
                  </label>
                  <span class="float-right">{{ option.price }}</span>
@@ -60,13 +63,15 @@
          <div class="form-group">
            <label for="special-instructions">Special instructions (Optional)</label>
            <input type="text" class="form-control" name="note"
-                  placeholder="Add note (e.g. allergies, extra spicy, etc.)">
+                  placeholder="Add note (e.g. allergies, extra spicy, etc.)"
+                  {% if cart_line %}value="{{ cart_line.note }}"{% endif %}>
          </div>
          <hr>
          <div class="input-group number-spinner mb-2 mr-sm-2 float-left"
               style="width: 150px; height: 37px">
               <button class="btn btn-default minus" data-dir="dwn"></button>
-              <input type="text" class="form-control text-center" name="quantity" value="1">
+              <input type="text" class="form-control text-center" name="quantity"
+                     value="{% if cart_line %}{{ cart_line.quantity }}{% else %}1{% endif %}">
               <button class="btn btn-default plus" data-dir="up"></button>
          </div>
          <button type="submit" class="btn btn-primary float-right" id="add-to-cart">

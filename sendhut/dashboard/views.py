@@ -4,23 +4,20 @@ from django.views import View
 from django.views.generic.edit import FormView
 from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib import messages
 from django.utils.text import slugify
-from django.core.mail import send_mail
 from django.urls import reverse
 
 from sendhut import utils
-from sendhut.accounts.models import User
 from sendhut.lunch.models import Item, Order
 from .models import Employee, Company, Invite, Allowance
 from .forms import EmployeeForm, AllowanceForm
+from sendhut.dashboard import emails
 
 
 def home(request):
     template = 'dashboard/home.html'
     context = {
         'page_title': 'Dashboard',
-        'items': Item.objects.all()[:3]
     }
     return render(request, template, context)
 
@@ -59,21 +56,28 @@ class EmployeeCreate(FormView):
     success_url = '/business/employees'
     page_title = 'Add Employee'
 
+    def get_form_class(self):
+        from functools import partial
+        return partial(self.form_class, self.request.user.company)
+
     def form_valid(self, form):
-        # TODO(yao): send invitation email/sms
-        # SEE https://simpleisbetterthancomplex.com/tutorial/2017/05/27/how-to-configure-mailgun-to-send-emails-in-a-django-app.html
+        # TODO(yao): send sms alert?
         data = form.cleaned_data
-        _role = data.pop('role')
         company = self.request.user.company
         token = utils.generate_token()
-        username = '{}-{}'.format(slugify(company.name), token)
-        user = User.objects.create(username=username, **data)
-        Invite.objects.create(token=token, company=company, user=user)
+        email = data['email']
+        Invite.objects.create(
+            token=token,
+            company=company,
+            email=email,
+            role=data['role'],
+            allowance_id=data['allowance']
+        )
         url = self.request.build_absolute_uri(reverse('dashboard:join', args=(token,)))
-        subject = 'Lunch - {}'.format(self.request.user.get_full_name())
-        body = 'Join me for lunch here {}'.format(url)
-        send_mail(subject, body, 'yao@sendhut.com', [data['email'], ])
-        messages.success(self.request, 'Invitation sent to {}'.format(user.get_full_name()))
+        sender = self.request.user.get_full_name()
+        emails.send_invitation(data['email'], sender, url)
+        email = data['email']
+        messages.success(self.request, 'Invitation sent to {}'.format(email))
         return super().form_valid(form)
 
 
@@ -95,14 +99,6 @@ def accept_invitation(request, token):
     return redirect(reverse('home'))
 
 
-def allowance_details(request):
-    # allowance detail: details + members
-    # TODO(yao): update allowance limit
-    # TODO(yao): link employees to allowance
-    # TODO(yao): unlink employees to allowance
-    pass
-
-
 def allowance_list(request):
     company = request.user.company
     template = 'dashboard/allowance_list.html'
@@ -113,8 +109,43 @@ def allowance_list(request):
     return render(request, template, context)
 
 
+class AllowanceUpdate(FormView):
+    template_name = 'dashboard/allowance_form.html'
+    form_class = AllowanceForm
+    success_url = '/business/allowances'
+    page_title = 'Update Allowance'
+
+    def get_initial(self):
+        allowance = Allowance.objects.get(id=self.kwargs['allowance_id'])
+        return {
+            'name': allowance.name,
+            'frequency': allowance.frequency,
+            'limit': allowance.limit.amount
+        }
+
+    def form_valid(self, form):
+        data = form.cleaned_data
+        member_ids = map(int, form.data.getlist('employees', []))
+        members = Employee.objects.filter(id__in=member_ids)
+        allowance_id = self.kwargs['allowance_id']
+        allowance = Allowance.objects.filter(id=allowance_id).update(**data)
+        allowance = Allowance.objects.get(id=allowance_id)
+        allowance.members.set(members)
+        messages.success(self.request, 'Allowance updated')
+        return super().form_valid(form)
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(**kwargs)
+        allowance_id = self.kwargs['allowance_id']
+        context['members'] = Employee.objects.filter(
+            company=self.request.user.company,
+            allowance_id=allowance_id
+        )
+        context['employees'] = Employee.objects.filter(company=self.request.user.company)
+        return context
+
+
 class AllowanceCreate(FormView):
-    # TODO(yao): link employees to allowance
     template_name = 'dashboard/allowance_form.html'
     form_class = AllowanceForm
     success_url = '/business/allowances'
@@ -122,7 +153,7 @@ class AllowanceCreate(FormView):
 
     def form_valid(self, form):
         data = form.cleaned_data
-        member_ids = map(int, form.data.get('employees', []))
+        member_ids = map(int, form.data.getlist('employees', []))
         members = Employee.objects.filter(id__in=member_ids)
         allowance = Allowance.objects.create(
             created_by=self.request.user,
@@ -133,16 +164,14 @@ class AllowanceCreate(FormView):
         messages.success(self.request, 'Allowance created')
         return super().form_valid(form)
 
-    def eligible_employees(self, allowance_id=None):
-        if allowance_id:
-            return Employee.objects.filter(
-                company=self.request.user.company,
-                allowance_id=allowance_id
-            )
-
-        return Employee.objects.filter(company=self.request.user.company)
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['employees'] = self.request.user.company.employees.all
+        return context
 
 
-class allowance_delete(View):
-    # unlink allowance from members
-    pass
+def allowance_delete(request, allowance_id):
+    # TODO(yao): unlink allowance from members
+    allowance = Allowance.objects.delete()
+    messages.info(request, "Allowance deleted")
+    return redirect(reverse('allowances'))

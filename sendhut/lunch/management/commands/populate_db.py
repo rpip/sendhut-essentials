@@ -102,6 +102,7 @@ class Command(BaseCommand):
             e.allowance = allowance
             e.save()
 
+        InviteFactory.create_batch(choice(range(4, 9)), allowance=choice(allowance), company=company)
         self.stdout.write(self.style.SUCCESS('DONE: Dashboard setup'))
         # TODO(yao): generate employee orders
 

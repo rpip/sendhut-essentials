@@ -13,3 +13,8 @@ MIDDLEWARE = MIDDLEWARE + [
 ]
 
 MESSAGE_LEVEL = message_constants.DEBUG
+
+# Email settings
+EMAIL_PORT = 1025
+EMAIL_HOST = 'localhost'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

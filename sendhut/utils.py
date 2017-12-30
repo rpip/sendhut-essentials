@@ -1,5 +1,9 @@
 import os
+import hashlib
 import binascii
+
+from djmoney.money import Money
+from django.core.serializers.json import DjangoJSONEncoder
 
 
 def sane_repr(*attrs):
@@ -28,4 +32,23 @@ def image_upload_path(instance, filename):
 
 def generate_token(token_length=19):
     " Returns a random hexadecimal string with the given length."
-    return str(binascii.b2a_hex(os.urandom(token_length))[:token_length])
+    token = binascii.b2a_hex(os.urandom(token_length))[:token_length]
+    return token.decode('utf-8')
+
+
+class JSONEncoder(DjangoJSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, Money):
+            return obj.amount
+        return super().default(obj)
+
+
+def hash_data(data, hash_length=190, data_type=None):
+    salt = "ValentinaIsTheMostAwsomeDogInTheWord"
+    if data:
+        data = "{}{}".format(data, salt)
+        data_hashed = hashlib.sha512(data.encode('utf-8')).hexdigest()
+        data_hashed = data_hashed[0:hash_length]
+    else:
+        data_hashed = None
+    return data_hashed

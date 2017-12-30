@@ -6,7 +6,6 @@ from djmoney.models.fields import MoneyField
 from sendhut.utils import sane_repr, generate_token
 from sendhut.db import BaseModel
 from sendhut.accounts.models import Address
-# TODO(yao): add employee, upload csv
 
 
 class Company(BaseModel):
@@ -27,7 +26,6 @@ class Company(BaseModel):
         db_table = 'company'
 
 
-
 class Employee(BaseModel):
 
     MEMBER = 0
@@ -37,7 +35,7 @@ class Employee(BaseModel):
         (MEMBER, 'Member'),
         (ADMIN, 'Admin')
     ]
-    user = models.ForeignKey(settings.AUTH_USER_MODEL)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True)
     role = models.IntegerField(
         choices=ROLES,
         default=MEMBER,
@@ -75,7 +73,6 @@ class Allowance(BaseModel):
         max_length=100,
         null=True,
         blank=True,
-        default=_generate_random_name()
     )
     frequency = models.IntegerField(
         choices=FREQUENCY,
@@ -89,16 +86,29 @@ class Allowance(BaseModel):
     def frequency_text(self):
         return dict(self.FREQUENCY)[self.frequency].capitalize()
 
+    def __str__(self):
+        return "%s" % self.limit
+
     class Meta:
         db_table = 'allowance'
 
 
 class Invite(BaseModel):
+    # TODO: resend invitation
+    email = models.CharField(max_length=32)
     token = models.CharField(max_length=32)
     date_joined = models.DateTimeField(blank=True, null=True)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL)
     company = models.ForeignKey(Company, related_name='invited_employees')
+    allowance = models.ForeignKey('Allowance', null=True, blank=True)
+    role = models.IntegerField(
+        choices=Employee.ROLES,
+        default=Employee.MEMBER,
+        blank=True,
+        null=True
+    )
 
-    @staticmethod
-    def mark_joined(token):
-        pass
+    def role_text(self):
+        return dict(Employee.ROLES)[self.role]
+
+    class Meta:
+        db_table = 'invite'

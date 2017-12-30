@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% load lunch_extras %}
+{% load thumbnail %}
+
+{% block page_header %}
+  {{ page_title }}
+{% endblock %}
+
+{% block content %}
+
+  <div class="cart">
+    <h2 class="text-center bold">Your Order</h2>
+
+    {% if cart %}
+      <div>
+        {% for cart_line in cart %}
+          <div class="container-fluid cart-line">
+            <div class="row">
+              <div class="col-sm-1">{{ cart_line.quantity }}</div>
+              <div class="col-sm-10">
+                <div class="container-fluid">
+                  <div class="row">
+                    <div class="col-sm-10">{{ cart_line.name }}</div>
+                    <div class="col-sm-1">{{ cart_line.total }}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+
+      <div class="container cart-summary">
+        <div class="row">
+          <div class="col-sm">
+            Subtotal
+          </div>
+          <div class="offset-sm-3 col-sm-3">
+            {{ sub_total }}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm">
+            Delivery
+          </div>
+          <div class="offset-sm-3 col-sm-3">
+            {{ delivery_fee }}
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-10 offset-sm-1">
+            <a href="{% url 'lunch:checkout' %}" class="btn-checkout">
+              <span class="float-left">Checkout</span>
+              <span class="float-right">{{ total }}</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+{% else %}
+  <div class="clearfix"></div>
+  <h6 class="text-muted empty-cart-msg">Your basket is empty</h6>
+{% endif %}
+  </div>
+{% endblock %}

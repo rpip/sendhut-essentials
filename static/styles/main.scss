@@ -234,6 +234,10 @@ main {
   .cart-line {
     border-bottom: 1px solid rgba(35, 31, 26, 0.1);
     @include rem(padding, 10px);
+    .delete {
+      font-size: smaller;
+      color: $red;
+    }
   }
   .cart-summary {
     @include rem(padding-top, 20px);

@@ -9,4 +9,6 @@ urlpatterns = [
     url(r'^employees$', views.employee_list, name='employees'),
     url(r'^allowances$', views.allowance_list, name='allowances'),
     url(r'^allowance/add$', views.AllowanceCreate.as_view(), name='allowance_add'),
+    url(r'^allowance/(?P<allowance_id>[a-zA-Z0-9-]+)/$', views.AllowanceUpdate.as_view(),
+        name='allowance_details'),
 ]

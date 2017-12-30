@@ -6,28 +6,15 @@
   <form method="post">
     {% csrf_token %}
     {% include 'partials/form.html' %}
-    {% if members %}
-      <hr>
-      <h4 class="bold ">Employees on this allowance</h4>
-      {% for x in members %}
-        <div class="form-check">
-          <label class="form-check-label">
-            <input type="checkbox" class="form-check-input" name="employees"
-                   value="{{ x.id }}" checked>
-                   {{ x.user.get_full_name }}
-          </label>
-        </div>
-      {% endfor %}
-    {% endif %}
-    {% if employees %}
+    {% if view.eligible_employees %}
       <hr>
       <h4 class="bold ">Select employees</h4>
-      {% for x in employees %}
+      {% for x in view.eligible_employees %}
         <div class="form-check">
           <label class="form-check-label">
             <input type="checkbox" class="form-check-input" name="employees"
                    value="{{ x.id }}">
-                   {{ x.user.get_full_name }}
+            {{ x.user.get_full_name }}
           </label>
         </div>
       {% endfor %}

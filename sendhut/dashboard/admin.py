@@ -52,7 +52,8 @@ class InviteAdmin(admin.ModelAdmin):
         'created',
         'token',
         'date_joined',
-        'user',
+        'email',
+        'role',
         'company',
     )
     list_filter = (

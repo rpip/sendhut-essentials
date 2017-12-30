@@ -13,7 +13,9 @@ from sendhut.lunch.models import (
     Partner, Menu, Item, OptionGroup, Option,
     Image, ItemImage, OrderItem, Order
 )
-from sendhut.dashboard.models import Company, Employee, Allowance
+
+from sendhut.dashboard.models import Company, Employee, Allowance, Invite
+from sendhut.utils import generate_token
 
 
 fake = Faker()
@@ -188,6 +190,7 @@ class AllowanceFactory(DjangoModelFactory):
     class Meta:
         model = Allowance
 
+    name = lazy_attribute(lambda o: fake.catch_phrase())
     created_by = SubFactory(UserFactory)
     frequency = lazy_attribute(lambda o: choice(list(dict(Allowance.FREQUENCY).keys())))
     limit = lazy_attribute(lambda x: choice([0, 10000, 6000, 20000]))
@@ -203,6 +206,18 @@ class EmployeeFactory(DjangoModelFactory):
     role = lazy_attribute(lambda o: choice(list(dict(Employee.ROLES).keys())))
     company = SubFactory(CompanyFactory)
     allowance = SubFactory(AllowanceFactory)
+
+
+class InviteFactory(DjangoModelFactory):
+
+    class Meta:
+        model = Invite
+
+    email = lazy_attribute(lambda o: fake.email())
+    token = lazy_attribute(lambda o: generate_token())
+    company = SubFactory(CompanyFactory)
+    allowance = SubFactory(AllowanceFactory)
+    role = lazy_attribute(lambda o: choice(list(dict(Employee.ROLES).keys())))
 
 
 class OrderFactory(DjangoModelFactory):

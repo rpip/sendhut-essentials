@@ -1,13 +1,16 @@
 import json
+
 from django.views import View
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.http import JsonResponse
 from django.core.paginator import Paginator
 from django.shortcuts import render
+from djmoney.money import Money
 
 from .models import Item, Basket
 from sendhut.cart import Cart
+from sendhut import utils
 
 
 class FoodListView(ListView):
@@ -47,7 +50,35 @@ class FoodDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['page_title'] = context['item'].name
+        context['category'] = self.kwargs['category']
         return context
+
+
+class CartLineDetailView(DetailView):
+
+    model = Item
+    context_object_name = 'item'
+    template_name = 'lunch/_item_detail.html'
+
+    def get_object(self):
+        slug = self.kwargs['slug']
+        return Item.objects.get(slug=slug)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['page_title'] = context['item'].name
+        _hash = self.kwargs['hash']
+        cart = Cart(self.request)
+        context['cart_line'] = cart.get_line_by_hash(_hash).serialize()
+        return context
+
+
+class CartLineDeleteView(View):
+    def post(self, request, *args, **kwargs):
+        _hash = self.kwargs['hash']
+        cart = Cart(self.request)
+        Cart(request).remove_by_hash(_hash)
+        return JsonResponse({'status': 'OK'}, encoder=utils.JSONEncoder)
 
 
 class CartView(View):
@@ -66,19 +97,15 @@ class CartView(View):
         data = json.loads(request.body)
         item = Item.objects.get(uuid=data['uuid'])
         quantity = data.pop('quantity')
+        # import pdb; pdb.set_trace()
         cart.add(item, int(quantity), data)
-        return JsonResponse(self._get_cart())
-
-    def delete(self, request, *args, **kwargs):
-        # DELETE /cart/id
-        item = Item.objects.get(id=kwargs['id'])
-        Cart(request).remove(item)
-        return JsonResponse(self._get_cart())
+        # print("Item {}\n Qty {}\n Data {}".format(item, quantity, data))
+        return JsonResponse(self._get_cart(), encoder=utils.JSONEncoder)
 
     def _get_cart(self):
         cart = Cart(self.request)
-        delivery_fee = 200
-        sub_total = cart.get_subtotal()
+        delivery_fee = Money(200, 'NGN')
+        sub_total = Money(cart.get_subtotal(), 'NGN')
         total = sub_total + delivery_fee
         return {
             'cart': cart.serialize(),
@@ -88,19 +115,15 @@ class CartView(View):
         }
 
 
-class CheckOutView(View):
-
+class CheckOutView(CartView):
+    # TODO(yao): refresh cart on item add
+    # TODO(yao):
     def get(self, request, *args, **kwargs):
+        return render(request, 'lunch/confirm_checkout.html', self._get_cart())
+
+    def post(self, request, *args, **kwargs):
         pass
 
 
-class OrderHistoryView(View):
-
-    def get(self, request, *args, **kwargs):
-        pass
-
-
-class PaymentView(View):
-
-    def get(self, request, *args, **kwargs):
-        pass
+def order_history(request):
+    pass

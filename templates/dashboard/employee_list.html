@@ -52,21 +52,17 @@
       <table class="table table-striped">
         <thead>
           <tr>
-            <th scope="col">Name</th>
             <th scope="col">Email</th>
-            <th scope="col">Employee ID</th>
             <th scope="col">Allowance</th>
             <th scope="col">Role</th>
           </tr>
         </thead>
         <tbody>
-          {% for e in employees.invited %}
+          {% for invite in employees.invited %}
             <tr>
-              <td>{{ e.user.get_full_name }}</td>
-              <td>{{ e.user.email }}</td>
-              <td>{{ e.id }}</td>
-              <td>{{ e.allowance.limit }}</td>
-              <td>{{ e.role_text }}</td>
+              <td>{{ invite.email }}</td>
+              <td>{{ invite.allowance.limit }}</td>
+              <td>{{ invite.role_text }}</td>
             </tr>
           {% endfor %}
         </tbody>

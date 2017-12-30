@@ -25,7 +25,10 @@
     <tbody>
       {% for x in allowances %}
         <tr>
-          <td>{{ x.name }}</td>
+          <td>
+            <a href="{% url 'dashboard:allowance_details' x.id %}">{{ x.name }}</a>
+          </td>
+
           <td>{{ x.limit }}</td>
           <td>{{ x.frequency_text }}</td>
           <td>{{ x.created_by.get_full_name }}</td>

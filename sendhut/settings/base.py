@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'taggit',
     'sorl.thumbnail',
     'widget_tweaks',
+    'templated_email',
 
     'sendhut.accounts',
     'sendhut.lunch',
@@ -146,12 +147,6 @@ MEDIA_ROOT = Path(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 AUTH_USER_MODEL = 'accounts.User'
-
-# Email settings
-EMAIL_PORT = 1025
-# EMAIL_HOST = env('EMAIL_HOST', default='mailhog')
-EMAIL_HOST = 'localhost'
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # CACHING
 # ---------------------------------------------------------------

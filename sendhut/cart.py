@@ -3,7 +3,8 @@ from decimal import Decimal
 
 from django.conf import settings
 
-from sendhut.lunch.models import Item, Option
+from sendhut.lunch.models import Option
+from sendhut import utils
 
 
 class ItemLine:
@@ -11,7 +12,6 @@ class ItemLine:
     An ItemLine instance represents a certain quantity of a particular
     priceable.
     """
-
     def get_total(self, **kwargs):
         """
         The total price of the line.
@@ -49,7 +49,7 @@ class CartLine(ItemLine):
         return Decimal(self.data['price'])
 
     def _get_extras(self):
-        extras = self.data.pop('extras', [])
+        extras = self.data.get('extras', [])
         if extras:
             extras = list(map(int, extras))
             _extras = []
@@ -68,9 +68,10 @@ class CartLine(ItemLine):
 
     def _get_options_total(self):
         options = self._get_extras()
-        return sum([x['price'] for x in sum(options.values(), [])])
+        return Decimal(sum([x['price'] for x in sum(options.values(), [])]))
 
     def serialize(self):
+        extras = self.data.pop('extras', [])
         _data = {
             'uuid': self.uuid,
             'quantity': self.quantity,
@@ -78,8 +79,12 @@ class CartLine(ItemLine):
             'base_price': self.get_base_price(),
             'total': self.get_total(),
             'options': self._get_extras(),
+            'hash': utils.hash_data([self.uuid, extras]),
+            'extras': list(map(int, extras))
         }
         _data.update(self.data)
+        # HACK(yao): reinsert the extras as list of ints
+        self.data['extras'] = extras
         return _data
 
 
@@ -133,23 +138,37 @@ class Cart:
         independently.
         """
         # TODO(yao): Implement item replacement
-        line = self.get_line(item, quantity, data)
-        if not line:
+        line = self.get_line(item, data)
+        if line:
+            # update item
+            self._state = [x for x in self._state if x.uuid != item.uuid]
+            line = self.create_line(item, int(quantity), data)
+            self._state.append(line)
+            self.save()
+        else:
             line = self.create_line(item, int(quantity), data)
             self._state.append(line)
             self.save()
 
-    def get_line(self, item, quantity, data):
+    def get_line(self, item, data):
+        """
+        Returns False if item match is not found
+        Matches: item uuid, extra (sides/options)
+        """
+        extras = data.get('extras')
         return next((cart_line for cart_line in self._state if
-                    cart_line.uuid == item.uuid
-                    and cart_line.quantity == quantity
-                    and cart_line.data == data), None)
+                     cart_line.uuid == item.uuid
+                     and cart_line.data.get('extras') == extras), None)
 
     def create_line(self, item, quantity, data):
         """
         Creates a CartLine given a item, its quantity and data
         """
         return CartLine(item, quantity, data)
+
+    def get_line_by_hash(self, _hash):
+        match = [x for x in self._state if utils.hash_data([x.uuid, x.data.get('extras')]) == _hash]
+        return match[0] if match else None
 
     def save(self):
         self.session[settings.CART_SESSION_ID] = self.serialize_lite()
@@ -169,11 +188,18 @@ class Cart:
         self.session.modified = True
         self.modified = True
 
-    def remove(self, item, quantity, data):
+    def remove(self, item, data):
         """Remove a item from the cart"""
-        cart_line = self.get_line(item, quantity, data)
+        cart_line = self.get_line(item, data)
         self._state.remove(cart_line)
         self.save()
+
+    def remove_by_hash(self, _hash):
+        """Remove a item from the cart"""
+        cart_line = self.get_line_by_hash(_hash)
+        if cart_line:
+            self._state.remove(cart_line)
+            self.save()
 
     def get_subtotal(self):
         """

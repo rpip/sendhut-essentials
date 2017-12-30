@@ -12,7 +12,7 @@
   {% if cart %}
     <div class="container">
       <div class="row">
-        <div class="col-sm-10 offset-sm-1">
+        <div class="col-sm-11 offset-sm-1">
         <a href="{% url 'lunch:checkout' %}" class="btn-checkout">
           <span class="float-left">Checkout</span>
           <span class="float-right">{{ total }}</span>
@@ -22,15 +22,23 @@
     </div>
 
     <div>
-      {% for cart_line in cart %}
+      {% for line in cart %}
         <div class="container-fluid cart-line">
           <div class="row">
-            <div class="col-sm-1">{{ cart_line.quantity }}</div>
+            <div class="col-sm-1">{{ line.quantity }}</div>
             <div class="col-sm-10">
               <div class="container-fluid">
                 <div class="row">
-                  <div class="col-sm-10">{{ cart_line.name }}</div>
-                  <div class="col-sm-1">{{ cart_line.total }}</div>
+                  <div class="col-sm-10">
+                    <a href="#" class="item-popup"
+                       data-href="{% url 'lunch:cartline_detail' hash=line.hash slug=line.slug %}">
+                      {{ line.name }}
+                    </a>
+                  </div>
+                  <div class="col-sm-1">{{ line.total }}<br>
+                    <a data-href="{% url 'lunch:cartline_delete' line.hash %}"
+                       href="#" class="delete">Remove</a>
+                  </div>
                 </div>
               </div>
             </div>
@@ -41,18 +49,18 @@
 
     <div class="container cart-summary">
       <div class="row">
-        <div class="col-sm">
+        <div class="col-sm-6">
           Subtotal
         </div>
-        <div class="offset-sm-3 col-sm-3">
+        <div class="col-sm-6">
           {{ sub_total }}
         </div>
       </div>
       <div class="row">
-        <div class="col-sm">
+        <div class="col-sm-6">
           Delivery
         </div>
-        <div class="offset-sm-3 col-sm-3">
+        <div class="col-sm-6">
           {{ delivery_fee }}
         </div>
       </div>
