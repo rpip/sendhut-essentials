@@ -1,5 +1,5 @@
 from datetime import datetime
-from random import choice
+from random import choice, shuffle
 from uuid import uuid4
 import six
 
@@ -14,6 +14,11 @@ from sorl.thumbnail import ImageField
 from sendhut.utils import sane_repr, image_upload_path
 from sendhut.db import BaseModel
 from sendhut.accounts.models import Address
+
+FOOD_TAGS = [
+    'local gems', 'halal', 'pizza', 'vegetarian', 'deserts',
+    'guilty', 'pleasures', 'chinese', 'fresh drinks', 'healthy', 'food'
+]
 
 
 class Basket():
@@ -53,12 +58,21 @@ class Basket():
 
 
 class Partner(BaseModel):
-    "Food vendors"
+    "Food vendor"
 
     name = models.CharField(max_length=100)
     address = models.CharField(max_length=200)
     phone = models.CharField(max_length=30)
     location = models.CharField(max_length=30, null=True, blank=True)
+    logo = ImageField(upload_to=image_upload_path, null=True, blank=True)
+    # banner is image displayed on restaurant's page
+    slug = models.CharField(max_length=64)
+    banner = ImageField(upload_to=image_upload_path, null=True, blank=True)
+    tags = TaggableManager()
+
+    def tags_tx(self):
+        shuffle(FOOD_TAGS)
+        return ', '.join(FOOD_TAGS[:3])
 
     class Meta:
         db_table = "partner"

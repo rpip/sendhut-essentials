@@ -7,15 +7,15 @@ from django.conf import settings
 
 from .cart import Cart
 from .forms import LoginForm
+from sendhut.lunch.models import Partner
 
 
-class HomePageView(TemplateView):
-    template_name = 'home.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['page_title'] = 'Home'
-        return context
+def home(request):
+    context = {
+        'page_title': 'Home',
+        'restaurants': Partner.objects.all()[:3]
+    }
+    return render(request, 'home.html', context)
 
 
 class AboutPageView(TemplateView):

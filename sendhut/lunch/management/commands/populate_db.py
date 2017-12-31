@@ -7,7 +7,8 @@ from ._factory import (
     UserFactory, ItemFactory,
     MenuFactory, OptionGroupFactory,
     OptionFactory, ImageFactory, PartnerFactory,
-    CompanyFactory, AllowanceFactory, EmployeeFactory
+    CompanyFactory, AllowanceFactory, EmployeeFactory,
+    InviteFactory
 )
 
 
@@ -21,7 +22,7 @@ def get_random_food_categories():
 class Command(BaseCommand):
     help = 'Populates the database with dummy Sendhut data'
 
-    def _setup_partner(self, partner, menus_nbr=2):
+    def _setup_partner(self, partner, menus_nbr=6):
         self.stdout.write(self.style.SUCCESS('Creating menus'))
         menus = MenuFactory.create_batch(menus_nbr, partner=partner)
         for menu in menus:
@@ -31,7 +32,7 @@ class Command(BaseCommand):
 
     def _setup_partner_menu(self, menu):
         self.stdout.write(self.style.SUCCESS('Creating menu items'))
-        items = ItemFactory.create_batch(choice(range(8, 20)), menu=menu)
+        items = ItemFactory.create_batch(choice(range(3, 8)), menu=menu)
 
         images = ImageFactory.create_batch(50)
         image_ids = [image.id for image in images]
@@ -72,7 +73,7 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS('Creating partners'))
         partners = PartnerFactory.create_batch(10)
         for partner in partners:
-            self._setup_partner(partner)
+            self._setup_partner(partner, choice(range(4, 6)))
 
         # TODO(yao): create sample orders for users
         # create business account users
@@ -102,7 +103,7 @@ class Command(BaseCommand):
             e.allowance = allowance
             e.save()
 
-        InviteFactory.create_batch(choice(range(4, 9)), allowance=choice(allowance), company=company)
+        #InviteFactory.create_batch(choice(range(4, 9)), allowance=choice(allowances), company=company)
         self.stdout.write(self.style.SUCCESS('DONE: Dashboard setup'))
         # TODO(yao): generate employee orders
 

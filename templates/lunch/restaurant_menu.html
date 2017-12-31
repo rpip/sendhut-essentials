@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% load lunch_extras %}
+{% load thumbnail %}
+
+{% block page_header %}
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-6">
+        <h2 class="bold">{{ vendor.name }}</h2>
+        <div class="text-muted">{{ vendor.tags_tx }}</div>
+        <div class="avg-time bold">{{ vendor|avg_delivery_time }}</div>
+      </div>
+      <div class="col-sm-5">
+        {% thumbnail vendor.banner "370x160" crop="center" as im %}
+        <img class="card-img-top img-fluid"
+             src="{{ im.url }}"
+             alt="{{ item.title }"
+             width="{{ im.width }}"
+             height="{{ im.height }}">
+           {% endthumbnail %}
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="container">
+      <nav class="nav">
+        {% for menu in vendor.menus.all %}
+          <a class="nav-link" href="#{{ menu.name }}">{{ menu.name }}</a>
+        {% endfor %}
+      </nav>
+    </div>
+  </div>
+  <hr>
+  <div class="row">
+      {% for menu in vendor.menus.all %}
+        <div class="row food-list">
+          <div class="container">
+        <h3 id="{{ menu.name }}">{{menu.name}}</h3>
+        {% for item in menu.items.all %}
+          <a
+            data-href="{% url  'lunch:food_detail' vendor=vendor.slug slug=item.slug %}"
+            class="item-popup">
+            <div class="card">
+              {% thumbnail item.primary_image "310x172" crop="center" as im %}
+              <img class="card-img-top img-fluid"
+                   src="{{ im.url }}"
+                   alt="{{ item.title }"
+                   width="{{ im.width }}"
+                   height="{{ im.height }}">
+                 {% endthumbnail %}
+
+                 <div class="card-body">
+                   <p class="card-title">{{ item.name }}</p>
+                   <p class="card-text">
+                     {% include  "lunch/_dietary_labels.html" with item=item %}
+                     <div class="row">
+                       <div class="container">
+                         <div class="avg-time">{{ item.menu.partner|avg_delivery_time }}</div>
+                       </div>
+                     </div>
+                   </p>
+                 </div>
+            </div>
+          </a>
+        {% endfor %}
+                 </div>
+            </div>
+      {% endfor %}
+    </div>
+
+
+  <!-- Modal -->
+  <div class="modal fade" id="item-modal" tabindex="-1" role="dialog"
+       aria-labelledby="item-modal-label" aria-hidden="true">
+       <div class="modal-dialog" role="document">
+         <div class="modal-content">
+           <div class="modal-header">
+             <h5 class="modal-title" id="item-modal-label"></h5>
+             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+               <span aria-hidden="true">&times;</span>
+             </button>
+           </div>
+           <div class="modal-body">
+           </div>
+         </div>
+       </div>
+  </div>
+{% endblock %}

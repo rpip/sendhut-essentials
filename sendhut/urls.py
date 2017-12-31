@@ -8,12 +8,12 @@ from sendhut.lunch import urls as lunch_urls
 from sendhut.accounts import urls as account_urls
 from sendhut.dashboard import urls as dashboard_urls
 from .views import (
-    HomePageView, AboutPageView,
-    LoginView, LogoutView
+    AboutPageView, LoginView, LogoutView,
+    home
 )
 
 urlpatterns = [
-    url(r'^$', HomePageView.as_view(), name='home'),
+    url(r'^$', home, name='home'),
     url(r'^login/$', LoginView.as_view(), name='login'),
     url(r'^logout/$', LogoutView.as_view(), name='logout'),
     url(r'^about/$', AboutPageView.as_view(), name='about'),

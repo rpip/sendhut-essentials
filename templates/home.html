@@ -1,17 +1,21 @@
 {% extends "base.html" %}
 
+{% block body_class %}body-home{% endblock %}
+
 {% block page_header %}
-  What's on the menu?
+ What's on the menu?
 {% endblock %}
 
 {% block content %}
 
   {% include "partials/lunch_categories.html" %}
 
+  {% include "partials/popular_tags.html" %}
+
   {# include weekly meal-subscription #}
 {% endblock %}
 
 {% block main_bottom %}
   {% include "partials/office_lunch_promo.html" %}
-  {% include "partials/download_app.html" %}
+  {#% include "partials/download_app.html" %#}
 {% endblock %}

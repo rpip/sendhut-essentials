@@ -7,33 +7,20 @@ from django.http import JsonResponse
 from django.core.paginator import Paginator
 from django.shortcuts import render
 from djmoney.money import Money
+from django.shortcuts import render, redirect, get_object_or_404
 
-from .models import Item, Basket
+from .models import Item, Basket, Partner
 from sendhut.cart import Cart
 from sendhut import utils
 
 
-class FoodListView(ListView):
-
-    model = Item
-    context_object_name = 'items'
-    ITEMS_PER_PAGE = 30
-    template_name = 'lunch/item_list.html'
-
-    def get_queryset(self):
-        category = self.kwargs['category']
-        items = Basket.filter_by_category_slugs([category])
-        paginator = Paginator(items, self.ITEMS_PER_PAGE)
-        page = self.request.GET.get('page', 1)
-        items = paginator.page(page)
-        # if self.request.is_ajax(), return ajax list view
-        return items
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['category'] = category = self.kwargs['category']
-        context['page_title'] = Basket.format_slug(category)
-        return context
+def restaurant_menu(request, slug):
+    template = 'lunch/restaurant_menu.html'
+    vendor = get_object_or_404(Partner, slug=slug)
+    context = {
+        'vendor': vendor
+    }
+    return render(request, template, context)
 
 
 class FoodDetailView(DetailView):
@@ -43,14 +30,12 @@ class FoodDetailView(DetailView):
     template_name = 'lunch/_item_detail.html'
 
     def get_object(self):
-        # category_slug = self.kwargs['category']
         slug = self.kwargs['slug']
         return Item.objects.get(slug=slug)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['page_title'] = context['item'].name
-        context['category'] = self.kwargs['category']
         return context
 
 

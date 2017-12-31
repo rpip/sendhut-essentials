@@ -42,7 +42,6 @@ MENU_NAMES = (
     'Main Dish',
     'Desserts',
     'Meditanian Dishes - Salads',
-    ''
 )
 
 SIDE_MENUS = (
@@ -102,14 +101,23 @@ class AddressFactory(DjangoModelFactory):
 
 
 class PartnerFactory(DjangoModelFactory):
-
     class Meta:
         model = Partner
+
+    def _logo_img():
+        images = glob.glob('./static/images/restaurant-logos/*')
+        return File(open(choice(images), 'rb'))
+
+    def _banner_img():
+        images = glob.glob('./static/images/fixtures/*/*')
+        return File(open(choice(images), 'rb'))
 
     name = lazy_attribute(lambda o: fake.company())
     address = lazy_attribute(lambda o: fake.address())
     location = choice(FOOD_LOCATIONS)
     phone = choice(PHONE_NUMBERS)
+    logo = LazyFunction(_logo_img)
+    banner = LazyFunction(_banner_img)
 
 
 class MenuFactory(DjangoModelFactory):
