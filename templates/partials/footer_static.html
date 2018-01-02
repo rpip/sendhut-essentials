@@ -104,7 +104,8 @@ $('body').on('click', '#item-modal #add-to-cart', function(e) {
         var href = $('[data-slidepanel]').data('href');
         $('#slidepanel').html('').load(href, function() {});
         console.log(status);
-        console.log(data);
+        var x = $('#cart-item-count').html();
+        $('#cart-item-count').html(parseInt(x) + 1);
       }
     });
 });
@@ -121,7 +122,11 @@ $('body').on('click', '.cart-line .delete', function(e) {
       contentType: 'application/json',
       success: function(data, status) {
         var href = $('[data-slidepanel]').data('href');
-        $('#slidepanel').html('').load(href, function() {});
+  $('#slidepanel').html('').load(href, function() {});
+
+  var x = $('#cart-item-count').html();
+  $('#cart-item-count').html(parseInt(x) - 1);
+
       }
       });
   });

@@ -6,24 +6,23 @@
   <div class="card-row">
     {% for vendor in restaurants %}
       <div class="col-sm-4">
-        <div class="card">
-          <a href="{% url 'lunch:restaurant_menu' vendor.slug %}">
-          {% thumbnail vendor.banner "585x312" crop="center" as im %}
+        <a href="{% url 'lunch:restaurant_menu' vendor.slug %}" class="no-deco">
+          <div class="card">
+            {% thumbnail vendor.banner "585x312" crop="center" as im %}
             <img class="card-img-top img-fluid"
                  src="{{ im.url }}"
                  alt="{{ item.title }"
                  width="{{ im.width }}"
                  height="{{ im.height }}">
-        {% endthumbnail %}
-          </a>
-        <div class="card-body">
-          <a class="cad-title">{{ vendor.name }}</a>
-          <div class="text-muted">{{ vendor.tags_tx }}</div>
-          <div class="avg-time">{{ vendor|avg_delivery_time }}</div>
-        </div>
-        </div>
+               {% endthumbnail %}
+               <div class="card-body">
+                 <h6 class="card-title">{{ vendor.name }}</h6>
+                 <h6 class="card-subtitle mb-2 text-muted">{{ vendor.tags_tx }}</h6>
+                 <div class="avg-time">{#{ vendor|avg_delivery_time }#}</div>
+               </div>
+          </div>
+        </a>
       </div>
     {% endfor %}
-
   </div>
 </div> <!-- lunch-categories -->

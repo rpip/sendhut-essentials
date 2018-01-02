@@ -3,19 +3,25 @@
 {% block body_class %}body-home{% endblock %}
 
 {% block page_header %}
- What's on the menu?
+Featured restaurants
 {% endblock %}
 
 {% block content %}
 
-  {% include "partials/lunch_categories.html" %}
+<br>
 
-  {% include "partials/popular_tags.html" %}
+<div>
+Every menu is sourced from local chefs and restaurants offering a unique take on a cuisine. <br>Your lunch is neatly packed and fresh, with dietary restrictions noted; ready to eat when you are.
+</div> <br>
 
-  {# include weekly meal-subscription #}
+{% include "partials/lunch_categories.html" %}
+
+{#% include "partials/popular_tags.html" %#}
+
+{# include weekly meal-subscription #}
 {% endblock %}
 
 {% block main_bottom %}
-  {% include "partials/office_lunch_promo.html" %}
-  {#% include "partials/download_app.html" %#}
+{% include "partials/office_lunch_promo.html" %}
+{#% include "partials/download_app.html" %#}
 {% endblock %}

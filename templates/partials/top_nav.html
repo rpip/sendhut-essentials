@@ -22,12 +22,6 @@
               <a class="dropdown-item" href="{% url 'lunch:order_history' %}">Order History</a>
               <a class="dropdown-item" href="#">Your Account</a>
               <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
-              {% if user.company %}
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="{% url 'dashboard:home' %}">
-                View company dashboard
-              </a>
-              {% endif %}
 
             </div>
           </div>
