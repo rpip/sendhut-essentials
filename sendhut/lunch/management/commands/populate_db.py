@@ -1,20 +1,19 @@
 from random import choice, shuffle
 from django.core.management.base import BaseCommand, CommandError
 
-from sendhut.lunch.models import Basket, Item
-from sendhut.dashboard.models import Allowance
+from sendhut.lunch.models import Item, OrderLine
 from ._factory import (
     UserFactory, ItemFactory,
     MenuFactory, OptionGroupFactory,
     OptionFactory, ImageFactory, PartnerFactory,
     CompanyFactory, AllowanceFactory, EmployeeFactory,
-    InviteFactory
+    OrderFactory, OrderLineFactory, fake
 )
 
 
 def get_random_food_categories():
     n = choice(range(1, 4))
-    categories = [k for k, _ in Basket.FOOD_CATEGORIES]
+    categories = [k for k, _ in Item.FOOD_CATEGORIES]
     shuffle(categories)
     return categories[:n]
 
@@ -89,9 +88,26 @@ class Command(BaseCommand):
         admin.is_superuser = True
         admin.set_password('sendhut2017')
         admin.save()
+
+        self.stdout.write(self.style.SUCCESS('Creating Orders'))
+        orders = OrderFactory.create_batch(10, user=admin)
+        for x in orders:
+            self.create_orderlines(x)
+
         self._setup_business_user(admin)
 
         self.stdout.write(self.style.SUCCESS('DONE'))
+
+    def create_orderlines(self, order):
+        for x in range(1, choice([3, 6])):
+            items = Item.objects.all()
+            OrderLine.objects.create(
+                quantity=choice(range(1, 6)),
+                price=choice([1200, 900, 3500, 800, 400, 1400, 1650, 850]),
+                special_instructions=fake.sentence(),
+                order=order,
+                item=choice(items)
+            )
 
     def _setup_business_user(self, user):
         company = CompanyFactory.create(user=user)

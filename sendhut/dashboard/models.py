@@ -1,9 +1,8 @@
-from faker import Faker
 from django.db import models
 from django.conf import settings
 from djmoney.models.fields import MoneyField
 
-from sendhut.utils import sane_repr, generate_token
+from sendhut.utils import sane_repr
 from sendhut.db import BaseModel
 from sendhut.accounts.models import Address
 
@@ -61,12 +60,6 @@ class Allowance(BaseModel):
         (DAILY, 'daily'),
         (WEEKLY, 'weekly')
     ]
-
-    def _generate_random_name():
-        fake = Faker()
-        token = generate_token()
-        word = '{}-{}-{}'.format(token, fake.color_name(), fake.street_name())
-        return word.replace(' ', '-')
 
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL)
     name = models.CharField(

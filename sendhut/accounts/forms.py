@@ -1,0 +1,29 @@
+from django import forms
+from django.contrib.auth.forms import AuthenticationForm
+
+
+class LoginForm(AuthenticationForm):
+    pass
+
+
+class SignupForm(forms.Form):
+    first_name = forms.CharField(
+        label='First name',
+        max_length=30,
+        widget=forms.TextInput(attrs={'placeholder': 'Your first name'}))
+    last_name = forms.CharField(
+        label='Last name',
+        max_length=30,
+        widget=forms.TextInput(attrs={'placeholder': 'Your last name'}))
+    email = forms.EmailField(
+        label='Email',
+        max_length=30,
+        widget=forms.TextInput(attrs={'placeholder': 'e.g. name@example.com'}))
+    password = forms.CharField(
+        label='Password',
+        max_length=20,
+        widget=forms.PasswordInput(attrs={'placeholder': 'Password'}))
+    phone = forms.CharField(
+        label='Mobile Phone',
+        max_length=20,
+        widget=forms.TextInput(attrs={'placeholder': 'Your mobile phone number'}))

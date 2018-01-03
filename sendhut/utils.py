@@ -2,6 +2,8 @@ import os
 import hashlib
 import binascii
 
+from faker import Faker
+
 from djmoney.money import Money
 from django.core.serializers.json import DjangoJSONEncoder
 
@@ -30,7 +32,7 @@ def image_upload_path(instance, filename):
     )
 
 
-def generate_token(token_length=19):
+def generate_token(token_length=16):
     " Returns a random hexadecimal string with the given length."
     token = binascii.b2a_hex(os.urandom(token_length))[:token_length]
     return token.decode('utf-8')
@@ -52,3 +54,10 @@ def hash_data(data, hash_length=190, data_type=None):
     else:
         data_hashed = None
     return data_hashed
+
+
+def generate_random_name():
+    fake = Faker()
+    token = generate_token()
+    word = '{}-{}-{}'.format(token, fake.color_name(), fake.street_name())
+    return word.replace(' ', '-')

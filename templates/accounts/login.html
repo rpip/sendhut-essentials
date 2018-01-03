@@ -3,28 +3,20 @@
 {% load widget_tweaks %}
 
 {% block page_header %}
-  Login
 {% endblock %}
 
 {% block content %}
   <div class="row">
-    <div class="col-md-3 offset-md-4">
-      {% if form.errors %}
-        <p>Your username and password didn't match. Please try again.</p>
+    <div class="col-md-4 offset-md-4">
+      <br>
+      <h4>Have an account?</h4>
+      {% if login_form.errors %}
+        <p>Please enter a correct username and password. Note that both fields may be case-sensitive</p>
       {% endif %}
-
-      {% if next %}
-        {% if user.is_authenticated %}
-          <p>Your account doesn't have access to this page. To proceed,
-            please login with an account that has access.</p>
-          {% else %}
-            <p>Please login to see this page.</p>
-          {% endif %}
-        {% endif %}
 
         <form method="post">
           {% csrf_token %}
-          {% include 'partials/form.html' %}
+          {% include 'partials/form.html' with form=login_form %}
           <div class="form-check">
             <label class="form-check-label">
               <input type="checkbox" class="form-check-input">
@@ -33,17 +25,34 @@
           </div>
           <div class="form-group">
             <button type="submit" class="btn btn-success">
-              <span class="glyphicon glyphicon-ok"></span> Save
+              <span class="glyphicon glyphicon-ok"></span> Log In
             </button>
-            <a href="{% url 'home' %}" class="btn btn-default">Cancel</a>
           </div>
         </form>
-        {# Assumes you setup the password_reset view in your URLconf #}
         <p><a href="{# url 'password_reset' #}">Lost password?</a></p>
     </div>
   </div>
-{% endblock %}
+<hr>
+{% if cart %}
+<div class="row">
+    <div class="col-md-4 offset-md-4">
+      <h4>Create an account</h4>
 
-{% block main_bottom %}
-  {% include "partials/office_lunch_promo.html" %}
+        <form method="post" action="{% url 'signup' %}">
+          {% csrf_token %}
+          {% include 'partials/form.html' with form=signup_form %}
+          <div class="form-group">
+            <button type="submit" class="btn btn-success">
+              <span class="glyphicon glyphicon-ok"></span> Continue
+            </button>
+          </div>
+        </form>
+    </div>
+</div>
+{% else %}
+  <div class="col-md-4 offset-md-4">
+    <p>Don't have an account yet?</p>
+    <p>Just place an order to create one.</p>
+  </div>
+{% endif %}
 {% endblock %}

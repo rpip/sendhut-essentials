@@ -1,4 +1,3 @@
-from django.contrib.auth import views as auth_views
 from django.conf.urls.static import static
 from django.conf.urls import include, url
 from django.conf import settings
@@ -7,16 +6,19 @@ from django.contrib import admin
 from sendhut.lunch import urls as lunch_urls
 from sendhut.accounts import urls as account_urls
 from sendhut.dashboard import urls as dashboard_urls
+from sendhut.accounts.views import LoginView, LogoutView, SignupView
 from .views import (
-    AboutPageView, LoginView, LogoutView,
-    home
+    home, about, faqs, privacy_terms
 )
 
 urlpatterns = [
     url(r'^$', home, name='home'),
+    url(r'^about-us/$', about, name='about-us'),
+    url(r'^faqs/$', faqs, name='faqs'),
+    url(r'^privacy_terms/$', privacy_terms, name='privacy-terms'),
+    url(r'^signup/$', SignupView.as_view(), name='signup'),
     url(r'^login/$', LoginView.as_view(), name='login'),
     url(r'^logout/$', LogoutView.as_view(), name='logout'),
-    url(r'^about/$', AboutPageView.as_view(), name='about'),
     url(r'^accounts/', include(account_urls, namespace='accounts')),
     url(r'^lunch/', include(lunch_urls, namespace='lunch')),
     url(r'^business/', include(dashboard_urls, namespace='dashboard')),

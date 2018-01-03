@@ -10,10 +10,11 @@ from django.conf import settings
 from taggit.managers import TaggableManager
 from djmoney.models.fields import MoneyField
 from sorl.thumbnail import ImageField
+from jsonfield import JSONField
 
-from sendhut.utils import sane_repr, image_upload_path
+from sendhut.utils import sane_repr, image_upload_path, generate_token
 from sendhut.db import BaseModel
-from sendhut.accounts.models import Address
+
 
 FOOD_TAGS = [
     'local gems', 'halal', 'pizza', 'vegetarian', 'deserts',
@@ -21,45 +22,11 @@ FOOD_TAGS = [
 ]
 
 
-class Basket():
-    # TODO(yao): Research reservoir sampling
-    # Food categories
-    LOCAL_GEMS = 1
-    CONTINENTAL = 2
-    OUR_PICKS = 3
-    TODAY_SPECIAL = 4
-    TOMORROW_SPECIAL = 5
-    FRUITS_AND_DRINKS = 6
-
-    FOOD_CATEGORIES = (
-        (LOCAL_GEMS, 'Local gems'),
-        (CONTINENTAL, 'Continental'),
-        (OUR_PICKS, 'Our Picks'),
-        (TODAY_SPECIAL, 'Today\'s Special'),
-        (TOMORROW_SPECIAL, 'Tomorrow\'s Special'),
-        (FRUITS_AND_DRINKS, 'Fruits and Drinks')
-    )
-
-    @classmethod
-    def category_slugs(cls):
-        cats = dict([(x, slugify(y)) for x, y in cls.FOOD_CATEGORIES])
-        return {v: k for k, v in cats.items()}
-
-    @classmethod
-    def filter_by_category_slugs(cls, slugs):
-        categories = cls.category_slugs()
-        categories = [categories[x] for x in slugs]
-        return Item.objects.filter(categories__contains=[categories])
-
-    @classmethod
-    def format_slug(cls, slug):
-        category_id = cls.category_slugs()[slug]
-        return [v for k, v in cls.FOOD_CATEGORIES if k == category_id][0]
-
-
 class Partner(BaseModel):
     "Food vendor"
-
+    # TODO(yao): rename model to Vendor
+    # TODO(yao): add allergy information
+    # TODO(yao): add restaurant notes
     name = models.CharField(max_length=100)
     address = models.CharField(max_length=200)
     phone = models.CharField(max_length=30)
@@ -135,9 +102,31 @@ class Item(BaseModel):
         (HALAL, "Halal")
     ]
 
+    # Food categories
+    LOCAL_GEMS = 1
+    HALAL = 2
+    VEGETARIAN = 3
+    DESSERTS_SWEET_TREATS = 4
+    GUILTY_PLEASURES = 5
+    BAKERY = 6
+    FRESH_JUICE = 7
+    HEALTHY_FOOD = 8
+
+    FOOD_CATEGORIES = (
+        (LOCAL_GEMS, 'Local gems'),
+        (HALAL, 'Halal'),
+        (VEGETARIAN, 'Vegetarian'),
+        (DESSERTS_SWEET_TREATS, 'Desserts'),
+        (DESSERTS_SWEET_TREATS, 'Sweet treats'),
+        (GUILTY_PLEASURES, 'guilty pleasures'),
+        (BAKERY, 'Bakery'),
+        (FRESH_JUICE, 'Fresh Juice'),
+        (HEALTHY_FOOD, 'Healthy Food')
+    )
+
     categories = ArrayField(
         models.IntegerField(
-            choices=Basket.FOOD_CATEGORIES
+            choices=FOOD_CATEGORIES
         ),
         default=list,
         blank=True
@@ -217,7 +206,7 @@ class OptionGroup(BaseModel):
     - Soups
     """
     name = models.CharField(max_length=60)
-    item = models.ForeignKey(Item, related_name='option_groups')
+    item = models.ForeignKey(Item, related_name='option_groups', null=True, blank=True)
     is_required = models.BooleanField(default=False)
     multi_select = models.BooleanField(default=True)
 
@@ -242,33 +231,53 @@ class Option(BaseModel):
 
 class Order(BaseModel):
 
+    from datetime import datetime
+
+    DELIVERY_TIMES = (
+        '11:30',
+        '12:00',
+        '12:30',
+        '1:00',
+        '1:30',
+        '2:00',
+        '2:30'
+    )
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
-    reference = models.CharField(max_length=6, unique=True)
+    reference = models.CharField(max_length=8, unique=True)
     # TODO(yao): add helpers for calculating orders
-    delivery_date = models.DateField(default=datetime.now)
-    delivery_address = models.ForeignKey(Address)
-    # special instructions
-    special_instructions = models.TextField(null=True, blank=True)
+    delivery_time = models.DateTimeField(default=datetime.now)
+    delivery_address = models.CharField(max_length=120)
+    notes = models.CharField(max_length=300, null=True, blank=True)
     paid = models.BooleanField(default=False)
+
+    def save(self, *args, **kwargs):
+        self.reference = generate_token(8)
+        super().save(*args, **kwargs)
+        return self
 
     def get_total_cost(self):
         return sum(item.get_cost() for item in self.items.all())
+
+    @classmethod
+    def get_today_delivery_schedules(cls):
+        schedule = []
+        for time in cls.DELIVERY_TIMES:
+            hour, minute = time.split(':')
+            schedule.append(datetime.today().replace(hour=int(hour), minute=int(minute)))
+        return schedule
 
     class Meta:
         db_table = "order"
 
 
-class OrderItem(BaseModel):
+class OrderLine(BaseModel):
 
     item = models.ForeignKey(Item)
     quantity = models.IntegerField()
     price = MoneyField(max_digits=10, decimal_places=2, default_currency='NGN')
-    options = models.ManyToManyField(Option, related_name='related_orders')
     special_instructions = models.TextField(null=True, blank=True)
-    order = models.ForeignKey(Order, related_name='order_items')
-
-    def get_cost(self):
-        return self.price * self.quantity
+    order = models.ForeignKey(Order, related_name='order_lines')
+    metadata = JSONField(null=True, blank=True)
 
     class Meta:
-        db_table = "order_item"
+        db_table = "order_line"

@@ -3,20 +3,18 @@
 {% block body_class %}body-home{% endblock %}
 
 {% block page_header %}
-Featured restaurants
+<div>Featured restaurants</div>
 {% endblock %}
 
 {% block content %}
 
-<br>
-
 <div>
-Every menu is sourced from local chefs and restaurants offering a unique take on a cuisine. <br>Your lunch is neatly packed and fresh, with dietary restrictions noted; ready to eat when you are.
+Every lunch menu is sourced from local chefs and restaurants offering a unique take on a cuisine.
 </div> <br>
 
 {% include "partials/lunch_categories.html" %}
 
-{#% include "partials/popular_tags.html" %#}
+{% include "partials/popular_tags.html" %}
 
 {# include weekly meal-subscription #}
 {% endblock %}

@@ -8,7 +8,7 @@ import dj_database_url
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = Path(__file__).parent.parent.parent
 
-ENV = os.getenv('ENVIRONMENT')
+ENV = config('ENVIRONMENT')
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = config('SECRET_KEY')
@@ -110,7 +110,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 AUTHENTICATION_BACKENDS = (
     'sendhut.auth_backends.UsernamePhoneAuthentication',
-    'django.contrib.auth.backends.ModelBackend',
+    #'django.contrib.auth.backends.ModelBackend',
 )
 
 LOGIN_REDIRECT_URL = '/'
@@ -119,7 +119,7 @@ LOGOUT_REDIRECT_URL = '/'
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'en-ngn'
 
 TIME_ZONE = 'UTC'
 
@@ -166,3 +166,11 @@ MESSAGE_TAGS = {
     messages.WARNING: 'alert-warning',
     messages.ERROR: 'alert-danger',
 }
+
+
+LUNCH_DELIVERY_FEE = 300
+
+WELCOME_MESSAGE = "We're currently in beta testing but we'd love you to give it a try. \
+If you spot any glitches please let us know on phone 08169567963 or email hello@sendhut.com"
+
+LOGIN_URL = '/login'

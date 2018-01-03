@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 from django.contrib import admin
 
-from .models import Partner, Menu, Item, Image, ItemImage, OptionGroup, Option, Order, OrderItem
+from .models import (
+    Partner, Menu, Item, Image,
+    ItemImage, OptionGroup, Option, Order, OrderLine
+)
 
 
 @admin.register(Partner)
@@ -110,10 +113,10 @@ class OptionAdmin(admin.ModelAdmin):
     search_fields = ('name',)
 
 
-class OrderItemInline(admin.TabularInline):
+class OrderLineInline(admin.TabularInline):
 
-    model = OrderItem
-    raw_id_fields = ['item', 'options']
+    model = OrderLine
+    raw_id_fields = ['item']
 
 
 @admin.register(Order)
@@ -123,23 +126,23 @@ class OrderAdmin(admin.ModelAdmin):
         'created',
         'user',
         'reference',
-        'delivery_date',
+        'delivery_time',
         'delivery_address',
-        'special_instructions',
+        'notes',
         'paid',
     )
     list_filter = (
         'created',
         'user',
-        'delivery_date',
+        'delivery_time',
         'delivery_address',
         'paid',
     )
-    inlines = [OrderItemInline]
+    inlines = [OrderLineInline]
 
 
-@admin.register(OrderItem)
-class OrderItemAdmin(admin.ModelAdmin):
+@admin.register(OrderLine)
+class OrderLineAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'created',
@@ -151,4 +154,3 @@ class OrderItemAdmin(admin.ModelAdmin):
         'order',
     )
     list_filter = ('created', 'item', 'order')
-    raw_id_fields = ('options',)

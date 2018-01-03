@@ -11,7 +11,7 @@ from factory import (
 from sendhut.accounts.models import User, Address
 from sendhut.lunch.models import (
     Partner, Menu, Item, OptionGroup, Option,
-    Image, ItemImage, OrderItem, Order
+    Image, ItemImage, OrderLine, Order
 )
 
 from sendhut.dashboard.models import Company, Employee, Allowance, Invite
@@ -158,8 +158,8 @@ class ItemImageFactory(DjangoModelFactory):
     class Meta:
         model = ItemImage
 
-    image = SubFactory(Image)
-    item = SubFactory(Item)
+    image = SubFactory(ImageFactory)
+    item = SubFactory(ItemFactory)
 
 
 class OptionGroupFactory(DjangoModelFactory):
@@ -233,8 +233,20 @@ class OrderFactory(DjangoModelFactory):
     class Meta:
         model = Order
 
+    user = SubFactory(UserFactory)
+    delivery_time = lazy_attribute(lambda o: choice(Order.get_today_delivery_schedules()))
+    delivery_address = 'Lekki phase 1'
+    notes = lazy_attribute(lambda o: fake.sentence())
+    paid = choice([True, False])
 
-class OrderItemFactory(DjangoModelFactory):
+
+class OrderLineFactory(DjangoModelFactory):
 
     class Meta:
-        model = OrderItem
+        model = OrderLine
+
+    quantity = lazy_attribute(lambda o: choice(range(1, 6)))
+    price = lazy_attribute(lambda o: choice([1200, 900, 3500, 800, 400, 1400, 1650, 850]))
+    special_instructions = lazy_attribute(lambda o: fake.sentence())
+    order = SubFactory(OrderFactory)
+    item = SubFactory(ItemFactory)

@@ -1,23 +1,34 @@
 $rem-fallback: true;
-$blue: #00a4db;
+//$blue: #00a4db;
 // $sendhut-blue: #001625;
-//$blue: #1e262b;
-//$green: #11aeaa;
+//$dark-blue: #1e262b;
 //$flinto-blue: #365a87;
 //$black: #2e3333;
+// $grey: ecf0f1; // postmates
 $black: #231f1a;
-$dark: #737373;
-//$happy: #faf8f8;
+//$black: #2e3333;
+//$dark-blue: #737373;
 $grey: #f5f5f5;
-$happy: #ffeae4;
-//$happy: $grey;
+//$happy: #ffeae4;
+$orange-happy: #ffeae4; // orange happy
+$orange-light-happy: #faf8f8; // light orange
+$grey-happy: #f5f5f5;;
+
+// alt colour scheme: grey, black, green
+$pm-green: #11aeaa;
+$dv-green: #00ccbc;
+$primary: $pm-green;
+$happy: $grey-happy;
+
 $light-grey: #f8f8f9;
 $body-color: $black;
-$font-family-base: 'Source Sans Pro', Helvetica, Arial, Lucida, sans-serif;
+//$font-family-base: 'Source Sans Pro', "Helvetica Neue", Helvetica, Arial, Lucida, sans-serif;
+$font-family-base: 'adelle', "Helvetica Neue", Helvetica, Arial, Lucida, sans-serif;
 
 @import "../fonts/source-sans-pro/source-sans-pro.css";
 @import "bootstrap/bootstrap";
 @import "_rem";
+@import "_stratos";
 
 @mixin circle($width, $border-color:$grey, $bg-color:$white) {
   width: $width;
@@ -36,13 +47,13 @@ html {
 }
 
 body {
-  // @include rem(font-size, 16px);
-  // font-weight: 400;
-  min-height: 75rem;
+  @include rem(font-size, 14px);
+  font-weight: 400;
+  //min-height: 75rem;
   padding-top: 4rem;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  line-height: 1.7em;
+  line-height: 1.4em;
   @include rem(margin-bottom, 60px); /* Margin bottom by footer height */
 }
 
@@ -81,9 +92,6 @@ body {
   }
 }
 
-img.card-img-top.img-fluid {
-  @include rem(height, 180px);
-}
 
 .card-row {
   @extend .row;
@@ -102,11 +110,10 @@ img.card-img-top.img-fluid {
   .card {
     &:hover {
       background-color: $grey;
-      cursor: pointer;
     }
   }
-  .card-body {
-    padding-left: 0;
+  .vendor {
+    @include rem(margin-bottom, 20px);
   }
 }
 
@@ -156,27 +163,33 @@ main {
   }
 }
 
+.menu-header {
+  margin-top: 20px;
+}
+
 .food-list {
   a {
     color: $black !important;
   }
-  .card {
-    border: 0;
-    float: left;
+  .menu-item {
+    @include rem(margin-bottom, 6px);
     cursor: pointer;
-    @include rem(margin-right, 15px);
-    @include rem(margin-bottom, 10px);
-    @include rem(width, 310px);
-    @include rem(height, 320px);
-    @include rem(padding, 3px);
     &:hover {
       background-color: $light-grey;
     }
+  }
+  .card {
+    float: left;
+    border: none;
+    background-color: transparent;
     .card-body{
-      padding: .125rem;
+      .card-text {
+        margin-bottom: 3px ;
+        font-size: 14px;
+      }
+      padding: 0 .125rem;
       padding-left: 0;
     }
-
   }
 }
 
@@ -206,10 +219,14 @@ main {
   display: block;
 }
 
-.cart {
+
+.cart{
+  a {
+    color: $black !important;
+    cursor: pointer;
+  }
+
   @include rem(font-size, 16px);
-  overflow-y: scroll;
-  height: 700px;
 
   .close {
     cursor: pointer;
@@ -232,19 +249,48 @@ main {
     margin-top: 30px;
     margin-bottom: 15px;
     width: 100%;
+    color: $white !important;
   }
 
   .cart-line {
     border-bottom: 1px solid rgba(35, 31, 26, 0.1);
     @include rem(padding, 10px);
-    .delete {
-      font-size: smaller;
-      color: $red;
+    .delete, .x-delete {
+      //display: none;
+      font-size: 10px;
+      // color: $primary !important;
     }
   }
   .cart-summary {
     @include rem(padding-top, 20px);
   }
+}
+
+#delivery-time-form {
+  label {
+    font-size: 15px !important;
+  }
+  select {
+    font-size: 14px !important;
+  }
+}
+
+.subcart-header {
+  padding-top: 30px;
+}
+#checkout-cart {
+  height: 100%;
+}
+
+.cart-summary {
+  .row {
+    padding: 5px;
+  }
+}
+
+#sidebar-cart {
+  height: 700px;
+  overflow-y: scroll;
 }
 
 
@@ -407,13 +453,13 @@ footer {
 }
 
 .diet-vegan, .diet-vegetarian {
-  @include circle(24px, $green);
+  @include circle(22px, $green);
 }
 
 .diet-halal {
-  @include circle(24px, $blue);
+  @include circle(22px, $blue);
 }
 
 .diet-gluten-free, .diet-dairy-free {
-  @include circle(24px, $red);
+  @include circle(22px, $red);
 }

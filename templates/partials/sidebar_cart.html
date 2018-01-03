@@ -1,4 +1,5 @@
-<div class="cart">
+{% load djmoney %}
+<div class="cart" id="sidebar-cart">
   <div>
     {% if items %}
       <h6 class="float-left bold">Your Order</h6>
@@ -10,16 +11,12 @@
   </div>
 
   {% if cart %}
-    <div class="container">
-      <div class="row">
-        <div class="col-sm-11 offset-sm-1">
-        <a href="{% url 'lunch:checkout' %}" class="btn-checkout">
-          <span class="float-left">Checkout</span>
-          <span class="float-right">{{ total }}</span>
-        </a>
-      </div>
-      </div>
-    </div>
+  <div class="col-sm-11 sm-offset-1">
+    <a href="{% url 'lunch:cart_summary' %}" class="btn-checkout">
+      <span class="float-left">Checkout</span>
+      <span class="float-right">{{ total }}</span>
+    </a>
+  </div>
 
     <div>
       {% for line in cart %}
@@ -30,7 +27,7 @@
               <div class="container-fluid">
                 <div class="row">
                   <div class="col-sm-10">
-                    <a href="#" class="item-popup"
+                    <a class="item-popup"
                        data-href="{% url 'lunch:cartline_detail' uuid=line.uuid slug=line.slug %}">
                       {{ line.name }}
                     </a>
@@ -49,19 +46,19 @@
 
     <div class="container cart-summary">
       <div class="row">
-        <div class="col-sm-6">
+        <div class="col-sm-6 bold">
           Subtotal
         </div>
-        <div class="col-sm-6">
+        <div class="col-sm-6 bold">
           {{ sub_total }}
         </div>
       </div>
       <div class="row">
-        <div class="col-sm-6">
+        <div class="col-sm-6 bold">
           Delivery
         </div>
-        <div class="col-sm-6">
-          {{ delivery_fee }}
+        <div class="col-sm-6 bold">
+          {{ cart_delivery_fee }}
         </div>
       </div>
     </div>

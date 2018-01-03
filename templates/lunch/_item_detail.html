@@ -17,8 +17,12 @@
        {% include  "lunch/_dietary_labels.html" with item=item %}
        <form id="item-form" data-cart-submit>
          <input type="hidden" name="uuid" value="{{ item.uuid }}" />
+         <input type="hidden" name="item_id" value="{{ item.id }}" />
          <input type="hidden" name="name" value="{{ item.name}}" />
-         <input type="hidden" name="partner" value="{{ item.menu.partner.name }}" />
+         <input type="hidden" name="vendor[name]" value="{{ item.menu.partner.name }}" />
+         <input type="hidden" name="vendor[uuid]" value="{{ item.menu.partner.uuid }}" />
+         <input type="hidden" name="vendor[address]" value="{{ item.menu.partner.address }}"/>
+         <input type="hidden" name="vendor[location]" value="{{ item.menu.partner.location }}"/>
          <input type="hidden" name="available" value="{{ item.available }}" />
          <input type="hidden" name="price" value="{{ item.price.amount }}" />
          <input type="hidden" name="slug" value="{{ item.slug }}" />

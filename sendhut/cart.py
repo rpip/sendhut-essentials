@@ -2,6 +2,7 @@ from itertools import groupby
 from decimal import Decimal
 
 from django.conf import settings
+from djmoney.money import Money
 
 from sendhut.lunch.models import Option
 from sendhut import utils
@@ -38,7 +39,9 @@ class CartLine(ItemLine):
     A CartLine object represents a single line in a shopping cart
     """
     def __init__(self, item, quantity, data=None):
+        # TODO(yao): generate uuid for cart, independent from item uuids
         self.uuid = str(item.uuid)
+        # self.item_id = str(item.id)
         self.quantity = quantity
         self.data = data or {}
 
@@ -50,9 +53,9 @@ class CartLine(ItemLine):
 
     def _get_extras(self):
         extras = self.data.get('extras', [])
+        _extras = []
         if extras:
             extras = list(map(int, extras))
-            _extras = []
             for x in Option.objects.filter(id__in=extras):
                 _extras.append({
                     'uuid': x.uuid,
@@ -61,27 +64,30 @@ class CartLine(ItemLine):
                     'parent': x.group.name
                 })
 
-            _extras = [(c, list(cgen)) for c, cgen in
-                       groupby(_extras, lambda x: x['parent'])]
-            return dict(_extras)
-        return {}
+            #_extras = [(c, list(cgen)) for c, cgen in
+            #           groupby(_extras, lambda x: x['parent'])]
+            #return dict(_extras)
+        return _extras
 
     def _get_options_total(self):
         options = self._get_extras()
-        return Decimal(sum([x['price'] for x in sum(options.values(), [])]))
+        return Decimal(sum([x['price'] for x in options]))
 
     def serialize(self):
-        extras = self.data.pop('extras', [])
+        # TODO(yao): better way to handle inject of data from clientside cart
+        # TODO(yao): rename extras to options
+        extras = self.data.get('extras', [])
         _data = {
             'uuid': self.uuid,
             'quantity': self.quantity,
             'unit_price': self.get_price_per_item(),
             'base_price': self.get_base_price(),
-            'total': self.get_total(),
-            'options': self._get_extras(),
-            'hash': utils.hash_data([self.uuid, extras]),
+            'total': Money(self.get_total(), 'NGN'),
+            'extras_meta': self._get_extras(),
             'extras': list(map(int, extras))
         }
+        # temp delete extras
+        self.data.pop('extras', [])
         _data.update(self.data)
         # HACK(yao): reinsert the extras as list of ints
         self.data['extras'] = extras
@@ -138,7 +144,7 @@ class Cart:
         independently.
         """
         # TODO(yao): Implement item replacement
-        line = self.get_line(item, data)
+        line = self.get_line(item.uuid)
         if line:
             # update item
             self._state = [x for x in self._state if x.uuid != item.uuid]
@@ -150,15 +156,14 @@ class Cart:
             self._state.append(line)
             self.save()
 
-    def get_line(self, item, data):
+    def get_line(self, item_uuid):
         """
         Returns False if item match is not found
         Matches: item uuid, extra (sides/options)
         """
-        extras = data.get('extras')
+        # TODO(yao): use unique line id's to differentiate cart lines
         return next((cart_line for cart_line in self._state if
-                     cart_line.uuid == item.uuid
-                     and cart_line.data.get('extras') == extras), None)
+                     cart_line.uuid == item_uuid), None)
 
     def create_line(self, item, quantity, data):
         """
@@ -166,14 +171,18 @@ class Cart:
         """
         return CartLine(item, quantity, data)
 
-    def get_line_by_hash(self, _hash):
-        match = [x for x in self._state if utils.hash_data([x.uuid, x.data.get('extras')]) == _hash]
-        return match[0] if match else None
-
     def save(self):
         self.session[settings.CART_SESSION_ID] = self.serialize_lite()
         self.session.modified = True
         self.modified = True
+
+    def set_delivery_time(self, delivery_time):
+        key = '{}-delivery-time'.format(settings.CART_SESSION_ID)
+        self.session[key] = delivery_time
+
+    def get_delivery_time(self):
+        key = '{}-delivery-time'.format(settings.CART_SESSION_ID)
+        return self.session.get(key)
 
     def serialize(self):
         return [x.serialize() for x in self._state]
@@ -188,18 +197,11 @@ class Cart:
         self.session.modified = True
         self.modified = True
 
-    def remove(self, item, data):
+    def remove(self, item_uuid):
         """Remove a item from the cart"""
-        cart_line = self.get_line(item, data)
+        cart_line = self.get_line(item_uuid)
         self._state.remove(cart_line)
         self.save()
-
-    def remove_by_hash(self, _hash):
-        """Remove a item from the cart"""
-        cart_line = self.get_line_by_hash(_hash)
-        if cart_line:
-            self._state.remove(cart_line)
-            self.save()
 
     def get_subtotal(self):
         """
@@ -227,3 +229,22 @@ class Cart:
 
     def __repr__(self):
         return 'Cart(%r)' % (list(self),)
+
+    def build_cart(self):
+        sub_total = Money(self.get_subtotal(), 'NGN')
+        delivery_fee = Money(settings.LUNCH_DELIVERY_FEE, 'NGN')
+        cart_serialized = self.serialize()
+        _cart = groupby(cart_serialized, lambda x: x['vendor']['name'])
+        _cart = [(x, list(y)) for x, y in _cart]
+        cart_delivery_fee = delivery_fee * len(_cart)
+        total = sub_total + cart_delivery_fee
+
+        return {
+            'cart': cart_serialized,
+            'sub_total': sub_total,
+            'grouped_cart': _cart,
+            'delivery_fee': delivery_fee,
+            'cart_delivery_fee': cart_delivery_fee,
+            'total': total,
+            'delivery_time': self.get_delivery_time()
+        }

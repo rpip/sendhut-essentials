@@ -1,7 +1,10 @@
 from random import choice
 
+from djmoney.money import Money
 from django import template
 from django.utils.text import slugify
+from django.conf import settings
+
 from sendhut.lunch.models import Item
 
 register = template.Library()
@@ -27,8 +30,12 @@ def dietary_labels(label):
         return 'DF'
 
 
-@register.filter(name='avg_delivery_time')
-def avg_delivery_time(partner):
-    # TODO(yao): calculate avg delivery time
-    _min, _max = choice([(20, 30), (15, 25), (30, 40), (25, 35), (55, 65)])
-    return '{} - {} Min'.format(_min, _max)
+@register.filter(name='subcart_total')
+def subcart_total(cart):
+    total = sum(x['total'].amount for x in cart)
+    return Money(total, 'NGN')
+
+
+@register.filter(name='times')
+def times(n):
+    return range(n)
