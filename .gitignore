@@ -91,7 +91,6 @@ venv
 *.sqlite3
 
 # static assets
-static/vendor
 staticfiles
 media
 node_modules
