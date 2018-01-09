@@ -41,7 +41,7 @@ class CartLine(ItemLine):
     def __init__(self, item, quantity, data=None):
         # TODO(yao): generate id for cart line, independent from item uuids
         self.uuid = str(item.uuid)
-        #self.item_id = data['item_id']
+        self.item_id = data['item_id']
         self.quantity = quantity
         self.data = data or {}
 
