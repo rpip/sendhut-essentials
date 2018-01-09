@@ -247,7 +247,9 @@ class Order(BaseModel):
     # TODO(yao): add helpers for calculating orders
     delivery_time = models.DateTimeField(default=datetime.now)
     delivery_address = models.CharField(max_length=120)
+    delivery_fee = MoneyField(max_digits=10, decimal_places=2, default_currency='NGN')
     notes = models.CharField(max_length=300, null=True, blank=True)
+    total_cost = MoneyField(max_digits=10, decimal_places=2, default_currency='NGN')
     paid = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):

@@ -87,9 +87,15 @@ body {
 }
 
 .page-header {
-  h1 {
+  h1, h4 {
     //@include rem(margin-bottom, 35px)
+    @include rem(margin-top, 20px);
   }
+}
+
+
+*[data-href] {
+  cursor: pointer;
 }
 
 
@@ -293,6 +299,9 @@ main {
   overflow-y: scroll;
 }
 
+.invalid-feedback {
+  display: block !important;
+}
 
 // FOOTER
 

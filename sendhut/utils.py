@@ -1,3 +1,4 @@
+import json
 import os
 import hashlib
 import binascii
@@ -43,6 +44,10 @@ class JSONEncoder(DjangoJSONEncoder):
         if isinstance(obj, Money):
             return obj.amount
         return super().default(obj)
+
+
+def json_encode(data):
+    return json.dumps(data, cls=JSONEncoder)
 
 
 def hash_data(data, hash_length=190, data_type=None):

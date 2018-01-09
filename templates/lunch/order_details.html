@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load lunch_extras %}
+{% load thumbnail %}
+
+{% block page_header %}
+  Order # {{ order.reference }}
+{% endblock %}
+
+{% block content %}
+<br>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">Item</th>
+      <th scope="col">Quantity</th>
+      <th scope="col">Price</th>
+      <th scope="col">Special instructions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for line in order.order_lines.all %}
+      <tr>
+        <td>
+          {{ line.item.name }}
+        </td>
+        <td>{{ line.quantity  }}</td>
+        <td>{{ line.price }}</td>
+        <td>{{ line.special_instructions }}</td>
+      </tr>
+    </a>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

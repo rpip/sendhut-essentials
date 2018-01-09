@@ -133,7 +133,6 @@ class OrderAdmin(admin.ModelAdmin):
     )
     list_filter = (
         'created',
-        'user',
         'delivery_time',
         'delivery_address',
         'paid',

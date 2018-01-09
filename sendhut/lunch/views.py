@@ -1,13 +1,16 @@
 import json
+from datetime import datetime
 
 from django.views import View
 from django.views.generic.detail import DetailView
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Item, Partner, Order, OrderLine
+from .forms import CheckoutForm
 from sendhut.cart import Cart
 from sendhut import utils
 
@@ -94,8 +97,9 @@ class DeliveryTimeView(CartView):
 
 
 def cart_summary(request):
-    cart = Cart(request).build_cart()
-    return render(request, 'lunch/cart_summary.html', cart)
+    context = Cart(request).build_cart()
+    context['form'] = CheckoutForm(data=request.POST)
+    return render(request, 'lunch/cart_summary.html', context)
 
 
 def cart_reload(request):
@@ -103,37 +107,64 @@ def cart_reload(request):
     return render(request, 'lunch/_cart_summary.html', cart)
 
 
-def list_orders(request):
-    pass
+@login_required
+def order_list(request):
+    # TODO(yao): add pagination
+    context = {
+        'orders': Order.objects.filter(user=request.user)
+    }
+    return render(request, 'lunch/order_list.html', context)
+
+
+@login_required
+def order_details(request, reference):
+    context = {
+        'order': get_object_or_404(Order, user=request.user, reference=reference)
+    }
+    return render(request, 'lunch/order_details.html', context)
 
 
 class CheckoutView(LoginRequiredMixin, View):
 
+    def get(self, request):
+        form = CheckoutForm(data=request.POST)
+        context = Cart(request).build_cart()
+        context['form'] = form
+        return render(request, 'lunch/cart_summary.html', context)
+
     def post(self, request):
-        delivery_address = request.POST.get('delivery_address')
-        if not(delivery_address):
-            messages.error(request, "Provide delivery address")
-        delivery_time = request.POST.get('delivery_time')
-        notes = request.POST.get('notes')
+        form = CheckoutForm(data=request.POST)
+        if not(form.is_valid()):
+            messages.error(request, "Please complete the delivery form to proceed")
+            context = Cart(request).build_cart()
+            context['form'] = form
+            return render(request, 'lunch/cart_summary.html', context)
+
+        delivery_time = form.cleaned_data['delivery_time']
+        hour, minute = delivery_time.split(':')
+        delivery_time = datetime.today().replace(hour=int(hour), minute=int(minute))
+        delivery_address = form.cleaned_data['delivery_address']
+        notes = form.cleaned_data['notes']
         cart = Cart(request)
-        # TODO(yao): email cart
+        # TODO(yao): send invoice email, send sms confirmation/updates
         _cart = cart.build_cart()
         order = Order.objects.create(
             user=request.user,
             delivery_time=delivery_time,
             notes=notes,
+            total_cost=_cart['total'],
             delivery_address=delivery_address,
             delivery_fee=_cart['delivery_fee']
         )
         for line in cart:
-            data = cart.serialized()
+            data = line.serialize()
             OrderLine.objects.create(
                 item_id=line.item_id,
                 quantity=line.get_quantity(),
                 price=line.get_total(),
                 order=order,
                 special_instructions=data['note'],
-                metadata=data
+                metadata=utils.json_encode(data)
             )
         cart.clear()
         messages.info(request, "Order submitted for processing. reference {}".format(order.reference))
