@@ -27,6 +27,7 @@
          <input type="hidden" name="price" value="{{ item.price.amount }}" />
          <input type="hidden" name="slug" value="{{ item.slug }}" />
          <input type="hidden" name="category" value="{{ category }}" />
+         <input type="hidden" name="line_id" value="{{ cart_line.line_id }}" />
          {% for opt_group in item.option_groups.all %}
            <h5>
              {{ opt_group.name }}

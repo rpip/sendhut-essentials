@@ -14,8 +14,10 @@ from .forms import CheckoutForm
 from sendhut.cart import Cart
 from sendhut import utils
 
+# TODO(yao): reorganize around domains: vendor, cart, food
 
-def restaurant_menu(request, slug):
+
+def vendor_page(request, slug):
     messages.info(request, "You can order in lunch with coworkers or \
     friends with the group order.")
     template = 'lunch/restaurant_menu.html'
@@ -26,45 +28,30 @@ def restaurant_menu(request, slug):
     return render(request, template, context)
 
 
-class FoodDetailView(DetailView):
-
-    model = Item
-    context_object_name = 'item'
-    template_name = 'lunch/_item_detail.html'
-
-    def get_object(self):
-        slug = self.kwargs['slug']
-        return Item.objects.get(slug=slug)
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['page_title'] = context['item'].name
-        return context
+def food_detail(request, slug):
+    template = 'lunch/_item_detail.html'
+    item = Item.objects.get(slug=slug)
+    context = {
+        'item': item,
+        'page_title': item.name
+    }
+    return render(request, template, context)
 
 
-class CartLineDetailView(DetailView):
-
-    model = Item
-    context_object_name = 'item'
-    template_name = 'lunch/_item_detail.html'
-
-    def get_object(self):
-        slug = self.kwargs['slug']
-        return Item.objects.get(slug=slug)
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['page_title'] = context['item'].name
-        uuid = self.kwargs['uuid']
-        cart = Cart(self.request)
-        context['cart_line'] = cart.get_line(uuid).serialize()
-        return context
+def cartline_detail(request, line_id, slug):
+    template = 'lunch/_item_detail.html'
+    item = Item.objects.get(slug=slug)
+    cart = Cart(request)
+    context = {
+        'item': item,
+        'page_title': item.name,
+        'cart_line': cart.get_line(line_id).serialize()
+    }
+    return render(request, template, context)
 
 
-class CartLineDeleteView(View):
-    def post(self, request, *args, **kwargs):
-        uuid = self.kwargs['uuid']
-        Cart(request).remove(uuid)
+def cartline_delete(request, line_id):
+        Cart(request).remove(line_id)
         return JsonResponse({'status': 'OK'}, encoder=utils.JSONEncoder)
 
 
@@ -80,20 +67,18 @@ class CartView(View):
         return render(request, 'partials/sidebar_cart.html', cart)
 
     def post(self, request):
-        # /cart
+        "This endpoints handle new cart additions and cart item updates"
         cart = Cart(request)
         data = json.loads(request.body)
+        # if line_id is present, it means it's an update
+        # delete cart line and re-add
+        if data and data.get('line_id'):
+            cart.remove(data.get('line_id'))
+
         item = Item.objects.get(uuid=data['uuid'])
         quantity = data.pop('quantity')
         cart.add(item, int(quantity), data)
         return JsonResponse(cart.build_cart(), encoder=utils.JSONEncoder)
-
-
-class DeliveryTimeView(CartView):
-    def post(self, request, *args, **kwargs):
-        delivery_time = self.request.POST['delivery_time']
-        Cart(request).set_delivery_time(delivery_time)
-        return JsonResponse(self._get_cart(), encoder=utils.JSONEncoder)
 
 
 def cart_summary(request):
@@ -109,7 +94,6 @@ def cart_reload(request):
 
 @login_required
 def order_list(request):
-    # TODO(yao): add pagination
     context = {
         'orders': Order.objects.filter(user=request.user)
     }
@@ -159,7 +143,7 @@ class CheckoutView(LoginRequiredMixin, View):
         for line in cart:
             data = line.serialize()
             OrderLine.objects.create(
-                item_id=line.item_id,
+                item_id=line.id,
                 quantity=line.get_quantity(),
                 price=line.get_total(),
                 order=order,

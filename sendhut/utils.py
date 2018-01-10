@@ -34,7 +34,7 @@ def image_upload_path(instance, filename):
 
 
 def generate_token(token_length=16):
-    " Returns a random hexadecimal string with the given length."
+    "Returns a random hexadecimal string with the given length."
     token = binascii.b2a_hex(os.urandom(token_length))[:token_length]
     return token.decode('utf-8')
 

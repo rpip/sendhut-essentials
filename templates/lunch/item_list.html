@@ -11,7 +11,7 @@
     <div class="container">
       {% for item in items %}
         <a
-           data-href="{% url  'lunch:food_detail' category=category slug=item.slug %}"
+           data-href="{% url 'lunch:food_detail' slug=item.slug %}"
            class="item-popup">
         <div class="card">
           {% thumbnail item.primary_image "310x172" crop="center" as im %}
@@ -28,6 +28,7 @@
               {% include  "lunch/_dietary_labels.html" with item=item %}
               <div class="row">
                 <div class="container">
+                  {# TODO(yao): display estimated ready time for food #}
                   <div class="avg-time">{{ item.menu.partner|avg_delivery_time }}</div>
                 </div>
               </div>

@@ -20,7 +20,7 @@
                   <div class="row">
                     <div class="col-sm-10">
                       <a class="item-popup"
-                         data-href="{% url 'lunch:cartline_detail' uuid=line.uuid slug=line.slug %}">
+                         data-href="{% url 'lunch:cartline_detail' line_id=line.line_id slug=line.slug %}">
                          {{ line.name }}
                          <ul class="text-muted">
                            {% for x in line.extras_meta %}

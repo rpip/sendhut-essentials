@@ -5,7 +5,6 @@ from django.conf import settings
 from djmoney.money import Money
 
 from sendhut.lunch.models import Option
-from sendhut import utils
 
 
 class ItemLine:
@@ -39,11 +38,14 @@ class CartLine(ItemLine):
     A CartLine object represents a single line in a shopping cart
     """
     def __init__(self, item, quantity, data=None):
-        # TODO(yao): generate id for cart line, independent from item uuids
-        self.uuid = str(item.uuid)
-        self.item_id = data['item_id']
+        from uuid import uuid4
+        data = data or {}
+        # add line id for fresh line
+        if not data.get('line_id'):
+            data['line_id'] = uuid4().hex
+        self.id = item.id
         self.quantity = quantity
-        self.data = data or {}
+        self.data = data
 
     def get_price_per_item(self, **kwargs):
         return self.get_base_price() + self._get_options_total()
@@ -56,17 +58,14 @@ class CartLine(ItemLine):
         _extras = []
         if extras:
             extras = list(map(int, extras))
-            for x in Option.objects.filter(id__in=extras):
+            for option in Option.objects.filter(id__in=extras):
                 _extras.append({
-                    'uuid': x.uuid,
-                    'name': x.name,
-                    'price': x.price.amount,
-                    'parent': x.group.name
+                    'uuid': option.uuid,
+                    'name': option.name,
+                    'price': option.price.amount,
+                    'parent': option.group.name
                 })
 
-            #_extras = [(c, list(cgen)) for c, cgen in
-            #           groupby(_extras, lambda x: x['parent'])]
-            #return dict(_extras)
         return _extras
 
     def _get_options_total(self):
@@ -74,11 +73,10 @@ class CartLine(ItemLine):
         return Decimal(sum([x['price'] for x in options]))
 
     def serialize(self):
-        # TODO(yao): better way to handle inject of data from clientside cart
         # TODO(yao): rename extras to options
         extras = self.data.get('extras', [])
         _data = {
-            'uuid': self.uuid,
+            'id': self.id,
             'quantity': self.quantity,
             'unit_price': self.get_price_per_item(),
             'base_price': self.get_base_price(),
@@ -86,12 +84,10 @@ class CartLine(ItemLine):
             'extras_meta': self._get_extras(),
             'extras': list(map(int, extras))
         }
-        # temp delete extras
-        self.data.pop('extras', [])
-        _data.update(self.data)
-        # HACK(yao): reinsert the extras as list of ints
-        self.data['extras'] = extras
-        return _data
+        import copy
+        json = copy.deepcopy(self.data)
+        json.update(_data)
+        return json
 
 
 class Cart:
@@ -126,44 +122,32 @@ class Cart:
             for l in [obj(x) for x in items]:
                 self.add(l, l.quantity, l.data)
 
-    def add(self, item, quantity=1, data=None, replace=False):
+    def add(self, item, quantity=1, data=None):
         """
-        If replace is False, increases quantity of the given item
-        by quantity. If given item is not in the cart yet, a new line
-        is created.
-
-        If replace is True, quantity of the given item is set to quantity.
-        If given item is not in the cart yet, a new line is created.
-
-        If the resulting quantity of a item is zero, its line is removed
-        from the cart.
-
         Items are considered identical if both item and data are equal.
         This allows you to customize two copies of the same item
         (eg. choose different toppings) and track their quantities
         independently.
         """
-        # TODO(yao): Implement item replacement
-        line = self.get_line(item.uuid)
-        if line:
-            # update item
-            self._state = [x for x in self._state if x.uuid != item.uuid]
-            line = self.create_line(item, int(quantity), data)
-            self._state.append(line)
-            self.save()
-        else:
+        line = self.match_line(item, quantity, data)
+        if not line:
             line = self.create_line(item, int(quantity), data)
             self._state.append(line)
             self.save()
 
-    def get_line(self, item_uuid):
+    def match_line(self, item, quantity, data):
+        "Matches: item uuid, extra (sides/options)"
+        return next((line for line in self._state if
+                     line.id == item.id and
+                     line.quantity == quantity and
+                     line.data.get('extras') == data.get('extras')), None)
+
+    def get_line(self, line_id):
         """
-        Returns False if item match is not found
-        Matches: item uuid, extra (sides/options)
+        Returns False if item match is not found.
         """
-        # TODO(yao): use unique line id's to differentiate cart lines
-        return next((cart_line for cart_line in self._state if
-                     cart_line.uuid == item_uuid), None)
+        return next((line for line in self._state if
+                     line.data['line_id'] == line_id), None)
 
     def create_line(self, item, quantity, data):
         """
@@ -197,9 +181,9 @@ class Cart:
         self.session.modified = True
         self.modified = True
 
-    def remove(self, item_uuid):
+    def remove(self, line_id):
         """Remove a item from the cart"""
-        cart_line = self.get_line(item_uuid)
+        cart_line = self.get_line(line_id)
         self._state.remove(cart_line)
         self.save()
 
@@ -217,8 +201,6 @@ class Cart:
         """
         Iterate over the items in the cart and get the items from the database
         """
-        # TODO(yao): group extras by option_group
-        # TODO(yao): rename extras to options
         return iter(self._state)
 
     def __getitem__(self, key):

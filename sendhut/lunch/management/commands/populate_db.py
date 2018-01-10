@@ -66,7 +66,6 @@ class Command(BaseCommand):
 
         # raise CommandError()
         self.stdout.write(self.style.SUCCESS('Creating Partners'))
-        # TODO(yao): Add orders
         users = UserFactory.create_batch(10)
 
         self.stdout.write(self.style.SUCCESS('Creating partners'))
@@ -74,7 +73,7 @@ class Command(BaseCommand):
         for partner in partners:
             self._setup_partner(partner, choice(range(4, 6)))
 
-        # TODO(yao): create sample orders for users
+        # TODO(yao): create sample orders for employees
         # create business account users
         self.stdout.write(self.style.SUCCESS('Creating dashboard data'))
         business_users = users[:2]
