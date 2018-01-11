@@ -2,7 +2,6 @@ import json
 from datetime import datetime
 
 from django.views import View
-from django.views.generic.detail import DetailView
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
@@ -15,6 +14,15 @@ from sendhut.cart import Cart
 from sendhut import utils
 
 # TODO(yao): reorganize around domains: vendor, cart, food
+
+
+def search(request, tag):
+    context = {
+        'page_title': 'search',
+        'search_term': tag,
+        'restaurants': Partner.objects.filter(tags__name__in=[tag])
+    }
+    return render(request, 'lunch/search.html', context)
 
 
 def vendor_page(request, slug):

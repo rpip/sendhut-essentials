@@ -2,21 +2,32 @@ from django.contrib.auth import authenticate, login, logout
 
 from django.views import View
 from django.shortcuts import redirect, render
+from django.contrib import messages
 from django.conf import settings
 
 from sendhut.cart import Cart
 from sendhut import utils
 from sendhut.accounts.models import User
-from .forms import LoginForm, SignupForm
+from .forms import LoginForm, SignupForm, ProfileForm
 
 
 class ProfileView(View):
+    # TODO(yao): CRUD delivery addresses
 
     def get(self, request, *args, **kwargs):
-        pass
+        form = ProfileForm(instance=request.user)
+        context = {'form': form}
+        return render(request, 'accounts/profile.html', context)
 
     def post(self, request, *args, **kwargs):
-        pass
+        form = ProfileForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Your profile was successfully updated!')
+            return redirect('accounts:profile')
+        else:
+            context = {'form': form}
+            return render(request, 'accounts/profile.html', context)
 
 
 class LoginView(View):

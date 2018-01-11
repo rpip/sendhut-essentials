@@ -18,7 +18,7 @@ from sendhut.db import BaseModel
 
 FOOD_TAGS = [
     'local gems', 'halal', 'pizza', 'vegetarian', 'deserts',
-    'guilty', 'pleasures', 'chinese', 'fresh drinks', 'healthy', 'food'
+    'guilty pleasures', 'chinese', 'fresh drinks', 'healthy', 'food'
 ]
 
 
@@ -38,8 +38,8 @@ class Partner(BaseModel):
     tags = TaggableManager()
 
     def tags_tx(self):
-        shuffle(FOOD_TAGS)
-        return ', '.join(FOOD_TAGS[:3])
+        tags = self.tags.all()
+        return ', '.join([x.name for x in tags[:3]])
 
     class Meta:
         db_table = "partner"

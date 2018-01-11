@@ -24,3 +24,12 @@ class AllowanceForm(forms.Form):
         widget=forms.Select
     )
     limit = forms.DecimalField()
+
+
+class BusinessSignupForm(forms.Form):
+    email = forms.EmailField(
+        max_length=60,
+        widget=forms.TextInput(attrs={'placeholder': 'Your work email address'}))
+    company = forms.CharField(
+        max_length=60,
+        widget=forms.TextInput(attrs={'placeholder': 'Your company name'}))

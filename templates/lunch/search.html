@@ -3,14 +3,10 @@
 {% block body_class %}body-home{% endblock %}
 
 {% block page_header %}
-<div>Featured restaurants</div>
+<div>Restaurants tagged {{ search_term }}</div>
 {% endblock %}
 
 {% block content %}
-
-<div>
-Every lunch menu is sourced from local chefs and restaurants offering a unique take on a cuisine.
-</div> <br>
 
 {% include "partials/lunch_categories.html" %}
 
@@ -20,5 +16,4 @@ Every lunch menu is sourced from local chefs and restaurants offering a unique t
 
 {% block main_bottom %}
 {% include "partials/office_lunch_promo.html" %}
-{#% include "partials/download_app.html" %#}
 {% endblock %}

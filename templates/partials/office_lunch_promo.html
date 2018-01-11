@@ -23,11 +23,10 @@
       <div class="col-sm-6">
         <h5>Give your team healthy and delicious food</h5>
         <p>We'll work with you to meet your team's exact needs.</p>
-        <form>
-          <div class="form-group">
-            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter your mobile number or email">
-          </div>
-          <button type="submit" class="btn btn-primary">Start</button>
+        <form method="post" action="{% url 'dashboard:signup' %}">
+          {% csrf_token %}
+          {% include 'partials/form.html' with form=business_signup_form %}
+          <button type="submit" class="btn btn-primary">Continue</button>
         </form>
       </div>
       <div class="col-sm-5" id="team-lunch"></div>

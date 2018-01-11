@@ -3,13 +3,15 @@ from django.contrib import messages
 from django.shortcuts import render
 
 from sendhut.lunch.models import Partner
+from sendhut.dashboard.forms import BusinessSignupForm
 
 
 def home(request):
     messages.info(request, settings.WELCOME_MESSAGE)
     context = {
         'page_title': 'Home',
-        'restaurants': Partner.objects.all()[:6]
+        'restaurants': Partner.objects.all()[:6],
+        'business_signup_form': BusinessSignupForm()
     }
     return render(request, 'home.html', context)
 

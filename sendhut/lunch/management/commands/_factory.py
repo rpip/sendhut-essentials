@@ -11,7 +11,7 @@ from factory import (
 from sendhut.accounts.models import User, Address
 from sendhut.lunch.models import (
     Partner, Menu, Item, OptionGroup, Option,
-    Image, ItemImage, OrderLine, Order
+    Image, ItemImage, OrderLine, Order, FOOD_TAGS
 )
 
 from sendhut.dashboard.models import Company, Employee, Allowance, Invite
@@ -139,6 +139,7 @@ class ItemFactory(DjangoModelFactory):
     description = lazy_attribute(lambda o: fake.text(max_nb_chars=100))
     price = choice([1200, 900, 3500, 800, 400, 1400, 1650, 850])
     dietary_labels = lazy_attribute(lambda o: random_diet_labels())
+    tags = lazy_attribute(lambda o: FOOD_TAGS[:3])
 
 
 class ImageFactory(DjangoModelFactory):

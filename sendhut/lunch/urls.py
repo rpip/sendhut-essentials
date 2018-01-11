@@ -1,13 +1,14 @@
 from django.conf.urls import url
 from .views import (
     CartView, CheckoutView,
-    food_detail,
-    cartline_detail, cartline_delete, vendor_page,
-    cart_reload, cart_summary, order_list, order_details
+    food_detail, cartline_detail, cartline_delete, vendor_page,
+    cart_reload, cart_summary, order_list, order_details,
+    search
 )
 
 
 urlpatterns = [
+    url(r'^(?P<tag>[a-zA-Z0-9-]+)$', search, name='search'),
     url(r'^cart/(?P<line_id>[a-zA-Z0-9-]+)/(?P<slug>[a-zA-Z0-9-]+)/$',
         cartline_detail, name='cartline_detail'),
     url(r'^cart/(?P<line_id>[a-zA-Z0-9-]+)/delete$',
@@ -22,5 +23,5 @@ urlpatterns = [
     url(r'^vendor/(?P<slug>[a-zA-Z0-9-]+)/$',
         vendor_page, name='restaurant_menu'),
     url(r'^item/(?P<slug>[a-zA-Z0-9-]+)/$',
-        food_detail, name='food_detail'),
+        food_detail, name='food_detail')
 ]

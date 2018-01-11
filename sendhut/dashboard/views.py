@@ -1,17 +1,15 @@
 from datetime import datetime
 
-from django.views import View
 from django.views.generic.edit import FormView
 from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
-from django.utils.text import slugify
 from django.urls import reverse
 
 from sendhut import utils
-from sendhut.lunch.models import Item, Order
-from .models import Employee, Company, Invite, Allowance
-from .forms import EmployeeForm, AllowanceForm
-from sendhut.dashboard import emails
+from sendhut.lunch.models import Order
+from .models import Employee, Invite, Allowance
+from .forms import EmployeeForm, AllowanceForm, BusinessSignupForm
+from sendhut import emails
 
 
 def home(request):
@@ -20,6 +18,24 @@ def home(request):
         'page_title': 'Dashboard',
     }
     return render(request, template, context)
+
+
+def business_signup(request):
+    if request.method == 'POST':
+        form = BusinessSignupForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            company = form.cleaned_data['company']
+            messages.info(request, "Thanks! We'll contact you shortly to onboard your team")
+            emails.alert_business_signup(email, company)
+            return redirect('home')
+        else:
+            messages.error(request, "Please complete the form")
+            template = 'dashboard/signup.html'
+            context = {
+                'business_signup_form': form
+            }
+            return render(request, template, context)
 
 
 def order_list(request):

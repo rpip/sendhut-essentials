@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
+from .models import User
 
 
 class LoginForm(AuthenticationForm):
@@ -27,3 +28,13 @@ class SignupForm(forms.Form):
         label='Mobile Phone',
         max_length=20,
         widget=forms.TextInput(attrs={'placeholder': 'Your mobile phone number'}))
+
+
+class ProfileForm(forms.ModelForm):
+    # TODO(yao): add notification toggles
+    # TODO(yao): add address form
+    # TODO(yao): confirm new email
+
+    class Meta:
+        model = User
+        fields = ('first_name', 'last_name', 'email', 'phone')
