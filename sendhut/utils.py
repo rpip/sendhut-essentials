@@ -66,3 +66,7 @@ def generate_random_name():
     token = generate_token()
     word = '{}-{}-{}'.format(token, fake.color_name(), fake.street_name())
     return word.replace(' ', '-')
+
+
+def unslugify(text):
+    return text.replace('-', ' ').replace('_', ' ')

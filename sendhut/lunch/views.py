@@ -19,7 +19,7 @@ from sendhut import utils
 def search(request, tag):
     context = {
         'page_title': 'search',
-        'search_term': tag,
+        'search_term': utils.unslugify(tag),
         'restaurants': Partner.objects.filter(tags__name__in=[tag])
     }
     return render(request, 'lunch/search.html', context)
