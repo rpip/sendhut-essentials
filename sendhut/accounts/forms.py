@@ -1,10 +1,14 @@
 from django import forms
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, UsernameField
 from .models import User
 
 
 class LoginForm(AuthenticationForm):
-    pass
+    username = UsernameField(
+        max_length=254,
+        label='Your email or mobile number',
+        widget=forms.TextInput(attrs={'autofocus': True}),
+    )
 
 
 class SignupForm(forms.Form):

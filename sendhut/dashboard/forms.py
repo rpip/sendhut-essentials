@@ -27,9 +27,15 @@ class AllowanceForm(forms.Form):
 
 
 class BusinessSignupForm(forms.Form):
-    email = forms.EmailField(
+
+    name = forms.CharField(
         max_length=60,
-        widget=forms.TextInput(attrs={'placeholder': 'Your work email address'}))
+        widget=forms.TextInput(attrs={'placeholder': 'Your full name'}))
+    phone = forms.CharField(
+        max_length=60,
+        widget=forms.TextInput(attrs={'placeholder': 'Phone number'}))
+    email = forms.EmailField(
+        widget=forms.TextInput(attrs={'placeholder': 'Work email address'}))
     company = forms.CharField(
         max_length=60,
-        widget=forms.TextInput(attrs={'placeholder': 'Your company name'}))
+        widget=forms.TextInput(attrs={'placeholder': 'Company name'}))

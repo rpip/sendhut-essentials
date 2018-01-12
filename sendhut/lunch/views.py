@@ -11,6 +11,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Item, Partner, Order, OrderLine
 from .forms import CheckoutForm
 from sendhut.cart import Cart
+from sendhut.dashboard.forms import BusinessSignupForm
 from sendhut import utils
 
 # TODO(yao): reorganize around domains: vendor, cart, food
@@ -20,6 +21,7 @@ def search(request, tag):
     context = {
         'page_title': 'search',
         'search_term': utils.unslugify(tag),
+        'business_signup_form': BusinessSignupForm(),
         'restaurants': Partner.objects.filter(tags__name__in=[tag])
     }
     return render(request, 'lunch/search.html', context)

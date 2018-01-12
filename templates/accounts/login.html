@@ -9,7 +9,7 @@
   <div class="row">
     <div class="col-md-4 offset-md-4">
       <br>
-      <h4>Have an account?</h4>
+      <h3>Have an account?</h3>
       {% if login_form.errors %}
         <p>Please enter a correct username and password. Note that both fields may be case-sensitive</p>
       {% endif %}
@@ -29,7 +29,7 @@
             </button>
           </div>
         </form>
-        <p><a href="{# url 'password_reset' #}">Lost password?</a></p>
+        <p><a href="{% url 'password_reset' %}">Lost password?</a></p>
     </div>
   </div>
 <hr>

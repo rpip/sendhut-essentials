@@ -160,6 +160,9 @@ main {
   #signup {
     background-color: $white;
     @extend .jumbotron;
+    label {
+      display: none;
+    }
 
     #team-lunch {
       background: $white url(../images/team-lunch.png) no-repeat top;
