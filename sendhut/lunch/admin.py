@@ -2,13 +2,13 @@
 from django.contrib import admin
 
 from .models import (
-    Partner, Menu, Item, Image,
+    Vendor, Menu, Item, Image,
     ItemImage, OptionGroup, Option, Order, OrderLine
 )
 
 
-@admin.register(Partner)
-class PartnerAdmin(admin.ModelAdmin):
+@admin.register(Vendor)
+class VendorAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'created',
@@ -27,8 +27,7 @@ class MenuAdmin(admin.ModelAdmin):
         'id',
         'created',
         'name',
-        'partner',
-        'label',
+        'vendor'
     )
     list_filter = ('created',)
     search_fields = ('name',)
@@ -128,14 +127,12 @@ class OrderAdmin(admin.ModelAdmin):
         'reference',
         'delivery_time',
         'delivery_address',
-        'notes',
-        'paid',
+        'notes'
     )
     list_filter = (
         'created',
         'delivery_time',
-        'delivery_address',
-        'paid',
+        'delivery_address'
     )
     inlines = [OrderLineInline]
 

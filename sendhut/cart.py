@@ -42,7 +42,7 @@ class CartLine(ItemLine):
         data = data or {}
         # add line id for fresh line
         if not data.get('line_id'):
-            data['line_id'] = uuid4()
+            data['line_id'] = uuid4().hex
         self.id = item.id
         self.quantity = quantity
         self.data = data

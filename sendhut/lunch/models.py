@@ -1,11 +1,10 @@
 from datetime import datetime
-from random import choice, shuffle
+from random import choice
 from uuid import uuid4
 import six
 
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
-from django.utils.text import slugify
 from django.conf import settings
 from taggit.managers import TaggableManager
 from djmoney.models.fields import MoneyField
@@ -14,22 +13,27 @@ from jsonfield import JSONField
 
 from sendhut.utils import sane_repr, image_upload_path, generate_token
 from sendhut.db import BaseModel
+from sendhut.accounts.models import User
 
 
 FOOD_TAGS = [
-    'local gems', 'halal', 'pizza', 'vegetarian', 'deserts',
-    'guilty pleasures', 'chinese', 'fresh drinks', 'healthy', 'food'
+    'local gems', 'halal', 'pizza', 'vegetarian', 'desserts',
+    'guilty pleasures', 'chinese', 'fresh drinks', 'healthy food'
 ]
 
 
-class Partner(BaseModel):
+class Vendor(BaseModel):
     "Food vendor"
-    # TODO(yao): rename model to Vendor
     # TODO(yao): add allergy information
     # TODO(yao): add restaurant notes
+    # TODO(yao): Add boolean field showing if restaurant is open today
     name = models.CharField(max_length=100)
+    # TODO(yao): delete address
     address = models.CharField(max_length=200)
+    # TODO(yao): add multiple vendor phones
     phone = models.CharField(max_length=30)
+    # TODO(yao): Add locations for multipe vendor locations
+    # VendorLocation: address, geo, phones
     location = models.CharField(max_length=30, null=True, blank=True)
     logo = ImageField(upload_to=image_upload_path, null=True, blank=True)
     # banner is image displayed on restaurant's page
@@ -42,7 +46,7 @@ class Partner(BaseModel):
         return ', '.join([x.name for x in tags[:3]])
 
     class Meta:
-        db_table = "partner"
+        db_table = "vendor"
 
     __repr__ = sane_repr('name', 'address')
 
@@ -52,32 +56,15 @@ class Menu(BaseModel):
     For food vendors that offer different sets of menus either for lunch
     or on special occassions, menu labels can be used to group these menus.
     """
-    # menu labels
-    MAIN_MENU = 0
-    BREAKFAST = 1
-    LUNCH = 2
-    DINNER = 3
-    WEEKEND_SPECIAL = 4
-
-    MENU_LABELS = (
-        (MAIN_MENU, "Menu"),
-        (BREAKFAST, "Breakfast"),
-        (LUNCH, "Lunch"),
-        (DINNER, "Dinner"),
-        (WEEKEND_SPECIAL, "Weekend Special")
-    )
-
+    # TODO(yao): Add related menus that'll show as options, e.g, soup, meat, fish
     name = models.CharField(max_length=80, null=True, blank=True)
-    partner = models.ForeignKey(Partner, related_name='menus')
-    label = models.IntegerField(
-        choices=MENU_LABELS,
-        default=MAIN_MENU
-    )
+    vendor = models.ForeignKey(Vendor, related_name='menus')
+    tags = TaggableManager()
 
     class Meta:
         db_table = "menu"
 
-    __repr__ = sane_repr('name', 'partner')
+    __repr__ = sane_repr('name', 'vendor')
 
     def __unicode__(self):
         return "%s" % self.name
@@ -143,7 +130,6 @@ class Item(BaseModel):
         default=list,
         blank=True
     )
-    tags = TaggableManager()
     images = models.ManyToManyField('Image', related_name='items', through='ItemImage')
     available = models.BooleanField(default=True)
 
@@ -209,6 +195,7 @@ class OptionGroup(BaseModel):
     item = models.ForeignKey(Item, related_name='option_groups', null=True, blank=True)
     is_required = models.BooleanField(default=False)
     multi_select = models.BooleanField(default=True)
+    menus = models.ManyToManyField(Menu, related_name='options', through='MenuOption')
 
     class Meta:
         db_table = 'option_group'
@@ -227,6 +214,18 @@ class Option(BaseModel):
 
     def __unicode__(self):
         return "%s" % self.name
+
+
+class MenuOption(BaseModel):
+
+    menu = models.ForeignKey(Menu)
+    option_group = models.ForeignKey(OptionGroup)
+
+    class Meta:
+        db_table = 'menu_options'
+        unique_together = (('menu', 'option_group'), )
+
+    __repr__ = sane_repr('menu', 'option_group')
 
 
 class Order(BaseModel):
@@ -250,7 +249,7 @@ class Order(BaseModel):
     delivery_fee = MoneyField(max_digits=10, decimal_places=2, default_currency='NGN')
     notes = models.CharField(max_length=300, null=True, blank=True)
     total_cost = MoneyField(max_digits=10, decimal_places=2, default_currency='NGN')
-    paid = models.BooleanField(default=False)
+    payment = models.ForeignKey('Payment', null=True, blank=True)
 
     def save(self, *args, **kwargs):
         self.reference = generate_token(8)
@@ -279,7 +278,66 @@ class OrderLine(BaseModel):
     price = MoneyField(max_digits=10, decimal_places=2, default_currency='NGN')
     special_instructions = models.TextField(null=True, blank=True)
     order = models.ForeignKey(Order, related_name='order_lines')
-    metadata = JSONField(null=True, blank=True)
 
     class Meta:
         db_table = "order_line"
+
+
+class Payment(BaseModel):
+
+    class Meta:
+        db_table = 'payment'
+
+    PENDING = 1
+    CONFIRMED = 2
+    FAILED = 3
+
+    CASH = 1
+    ONLINE = 2
+
+    PAYMENT_STATUS = (
+        (PENDING, 'Pending'),
+        (CONFIRMED, 'Confirmed'),
+        (FAILED, 'Failed')
+    )
+
+    PAYMENT_SOURCE = (
+        (CASH, 'Cash'),
+        (ONLINE, 'Online')
+    )
+    reference = models.CharField(max_length=19)
+    status = models.IntegerField(
+        choices=PAYMENT_STATUS,
+        default=PENDING
+    )
+    source = models.IntegerField(
+        choices=PAYMENT_SOURCE,
+        default=CASH
+    )
+
+
+class GroupCart(BaseModel):
+
+    class Meta:
+        db_table = "group_cart"
+
+    owner = models.ForeignKey(User, related_name='owned_group_cart')
+    vendor = models.ForeignKey(Vendor, related_name='group_carts')
+    monetary_limit = MoneyField(max_digits=10, decimal_places=2, default_currency='NGN')
+    token = models.CharField(max_length=8)
+    cart = JSONField(blank=True, null=True)
+    order = models.ForeignKey(Order, related_name='group_order')
+    payment = models.ForeignKey(Payment)
+
+    def save(self, *args, **kwargs):
+        self.token = generate_token(8)
+        super().save(*args, **kwargs)
+        return self
+
+
+class GroupCartMembers(BaseModel):
+    user = models.ForeignKey(User, related_name='group_carts')
+    email = models.EmailField(null=True, blank=True)
+    phone = models.CharField(max_length=20)
+    group_cart = models.ForeignKey(GroupCart)
+    cart = JSONField(null=True, blank=True)

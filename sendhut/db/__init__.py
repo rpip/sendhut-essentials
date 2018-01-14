@@ -1,6 +1,7 @@
 from uuid import uuid4
 
 from django.db import models
+from jsonfield import JSONField
 
 
 class BaseModel(models.Model):
@@ -11,6 +12,7 @@ class BaseModel(models.Model):
     created = models.DateTimeField(auto_now_add=True, blank=True)
     updated = models.DateTimeField(auto_now=True, blank=True)
     deleted = models.DateTimeField(null=True, blank=True)
+    metadata = JSONField(blank=True, null=True)
     uuid = models.UUIDField(
         default=uuid4, blank=True,
         editable=False, unique=True

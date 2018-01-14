@@ -5,7 +5,7 @@ from sendhut.lunch.models import Item, OrderLine
 from ._factory import (
     UserFactory, ItemFactory,
     MenuFactory, OptionGroupFactory,
-    OptionFactory, ImageFactory, PartnerFactory,
+    OptionFactory, ImageFactory, VendorFactory,
     CompanyFactory, AllowanceFactory, EmployeeFactory,
     OrderFactory, OrderLineFactory, fake
 )
@@ -21,15 +21,15 @@ def get_random_food_categories():
 class Command(BaseCommand):
     help = 'Populates the database with dummy Sendhut data'
 
-    def _setup_partner(self, partner, menus_nbr=6):
+    def _setup_vendor(self, vendor, menus_nbr=6):
         self.stdout.write(self.style.SUCCESS('Creating menus'))
-        menus = MenuFactory.create_batch(menus_nbr, partner=partner)
+        menus = MenuFactory.create_batch(menus_nbr, vendor=vendor)
         for menu in menus:
-            self._setup_partner_menu(menu)
+            self._setup_vendor_menu(menu)
 
-        self.stdout.write(self.style.SUCCESS('Setup done for partner'))
+        self.stdout.write(self.style.SUCCESS('Setup done for vendor'))
 
-    def _setup_partner_menu(self, menu):
+    def _setup_vendor_menu(self, menu):
         self.stdout.write(self.style.SUCCESS('Creating menu items'))
         items = ItemFactory.create_batch(choice(range(3, 8)), menu=menu)
 
@@ -65,13 +65,13 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS('Creating ADMIN user'))
 
         # raise CommandError()
-        self.stdout.write(self.style.SUCCESS('Creating Partners'))
+        self.stdout.write(self.style.SUCCESS('Creating Vendors'))
         users = UserFactory.create_batch(10)
 
-        self.stdout.write(self.style.SUCCESS('Creating partners'))
-        partners = PartnerFactory.create_batch(10)
-        for partner in partners:
-            self._setup_partner(partner, choice(range(4, 6)))
+        self.stdout.write(self.style.SUCCESS('Creating vendors'))
+        vendors = VendorFactory.create_batch(10)
+        for vendor in vendors:
+            self._setup_vendor(vendor, choice(range(4, 6)))
 
         # TODO(yao): create sample orders for employees
         # create business account users
@@ -124,5 +124,5 @@ class Command(BaseCommand):
 
 
 # IDEA(yao):
-# create_fixture(partner, menu_config)
+# create_fixture(vendor, menu_config)
 # menu_config = {menu_1: [category, n_items], menu_2: [category, n_items]}

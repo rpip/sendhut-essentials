@@ -176,3 +176,5 @@ WELCOME_MESSAGE = "We're currently in beta testing but we'd love you to give it 
 If you spot any glitches please let us know on phone 08169567963 or email hello@sendhut.com"
 
 LOGIN_URL = '/login'
+
+PAYSTACK_SECRET_KEY = config('PAYSTACK_SECRET_KEY')

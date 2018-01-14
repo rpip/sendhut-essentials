@@ -8,3 +8,4 @@ class CheckoutForm(forms.Form):
         choices=((x, x) for x in Order.DELIVERY_TIMES)
     )
     notes = forms.CharField(max_length=300, required=False)
+    cash_delivery = forms.BooleanField(required=False)

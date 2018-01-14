@@ -8,9 +8,10 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from .models import Item, Partner, Order, OrderLine
+from .models import Item, Vendor, Order, OrderLine
 from .forms import CheckoutForm
 from sendhut.cart import Cart
+from sendhut import payments
 from sendhut.dashboard.forms import BusinessSignupForm
 from sendhut import utils
 
@@ -18,11 +19,13 @@ from sendhut import utils
 
 
 def search(request, tag):
+    # TODO(yao): Move search into component
+    # TODO(yao): search food and menus tags
     context = {
         'page_title': 'search',
         'search_term': utils.unslugify(tag),
         'business_signup_form': BusinessSignupForm(),
-        'restaurants': Partner.objects.filter(tags__name__in=[tag])
+        'restaurants': Vendor.objects.filter(tags__name__in=[tag])
     }
     return render(request, 'lunch/search.html', context)
 
@@ -31,7 +34,7 @@ def vendor_page(request, slug):
     messages.info(request, "You can order in lunch with coworkers or \
     friends with the group order.")
     template = 'lunch/restaurant_menu.html'
-    vendor = get_object_or_404(Partner, slug=slug)
+    vendor = get_object_or_404(Vendor, slug=slug)
     context = {
         'vendor': vendor
     }
@@ -121,6 +124,7 @@ def order_details(request, reference):
 class CheckoutView(LoginRequiredMixin, View):
 
     def get(self, request):
+        print("\n\n GET: {}\n\n POST: {} \n\n".format(request.GET, request.POST))
         form = CheckoutForm(data=request.POST)
         context = Cart(request).build_cart()
         context['form'] = form
@@ -139,6 +143,7 @@ class CheckoutView(LoginRequiredMixin, View):
         delivery_time = datetime.today().replace(hour=int(hour), minute=int(minute))
         delivery_address = form.cleaned_data['delivery_address']
         notes = form.cleaned_data['notes']
+        cash_delivery = form.cleaned_data['cash_delivery']
         cart = Cart(request)
         # TODO(yao): send invoice email, send sms confirmation/updates
         _cart = cart.build_cart()
@@ -160,6 +165,15 @@ class CheckoutView(LoginRequiredMixin, View):
                 special_instructions=data['note'],
                 metadata=utils.json_encode(data)
             )
-        cart.clear()
+        # cart.clear()
         messages.info(request, "Order submitted for processing. reference {}".format(order.reference))
+        if not(cash_delivery):
+            amount = _cart['total'].amount
+            response = payments.initialize_payment(order, amount, request.user.email)
+            if response['status']:
+                return redirect(response['data']['authorization_url'])
+            else:
+                # TODO(yao): what to do if payment fails
+                messages.error(request, "Payment failed")
+
         return redirect('home')

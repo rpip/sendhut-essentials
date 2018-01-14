@@ -2,15 +2,17 @@ from random import choice, shuffle
 import glob
 
 from django.core.files import File
+from django.utils.text import slugify
 from faker import Faker
 from factory import (
     DjangoModelFactory, SubFactory,
     LazyFunction, lazy_attribute, Sequence,
+    post_generation
 )
 
 from sendhut.accounts.models import User, Address
 from sendhut.lunch.models import (
-    Partner, Menu, Item, OptionGroup, Option,
+    Vendor, Menu, Item, OptionGroup, Option,
     Image, ItemImage, OrderLine, Order, FOOD_TAGS
 )
 
@@ -100,9 +102,9 @@ class AddressFactory(DjangoModelFactory):
     address_1 = 'Rukayyah, Atinuke Alaka Close Lekki Lagos 23401'
 
 
-class PartnerFactory(DjangoModelFactory):
+class VendorFactory(DjangoModelFactory):
     class Meta:
-        model = Partner
+        model = Vendor
 
     def _logo_img():
         images = glob.glob('./static/images/restaurant-logos/*')
@@ -114,10 +116,16 @@ class PartnerFactory(DjangoModelFactory):
 
     name = lazy_attribute(lambda o: fake.company())
     address = lazy_attribute(lambda o: fake.address())
-    location = choice(FOOD_LOCATIONS)
     phone = choice(PHONE_NUMBERS)
     logo = LazyFunction(_logo_img)
     banner = LazyFunction(_banner_img)
+
+    @post_generation
+    def post(obj, create, extracted, **kwargs):
+        shuffle(FOOD_TAGS)
+        obj.location = (choice(FOOD_LOCATIONS))
+        obj.tags.add(*[slugify(x) for x in FOOD_TAGS[:3]])
+        obj.save()
 
 
 class MenuFactory(DjangoModelFactory):
@@ -125,8 +133,13 @@ class MenuFactory(DjangoModelFactory):
     class Meta:
         model = Menu
 
-    name = choice(MENU_NAMES)
-    partner = SubFactory(Partner)
+    name = lazy_attribute(lambda o: choice(MENU_NAMES))
+    vendor = SubFactory(Vendor)
+
+    @post_generation
+    def post(obj, create, extracted, **kwargs):
+        shuffle(FOOD_TAGS)
+        obj.tags.add(*[slugify(x) for x in FOOD_TAGS[:3]])
 
 
 class ItemFactory(DjangoModelFactory):
@@ -139,7 +152,6 @@ class ItemFactory(DjangoModelFactory):
     description = lazy_attribute(lambda o: fake.text(max_nb_chars=100))
     price = choice([1200, 900, 3500, 800, 400, 1400, 1650, 850])
     dietary_labels = lazy_attribute(lambda o: random_diet_labels())
-    tags = lazy_attribute(lambda o: FOOD_TAGS[:3])
 
 
 class ImageFactory(DjangoModelFactory):
