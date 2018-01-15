@@ -159,6 +159,8 @@ CACHES = {
 
 CART_SESSION_ID = 'cart'
 
+GROUP_CART_SESSION_ID = 'group_cart'
+
 MESSAGE_TAGS = {
     messages.DEBUG: 'alert-info',
     messages.INFO: 'alert-info',

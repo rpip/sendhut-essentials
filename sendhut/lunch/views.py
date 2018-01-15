@@ -2,14 +2,15 @@ import json
 from datetime import datetime
 
 from django.views import View
+from django.conf import settings
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from .models import Item, Vendor, Order, OrderLine
-from .forms import CheckoutForm
+from .models import Item, Vendor, Order, OrderLine, GroupCart, GroupCartMember
+from .forms import CheckoutForm, GroupOrderForm
 from sendhut.cart import Cart
 from sendhut import payments
 from sendhut.dashboard.forms import BusinessSignupForm
@@ -31,9 +32,13 @@ def search(request, tag):
 
 
 def vendor_page(request, slug):
-    messages.info(request, "You can order in lunch with coworkers or \
-    friends with the group order.")
-    template = 'lunch/restaurant_menu.html'
+    if GroupOrder.in_session(request):
+        messages.info(request, "You are in a group order now. Your cart will be added to the group order")
+    else:
+        messages.info(request, "You can order in lunch with coworkers or \
+        friends with the group order.")
+
+    template = 'lunch/vendor_details.html'
     vendor = get_object_or_404(Vendor, slug=slug)
     context = {
         'vendor': vendor
@@ -76,8 +81,12 @@ class CartView(View):
         if request.GET.get('clear'):
             Cart(request).clear()
 
-        cart = Cart(request).build_cart()
-        return render(request, 'partials/sidebar_cart.html', cart)
+        context = Cart(request).build_cart()
+        if GroupOrder.in_session(request):
+            data = GroupOrder.get(request)
+            context['group_cart'] =  GroupCart.objects.get(uuid=data['uuid'])
+
+        return render(request, 'partials/sidebar_cart.html', context)
 
     def post(self, request):
         "This endpoints handle new cart additions and cart item updates"
@@ -95,7 +104,15 @@ class CartView(View):
 
 
 def cart_summary(request):
-    context = Cart(request).build_cart()
+    if GroupOrder.in_session(request):
+        # TODO(yao): group cart by members
+        context = GroupOrder.get(request)
+        context['vendor'] = GroupCart.objects.get(uuid=context['uuid'])
+    else:
+        context = Cart(request).build_cart()
+        # CONTINUE
+        pass
+
     context['form'] = CheckoutForm(data=request.POST)
     return render(request, 'lunch/cart_summary.html', context)
 
@@ -124,9 +141,13 @@ def order_details(request, reference):
 class CheckoutView(LoginRequiredMixin, View):
 
     def get(self, request):
-        print("\n\n GET: {}\n\n POST: {} \n\n".format(request.GET, request.POST))
         form = CheckoutForm(data=request.POST)
-        context = Cart(request).build_cart()
+        if GroupOrder.in_session(request):
+            context = GroupOrder.get(request)
+        else:
+            context = Cart(request).build_cart()
+
+
         context['form'] = form
         return render(request, 'lunch/cart_summary.html', context)
 
@@ -177,3 +198,89 @@ class CheckoutView(LoginRequiredMixin, View):
                 messages.error(request, "Payment failed")
 
         return redirect('home')
+
+
+class GroupOrderView(LoginRequiredMixin, View):
+
+    template_name = 'lunch/group_order.html'
+
+    def get(self, request, *args, **kwargs):
+        vendor_slug = kwargs['slug']
+        context = {
+            'form': GroupOrderForm(),
+            'vendor': Vendor.objects.get(slug=vendor_slug)
+        }
+        return render(request, self.template_name, context)
+
+    def post(self, request, *args, **kwargs):
+        form = GroupOrderForm(request.POST)
+        vendor = Vendor.objects.get(slug=kwargs['slug'])
+        if form.is_valid():
+            limit = form.cleaned_data['monetary_limit']
+            group_cart_url = GroupOrder.new(request, vendor, limit)
+            context = {
+                'group_cart_url': group_cart_url,
+                'vendor': vendor
+            }
+            messages.info(request, "Group order created!")
+            return render(request, self.template_name, context)
+        else:
+            context = {'form': form, 'vendor': vendor}
+            return render(request, self.template_name, context)
+
+
+def join_group_order(request, name):
+    group_cart = get_object_or_404(GroupCart, name)
+    if request.user.is_authenticated():
+        found = group_cart.members.filter(email=request.user.email)
+        if found:
+            msg = "You're already part of the {} group order".format(
+                group_cart.name)
+            messages.info(request, msg)
+        else:
+            GroupCartMember.objects.create(
+                user=request.user,
+                group_cart=group_cart,
+                email=request.user.email,
+                phone=request.user.phone
+            )
+            messages.info(request, "You've joined {} group order".format(group_cart.name))
+    else:
+        pass
+
+
+class GroupOrder:
+
+    @classmethod
+    def new(cls, request, vendor, limit=None):
+        # TODO(yao): maybe confirm clear existing Cart before proceeding?
+        group_cart = GroupCart.objects.create(
+            owner=request.user,
+            vendor=vendor,
+            monetary_limit=limit)
+        member = GroupCartMember.objects.create(
+            user=request.user,
+            group_cart=group_cart,
+            email=request.user.email,
+            phone=request.user.phone
+        )
+        group_cart.members.add(member)
+        from django.urls import reverse
+        url = reverse('group_order_join', args=(group_cart.name, ))
+        group_cart_url = request.build_absolute_uri(url)
+        request.session[settings.GROUP_CART_SESSION_ID] = {
+            'group_cart': {
+                'url': group_cart_url,
+                'uuid': str(group_cart.uuid)
+            }
+        }
+        request.session.modified = True
+        return group_cart_url
+
+    @classmethod
+    def in_session(cls, request):
+        return request.session.get(settings.GROUP_CART_SESSION_ID)
+
+    @classmethod
+    def get(cls, request):
+        return request.session.get(settings.GROUP_CART_SESSION_ID, {})

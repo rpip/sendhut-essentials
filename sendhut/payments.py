@@ -24,16 +24,6 @@ def initialize_payment(order, amount, email):
     )
 
 
-def handle_payment_callback(reference):
+def verify_transaction(reference):
     response = paystack.transaction.verify(reference)
-    if response['status']:
-        payment = Payment.objects.get(reference=reference)
-        payment.status = Payment.CONFIRMED
-        payment.save()
-        order_ref = payment.metadata['order_ref']
-        order = Order.objects.get(reference=order_ref)
-        # TODO(yao): signal that the order is confirmed, notify user
-
-
-def handle_payment_webhook():
-    pass
+    return response['status'] == 'success'

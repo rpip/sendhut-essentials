@@ -8,6 +8,7 @@ from sendhut.lunch import urls as lunch_urls
 from sendhut.accounts import urls as account_urls
 from sendhut.dashboard import urls as dashboard_urls
 from sendhut.accounts.views import LoginView, LogoutView, SignupView
+from sendhut.lunch.views import join_group_order
 from .views import (
     home, about, faqs, privacy_terms,
     payment_callback, payment_webhook
@@ -22,6 +23,9 @@ urlpatterns = [
     url(r'^login/$', LoginView.as_view(), name='signin'),
     url(r'^logout/$', LogoutView.as_view(), name='logout'),
     url(r'^accounts/', include(account_urls, namespace='accounts')),
+    # group order join
+    url(r'^g/(?P<name>[a-zA-Z0-9-]+)/$', join_group_order,
+        name='group_order_join'),
     # payment transaction callback
     url(r'^payments/ck$', payment_callback, name='payment_callback'),
     # instant payment notification

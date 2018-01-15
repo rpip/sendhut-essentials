@@ -17,7 +17,14 @@
             <li class="text-muted">{{ vendor.phone }}</li>
           </ol>
         </div>
-        <div class="avg-time bold">{#{ vendor|avg_delivery_time }#}</div>
+        <div>
+          {% if not group_order_session %}
+            <a href="{% url 'lunch:group_order' vendor.slug %}">
+              <button type="button" class="btn btn-primary">Create Group Order</button>
+            </a>
+          {% endif %}
+        </div>
+        <br>
       </div>
       <div class="col-sm-5">
         {% thumbnail vendor.banner "370x160" crop="center" as im %}
@@ -48,10 +55,10 @@
         <hr>
         <div class="row food-list">
           {% for item in menu.items.all %}
-              <div class="col-sm-6 menu-item">
-            <a
-              data-href="{% url 'lunch:food_detail' slug=item.slug %}"
-              class="item-popup">
+            <div class="col-sm-6 menu-item">
+              <a
+                data-href="{% url 'lunch:food_detail' slug=item.slug %}"
+                class="item-popup">
                 <div class="row">
                   <div class="col-sm-3">
                     {% thumbnail item.primary_image "128x128" crop="center" as im %}
@@ -68,18 +75,18 @@
                         <h6 class="card-title">{{ item.name }}</h6>
                         <p class="card-text text-muted">{{ item.description }}</p>
                         <div class="item-meta">
-                        <span class="float-left item-price">{{item.price}}</span>
-                        <span class="float-right">
-                          {% include  "lunch/_dietary_labels.html" with item=item %}
-                        </span>
+                          <span class="float-left item-price">{{item.price}}</span>
+                          <span class="float-right">
+                            {% include  "lunch/_dietary_labels.html" with item=item %}
+                          </span>
                         </div>
                       </div>
                     </div>
 
                   </div>
                 </div>
-            </a>
-              </div><!--// menu item -->
+              </a>
+            </div><!--// menu item -->
           {% endfor %}
         </div>
       {% endfor %}

@@ -6,7 +6,7 @@
   <div class="card-row">
     {% for vendor in restaurants %}
       <div class="col-sm-4 vendor">
-        <a href="{% url 'lunch:restaurant_menu' vendor.slug %}" class="no-deco">
+        <a href="{% url 'lunch:vendor_details' vendor.slug %}" class="no-deco">
           <div class="card">
             {% thumbnail vendor.banner "585x312" crop="center" as im %}
             <img class="card-img-top img-fluid"

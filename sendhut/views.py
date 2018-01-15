@@ -1,9 +1,10 @@
 from django.conf import settings
 from django.contrib import messages
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
-from sendhut.lunch.models import Vendor
+from sendhut.lunch.models import Vendor, Payment, Order
 from sendhut.dashboard.forms import BusinessSignupForm
+from . import payments
 
 
 def home(request):
@@ -29,7 +30,28 @@ def privacy_terms(request):
 
 
 def payment_callback(request):
-    pass
+    # TODO(yao): difference between txref and reference
+    # payments/ck?trxref=a0200d217c436d44&reference=a0200d217c436d44
+    # TODO(yao): alert slack/sms/email channel about payment status
+    # txref = request.GET['txref']
+    reference = request.GET['reference']
+    if payments.verify_transaction(reference):
+        payment = Payment.objects.get(reference=reference)
+        payment.status = Payment.CONFIRMED
+        payment.save()
+        order_ref = payment.metadata['order_ref']
+        order = Order.objects.get(reference=order_ref)
+        success_message = "Payment confirmed. We'll deliver your lunch at {}".format(order.delivery_time)
+        messages.info(request, success_message)
+        return redirect('home')
+        # TODO(yao): clear cart after payment confirmed
+        # Cart(request).clear()
+    else:
+        error_message = "Payment failed. We can arrange for you to pay when the \
+        meal arrives. Let us know now!"
+        # TODO(yao): reach out to customers whose payment failed
+        messages.error(request, success_message)
+        return redirect('lunch:cart_summary')
 
 
 def payment_webhook(request):

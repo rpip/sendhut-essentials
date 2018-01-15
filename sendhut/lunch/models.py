@@ -321,23 +321,33 @@ class GroupCart(BaseModel):
     class Meta:
         db_table = "group_cart"
 
+    name = models.CharField(max_length=20)
     owner = models.ForeignKey(User, related_name='owned_group_cart')
     vendor = models.ForeignKey(Vendor, related_name='group_carts')
-    monetary_limit = MoneyField(max_digits=10, decimal_places=2, default_currency='NGN')
-    token = models.CharField(max_length=8)
-    cart = JSONField(blank=True, null=True)
-    order = models.ForeignKey(Order, related_name='group_order')
-    payment = models.ForeignKey(Payment)
+    monetary_limit = MoneyField(
+        max_digits=10,
+        decimal_places=2,
+        default_currency='NGN',
+        null=True,
+        blank=True
+    )
+    order = models.ForeignKey(Order, related_name='group_order', null=True, blank=True)
+    payment = models.ForeignKey(Payment, null=True, blank=True)
 
     def save(self, *args, **kwargs):
-        self.token = generate_token(8)
+        # TODO(yao): generate Heroku-style names for the group order
+        self.name = generate_token(8)
         super().save(*args, **kwargs)
         return self
 
 
-class GroupCartMembers(BaseModel):
+class GroupCartMember(BaseModel):
+
+    class Meta:
+        db_table = "group_cart_member"
+
     user = models.ForeignKey(User, related_name='group_carts')
+    group_cart = models.ForeignKey(GroupCart, related_name='members')
     email = models.EmailField(null=True, blank=True)
     phone = models.CharField(max_length=20)
-    group_cart = models.ForeignKey(GroupCart)
     cart = JSONField(null=True, blank=True)

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block page_header %}
+{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-md-4 offst-md-4">
+      <h3>Group Order</h3>
+      <p class="text-muted">{{ vendor.name }}</p>
+      {% if group_cart_url %}
+        <p>Tap on the group order link below to copy and share. Each member can then go in and order individually</p>
+        <div class="btn btn-primary">{{ group_cart_url }}</div>
+      <p><small>tap to copy</small></p>
+      <br>
+      <a href="{% url 'lunch:vendor_details' vendor.slug %}">Back to {{ vendor.name }}</a>
+    {%  else %}
+      <form method="post">
+        {% csrf_token %}
+        {% include 'partials/form.html' %}
+        <div class="form-group">
+          <button type="submit" class="btn btn-success">
+            <span class="glyphicon glyphicon-ok"></span> Create
+          </button>
+        </div>
+      </form>
+    {% endif %}
+    </div>
+  </div>
+
+{% endblock %}
