@@ -85,8 +85,6 @@ class Command(BaseCommand):
         for x in orders:
             self.create_orderlines(x)
 
-        self._setup_business_user(admin)
-
         self.stdout.write(self.style.SUCCESS('DONE'))
 
     def create_orderlines(self, order):
