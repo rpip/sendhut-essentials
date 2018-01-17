@@ -29,17 +29,17 @@
     "default": {
         "boto3": {
             "hashes": [
-                "sha256:6ec3bc48ce7164cdeccf9325252f09ec73a64dc317cc8b0f51a97cbf61d03ce0",
-                "sha256:f1d5870a0ca4bcacaea02ca338e7761777340a56b09d2fe3c03194b84ce0cb57"
+                "sha256:941641b6b2fc10c5f9e8c2cbb14eca2620e2d7f605d38d763e03674a1879dc55",
+                "sha256:895b5899bb81daf0190b4484f5595e88d01545875dc2a7bf36852cd0b9df045b"
             ],
-            "version": "==1.5.14"
+            "version": "==1.5.16"
         },
         "botocore": {
             "hashes": [
-                "sha256:adf58e6824c433b9a46aad9409f22a18a19c74f7f10ccdfff104bc201359e638",
-                "sha256:02d360797944f091fb5341a2a51810aa6f44f8b40ac66951c876555e410e5f06"
+                "sha256:52f60526afc6e7bad415a9c7f5176af71f0b11e521c0985256a9c8106a6c9096",
+                "sha256:081326d5c931954b4000b37fdbd69cc53080dfc92ba237399820a586a104fd66"
             ],
-            "version": "==1.8.28"
+            "version": "==1.8.30"
         },
         "certifi": {
             "hashes": [
@@ -140,10 +140,10 @@
         },
         "faker": {
             "hashes": [
-                "sha256:39d09909969617dea6088e64bb49d3f06373e585b9b20987252cbcd968ab423e",
-                "sha256:1472250ed27b5cd59c5bd3372f222bb22e641e645b874c8b5236845ff1f6ef4c"
+                "sha256:91c3e79db508f6e2b8ff3d3099fee0967c95ce02caa1f4028096641696336fc0",
+                "sha256:9da4c829d5592202a614d2db3c3e05d17684f5b590b7dbd6d7e70dc1053213a6"
             ],
-            "version": "==0.8.9"
+            "version": "==0.8.10"
         },
         "gunicorn": {
             "hashes": [
@@ -395,10 +395,10 @@
         },
         "decorator": {
             "hashes": [
-                "sha256:95a26b17806e284452bfd97fa20aa1e8cb4ee23542bda4dbac5e4562aa1642cd",
-                "sha256:7cb64d38cb8002971710c8899fbdfb859a23a364b7c99dab19d1f719c2ba16b5"
+                "sha256:94d1d8905f5010d74bbbd86c30471255661a14187c45f8d7f3e5aa8540fdb2e5",
+                "sha256:7d46dd9f3ea1cf5f06ee0e4e1277ae618cf48dfb10ada7c8427cd46c42702a0e"
             ],
-            "version": "==4.1.2"
+            "version": "==4.2.1"
         },
         "factory-boy": {
             "hashes": [
@@ -409,10 +409,10 @@
         },
         "faker": {
             "hashes": [
-                "sha256:39d09909969617dea6088e64bb49d3f06373e585b9b20987252cbcd968ab423e",
-                "sha256:1472250ed27b5cd59c5bd3372f222bb22e641e645b874c8b5236845ff1f6ef4c"
+                "sha256:91c3e79db508f6e2b8ff3d3099fee0967c95ce02caa1f4028096641696336fc0",
+                "sha256:9da4c829d5592202a614d2db3c3e05d17684f5b590b7dbd6d7e70dc1053213a6"
             ],
-            "version": "==0.8.9"
+            "version": "==0.8.10"
         },
         "ipython": {
             "hashes": [

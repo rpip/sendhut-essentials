@@ -289,6 +289,9 @@ def group_order_submit(request):
         # TODO(yao): alert owner of group order
         member.save()
         messages.info(request, "Your cart has been added to the group order")
+    # if not logged in, grab info from session: email, phone
+    # create group_cart_member object, attach cart, add member to group cart
+    # proceed
 
     total = sum([Money(x.cart['sub_total']) for x in group_cart.members.all()])
     context = {

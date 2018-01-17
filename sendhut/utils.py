@@ -2,11 +2,15 @@ import json
 import os
 import hashlib
 import binascii
+import re
 
 from faker import Faker
 
 from djmoney.money import Money
 from django.core.serializers.json import DjangoJSONEncoder
+
+
+MOBILE_AGENT_RE = re.compile(r".*(iphone|ios|mini|mobile|androidtouch)", re.IGNORECASE)
 
 
 def sane_repr(*attrs):
@@ -70,3 +74,11 @@ def generate_random_name():
 
 def unslugify(text):
     return text.replace('-', ' ').replace('_', ' ')
+
+
+def is_mobile(request):
+    """Return True if the request comes from a mobile device."""
+    if MOBILE_AGENT_RE.match(request.META['HTTP_USER_AGENT']):
+        return True
+    else:
+        return False

@@ -8,10 +8,10 @@
       <div class="col-sm-4 vendor">
         <a href="{% url 'lunch:vendor_details' vendor.slug %}" class="no-deco">
           <div class="card">
-            {% thumbnail vendor.banner "585x312" crop="center" as im %}
+            {% thumbnail vendor.banner "350x187" crop="center" as im %}
             <img class="card-img-top img-fluid"
                  src="{{ im.url }}"
-                 alt="{{ item.title }"
+                 alt="{{ item.title }}"
                  width="{{ im.width }}"
                  height="{{ im.height }}">
                {% endthumbnail %}

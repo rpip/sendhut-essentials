@@ -346,7 +346,7 @@ class GroupCartMember(BaseModel):
     class Meta:
         db_table = "group_cart_member"
 
-    user = models.ForeignKey(User, related_name='group_carts')
+    user = models.ForeignKey(User, related_name='group_carts', null=True, blank=True)
     group_cart = models.ForeignKey(GroupCart, related_name='members')
     email = models.EmailField(null=True, blank=True)
     phone = models.CharField(max_length=20)
