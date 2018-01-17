@@ -6,7 +6,6 @@ from django.contrib import admin
 
 from sendhut.lunch import urls as lunch_urls
 from sendhut.accounts import urls as account_urls
-from sendhut.dashboard import urls as dashboard_urls
 from sendhut.accounts.views import LoginView, LogoutView, SignupView
 from sendhut.lunch.views import join_group_order
 from .views import (
@@ -37,9 +36,7 @@ urlpatterns = [
         auth_views.password_reset_confirm, name='password_reset_confirm'),
     url(r'^reset/done/$', auth_views.password_reset_complete, name='password_reset_complete'),
     url(r'^lunch/', include(lunch_urls, namespace='lunch')),
-    url(r'^business/', include(dashboard_urls, namespace='dashboard')),
     url(r'^admin/', include(admin.site.urls)),
-
 ]
 
 

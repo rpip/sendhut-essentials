@@ -3,7 +3,6 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 
 from sendhut.lunch.models import Vendor, Payment, Order
-from sendhut.dashboard.forms import BusinessSignupForm
 from . import payments
 
 
@@ -11,8 +10,7 @@ def home(request):
     messages.info(request, settings.WELCOME_MESSAGE)
     context = {
         'page_title': 'Home',
-        'restaurants': Vendor.objects.all()[:6],
-        'business_signup_form': BusinessSignupForm()
+        'restaurants': Vendor.objects.all()[:6]
     }
     return render(request, 'home.html', context)
 

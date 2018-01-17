@@ -6,7 +6,6 @@ from ._factory import (
     UserFactory, ItemFactory,
     MenuFactory, OptionGroupFactory,
     OptionFactory, ImageFactory, VendorFactory,
-    CompanyFactory, AllowanceFactory, EmployeeFactory,
     OrderFactory, OrderLineFactory, fake
 )
 
@@ -73,13 +72,6 @@ class Command(BaseCommand):
         for vendor in vendors:
             self._setup_vendor(vendor, choice(range(4, 6)))
 
-        # TODO(yao): create sample orders for employees
-        # create business account users
-        self.stdout.write(self.style.SUCCESS('Creating dashboard data'))
-        business_users = users[:2]
-        for user in business_users:
-            self._setup_business_user(user)
-
         # create admin user
         self.stdout.write(self.style.SUCCESS('Setting up admin user'))
         admin = UserFactory.create(email='admin@sendhut.com', username='admin')
@@ -107,20 +99,6 @@ class Command(BaseCommand):
                 order=order,
                 item=choice(items)
             )
-
-    def _setup_business_user(self, user):
-        company = CompanyFactory.create(user=user)
-        employees = EmployeeFactory.create_batch(choice(range(5, 15)), company=company)
-        allowances = AllowanceFactory.create_batch(choice(range(2, 4)), created_by=user, company=company)
-        allowance_groups = []
-        for e in employees:
-            allowance = choice(allowances)
-            e.allowance = allowance
-            e.save()
-
-        #InviteFactory.create_batch(choice(range(4, 9)), allowance=choice(allowances), company=company)
-        self.stdout.write(self.style.SUCCESS('DONE: Dashboard setup'))
-        # TODO(yao): generate employee orders
 
 
 # IDEA(yao):

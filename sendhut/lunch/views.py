@@ -14,7 +14,6 @@ from .models import Item, Vendor, Order, OrderLine, GroupCart, GroupCartMember
 from .forms import CheckoutForm, GroupOrderForm
 from sendhut.cart import Cart
 from sendhut import payments
-from sendhut.dashboard.forms import BusinessSignupForm
 from sendhut import utils
 
 # TODO(yao): reorganize around domains: vendor, cart, food
@@ -26,7 +25,6 @@ def search(request, tag):
     context = {
         'page_title': 'search',
         'search_term': utils.unslugify(tag),
-        'business_signup_form': BusinessSignupForm(),
         'restaurants': Vendor.objects.filter(tags__name__in=[tag])
     }
     return render(request, 'lunch/search.html', context)
