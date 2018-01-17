@@ -255,7 +255,7 @@ main {
     @extend .btn;
     @extend .btn-primary;
     @extend .btn-lg;
-    margin-top: 30px;
+    margin-top: 10px;
     margin-bottom: 15px;
     width: 100%;
     color: $white !important;
@@ -309,6 +309,13 @@ main {
 .invalid-feedback {
   display: block !important;
 }
+
+.group-order-explainer {
+  li {
+    padding: 3px;
+  }
+}
+
 
 // FOOTER
 

@@ -212,15 +212,20 @@ class Cart:
     def __repr__(self):
         return 'Cart(%r)' % (list(self),)
 
-    def build_cart(self):
+    def build_cart(self, is_group_order=False):
         sub_total = Money(self.get_subtotal(), 'NGN')
-        delivery_fee = Money(settings.LUNCH_DELIVERY_FEE, 'NGN')
         cart_serialized = self.serialize()
+        if is_group_order:
+            return {
+                'cart': cart_serialized,
+                'sub_total': sub_total,
+            }
+
+        delivery_fee = Money(settings.LUNCH_DELIVERY_FEE, 'NGN')
         _cart = groupby(cart_serialized, lambda x: x['vendor']['name'])
         _cart = [(x, list(y)) for x, y in _cart]
         cart_delivery_fee = delivery_fee * len(_cart)
         total = sub_total + cart_delivery_fee
-
         return {
             'cart': cart_serialized,
             'sub_total': sub_total,

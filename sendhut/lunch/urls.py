@@ -3,7 +3,7 @@ from .views import (
     CartView, CheckoutView, GroupOrderView,
     food_detail, cartline_detail, cartline_delete, vendor_page,
     cart_reload, cart_summary, order_list, order_details,
-    search
+    search, group_order_submit
 )
 
 
@@ -16,12 +16,13 @@ urlpatterns = [
     url(r'^cart/reload$', cart_reload, name='cart_reload'),
     url(r'^cart/summary$', cart_summary, name='cart_summary'),
     url(r'^cart/$', CartView.as_view(), name='cart'),
-    url(r'^checkout/$', CheckoutView.as_view(), name='checkout'),
+    url(r'^group-order/submit$', group_order_submit, name='group_order_submit'),
     url(r'^group-order/(?P<slug>[a-zA-Z0-9-]+)/$', GroupOrderView.as_view(),
         name='group_order'),
     url(r'^orders/(?P<reference>[a-zA-Z0-9-]+)$', order_details,
         name='order_details'),
     url(r'^orders/$', order_list, name='order_history'),
+    url(r'^checkout$', CheckoutView.as_view(), name='checkout'),
     url(r'^vendor/(?P<slug>[a-zA-Z0-9-]+)/$',
         vendor_page, name='vendor_details'),
     url(r'^item/(?P<slug>[a-zA-Z0-9-]+)/$',

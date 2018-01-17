@@ -17,8 +17,8 @@
   {% if cart %}
     <div class="col-sm-9 sm-offset-1">
       {% if group_order_session %}
-        <a href="{% url 'lunch:cart_summary' %}" class="btn-checkout">
-          <span class="float-left">Add to Group Cart</span><br>
+        <a href="{% url 'lunch:group_order_submit' %}" class="btn-checkout">
+          <span class="float-left">Add to Group Order</span><br>
         </a>
         <a class="bold">
           <span class="bold">Subtotal {{ sub_total }}</span>

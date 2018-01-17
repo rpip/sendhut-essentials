@@ -8,6 +8,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from djmoney.money import Money
 
 from .models import Item, Vendor, Order, OrderLine, GroupCart, GroupCartMember
 from .forms import CheckoutForm, GroupOrderForm
@@ -83,8 +84,8 @@ class CartView(View):
 
         context = Cart(request).build_cart()
         if GroupOrder.in_session(request):
-            data = GroupOrder.get(request)
-            context['group_cart'] =  GroupCart.objects.get(uuid=data['uuid'])
+            group_cart = GroupOrder.get(request)
+            context['group_cart'] =  GroupCart.objects.get(uuid=group_cart['uuid'])
 
         return render(request, 'partials/sidebar_cart.html', context)
 
@@ -104,15 +105,8 @@ class CartView(View):
 
 
 def cart_summary(request):
-    if GroupOrder.in_session(request):
-        # TODO(yao): group cart by members
-        context = GroupOrder.get(request)
-        context['vendor'] = GroupCart.objects.get(uuid=context['uuid'])
-    else:
-        context = Cart(request).build_cart()
-        # CONTINUE
-        pass
-
+    # if GroupOrder.in_session(request):
+    context = Cart(request).build_cart()
     context['form'] = CheckoutForm(data=request.POST)
     return render(request, 'lunch/cart_summary.html', context)
 
@@ -146,7 +140,6 @@ class CheckoutView(LoginRequiredMixin, View):
             context = GroupOrder.get(request)
         else:
             context = Cart(request).build_cart()
-
 
         context['form'] = form
         return render(request, 'lunch/cart_summary.html', context)
@@ -269,10 +262,8 @@ class GroupOrder:
         url = reverse('group_order_join', args=(group_cart.name, ))
         group_cart_url = request.build_absolute_uri(url)
         request.session[settings.GROUP_CART_SESSION_ID] = {
-            'group_cart': {
-                'url': group_cart_url,
-                'uuid': str(group_cart.uuid)
-            }
+            'url': group_cart_url,
+            'uuid': str(group_cart.uuid)
         }
         request.session.modified = True
         return group_cart_url
@@ -284,3 +275,27 @@ class GroupOrder:
     @classmethod
     def get(cls, request):
         return request.session.get(settings.GROUP_CART_SESSION_ID, {})
+
+
+def group_order_submit(request):
+    # TODO(yao): unauthenticated user
+    parent_cart = GroupOrder.get(request)
+    group_cart = GroupCart.objects.get(uuid=parent_cart['uuid'])
+    # clear cart, exit group order session, redirect to cart summary
+    user = request.user
+    cart = Cart(request)
+    if user.is_authenticated():
+        member = GroupCartMember.objects.get(user=user, group_cart=group_cart)
+        # TODO(yao): Remove Money objects from cart.py
+        member.cart = json.loads(utils.json_encode(cart.build_cart(is_group_order=True)))
+        # TODO(yao): alert owner of group order
+        member.save()
+        messages.info(request, "Your cart has been added to the group order")
+
+    total = sum([Money(x.cart['sub_total']) for x in group_cart.members.all()])
+    context = {
+        'group_cart': group_cart,
+        'sub_total': total,
+        'delivery_fee': Money(settings.LUNCH_DELIVERY_FEE, 'NGN')
+    }
+    return render(request, 'lunch/group_order_summary.html', context)
