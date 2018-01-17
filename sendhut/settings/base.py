@@ -37,8 +37,7 @@ INSTALLED_APPS = [
     'templated_email',
 
     'sendhut.accounts',
-    'sendhut.lunch',
-    'sendhut.dashboard'
+    'sendhut.lunch'
 ]
 
 MIDDLEWARE = [
