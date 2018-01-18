@@ -11,7 +11,7 @@ from djmoney.models.fields import MoneyField
 from sorl.thumbnail import ImageField
 from jsonfield import JSONField
 
-from sendhut.utils import sane_repr, image_upload_path, generate_token
+from sendhut.utils import sane_repr, image_upload_path, generate_token, unslugify
 from sendhut.db import BaseModel
 from sendhut.accounts.models import User
 
@@ -43,7 +43,7 @@ class Vendor(BaseModel):
 
     def tags_tx(self):
         tags = self.tags.all()
-        return ', '.join([x.name for x in tags[:3]])
+        return ', '.join([unslugify(x.name) for x in tags[:3]])
 
     class Meta:
         db_table = "vendor"
