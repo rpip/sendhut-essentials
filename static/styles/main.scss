@@ -1,8 +1,4 @@
 $rem-fallback: true;
-//$blue: #00a4db;
-// $sendhut-blue: #001625;
-//$dark-blue: #1e262b;
-//$flinto-blue: #365a87;
 //$black: #2e3333;
 // $grey: ecf0f1; // postmates
 $black: #231f1a;
@@ -17,7 +13,13 @@ $grey-happy: #f5f5f5;;
 // alt colour scheme: grey, black, green
 $pm-green: #11aeaa;
 $dv-green: #00ccbc;
-$primary: $pm-green;
+$blue: #00a4db;
+$sendhut-blue: #001625;
+$dark-blue: #1e262b;
+$flinto-blue: #365a87;
+
+$primary: $flinto-blue;
+$success: $flinto-blue;
 $happy: $grey-happy;
 
 $light-grey: #f8f8f9;
