@@ -1,0 +1,27 @@
+{% load lunch_extras %}
+<div class="row" id="group-order-header">
+  <div class="col-sm-7" id="group-order-help">
+    {% if group_cart.owner == user %}
+      <h4>Your Group Order</h4>
+    <p>Add your meals to the group cart. Checkout when ready</p>
+  {% else %}
+    <h4>{{ group_cart.owner.get_full_name }}'s Group Order</h4>
+    <p>Add your meals to the group cart {% if group_cart.monetary_limit %}({{ group_cart|group_cart_limit }}){% endif %}.
+      Checkout when ready</p>
+  {% endif %}
+  </div>
+  <div class="offset-sm-2 col-sm-3" id="group-order-actions">
+    {% if group_cart.owner == user %}
+      <a href="{% url 'lunch:cancel_group_order' group_cart.name %}">
+        <button type="button" class="btn btn-outline-danger">Cancel Order</button>
+      </a>
+    {% else %}
+      <a href="{% url 'lunch:leave_group_order' group_cart.name %}">
+        <button type="button" class="btn btn-outline-danger">Leave</button>
+        </a>
+    {% endif %}
+    <a href="#" data-toggle="modal" data-target="#group-share-modal">
+      <button type="button" class="btn btn-primary">Share</button>
+    </a>
+  </div>
+</div>

@@ -5,5 +5,9 @@
 {% endblock %}
 
 {% block content %}
-  {% include "lunch/_cart_summary.html" %}
+  {% if group_session %}
+    {% include "lunch/_group_cart_summary.html" %}
+  {% else %}
+    {% include "lunch/_cart_summary.html" %}
+  {% endif %}
 {% endblock %}

@@ -2,9 +2,13 @@ from itertools import groupby
 from decimal import Decimal
 
 from django.conf import settings
-from djmoney.money import Money
+from django.dispatch import Signal
 
 from sendhut.lunch.models import Option
+
+
+# signal
+cart_updated = Signal(providing_args=['group_cart', 'cart', 'member'])
 
 
 class ItemLine:
@@ -80,7 +84,7 @@ class CartLine(ItemLine):
             'quantity': self.quantity,
             'unit_price': self.get_price_per_item(),
             'base_price': self.get_base_price(),
-            'total': Money(self.get_total(), 'NGN'),
+            'total': self.get_total(),
             'extras_meta': self._get_extras(),
             'extras': list(map(int, extras))
         }
@@ -133,7 +137,8 @@ class Cart:
         if not line:
             line = self.create_line(item, int(quantity), data)
             self._state.append(line)
-            self.save()
+            group_order = bool(self.session.get(settings.GROUP_CART_SESSION_ID))
+            self.save(group_order)
 
     def match_line(self, item, quantity, data):
         "Matches: item uuid, extra (sides/options)"
@@ -155,10 +160,12 @@ class Cart:
         """
         return CartLine(item, quantity, data)
 
-    def save(self):
+    def save(self, broadcast=False):
         self.session[settings.CART_SESSION_ID] = self.serialize_lite()
         self.session.modified = True
         self.modified = True
+        if broadcast:
+            self.broadcast_cart_update()
 
     def set_delivery_time(self, delivery_time):
         key = '{}-delivery-time'.format(settings.CART_SESSION_ID)
@@ -185,7 +192,8 @@ class Cart:
         """Remove a item from the cart"""
         cart_line = self.get_line(line_id)
         self._state.remove(cart_line)
-        self.save()
+        group_order = bool(self.session.get(settings.GROUP_CART_SESSION_ID))
+        self.save(group_order)
 
     def get_subtotal(self):
         """
@@ -212,18 +220,12 @@ class Cart:
     def __repr__(self):
         return 'Cart(%r)' % (list(self),)
 
-    def build_cart(self, is_group_order=False):
-        sub_total = Money(self.get_subtotal(), 'NGN')
+    def build_cart(self):
+        sub_total = self.get_subtotal()
         cart_serialized = self.serialize()
-        if is_group_order:
-            return {
-                'cart': cart_serialized,
-                'sub_total': sub_total,
-            }
-
-        delivery_fee = Money(settings.LUNCH_DELIVERY_FEE, 'NGN')
-        _cart = groupby(cart_serialized, lambda x: x['vendor']['name'])
-        _cart = [(x, list(y)) for x, y in _cart]
+        delivery_fee = settings.LUNCH_DELIVERY_FEE
+        _cart = [(x, list(y)) for x, y in
+                 groupby(cart_serialized, lambda x: x['vendor']['name'])]
         cart_delivery_fee = delivery_fee * len(_cart)
         total = sub_total + cart_delivery_fee
         return {
@@ -235,3 +237,22 @@ class Cart:
             'total': total,
             'delivery_time': self.get_delivery_time()
         }
+
+    def broadcast_cart_update(self):
+        group_session = self.session.get(settings.GROUP_CART_SESSION_ID)
+        if group_session:
+            cart = self.serialize()
+            cart_updated.send(
+                sender=self.__class__,
+                group_cart=group_session,
+                cart={'cart': cart, 'sub_total': self.get_subtotal()},
+                member=group_session['member']
+            )
+
+    def load(self, cart_json):
+        """
+        Loads cart from JSON data, built specifically for loading
+        cart from group order member carts"""
+        cart = cart_json['cart']
+        for line in cart:
+            self.add(line.pop('uuid'), line.pop('quantity'), data=line)

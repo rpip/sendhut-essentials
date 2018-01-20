@@ -1,0 +1,54 @@
+<!-- group order modal -->
+<div class="modal fade" id="group-order-modal" tabindex="-1" role="dialog"
+     aria-labelledby="group-order-modal-label" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="group-order-modal-label">Create Group Order</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body group-order-modal">
+        <p class="text-muted">
+          Share a link to your cart so everyone can add items to it.
+          Once everyone has chosen their food and added it the cart, any of the participants can submit the order whenever ready.
+        </p>
+        <br>
+        <form method="post" action="{% url 'lunch:group_order' %}"
+              name="group-order-form" id="group-order-form">
+          {% csrf_token %}
+          <nav aria-label="...">
+            <ul class="pagination">
+              <li class="page-item active" data-limit="0">
+                <a class="page-link" href="#" tabindex="-1">No Limit</a>
+              </li>
+              <li class="page-item" data-limit="1000">
+                <a class="page-link" href="#">₦1000</a>
+              </li>
+              <li class="page-item" data-limit="2000">
+                <a class="page-link" href="#">₦2000</a>
+              </li>
+              <li class="page-item" data-limit="3000">
+                <a class="page-link" href="#">₦3000</a>
+              </li>
+              <li class="page-item" data-limit="xx">
+                <a class="page-link" href="#">Other</a>
+              </li>
+            </ul>
+          </nav>
+          <div class="col-sm-6" id="limit-wrapper">
+            <input type="number" class="form-control mb-2" id="other_limit" name="other_limit">
+          </div>
+          <input type="hidden" name="limit" id="limit"/>
+          <input type="hidden" name="vendor" value="{{ vendor.slug }}"/>
+          <div class="form-group">
+            <button type="submit" class="btn btn-success">
+              <span class="glyphicon glyphicon-ok"></span> Create Group Order
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

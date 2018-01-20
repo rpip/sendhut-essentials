@@ -12,6 +12,7 @@
     <link rel="shortcut icon" type="image/x-icon" href="{% static 'images/favicon-16x16' %}">
   </head>
   <body class="{% block body_class %}{% endblock %}">
+   <div class="overlay"></div>
     {% include "partials/top_nav.html" %}
     <main role="main" class="container">
       {% include "partials/messages.html" %}
@@ -39,7 +40,7 @@
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
-          <div class="modal-body">
+          <div class="modal-body food-modal">
           </div>
         </div>
       </div>

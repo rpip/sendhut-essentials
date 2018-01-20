@@ -348,6 +348,6 @@ class GroupCartMember(BaseModel):
 
     user = models.ForeignKey(User, related_name='group_carts', null=True, blank=True)
     group_cart = models.ForeignKey(GroupCart, related_name='members')
-    email = models.EmailField(null=True, blank=True)
-    phone = models.CharField(max_length=20)
+    # TODO(yao): make name non nullable
+    name = models.CharField(max_length=40, null=True, blank=True)
     cart = JSONField(null=True, blank=True)

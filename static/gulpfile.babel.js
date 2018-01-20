@@ -109,6 +109,8 @@ gulp.task('vendor', function() {
   gulp.src(['vendor/slidepanel/**/*'])
     .pipe(gulp.dest('dist/vendor/slidepanel'))
 
+  gulp.src(['vendor/clipboard.min.js'])
+    .pipe(gulp.dest('dist/vendor'))
 });
 
 gulp.task('watchTask', () => {

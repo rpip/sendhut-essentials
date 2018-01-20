@@ -256,7 +256,6 @@ main {
   .btn-checkout {
     @extend .btn;
     @extend .btn-primary;
-    @extend .btn-lg;
     margin-top: 10px;
     margin-bottom: 15px;
     width: 100%;
@@ -275,6 +274,14 @@ main {
   .cart-summary {
     @include rem(padding-top, 20px);
   }
+
+  .right-pane {
+    padding: 30px;
+    border-left: 1px solid $grey;
+  }
+  .left-pane {
+    padding: 30px;
+  }
 }
 
 #delivery-time-form {
@@ -286,6 +293,44 @@ main {
   }
 }
 
+#group-order-form {
+  #limit-wrapper {
+    padding: 0;
+    #other_limit {
+      display: none;
+    }
+  }
+}
+
+#group-order-header {
+  @extend .alert-info;
+  padding: 10px;
+  padding-bottom: 0;
+  margin-bottom: 10px;
+  #group-order-actions {
+    padding: 10px;
+  }
+}
+
+.group-section-header{
+  background-color: $grey;
+  padding: 5px;
+}
+
+#cash_delivery {
+  font-size: 11px;
+}
+
+#group-share-modal {
+  #url-copy-row {
+    @extend .row;
+    width: 80%;
+    margin-left: 10%;
+    border: 1px dashed $primary;
+    padding: 10px;
+    cursor: pointer
+  }
+}
 .subcart-header {
   padding-top: 30px;
 }

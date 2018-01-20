@@ -1,0 +1,68 @@
+{% load lunch_extras %}
+{% load thumbnail %}
+
+<div class="cart" id="cart-confirm">
+  <div class="text-center">
+    <h2 class="bold">{{ group_cart.owner.get_full_name }}'s Group Order</h2>
+    <h6>{{ group_cart.members.count }} people in this group order</h6>
+    <a href="{% url 'lunch:vendor_details' group_cart.vendor.slug %}">Select more food &raquo;</a>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6 left-pane">
+      {% for member in group_cart.members.all %}
+        <h5 class="subcart-header">{{ member.name }}'s Oder</h5>
+        {#% include "lunch/_subcart.html" with subcart=member.cart.cart %#}
+        {% for line in member.cart.cart %}
+          <div class="container-fluid cart-line">
+            <div class="row">
+              <div class="col-md-1">{{line.quantity}}</div>
+              <div class="col-md-10">
+                <div class="container-fluid">
+                  <div class="row">
+                    <div class="col-md-10">
+                      <a class="item-popup"
+                         data-href="{% url 'lunch:cartline_detail' line_id=line.line_id slug=line.slug %}">
+                         {{ line.name }}
+                         <ul class="text-muted">
+                           {% for x in line.extras_meta %}
+                             <li>{{x.name}}</li>
+                           {% endfor %}
+                         </ul>
+                      </a>
+                    </div>
+                    {% if member.id == group_cart_session.member.id %}
+                      <div class="col-sm-1">{{ line.total }}<br>
+                        <a data-href="{% url 'lunch:cartline_delete' line.line_id %}" href="#" class="x-delete">
+                          Remove
+                        </a>
+                      </div>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+
+        <div class="container cart-summary">
+          <div class="row">
+            <div class="col-md-3 offset-sm-7"><a>Subtotal</a></div>
+            <div class="col-md-1"><a>{{ member.cart.cart|subcart_total }}</a></div>
+          </div>
+        </div><!--// cart cost -->
+        <br>
+      {% endfor %}
+    </div> <!--//left-pane -->
+    <div class="col-md-6 right-pane">
+      <div class="cart-summary">
+        <div class="row">
+          <div><h5 class="bold">Total</h5></div>
+          <div class="offset-sm-1 bold">{{ total }}</div>
+        </div>
+      </div><!-- // cart-summary  -->
+      <hr>
+      {% include "lunch/_checkout_form.html" %}
+    </div>
+  </div> <!-- right-pane-->
+</div>

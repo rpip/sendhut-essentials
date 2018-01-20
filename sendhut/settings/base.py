@@ -173,7 +173,7 @@ LUNCH_DELIVERY_FEE = 300
 
 SENDHUT_EMAIL = 'hello@sendhut.com'
 
-WELCOME_MESSAGE = "We're currently in beta testing but we'd love you to give it a try. \
+WELCOME_MESSAGE = "We're not quite ready yet, but we'd love you to give it a try. \
 If you spot any glitches please let us know on phone 08169567963 or email hello@sendhut.com"
 
 LOGIN_URL = '/login'

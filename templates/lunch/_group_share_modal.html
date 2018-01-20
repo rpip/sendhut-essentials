@@ -1,0 +1,29 @@
+{% load lunch_extras %}
+<!-- cart share modal -->
+<div class="modal fade" id="group-share-modal" tabindex="-1" role="dialog"
+     aria-labelledby="group-share-modal-label" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="group-share-modal-label">Share Group Order</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>{{ group_cart.owner.get_full_name }}</p>
+        <p>{{ group_cart|group_cart_limit }}</p>
+        <p>
+          Copy and share this link with everyone who's going to add to the group order.
+          Each member can then go in and order individually.
+        </p>
+        <div id="url-copy-row">
+          <div id="foo" class="col-sm-10">{{url}}</div>
+          <div class="col-sm-2">
+            <button type="button" class="btn btn-primary btn-sm copy" data-clipboard-target="#foo">Copy</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,8 +1,8 @@
 {% load static %}
 <nav class="navbar navbar-expand-md navbar-light fixed-top">
   <div class="container">
-    <a class="navbar-brand" href="{% url 'home' %}">
-      <img src="{% static 'images/sendhut-yellow.png' %}" alt="">
+    <a class="navbar-brand text-hide" href="{% url 'home' %}">
+      <img src="{% static 'images/sendhut-yellow.png' %}" alt="">Sendhut Lunch delivery
     </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -19,8 +19,8 @@
               My Account
             </button>
             <div class="dropdown-menu">
-              <a class="dropdown-item" href="{% url 'lunch:order_history' %}">Order History</a>
-              <a class="dropdown-item" href="{% url 'accounts:profile' %}">Account details</a>
+              <a class="dropdown-item" href="{% url 'lunch:order_history' %}">Orders</a>
+              <a class="dropdown-item" href="{% url 'accounts:profile' %}">Settings</a>
             </div>
           </div>
         {% else %}

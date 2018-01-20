@@ -1,5 +1,6 @@
 {% load static %}
 <script src="{% static 'vendor/jquery.js' %}"></script>
+<script src="{% static 'vendor/clipboard.min.js' %}"></script>
 <script src="{% static 'vendor/popper.js' %}"></script>
 <script src="{% static 'vendor/bootstrap.js' %}"></script>
 <script src="{% static 'vendor/scrollPosStyler.js' %}"></script>
@@ -14,14 +15,17 @@
 <script type="text/javascript">
 $(function () {
 
+
+    new Clipboard('.copy');
+
     $('body').tooltip({
         selector: '[data-toggle="tooltip"]'
     });
 
     // item detail modal
-  $('body').on('click', '.item-popup', function() {
-  var dataURL = $(this).attr('data-href');
-        $('.modal-body').load(dataURL, function(){
+    $('body').on('click', '.item-popup', function() {
+        var dataURL = $(this).attr('data-href');
+        $('.food-modal').load(dataURL, function(){
             $('#item-modal').modal({show: true});
         });
     });
@@ -122,13 +126,11 @@ $('body').on('click', '.cart-line .delete', function(e) {
       contentType: 'application/json',
       success: function(data, status) {
         var href = $('[data-slidepanel]').data('href');
-  $('#slidepanel').html('').load(href, function() {});
-
-  var x = $('#cart-item-count').html();
-  $('#cart-item-count').html(parseInt(x) - 1);
-
+        $('#slidepanel').html('').load(href, function() {});
+        var x = $('#cart-item-count').html();
+        $('#cart-item-count').html(parseInt(x) - 1);
       }
-      });
+     });
   });
 
 
@@ -149,5 +151,18 @@ $('body').on('click', '.cart-line .x-delete', function(e) {
       }
       });
   });
+
+
+$('body').on('click', 'li.page-item', function() {
+$('li.page-item').removeClass('active');
+$(this).toggleClass("active");
+var limit = $(this).attr('data-limit');
+console.log(limit);
+if(limit == "xx") {
+   $("#other_limit").show();
+} else {
+  $("input#limit").val(limit);
+}
+});
 
 </script>

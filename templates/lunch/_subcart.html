@@ -1,0 +1,29 @@
+{% for line in subcart %}
+<div class="container-fluid cart-line">
+  <div class="row">
+    <div class="col-md-1">{{line.quantity}}</div>
+    <div class="col-md-10">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-md-10">
+            <a class="item-popup"
+               data-href="{% url 'lunch:cartline_detail' line_id=line.line_id slug=line.slug %}">
+              {{ line.name }}
+              <ul class="text-muted">
+                {% for x in line.extras_meta %}
+                <li>{{x.name}}</li>
+                {% endfor %}
+              </ul>
+            </a>
+          </div>
+          <div class="col-md-1">{{ line.total }}
+            <a data-href="{% url 'lunch:cartline_delete' line.line_id %}" href="#" class="x-delete">
+              Remove
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endfor %}

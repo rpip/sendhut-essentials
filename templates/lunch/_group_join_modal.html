@@ -1,0 +1,31 @@
+{% load lunch_extras %}
+<!-- cart join modal -->
+<div class="modal fade" id="group-join-modal" tabindex="-1" role="dialog"
+     aria-labelledby="group-join-modal-label" aria-hidden="true">
+     <div class="modal-dialog" role="document">
+       <div class="modal-content">
+         <div class="modal-header">
+           <h5 class="modal-title" id="group-join-modal-label">Join Group Order</h5>
+         </div>
+         <div class="modal-body">
+           <p>{{ group_cart.owner.get_full_name }}</p>
+           <p>{{ group_cart|group_cart_limit }}</p>
+           <hr>
+           <p>Tell us your name so we can identify your food.</p>
+           <form method="POST" action="{% url 'lunch:cart_join' group_cart.name  %}">
+           {% csrf_token %}
+            <div class="form-group">
+              <input type="text" class="form-control" name="name"
+                     aria-describedby="nameHelp" placeholder="Enter your name">
+               <small id="nameHelp" class="form-text text-muted">You can also enter email address or phone</small>
+             </div>
+             <div class="form-group">
+               <button type="submit" class="btn btn-success">
+                 <span class="glyphicon glyphicon-ok"></span> Join Group Order
+               </button>
+             </div>
+           </form>
+         </div>
+       </div>
+     </div>
+</div>

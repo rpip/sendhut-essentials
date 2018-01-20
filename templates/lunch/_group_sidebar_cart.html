@@ -1,0 +1,73 @@
+{% load djmoney %}
+{% load lunch_extras %}
+{% if cart %}
+  <div class="cart-header">
+    <h4>Your Order</h4>
+    <button type="button" class="close float-right" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="col-sm-10 sm-offset-1">
+    <a href="{% url 'lunch:cart_summary' %}" class="btn-checkout">
+      <span class="float-left">Checkout &nbsp;</span>
+      <span class="float-right">{{ total }}</span>
+    </a>
+  </div>
+{% endif %}
+
+{% for member in group_cart.members.all %}
+  <h6 class="group-section-header">{{ member.name }}'s Order</h6>
+  {% for line in member.cart.cart %}
+    <div class="container-fluid cart-line">
+      <div class="row">
+        <div class="col-sm-1">{{ line.quantity }}</div>
+        <div class="col-sm-10">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-sm-10">
+              <a class="item-popup"
+                 data-href="{% url 'lunch:cartline_detail' line_id=line.line_id slug=line.slug %}">
+                 {{ line.name }}
+              </a>
+              <a class="item-popup"
+                 data-href="{% url 'lunch:cartline_detail' line_id=line.line_id slug=line.slug %}">
+                 {{ line.name }}
+              </a>
+              </div>
+              {% if member.id == group_cart_session.member.id %}
+              <div class="col-sm-1">{{ line.total }}<br>
+                <a data-href="{% url 'lunch:cartline_delete' line.line_id %}"
+                   href="#" class="delete">Remove</a>
+              </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+{% endfor %}
+
+{% if cart %}
+  <div class="container cart-summary">
+    <div class="row">
+      <div class="col-sm-6 bold">
+        Subtotal
+      </div>
+      <div class="col-sm-6 bold">
+        {{ sub_total }}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-6 bold">
+        Delivery
+      </div>
+      <div class="col-sm-6 bold">
+        {{ cart_delivery_fee }}
+      </div>
+    </div><!--//delivery -->
+  </div>
+{% else %}
+  <div class="clearfix"></div>
+  <h6 class="text-muted empty-cart-msg">Your basket is empty</h6>
+{% endif %}
