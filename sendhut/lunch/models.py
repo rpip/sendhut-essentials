@@ -29,15 +29,15 @@ class Vendor(BaseModel):
     # TODO(yao): Add boolean field showing if restaurant is open today
     name = models.CharField(max_length=100)
     # TODO(yao): delete address
-    address = models.CharField(max_length=200)
+    address = models.CharField(max_length=200, null=True, blank=True)
     # TODO(yao): add multiple vendor phones
-    phone = models.CharField(max_length=30)
+    phone = models.CharField(max_length=30, null=True, blank=True)
     # TODO(yao): Add locations for multipe vendor locations
     # VendorLocation: address, geo, phones
-    location = models.CharField(max_length=30, null=True, blank=True)
+    # location = models.CharField(max_length=30, null=True, blank=True)
     logo = ImageField(upload_to=image_upload_path, null=True, blank=True)
     # banner is image displayed on restaurant's page
-    slug = models.CharField(max_length=64)
+    slug = models.CharField(max_length=200)
     banner = ImageField(upload_to=image_upload_path, null=True, blank=True)
     tags = TaggableManager()
 
@@ -57,9 +57,10 @@ class Menu(BaseModel):
     or on special occassions, menu labels can be used to group these menus.
     """
     # TODO(yao): Add related menus that'll show as options, e.g, soup, meat, fish
-    name = models.CharField(max_length=80, null=True, blank=True)
+    name = models.CharField(max_length=40, null=True, blank=True)
     vendor = models.ForeignKey(Vendor, related_name='menus')
     tags = TaggableManager()
+    info = models.CharField(max_length=360, null=True, blank=True)
 
     class Meta:
         db_table = "menu"
@@ -119,8 +120,8 @@ class Item(BaseModel):
         blank=True
     )
     menu = models.ForeignKey(Menu, related_name='items')
-    name = models.CharField(max_length=60)
-    slug = models.CharField(max_length=64)
+    name = models.CharField(max_length=120)
+    slug = models.CharField(max_length=240)
     description = models.TextField()
     price = MoneyField(max_digits=10, decimal_places=2, default_currency='NGN')
     dietary_labels = ArrayField(
@@ -191,7 +192,7 @@ class OptionGroup(BaseModel):
     - Pizza sizes
     - Soups
     """
-    name = models.CharField(max_length=60)
+    name = models.CharField(max_length=80)
     item = models.ForeignKey(Item, related_name='option_groups', null=True, blank=True)
     is_required = models.BooleanField(default=False)
     multi_select = models.BooleanField(default=True)

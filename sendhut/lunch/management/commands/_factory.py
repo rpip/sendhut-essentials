@@ -1,6 +1,7 @@
 from random import choice, shuffle
 import glob
 
+from django.conf import settings
 from django.core.files import File
 from django.utils.text import slugify
 from faker import Faker
@@ -202,7 +203,8 @@ class OrderFactory(DjangoModelFactory):
     delivery_time = lazy_attribute(lambda o: choice(Order.get_today_delivery_schedules()))
     delivery_address = 'Lekki phase 1'
     notes = lazy_attribute(lambda o: fake.sentence())
-    paid = choice([True, False])
+    delivery_fee = settings.LUNCH_DELIVERY_FEE
+    total_cost = choice([2300, 1200, 8000, 12000])
 
 
 class OrderLineFactory(DjangoModelFactory):

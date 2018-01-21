@@ -16,4 +16,4 @@ echo "----------------------------------------------------------"
 echo "Creating fixtures..."
 echo "----------------------------------------------------------"
 
-python manage.py populate_db
+python manage.py setup_seed

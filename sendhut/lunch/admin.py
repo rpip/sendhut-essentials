@@ -15,7 +15,6 @@ class VendorAdmin(admin.ModelAdmin):
         'name',
         'address',
         'phone',
-        'location',
     )
     list_filter = ('created',)
     search_fields = ('name',)

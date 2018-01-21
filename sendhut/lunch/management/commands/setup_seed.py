@@ -1,12 +1,11 @@
 from random import choice, shuffle
 from django.core.management.base import BaseCommand, CommandError
 
-from sendhut.lunch.models import Item, OrderLine
+from sendhut.lunch.models import Item, OrderLine, Vendor
+from .upload_foods import create_lagos_vendors
 from ._factory import (
-    UserFactory, ItemFactory,
-    MenuFactory, OptionGroupFactory,
-    OptionFactory, ImageFactory, VendorFactory,
-    OrderFactory, OrderLineFactory, fake
+    UserFactory, OptionGroupFactory, VendorFactory,
+    OptionFactory, ImageFactory, OrderFactory, fake
 )
 
 
@@ -20,19 +19,20 @@ def get_random_food_categories():
 class Command(BaseCommand):
     help = 'Populates the database with dummy Sendhut data'
 
-    def _setup_vendor(self, vendor, menus_nbr=6):
+    def _setup_vendor(self, vendor):
         self.stdout.write(self.style.SUCCESS('Creating menus'))
-        menus = MenuFactory.create_batch(menus_nbr, vendor=vendor)
-        for menu in menus:
+        vendor.logo = VendorFactory._logo_img()
+        vendor.banner = VendorFactory._banner_img()
+        vendor.save()
+        for menu in vendor.menus.all():
             self._setup_vendor_menu(menu)
 
         self.stdout.write(self.style.SUCCESS('Setup done for vendor'))
 
     def _setup_vendor_menu(self, menu):
         self.stdout.write(self.style.SUCCESS('Creating menu items'))
-        items = ItemFactory.create_batch(choice(range(3, 8)), menu=menu)
-
-        images = ImageFactory.create_batch(50)
+        items = menu.items.all()
+        images = ImageFactory.create_batch(15)
         image_ids = [image.id for image in images]
         for index, item in enumerate(items):
             # create item images
@@ -48,8 +48,6 @@ class Command(BaseCommand):
                 for opt_group in opt_groups:
                     OptionFactory.create_batch(choice([3, 7]), group=opt_group)
 
-        self.stdout.write(self.style.SUCCESS('Creating side menu items'))
-
     def _create_item_images(self, item_id, image_ids):
         shuffle(image_ids)
         _images = image_ids[:choice(range(2, 5))]
@@ -64,13 +62,13 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS('Creating ADMIN user'))
 
         # raise CommandError()
-        self.stdout.write(self.style.SUCCESS('Creating Vendors'))
+        self.stdout.write(self.style.SUCCESS('Creating users'))
         users = UserFactory.create_batch(10)
 
         self.stdout.write(self.style.SUCCESS('Creating vendors'))
-        vendors = VendorFactory.create_batch(10)
-        for vendor in vendors:
-            self._setup_vendor(vendor, choice(range(4, 6)))
+        create_lagos_vendors()
+        for vendor in Vendor.objects.all():
+            self._setup_vendor(vendor)
 
         # create admin user
         self.stdout.write(self.style.SUCCESS('Setting up admin user'))
