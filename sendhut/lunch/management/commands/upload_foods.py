@@ -1,5 +1,6 @@
 import json
 from pathlib import Path
+from random import shuffle
 
 from django.core.management.base import BaseCommand, CommandError
 from django.utils.text import slugify
@@ -17,11 +18,12 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS('DONE'))
 
 
-def create_lagos_vendors(n=20):
+def create_lagos_vendors(n=15):
     lagos_vendors_file = Path('etc/lagos-vendors.json')
     with open(lagos_vendors_file) as f:
         restaurants = json.load(f)
-        for vendor in restaurants[n]:
+        shuffle(restaurants)
+        for vendor in restaurants[:n]:
             add_vendor(vendor)
 
 

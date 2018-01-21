@@ -192,7 +192,7 @@ class OptionGroup(BaseModel):
     - Pizza sizes
     - Soups
     """
-    name = models.CharField(max_length=80)
+    name = models.CharField(max_length=120)
     item = models.ForeignKey(Item, related_name='option_groups', null=True, blank=True)
     is_required = models.BooleanField(default=False)
     multi_select = models.BooleanField(default=True)

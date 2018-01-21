@@ -32,7 +32,7 @@ class Command(BaseCommand):
     def _setup_vendor_menu(self, menu):
         self.stdout.write(self.style.SUCCESS('Creating menu items'))
         items = menu.items.all()
-        images = ImageFactory.create_batch(15)
+        images = ImageFactory.create_batch(10)
         image_ids = [image.id for image in images]
         for index, item in enumerate(items):
             # create item images
@@ -46,11 +46,11 @@ class Command(BaseCommand):
                 opt_groups = [opt_group1, opt_group2]
                 # populate side menus
                 for opt_group in opt_groups:
-                    OptionFactory.create_batch(choice([3, 7]), group=opt_group)
+                    OptionFactory.create_batch(choice([2, 4]), group=opt_group)
 
     def _create_item_images(self, item_id, image_ids):
         shuffle(image_ids)
-        _images = image_ids[:choice(range(2, 5))]
+        _images = image_ids[:choice(range(1, 4))]
         item_to_images = []
         for _id in _images:
             item_image = Item.images.through(item_id=item_id, image_id=_id)
@@ -63,7 +63,7 @@ class Command(BaseCommand):
 
         # raise CommandError()
         self.stdout.write(self.style.SUCCESS('Creating users'))
-        users = UserFactory.create_batch(10)
+        users = UserFactory.create_batch(5)
 
         self.stdout.write(self.style.SUCCESS('Creating vendors'))
         create_lagos_vendors()
@@ -79,14 +79,14 @@ class Command(BaseCommand):
         admin.save()
 
         self.stdout.write(self.style.SUCCESS('Creating Orders'))
-        orders = OrderFactory.create_batch(10, user=admin)
+        orders = OrderFactory.create_batch(3, user=admin)
         for x in orders:
             self.create_orderlines(x)
 
         self.stdout.write(self.style.SUCCESS('DONE'))
 
     def create_orderlines(self, order):
-        for x in range(1, choice([3, 6])):
+        for x in range(1, choice([2, 5])):
             items = Item.objects.all()
             OrderLine.objects.create(
                 quantity=choice(range(1, 6)),
