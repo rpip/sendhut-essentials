@@ -1,17 +1,16 @@
 {% extends "base.html" %}
 
-{% block title %}Forbidden (403){% endblock %}
-
-{% page_header %}CSRF Verification Failed {% endblock %}
+{% block title %}Permission Denied{% endblock %}
 
 {% block content %}
-<p>A required security token was not found or was invalid.</p>
+<h4>A required security check failed</h4>
 
 <p>If you're continually seeing this issue, try the following:</p>
 
 <ol>
-  <li>Clear cookies (at least for Sentry's domain)</li>
+  <li>Clear cookies </li>
   <li>Reload the page you're trying to submit (don't re-submit data).</li>
   <li>Re-enter the information, and submit the form again</li>
 </ol>
+<p>If it still doesn't work, let us know</p>
 {% endblock %}

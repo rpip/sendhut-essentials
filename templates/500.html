@@ -1,7 +1,11 @@
 {% extends "base.html" %}
 
-{% block page_header %} 500 - Internal server error {% endblock %}
+{% block title %} System Error {% endblock %}
 
 {% block content %}
-Internal server error
+<div class="jumbotron">
+  <h1 class="display-4">Something went wrong</h1>
+  <p class="lead">Try that again, and if still doesn't work, let us know.</p>
+  <hr class="my-4">
+</div>
 {% endblock %}
