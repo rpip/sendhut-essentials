@@ -17,11 +17,11 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS('DONE'))
 
 
-def create_lagos_vendors():
+def create_lagos_vendors(n=20):
     lagos_vendors_file = Path('etc/lagos-vendors.json')
     with open(lagos_vendors_file) as f:
         restaurants = json.load(f)
-        for vendor in restaurants:
+        for vendor in restaurants[n]:
             add_vendor(vendor)
 
 
