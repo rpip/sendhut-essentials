@@ -284,6 +284,12 @@ main {
   }
 }
 
+#faqs {
+  h6, h5{
+    padding: 10px 10px 10px 0;
+    color: $primary;
+  }
+}
 #delivery-time-form {
   label {
     font-size: 15px !important;
