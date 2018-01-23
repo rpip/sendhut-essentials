@@ -198,7 +198,6 @@ CACHES = {
 }
 
 # solr-thumbnail related settings
-THUMBNAIL_FORMAT = 'PNG'
 THUMBNAIL_KVSTORE = 'sorl.thumbnail.kvstores.redis_kvstore.KVStore'
 THUMBNAIL_REDIS_HOST = redis_url.hostname
 THUMBNAIL_REDIS_PORT = redis_url.port
