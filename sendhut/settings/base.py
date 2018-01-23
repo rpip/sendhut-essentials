@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+from urllib.parse import urlparse
 from django.contrib.messages import constants as messages
 
 from decouple import config, Csv
@@ -182,3 +183,22 @@ If you spot any glitches please let us know on phone 08169567963 or email hello@
 LOGIN_URL = '/login'
 
 PAYSTACK_SECRET_KEY = config('PAYSTACK_SECRET_KEY')
+
+redis_url = urlparse(os.environ.get('REDIS_URL'))
+CACHES = {
+    "default": {
+         "BACKEND": "redis_cache.RedisCache",
+         "LOCATION": "{0}:{1}".format(redis_url.hostname, redis_url.port),
+         "OPTIONS": {
+             "PASSWORD": redis_url.password,
+             "DB": 0,
+         }
+    }
+}
+
+# solr-thumbnail related settings
+THUMBNAIL_FORMAT = 'PNG'
+THUMBNAIL_KVSTORE = 'sorl.thumbnail.kvstores.redis_kvstore.KVStore'
+THUMBNAIL_REDIS_HOST = redis_url.hostname
+THUMBNAIL_REDIS_PORT = redis_url.port
+THUMBNAIL_DEBUG=True
