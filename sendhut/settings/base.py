@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'sorl.thumbnail',
     'widget_tweaks',
     'templated_email',
+    'raven.contrib.django.raven_compat',
 
     'sendhut.accounts',
     'sendhut.lunch'
