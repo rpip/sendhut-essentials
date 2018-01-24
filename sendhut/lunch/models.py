@@ -16,10 +16,36 @@ from sendhut.db import BaseModel
 from sendhut.accounts.models import User
 
 
-FOOD_TAGS = [
-    'local gems', 'halal', 'pizza', 'vegetarian', 'desserts',
-    'guilty pleasures', 'chinese', 'fresh drinks', 'healthy food'
-]
+class FOOD_TAGS:
+    tags = {
+        'local-gems': ['local', 'nigeria', 'africa'],
+        'halal': ['halal'],
+        'pizza': ['pizza'],
+        'vegetarian': ['veggie', 'vegetarian', 'vegetable'],
+        'desserts': ['desserts', 'sweets', 'cake'],
+        'guilty-pleasures': [
+            'pizza',
+            'cake',
+            'desserts',
+            'sweets',
+            'burger',
+            'sandwich',
+            'french',
+            'italian'
+        ],
+        'chinese': ['chinese', 'asia'],
+        'fresh-drinks': ['veggie', 'vegetarian', 'vegetable', 'fresh'],
+        'healthy-food': ['veggie', 'vegetarian', 'vegetable', 'health']
+    }
+
+    @classmethod
+    def labels(cls, human=False):
+        labels = cls.tags.keys()
+        return [unslugify(x) for x in labels] if human else labels
+
+    @classmethod
+    def tags_for(cls, label):
+        return cls.tags.get(label, [])
 
 
 class Vendor(BaseModel):

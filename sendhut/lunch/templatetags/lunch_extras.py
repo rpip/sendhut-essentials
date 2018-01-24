@@ -6,6 +6,7 @@ from django.utils.text import slugify
 from django.conf import settings
 
 from sendhut.lunch.models import Item
+from sendhut.utils import unslugify
 
 register = template.Library()
 
@@ -49,3 +50,8 @@ def times(n):
 def group_cart_limit(group_cart):
     if group_cart.monetary_limit:
         return "Limit {} per person".format(group_cart.monetary_limit)
+
+
+@register.filter(name='unslugify')
+def _unslugify(text):
+    return unslugify(text)

@@ -8,7 +8,7 @@ def cart(request):
     group_session = GroupOrder.get(request)
     return {
         'cart': Cart(request),
-        'food_tags': FOOD_TAGS,
+        'food_tags': FOOD_TAGS.labels(),
         'delivery_schedule': Order.DELIVERY_TIMES,
         'group_session': group_session,
         'is_mobile': utils.is_mobile(request)

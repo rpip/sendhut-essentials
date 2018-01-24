@@ -11,7 +11,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse
 from djmoney.money import Money
 
-from .models import Item, Vendor, Order, OrderLine, GroupCart, GroupCartMember
+from .models import (
+    Item, Vendor, Order, OrderLine, GroupCart, GroupCartMember, FOOD_TAGS
+)
 from .forms import CheckoutForm
 from sendhut.cart import Cart
 from sendhut import payments
@@ -19,14 +21,21 @@ from sendhut import utils
 
 # TODO(yao): reorganize around domains: vendor, cart, food
 
+from functools import reduce
+import operator
+from django.db.models import Q
+
 
 def search(request, tag):
     # TODO(yao): Move search into component
     # TODO(yao): search food and menus tags
+    subtags = FOOD_TAGS.tags_for(tag)
+    results = Vendor.objects.filter(
+        reduce(operator.or_, (Q(tags__name__icontains=q) for q in subtags)))
     context = {
         'page_title': 'search',
         'search_term': utils.unslugify(tag),
-        'restaurants': Vendor.objects.filter(tags__name__in=[tag])
+        'restaurants': results
     }
     return render(request, 'lunch/search.html', context)
 

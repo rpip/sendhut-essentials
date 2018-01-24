@@ -1,10 +1,11 @@
+{% load lunch_extras %}
 <div class="row" id="popular-tags">
   <div class="col-sm-12">
     <h2><span class="bold">Need some more options?</span></h2>
     <ul class="list-unstyled list-inline float-left tag-row">
       {% for tag in food_tags %}
       <li class="list-inline-item">
-        <a href="{% url 'lunch:search' tag=tag|slugify %}" class="badge badge-light">{{ tag }}</a>
+        <a href="{% url 'lunch:search' tag %}" class="badge badge-light">{{ tag|unslugify }}</a>
       </li>
       {% endfor %}
     </ul>

@@ -21,6 +21,14 @@ from sendhut.lunch.models import (
 fake = Faker()
 
 
+def get_food_tags():
+    labels = FOOD_TAGS.labels()
+    shuffle(labels)
+    n = choice(range(0, len(labels)))
+    label = labels[n]
+    return FOOD_TAGS.tags_for(label)
+
+
 def random_diet_labels():
     items = [x[0] for x in Item.DIETARY_RESTRICTIONS]
     shuffle(items)
@@ -120,9 +128,8 @@ class VendorFactory(DjangoModelFactory):
 
     @post_generation
     def post(obj, create, extracted, **kwargs):
-        shuffle(FOOD_TAGS)
         obj.location = (choice(FOOD_LOCATIONS))
-        obj.tags.add(*[slugify(x) for x in FOOD_TAGS[:3]])
+        obj.tags.add(*[slugify(x) for x in get_food_tags()])
         obj.save()
 
 
@@ -136,8 +143,7 @@ class MenuFactory(DjangoModelFactory):
 
     @post_generation
     def post(obj, create, extracted, **kwargs):
-        shuffle(FOOD_TAGS)
-        obj.tags.add(*[slugify(x) for x in FOOD_TAGS[:3]])
+        obj.tags.add(*[slugify(x) for x in get_food_tags()])
 
 
 class ItemFactory(DjangoModelFactory):
