@@ -8,6 +8,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.decorators.cache import cache_page
 from django.urls import reverse
 from djmoney.money import Money
 
@@ -26,6 +27,7 @@ import operator
 from django.db.models import Q
 
 
+@cache_page(60 * 60)
 def search(request, tag):
     # TODO(yao): Move search into component
     # TODO(yao): search food and menus tags
@@ -40,6 +42,7 @@ def search(request, tag):
     return render(request, 'lunch/search.html', context)
 
 
+@cache_page(60 * 60)
 def vendor_page(request, slug):
     template = 'lunch/vendor_details.html'
     vendor = get_object_or_404(Vendor, slug=slug)
@@ -58,6 +61,7 @@ def vendor_page(request, slug):
     return render(request, template, context)
 
 
+@cache_page(60 * 60)
 def food_detail(request, slug):
     template = 'lunch/_item_detail.html'
     item = Item.objects.get(slug=slug)
@@ -68,6 +72,7 @@ def food_detail(request, slug):
     return render(request, template, context)
 
 
+@cache_page(60 * 60)
 def cartline_detail(request, line_id, slug):
     template = 'lunch/_item_detail.html'
     item = Item.objects.get(slug=slug)
@@ -133,6 +138,7 @@ def cart_reload(request):
 
 
 @login_required
+@cache_page(60 * 60)
 def order_list(request):
     context = {
         'orders': Order.objects.filter(user=request.user)
@@ -141,6 +147,7 @@ def order_list(request):
 
 
 @login_required
+@cache_page(60 * 60)
 def order_details(request, reference):
     context = {
         'order': get_object_or_404(Order, user=request.user, reference=reference)

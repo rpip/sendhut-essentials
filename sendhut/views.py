@@ -1,11 +1,13 @@
 from django.conf import settings
 from django.contrib import messages
 from django.shortcuts import render, redirect
+from django.views.decorators.cache import cache_page
 
 from sendhut.lunch.models import Vendor, Payment, Order
 from . import payments
 
 
+@cache_page(60 * 60)
 def home(request):
     messages.info(request, settings.WELCOME_MESSAGE)
     context = {
@@ -24,7 +26,9 @@ def faqs(request):
 
 
 def privacy_terms(request):
-    return render(request, 'privacy_terms.html', {'page_title': 'Privacy & Terms'})
+    return render(request, 'privacy_terms.html', {
+        'page_title': 'Privacy & Terms'
+    })
 
 
 def payment_callback(request):
