@@ -1,7 +1,7 @@
 from random import choice, shuffle
 from django.core.management.base import BaseCommand, CommandError
 
-from sendhut.lunch.models import Item, OrderLine, Vendor
+from sendhut.lunch.models import Item, OrderLine, Vendor, Image
 from .upload_foods import create_lagos_vendors
 from ._factory import (
     UserFactory, OptionGroupFactory, VendorFactory,
@@ -32,8 +32,8 @@ class Command(BaseCommand):
     def _setup_vendor_menu(self, menu):
         self.stdout.write(self.style.SUCCESS('Creating menu items'))
         items = menu.items.all()
-        images = ImageFactory.create_batch(10)
-        image_ids = [image.id for image in images]
+        image_ids = [image.id for image in Image.objects.all()]
+        shuffle(image_ids)
         for index, item in enumerate(items):
             # create item images
             self._create_item_images(item.id, image_ids)
@@ -46,11 +46,11 @@ class Command(BaseCommand):
                 opt_groups = [opt_group1, opt_group2]
                 # populate side menus
                 for opt_group in opt_groups:
-                    OptionFactory.create_batch(choice([2, 4]), group=opt_group)
+                    OptionFactory.create_batch(choice([1, 3]), group=opt_group)
 
     def _create_item_images(self, item_id, image_ids):
         shuffle(image_ids)
-        _images = image_ids[:choice(range(1, 4))]
+        _images = image_ids[:choice(range(1, 3))]
         item_to_images = []
         for _id in _images:
             item_image = Item.images.through(item_id=item_id, image_id=_id)
@@ -63,9 +63,11 @@ class Command(BaseCommand):
 
         # raise CommandError()
         self.stdout.write(self.style.SUCCESS('Creating users'))
-        users = UserFactory.create_batch(5)
+        users = UserFactory.create_batch(3)
 
         self.stdout.write(self.style.SUCCESS('Creating vendors'))
+        # create set of seed images
+        ImageFactory.create_batch(12)
         create_lagos_vendors()
         for vendor in Vendor.objects.all():
             self._setup_vendor(vendor)
@@ -79,7 +81,7 @@ class Command(BaseCommand):
         admin.save()
 
         self.stdout.write(self.style.SUCCESS('Creating Orders'))
-        orders = OrderFactory.create_batch(3, user=admin)
+        orders = OrderFactory.create_batch(2, user=admin)
         for x in orders:
             self.create_orderlines(x)
 
