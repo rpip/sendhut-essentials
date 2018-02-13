@@ -9,6 +9,9 @@ from ._factory import (
 )
 
 
+ADMIN_PASSWORD = USER_PASSWORD = 'h3ll02018!'
+
+
 def get_random_food_categories():
     n = choice(range(1, 4))
     categories = [k for k, _ in Item.FOOD_CATEGORIES]
@@ -63,7 +66,7 @@ class Command(BaseCommand):
 
         # raise CommandError()
         self.stdout.write(self.style.SUCCESS('Creating users'))
-        users = UserFactory.create_batch(3)
+        UserFactory.create_batch(3, password=USER_PASSWORD)
 
         self.stdout.write(self.style.SUCCESS('Creating vendors'))
         # create set of seed images
@@ -74,10 +77,10 @@ class Command(BaseCommand):
 
         # create admin user
         self.stdout.write(self.style.SUCCESS('Setting up admin user'))
-        admin = UserFactory.create(email='admin@sendhut.com', username='admin')
+        admin = UserFactory.create(email='hello@sendhut.com', username='admin')
         admin.is_staff = True
         admin.is_superuser = True
-        admin.set_password('sendhut2017')
+        admin.set_password(ADMIN_PASSWORD)
         admin.save()
 
         self.stdout.write(self.style.SUCCESS('Creating Orders'))

@@ -29,6 +29,7 @@ def privacy_terms(request):
     })
 
 
+
 def payment_callback(request):
     # TODO(yao): difference between txref and reference
     # payments/ck?trxref=a0200d217c436d44&reference=a0200d217c436d44

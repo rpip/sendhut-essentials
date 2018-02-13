@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'raven.contrib.django.raven_compat',
 
     'sendhut.accounts',
-    'sendhut.lunch'
+    'sendhut.lunch',
+    'sendhut.envoy'
 ]
 
 MIDDLEWARE = [
@@ -185,13 +186,14 @@ LOGIN_URL = '/login'
 
 PAYSTACK_SECRET_KEY = config('PAYSTACK_SECRET_KEY')
 
-redis_url = urlparse(os.environ.get('REDIS_URL'))
+REDIS_URL = urlparse(os.environ.get('REDIS_URL'))
+
 CACHES = {
     "default": {
          "BACKEND": "redis_cache.RedisCache",
-         "LOCATION": "{0}:{1}".format(redis_url.hostname, redis_url.port),
+         "LOCATION": "{0}:{1}".format(REDIS_URL.hostname, REDIS_URL.port),
          "OPTIONS": {
-             "PASSWORD": redis_url.password,
+             "PASSWORD": REDIS_URL.password,
              "DB": 0,
          }
     }
@@ -199,6 +201,17 @@ CACHES = {
 
 # solr-thumbnail related settings
 THUMBNAIL_KVSTORE = 'sorl.thumbnail.kvstores.redis_kvstore.KVStore'
-THUMBNAIL_REDIS_HOST = redis_url.hostname
-THUMBNAIL_REDIS_PORT = redis_url.port
+THUMBNAIL_REDIS_HOST = REDIS_URL.hostname
+THUMBNAIL_REDIS_PORT = REDIS_URL.port
 # THUMBNAIL_DEBUG = True
+
+# Email settings
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+EMAIL_HOST = config('EMAIL_HOST', default='localhost')
+EMAIL_PORT = config('EMAIL_PORT', default=1025)
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool)
+# TODO(yao): personalize email with 'Yao from Sendhut'
+DEFAULT_FROM_EMAIL = 'hello@sendhut.com'

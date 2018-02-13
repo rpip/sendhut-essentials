@@ -4,13 +4,19 @@ import hashlib
 import binascii
 import re
 
+from django.conf import settings
 from faker import Faker
-
+import redis
 from djmoney.money import Money
 from django.core.serializers.json import DjangoJSONEncoder
 
 
 MOBILE_AGENT_RE = re.compile(r".*(iphone|ios|mini|mobile|androidtouch)", re.IGNORECASE)
+
+REDIS = redis.StrictRedis(
+    host=settings.REDIS_URL.hostname,
+    port=settings.REDIS_URL.port,
+    password=settings.REDIS_URL.password)
 
 
 def sane_repr(*attrs):
@@ -82,3 +88,13 @@ def is_mobile(request):
         return True
     else:
         return False
+
+
+def generate_password_token(phone):
+    token = generate_token(13)
+    REDIS.setex(token, 60 * 5, phone)
+    return token
+
+
+def check_password_token(token):
+    return REDIS.get(token)

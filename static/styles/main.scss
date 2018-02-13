@@ -162,9 +162,6 @@ main {
   #signup {
     background-color: $white;
     @extend .jumbotron;
-    label {
-      display: none;
-    }
 
     #team-lunch {
       background: $white url(../images/team-lunch.png) no-repeat top;
@@ -485,6 +482,69 @@ footer {
   }
 }
 
+body.vendor-b2b-signup {
+  #vendor-b2b-banner {
+    .card-title {
+      margin-top: 170px;
+      display: block;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-weight: 400;
+      font-size: 48px;
+      letter-spacing: 0px;
+      line-height: 1em;
+      font-family: futura-pt;
+      font-weight: 600;
+      font-style: normal;
+      font-size: 90px;
+      letter-spacing: 1px;
+      text-transform: none;
+      line-height: 1.1em;
+      color: #fff;
+    }
+    .card-text {
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-weight: 400;
+      font-size: 18px;
+      letter-spacing: 0px;
+      line-height: 1.5em;
+      font-family: futura-pt;
+      font-weight: 500;
+      font-style: normal;
+      font-size: 28px;
+      letter-spacing: 1px;
+      text-transform: none;
+      line-height: 1.3em;
+      color: #fff;
+      margin: 20px auto;
+    }
+
+    .card-img-overlay{
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      background-color: rgba(117, 29, 0, .2);
+      z-index: 99;
+    }
+  }
+
+  #vendor-marketing {
+    .card {
+      float: left;
+      border: 0
+    }
+  }
+  .vendor-b2b-highlight {
+    border-top: 1px solid $grey;
+    padding-top: 5px;
+  }
+
+  #envoy-merchant-request {
+    background-color: $white;
+    @extend .jumbotron;
+  }
+}
 
 // MISCELLANEOUS
 .btn {
