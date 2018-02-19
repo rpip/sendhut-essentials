@@ -309,7 +309,7 @@ class Order(BaseModel):
         choices=PAYMENT_SOURCE,
         default=CASH
     )
-    group_cart = models.ForeignKey('GroupCart', related_name='orders', null=True, blank=True)
+    group_cart = models.OneToOneField('GroupCart', related_name='orders', null=True, blank=True)
 
     def save(self, *args, **kwargs):
         if not self.created:
