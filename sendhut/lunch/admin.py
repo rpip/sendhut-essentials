@@ -1,27 +1,44 @@
 # -*- coding: utf-8 -*-
 from django.contrib import admin
 
+from safedelete.admin import SafeDeleteAdmin, highlight_deleted
+
 from .models import (
     Vendor, Menu, Item, Image,
-    ItemImage, OptionGroup, Option, Order, OrderLine
+    ItemImage, OptionGroup, Option, Order, OrderLine,
+    GroupCart
 )
 
 
+class BaseModelAdmin(SafeDeleteAdmin):
+
+    exclude = ('metadata',)
+    _list_display = (highlight_deleted,) + SafeDeleteAdmin.list_display
+    _list_filter = SafeDeleteAdmin.list_filter
+
+    def get_list_display(self, request):
+        return tuple(self.list_display) + self._list_display
+
+    def get_list_filter(self, request):
+        return tuple(self.list_filter) + self._list_filter
+
+
 @admin.register(Vendor)
-class VendorAdmin(admin.ModelAdmin):
+class VendorAdmin(BaseModelAdmin):
     list_display = (
         'id',
         'created',
         'name',
         'address',
         'phone',
+        'verified',
     )
-    list_filter = ('created',)
+    list_filter = ('created', 'verified')
     search_fields = ('name',)
 
 
 @admin.register(Menu)
-class MenuAdmin(admin.ModelAdmin):
+class MenuAdmin(BaseModelAdmin):
     list_display = (
         'id',
         'created',
@@ -33,7 +50,7 @@ class MenuAdmin(admin.ModelAdmin):
 
 
 @admin.register(Item)
-class ItemAdmin(admin.ModelAdmin):
+class ItemAdmin(BaseModelAdmin):
     list_display = (
         'id',
         'created',
@@ -54,7 +71,7 @@ class ItemAdmin(admin.ModelAdmin):
 
 
 @admin.register(Image)
-class ImageAdmin(admin.ModelAdmin):
+class ImageAdmin(BaseModelAdmin):
     list_display = (
         'id',
         'created',
@@ -66,7 +83,7 @@ class ImageAdmin(admin.ModelAdmin):
 
 
 @admin.register(ItemImage)
-class ItemImageAdmin(admin.ModelAdmin):
+class ItemImageAdmin(BaseModelAdmin):
     list_display = (
         'id',
         'created',
@@ -78,7 +95,7 @@ class ItemImageAdmin(admin.ModelAdmin):
 
 
 @admin.register(OptionGroup)
-class OptionGroupAdmin(admin.ModelAdmin):
+class OptionGroupAdmin(BaseModelAdmin):
     list_display = (
         'id',
         'created',
@@ -97,7 +114,7 @@ class OptionGroupAdmin(admin.ModelAdmin):
 
 
 @admin.register(Option)
-class OptionAdmin(admin.ModelAdmin):
+class OptionAdmin(BaseModelAdmin):
     list_display = (
         'id',
         'created',
@@ -114,11 +131,12 @@ class OptionAdmin(admin.ModelAdmin):
 class OrderLineInline(admin.TabularInline):
 
     model = OrderLine
+    exclude = ('metadata',)
     raw_id_fields = ['item']
 
 
 @admin.register(Order)
-class OrderAdmin(admin.ModelAdmin):
+class OrderAdmin(BaseModelAdmin):
     list_display = (
         'id',
         'created',
@@ -126,18 +144,20 @@ class OrderAdmin(admin.ModelAdmin):
         'reference',
         'delivery_time',
         'delivery_address',
-        'notes'
+        'notes',
+        'payment'
     )
     list_filter = (
         'created',
         'delivery_time',
         'delivery_address'
     )
+    search_fields = ('reference',)
     inlines = [OrderLineInline]
 
 
 @admin.register(OrderLine)
-class OrderLineAdmin(admin.ModelAdmin):
+class OrderLineAdmin(BaseModelAdmin):
     list_display = (
         'id',
         'created',
@@ -149,3 +169,22 @@ class OrderLineAdmin(admin.ModelAdmin):
         'order',
     )
     list_filter = ('created', 'item', 'order')
+
+
+class GroupOrderInline(admin.StackedInline):
+
+    model = Order
+    exclude = ('metadata',)
+    raw_id_fields = ['group_cart']
+    extra = 0
+
+
+# @admin.register(GroupCart)
+# class GroupCartAdmin(BaseModelAdmin):
+#     list_display = [
+#         'owner',
+#         'vendor',
+#         'monetary_limit',
+#         'created'
+#     ]
+#     inlines = [GroupOrderInline]

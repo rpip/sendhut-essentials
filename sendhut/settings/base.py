@@ -39,10 +39,10 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'templated_email',
     'raven.contrib.django.raven_compat',
+    'safedelete',
 
     'sendhut.accounts',
-    'sendhut.lunch',
-    'sendhut.envoy'
+    'sendhut.lunch'
 ]
 
 MIDDLEWARE = [

@@ -1,6 +1,6 @@
 from django import forms
-from .models import Order
-from djmoney.forms import MoneyField
+from .models import Order, Vendor, GroupCart
+from django.forms import ModelForm
 
 
 class CheckoutForm(forms.Form):
@@ -12,17 +12,15 @@ class CheckoutForm(forms.Form):
     cash_delivery = forms.BooleanField(required=False)
 
 
-class GroupOrderForm(forms.Form):
-
-    members_help_text = """Type or paste email addresses or phone numbers,
-    separated by commas. Not required
-    """
-    monetary_limit = forms.DecimalField(
-        label='Budget limit',
-        required=False,
-        widget=forms.TextInput(attrs={'placeholder': 'You can set a budget limit here'}
-    ))
-    # members = forms.CharField(
-    #     required=False,
-    #     label='Participants',
-    #     widget=forms.Textarea(attrs={'placeholder': members_help_text}))
+class VendorSignupForm(ModelForm):
+    # number of locations
+    # type of cuisine
+    # estimated weekly to-go orders
+    # do you currently offer delivery
+    class Meta:
+        model = Vendor
+        fields = ['manager_name', 'phone', 'email', 'name']
+        labels = {
+            "manager_name": "Name",
+            "name": "Business Name"
+        }

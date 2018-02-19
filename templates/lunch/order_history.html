@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load lunch_extras %}
+{% load thumbnail %}
+
+{% block page_header %}
+Order History
+{% endblock %}
+
+{% block content %}
+<br>
+{% include "lunch/_order_history.html" with orders=orders %}
+
+{% endblock %}
+
+{% block extra_js %}
+<script type="text/javascript">
+    $('tr[data-href]').on("click",function(){
+      window.location = $(this).data('href');
+      return false;
+    });
+    $("td > a").on("click",function(e){
+      e.stopPropagation();
+    });
+</script>
+{% endblock %}

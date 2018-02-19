@@ -5,7 +5,9 @@
   <div class="text-center">
     <h2 class="bold">{{ group_cart.owner.get_full_name }}'s Group Order</h2>
     <h6>{{ group_cart.members.count }} people in this group order</h6>
-    <a href="{% url 'lunch:vendor_details' group_cart.vendor.slug %}">Select more food &raquo;</a>
+    <a href="{% url 'lunch:vendor_details' group_cart.vendor.slug %}">
+      <button type="button" class="btn btn-info btn-sm">&laquo; Back to menu</button>
+    </a>
   </div>
 
   <div class="row">
@@ -31,19 +33,19 @@
                          </ul>
                       </a>
                     </div>
-                    {% if member.id == group_cart_session.member.id %}
-                      <div class="col-sm-1">{{ line.total }}<br>
-                        <a data-href="{% url 'lunch:cartline_delete' line.line_id %}" href="#" class="x-delete">
-                          Remove
-                        </a>
-                      </div>
-                    {% endif %}
+                    <div class="col-sm-1">{{ line.total }}<br>
+                      {% if member.id == group_cart_session.member.id %}
+                      <a data-href="{% url 'lunch:cartline_delete' line.line_id %}" href="#" class="x-delete">
+                        Remove
+                      </a>
+                      {% endif %}
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        {% endfor %}
+          {% endfor %}
 
         <div class="container cart-summary">
           <div class="row">

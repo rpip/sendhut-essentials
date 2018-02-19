@@ -16,11 +16,6 @@ def add_item_slug(sender, instance, created, **kwargs):
         instance.save()
 
 
-def payment_notification(sender, **kwargs):
-    # mark order as paid
-    pass
-
-
 @receiver(cart_updated, sender=Cart)
 def update_group_order(sender, **kwargs):
     group_cart = kwargs['group_cart']

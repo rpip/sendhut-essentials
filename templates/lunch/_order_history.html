@@ -1,0 +1,25 @@
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">Date</th>
+      <th scope="col">Reference</th>
+      <th scope="col">Delivery Time</th>
+      <th scope="col">Delivery Address</th>
+      <th scope="col">Total</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for order in orders %}
+    <tr data-href="{% url 'lunch:order_details' order.reference %}">
+      <td>
+        {{ order.created }}
+      </td>
+      <td>{{ order.reference }}</td>
+      <td>{{ order.delivery_time }}</td>
+      <td>{{ order.delivery_address }}</td>
+      <td>{{ order.total_cost }}</td>
+    </tr>
+</a>
+{% endfor %}
+</tbody>
+</table>

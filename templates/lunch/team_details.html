@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% load lunch_extras %}
+
+{% block page_header %}
+  {{ team.alias }}
+{% endblock %}
+
+{% block content %}
+  <div>
+    <p class="badge badge-primary">{{ team.vendor }}</p>
+    {% if team.monetary_limit %}<p>{{ team|group_cart_limit }}</p>{% endif %}
+    <p>{{ team.members.all|length }} members</p>
+  </div>
+  <nav>
+    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+      <a class="nav-item nav-link active" id="nav-members-tab" data-toggle="tab" href="#nav-members" role="tab" aria-controls="nav-members" aria-selected="true">Members</a>
+      <a class="nav-item nav-link" id="nav-orders-tab" data-toggle="tab" href="#nav-orders" role="tab" aria-controls="nav-orders" aria-selected="false">Orders</a>
+  </nav>
+  <div class="tab-content" id="nav-tabContent">
+    <div class="tab-pane fade show active" id="nav-members" role="tabpanel" aria-labelledby="nav-members-tab">
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">Name</th>
+      <th scope="col">Email</th>
+    </tr>
+  </thead>
+  <tbody>
+      {% for member in team.members.all %}
+    <tr>
+      <td>{{ member.name }}</td>
+      <td>{{ member.email }}</td>
+    </tr>
+</a>
+{% endfor %}
+</tbody>
+</table>
+
+    </div>
+    <div class="tab-pane fade" id="nav-orders" role="tabpanel" aria-labelledby="nav-orders-tab">
+      {% include "lunch/_order_history.html" with orders=team.orders.all %}
+    </div>
+  </div>
+{% endblock %}
+
+{% block extra_js %}
+  <script type="text/javascript">
+    $('tr[data-href]').on("click",function(){
+    window.location = $(this).data('href');
+    return false;
+    });
+    $("td > a").on("click",function(e){
+    e.stopPropagation();
+    });
+  </script>
+{% endblock %}

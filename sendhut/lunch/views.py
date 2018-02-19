@@ -2,6 +2,7 @@ import json
 from datetime import datetime
 
 from django.views import View
+from django.views.generic.edit import FormView
 from django.conf import settings
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
@@ -14,7 +15,7 @@ from djmoney.money import Money
 from .models import (
     Item, Vendor, Order, OrderLine, GroupCart, GroupCartMember, FOOD_TAGS
 )
-from .forms import CheckoutForm
+from .forms import CheckoutForm, VendorSignupForm
 from sendhut.cart import Cart
 from sendhut import payments
 from sendhut import utils
@@ -24,6 +25,23 @@ from sendhut import utils
 from functools import reduce
 import operator
 from django.db.models import Q
+
+
+class VendorSignupView(FormView):
+    template_name = 'vendor_signup.html'
+    form_class = VendorSignupForm
+    page_title = 'Deliver with Sendhut'
+    success_url = '/business/'
+
+    def form_valid(self, form):
+        info = """
+        We will get back to you quickly, and we'll collect any more
+        info we need to get you listed.
+        """
+        messages.info(self.request, info)
+        Vendor.objects.create(**form.cleaned_data)
+        # TODO(yao): send email and sms notification to merchant
+        return super().form_valid(form)
 
 
 def search(request, tag):
@@ -134,10 +152,8 @@ def cart_reload(request):
 
 @login_required
 def order_list(request):
-    context = {
-        'orders': Order.objects.filter(user=request.user)
-    }
-    return render(request, 'lunch/order_list.html', context)
+    orders = Order.objects.filter(user=request.user)
+    return render(request, 'lunch/order_history.html', {'orders': orders})
 
 
 @login_required
@@ -182,13 +198,16 @@ class CheckoutView(LoginRequiredMixin, View):
         cart = Cart(request)
         # TODO(yao): send invoice email, send sms confirmation/updates
         _cart = cart.build_cart()
+        group_session = GroupOrder.get(request)
         order = Order.objects.create(
             user=request.user,
+            group_cart=group_cart,
             delivery_time=delivery_time,
             notes=notes,
             total_cost=_cart['total'],
             delivery_address=delivery_address,
             delivery_fee=_cart['delivery_fee']
+            #metadata={'session':  {x.id: x.cart for x in group_cart.members.all()}}
         )
         for line in cart:
             data = line.serialize()
@@ -200,11 +219,10 @@ class CheckoutView(LoginRequiredMixin, View):
                 special_instructions=data['note'],
                 metadata=utils.json_encode(data)
             )
-        # cart.clear()
         messages.info(request, "Order submitted for processing. reference {}".format(order.reference))
         if not(cash_delivery):
-            amount = _cart['total'].amount
-            response = payments.initialize_payment(order, amount, request.user.email)
+            amount = _cart['total']
+            response = payments.initialize_payment(order.reference, amount, request.user.email)
             if response['status']:
                 return redirect(response['data']['authorization_url'])
             else:
@@ -219,8 +237,9 @@ class GroupOrderView(LoginRequiredMixin, View):
     template_name = 'lunch/group_order.html'
 
     def post(self, request, *args, **kwargs):
+        # HACK: own limit
+        # TODO(yao): refactor
         limit = request.POST['limit']
-        # own limit
         other_limit = request.POST['other_limit']
         limit = float(limit) if limit else None
         limit = float(other_limit) if other_limit else limit
@@ -335,8 +354,9 @@ class GroupOrder:
 
     @classmethod
     def end_session(cls, request):
-        del request.session[settings.GROUP_CART_SESSION_ID]
-        request.session.modified = True
+        if cls.get(request):
+            del request.session[settings.GROUP_CART_SESSION_ID]
+            request.session.modified = True
 
     @classmethod
     def force_signup(cls, request):

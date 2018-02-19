@@ -54,18 +54,21 @@ class Vendor(BaseModel):
     # TODO(yao): add restaurant notes
     # TODO(yao): Add boolean field showing if restaurant is open today
     name = models.CharField(max_length=100)
+    manager_name = models.CharField(max_length=100, null=True, blank=True)
     # TODO(yao): delete address
     address = models.CharField(max_length=200, null=True, blank=True)
     # TODO(yao): add multiple vendor phones
-    phone = models.CharField(max_length=30, null=True, blank=True)
+    phone = models.CharField(max_length=30, null=True, blank=True, unique=True)
     # TODO(yao): Add locations for multipe vendor locations
     # VendorLocation: address, geo, phones
     # location = models.CharField(max_length=30, null=True, blank=True)
     logo = ImageField(upload_to=image_upload_path, null=True, blank=True)
     # banner is image displayed on restaurant's page
+    email = models.EmailField(max_length=70, null=True, blank=True, unique=True)
     slug = models.CharField(max_length=200)
     banner = ImageField(upload_to=image_upload_path, null=True, blank=True)
     tags = TaggableManager()
+    verified = models.BooleanField(default=False)
 
     def tags_tx(self):
         tags = self.tags.all()
@@ -73,6 +76,9 @@ class Vendor(BaseModel):
 
     class Meta:
         db_table = "vendor"
+
+    def __str__(self):
+        return self.name
 
     __repr__ = sane_repr('name', 'address')
 
@@ -174,6 +180,9 @@ class Item(BaseModel):
     class Meta:
         db_table = "item"
 
+    def __str__(self):
+        return self.name
+
 
 class Image(BaseModel):
 
@@ -257,7 +266,23 @@ class MenuOption(BaseModel):
 
 class Order(BaseModel):
 
-    from datetime import datetime
+    PENDING = 1
+    CONFIRMED = 2
+    FAILED = 3
+
+    CASH = 1
+    ONLINE = 2
+
+    PAYMENT_STATUS = (
+        (PENDING, 'Pending'),
+        (CONFIRMED, 'Confirmed'),
+        (FAILED, 'Failed')
+    )
+
+    PAYMENT_SOURCE = (
+        (CASH, 'Cash'),
+        (ONLINE, 'Online')
+    )
 
     DELIVERY_TIMES = (
         '11:30',
@@ -276,10 +301,19 @@ class Order(BaseModel):
     delivery_fee = MoneyField(max_digits=10, decimal_places=2, default_currency='NGN')
     notes = models.CharField(max_length=300, null=True, blank=True)
     total_cost = MoneyField(max_digits=10, decimal_places=2, default_currency='NGN')
-    payment = models.ForeignKey('Payment', null=True, blank=True)
+    payment = models.IntegerField(
+        choices=PAYMENT_STATUS,
+        default=PENDING
+    )
+    payment_source = models.IntegerField(
+        choices=PAYMENT_SOURCE,
+        default=CASH
+    )
+    group_cart = models.ForeignKey('GroupCart', related_name='orders', null=True, blank=True)
 
     def save(self, *args, **kwargs):
-        self.reference = generate_token(8)
+        if not self.created:
+            self.reference = generate_token(8)
         super().save(*args, **kwargs)
         return self
 
@@ -309,47 +343,31 @@ class OrderLine(BaseModel):
     class Meta:
         db_table = "order_line"
 
+# class BusinessProfile(BaseModel):
+# delivery time
+# delivery address
+# change vendor
+# set reminder time: 9:00am, 9:30am,
+# day before: 2:30pm, 3pm, 3:30pm,  4:30pm,  5pm
+# week before
+# require login: default False
+# group_cart
 
-class Payment(BaseModel):
-
-    class Meta:
-        db_table = 'payment'
-
-    PENDING = 1
-    CONFIRMED = 2
-    FAILED = 3
-
-    CASH = 1
-    ONLINE = 2
-
-    PAYMENT_STATUS = (
-        (PENDING, 'Pending'),
-        (CONFIRMED, 'Confirmed'),
-        (FAILED, 'Failed')
-    )
-
-    PAYMENT_SOURCE = (
-        (CASH, 'Cash'),
-        (ONLINE, 'Online')
-    )
-    reference = models.CharField(max_length=19)
-    status = models.IntegerField(
-        choices=PAYMENT_STATUS,
-        default=PENDING
-    )
-    source = models.IntegerField(
-        choices=PAYMENT_SOURCE,
-        default=CASH
-    )
+# Employee: name,email, role, allowance, employee ID
+# actions: add employee, search,upload CSV
+# filter invited or all
 
 
 class GroupCart(BaseModel):
+    """
+    Model for holding group orders.
+    """
 
     class Meta:
         db_table = "group_cart"
 
     name = models.CharField(max_length=20)
-    owner = models.ForeignKey(User, related_name='owned_group_cart')
+    owner = models.ForeignKey(User, related_name='group_carts')
     vendor = models.ForeignKey(Vendor, related_name='group_carts')
     monetary_limit = MoneyField(
         max_digits=10,
@@ -358,14 +376,16 @@ class GroupCart(BaseModel):
         null=True,
         blank=True
     )
-    order = models.ForeignKey(Order, related_name='group_order', null=True, blank=True)
-    payment = models.ForeignKey(Payment, null=True, blank=True)
 
     def save(self, *args, **kwargs):
         # TODO(yao): generate Heroku-style names for the group order
-        self.name = generate_token(8)
+        if not self.created:
+            self.name = generate_token(8)
         super().save(*args, **kwargs)
         return self
+
+    def __str__(self):
+        return self.name
 
 
 class GroupCartMember(BaseModel):
@@ -373,8 +393,21 @@ class GroupCartMember(BaseModel):
     class Meta:
         db_table = "group_cart_member"
 
-    user = models.ForeignKey(User, related_name='group_carts', null=True, blank=True)
+    MEMBER = 1
+    ADMIN = 2
+
+    ROLES = [
+        (MEMBER, "Member"),
+        (ADMIN, "Admin")
+    ]
+
+    user = models.ForeignKey(User, related_name='group_cart_memberships', null=True, blank=True)
     group_cart = models.ForeignKey(GroupCart, related_name='members')
     # TODO(yao): make name non nullable
     name = models.CharField(max_length=40, null=True, blank=True)
+    # holds user's cart for current group order session. cleared after checkout
     cart = JSONField(null=True, blank=True)
+    role = models.IntegerField(
+        choices=ROLES,
+        default=MEMBER
+    )

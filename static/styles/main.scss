@@ -110,11 +110,12 @@ body {
   }
 }
 
+a.no-deco {
+  color: $black;
+  text-decoration: none;
+}
+
 #lunch-categories {
-  a.no-deco {
-    color: $black;
-    text-decoration: none;
-  }
   .card {
     &:hover {
       background-color: $grey;
@@ -135,6 +136,18 @@ body {
       float: left;
       @include rem(font-size, 19px);
       //@include rem(padding, 8px);
+    }
+  }
+}
+
+.teams {
+  @extend .row;
+  @include rem(padding-bottom, 30px);
+
+  .card {
+    @include rem(margin-bottom, 20px);
+    &:hover {
+      background-color: $grey;
     }
   }
 }
@@ -487,11 +500,6 @@ body.vendor-b2b-signup {
     .card-title {
       margin-top: 170px;
       display: block;
-      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-      font-weight: 400;
-      font-size: 48px;
-      letter-spacing: 0px;
-      line-height: 1em;
       font-family: futura-pt;
       font-weight: 600;
       font-style: normal;
@@ -499,14 +507,9 @@ body.vendor-b2b-signup {
       letter-spacing: 1px;
       text-transform: none;
       line-height: 1.1em;
-      color: #fff;
+      color: $white;
     }
     .card-text {
-      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-      font-weight: 400;
-      font-size: 18px;
-      letter-spacing: 0px;
-      line-height: 1.5em;
       font-family: futura-pt;
       font-weight: 500;
       font-style: normal;
@@ -514,7 +517,7 @@ body.vendor-b2b-signup {
       letter-spacing: 1px;
       text-transform: none;
       line-height: 1.3em;
-      color: #fff;
+      color: $white;
       margin: 20px auto;
     }
 
@@ -535,14 +538,11 @@ body.vendor-b2b-signup {
       border: 0
     }
   }
-  .vendor-b2b-highlight {
-    border-top: 1px solid $grey;
-    padding-top: 5px;
-  }
 
   #envoy-merchant-request {
     background-color: $white;
     @extend .jumbotron;
+    padding-top: 5px;
   }
 }
 

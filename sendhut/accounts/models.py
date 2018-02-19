@@ -15,7 +15,7 @@ class User(AbstractUser, BaseModel):
 
     @property
     def is_business_account(self):
-        pass
+        return self.group_carts
 
     class Meta:
         db_table = 'user'
