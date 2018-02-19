@@ -40,5 +40,4 @@ STATICFILES_STORAGE = 'sendhut.storage_backends.StaticStorage'
 DEFAULT_FILE_STORAGE = 'sendhut.storage_backends.MediaStorage'
 AWS_PUBLIC_MEDIA_LOCATION = 'media/public'
 
-
-THUMBNAIL_REDIS_PASSWORD = redis_url.password
+THUMBNAIL_REDIS_PASSWORD = REDIS_URL.password
