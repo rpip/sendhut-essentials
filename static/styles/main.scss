@@ -140,6 +140,13 @@ a.no-deco {
   }
 }
 
+#how-it-works {
+  .card {
+    border: none;
+    float: left;
+  }
+}
+
 .teams {
   @extend .row;
   @include rem(padding-bottom, 30px);
