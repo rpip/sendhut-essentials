@@ -343,20 +343,6 @@ class OrderLine(BaseModel):
     class Meta:
         db_table = "order_line"
 
-# class BusinessProfile(BaseModel):
-# delivery time
-# delivery address
-# change vendor
-# set reminder time: 9:00am, 9:30am,
-# day before: 2:30pm, 3pm, 3:30pm,  4:30pm,  5pm
-# week before
-# require login: default False
-# group_cart
-
-# Employee: name,email, role, allowance, employee ID
-# actions: add employee, search,upload CSV
-# filter invited or all
-
 
 class GroupCart(BaseModel):
     """
@@ -393,21 +379,10 @@ class GroupCartMember(BaseModel):
     class Meta:
         db_table = "group_cart_member"
 
-    MEMBER = 1
-    ADMIN = 2
-
-    ROLES = [
-        (MEMBER, "Member"),
-        (ADMIN, "Admin")
-    ]
-
-    user = models.ForeignKey(User, related_name='group_cart_memberships', null=True, blank=True)
+    user = models.ForeignKey(User, related_name='joined_group_carts',
+                             null=True, blank=True)
     group_cart = models.ForeignKey(GroupCart, related_name='members')
     # TODO(yao): make name non nullable
     name = models.CharField(max_length=40, null=True, blank=True)
     # holds user's cart for current group order session. cleared after checkout
     cart = JSONField(null=True, blank=True)
-    role = models.IntegerField(
-        choices=ROLES,
-        default=MEMBER
-    )
