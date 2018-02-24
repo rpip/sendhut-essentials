@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "216aacfda2ab50108ab2132660fab94256ef6ddc0b6fd9f0b5f1526fe4e91ed3"
+            "sha256": "5fa511290f94caa3a2e010bbdcbd3ddcdd87362df42355dd79cd0f5fc790fa40"
         },
         "host-environment-markers": {
             "implementation_name": "cpython",
@@ -29,17 +29,17 @@
     "default": {
         "boto3": {
             "hashes": [
-                "sha256:ae0ae1c11f4a78bd69a43c8b8a9bdb6569c3b497331f5892cc3cdb95f6f7f42b",
-                "sha256:65d7b85d213b63f4540b259b5a9780db8b0cbdcb5d748545d1eb19992910587b"
+                "sha256:3cebf92fbc65d190f7d5618d3a46de341e5800ed24bc982dc8bb3ad2fa9478d0",
+                "sha256:5d7c47dbd14e6bbf1bee26da878091f31320bbb58aa72c5b08a8bf13c644d66e"
             ],
-            "version": "==1.5.31"
+            "version": "==1.5.36"
         },
         "botocore": {
             "hashes": [
-                "sha256:80ccf6d2145a19b2b0354df7522ab7f8ef4e2793b5e187ea10cb5c4d8cbbd6a3",
-                "sha256:8f91b648a216dc945783d1539c013fc08a9e65ecc4fc5aae017bdd5961fd3468"
+                "sha256:898f10e68a7a1c2be621caf046d29a8f782c0ea866d644d5be46472c00a3dee9",
+                "sha256:a80a23e080f4a93d11a1c067a69304dd407d18c358cba1e0df8c96f56c9e98b4"
             ],
-            "version": "==1.8.45"
+            "version": "==1.8.50"
         },
         "certifi": {
             "hashes": [
@@ -185,11 +185,17 @@
             ],
             "version": "==2.0.2"
         },
+        "jusibe": {
+            "hashes": [
+                "sha256:4136aed38142f5fec14fb0dc64c33d57ae3bc8bd319f3f4c2b484218b7dc969e"
+            ],
+            "version": "==0.3"
+        },
         "newrelic": {
             "hashes": [
-                "sha256:b01ecb7ca6cd2ae1fab1c462a29b8534a1ff896959d9950248f7a44164e69724"
+                "sha256:a9969fa9706bbed6cace6c0c8bd08fd45cd6ecfa84c5d9d5b13f4eaf765e5b81"
             ],
-            "version": "==2.102.0.85"
+            "version": "==2.104.0.86"
         },
         "paystackapi": {
             "hashes": [
@@ -390,10 +396,10 @@
         },
         "text-unidecode": {
             "hashes": [
-                "sha256:02efd86b9c0f489f858d8cead62e94d3760dab444054b258734716f7602330a3",
-                "sha256:d0afd5e8a7ac69bfb1372e1bbfa3c63c22e3db8ae1284690e96b45c4430d08d0"
+                "sha256:801e38bd550b943563660a91de8d4b6fa5df60a542be9093f7abf819f86050cc",
+                "sha256:5a1375bb2ba7968740508ae38d92e1f889a0832913cb1c447d5e2046061a396d"
             ],
-            "version": "==1.1"
+            "version": "==1.2"
         },
         "urllib3": {
             "hashes": [
@@ -527,10 +533,10 @@
         },
         "text-unidecode": {
             "hashes": [
-                "sha256:02efd86b9c0f489f858d8cead62e94d3760dab444054b258734716f7602330a3",
-                "sha256:d0afd5e8a7ac69bfb1372e1bbfa3c63c22e3db8ae1284690e96b45c4430d08d0"
+                "sha256:801e38bd550b943563660a91de8d4b6fa5df60a542be9093f7abf819f86050cc",
+                "sha256:5a1375bb2ba7968740508ae38d92e1f889a0832913cb1c447d5e2046061a396d"
             ],
-            "version": "==1.1"
+            "version": "==1.2"
         },
         "traitlets": {
             "hashes": [
