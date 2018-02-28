@@ -12,11 +12,11 @@
   </div>
   <div class="offset-sm-2 col-sm-3" id="group-order-actions">
     {% if group_cart.owner == user %}
-      <a href="{% url 'lunch:cancel_group_order' group_cart.name %}">
+      <a href="{% url 'lunch:cancel_group_order' group_cart.token %}">
         <button type="button" class="btn btn-outline-danger">Cancel Order</button>
       </a>
     {% else %}
-      <a href="{% url 'lunch:leave_group_order' group_cart.name %}">
+      <a href="{% url 'lunch:leave_group_order' group_cart.token %}">
         <button type="button" class="btn btn-outline-danger">Leave</button>
         </a>
     {% endif %}

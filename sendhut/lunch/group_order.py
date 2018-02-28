@@ -1,59 +1,78 @@
 from django.conf import settings
-from django.urls import reverse
 
 from djmoney.money import Money
 
-from .models import GroupCart, GroupCartMember
+from .models import GroupCart, GroupCartMember, Vendor
+from sendhut.api.serializers import GroupCartSerializer, GroupCartMemberSerializer
 
 
 class GroupOrder:
 
     @classmethod
-    def new(cls, request, vendor, limit=None):
-        # TODO(yao): maybe confirm clear existing Cart before proceeding?
+    def create(cls, request, vendor_slug, limit=None):
+        vendor = Vendor.objects.get(slug=vendor_slug)
         group_cart = GroupCart.objects.create(
             owner=request.user,
             vendor=vendor,
-            monetary_limit=limit)
+            monetary_limit=limit
+        )
         member = GroupCartMember.objects.create(
             user=request.user,
             group_cart=group_cart,
             name=request.user.get_full_name()
         )
         group_cart.members.add(member)
-        return cls.start_session(request, group_cart, member)
+        data = cls.serialize(group_cart)
+        return cls.add_to_session(request, data, member)
 
     @classmethod
-    def start_session(cls, request, group_cart, member=None):
-        url = reverse('lunch:cart_join', args=(group_cart.name, ))
-        group_cart_url = request.build_absolute_uri(url)
-        member = {'name': member.name, 'id': member.id} if member else None
-        if not cls.get(request):
-            request.session[settings.GROUP_CART_SESSION_ID] = {
-                'url': group_cart_url,
-                'reference': group_cart.name,
-                'uuid': str(group_cart.uuid),
-                'force_signup': not(request.user.is_authenticated()),
-                'member': member
-            }
+    def serialize(cls, group_cart):
+        return GroupCartSerializer(instance=group_cart).data
+
+    @classmethod
+    def join(cls, request, group_cart, name=None):
+        if request.user.is_authenticated():
+            GroupCartMember.objects.create(
+                user=request.user,
+                group_cart=group_cart,
+                name=request.user.get_full_name())
+
+        member = GroupCartMember.objects.create(group_cart=group_cart, name=name)
+        return cls.add_to_session(request, cls.serialize(group_cart), member)
+
+    @classmethod
+    def add_to_session(cls, request, group_order, member):
+        token = group_order['token']
+        if not cls.get(request, token):
+            # if first group order
+            if not cls.get(request):
+                request.session[settings.GROUP_CART_SESSION_ID] = {}
+
+            group_order['member'] = GroupCartMemberSerializer(instance=member).data
+            request.session[settings.GROUP_CART_SESSION_ID][token] = group_order
             request.session.modified = True
-        return group_cart_url
+
+        return group_order['url']
 
     @classmethod
-    def get(cls, request):
-        return request.session.get(settings.GROUP_CART_SESSION_ID, {})
+    def get(cls, request, cart_token=None):
+        group_orders = request.session.get(settings.GROUP_CART_SESSION_ID, {})
+        if group_orders and cart_token:
+            return group_orders.get(cart_token, {})
+
+        return group_orders
 
     @classmethod
-    def build_cart(cls, request):
-        group_cart_session = GroupOrder.get(request)
+    def build_cart(cls, request, cart_token):
+        group_order = cls.get(request, cart_token)
         cart = {}
-        if group_cart_session:
-            reference = group_cart_session['reference']
-            group_cart = GroupCart.objects.get(name=reference)
+        if group_order:
+            token = group_order['token']
+            group_cart = GroupCart.objects.get(token=token)
             sub_total = sum([Money(x.cart['sub_total'], 'NGN') for x
                              in group_cart.members.all() if x.cart])
             delivery_fee = Money(settings.LUNCH_DELIVERY_FEE, 'NGN')
-            cart['group_cart_session'] = group_cart_session
+            cart['group_cart_session'] = token
             cart['group_cart'] = group_cart
             cart['delivery_fee'] = delivery_fee
             cart['sub_total'] = sub_total
@@ -62,30 +81,34 @@ class GroupOrder:
         return cart
 
     @classmethod
-    def end_session(cls, request):
-        if cls.get(request):
-            del request.session[settings.GROUP_CART_SESSION_ID]
-            request.session.modified = True
-
-    @classmethod
-    def force_signup(cls, request):
-        request.session[settings.GROUP_CART_SESSION_ID]['force_signup'] = True
+    def end_session(cls, request, token):
+        del request.session[settings.GROUP_CART_SESSION_ID][token]
         request.session.modified = True
 
     @classmethod
-    def join_cart(cls, request, member):
-        member = {'name': member.name, 'id': member.id}
-        request.session[settings.GROUP_CART_SESSION_ID]['member'] = member
-        request.session[settings.GROUP_CART_SESSION_ID]['force_signup'] = False
-        request.session.modified = True
-
-    @classmethod
-    def get_cart_member(cls, request):
-        return request.session[settings.GROUP_CART_SESSION_ID]['member']
-
-    @classmethod
-    def update_member_cart(cls, group_cart, cart, member):
-        group_cart = GroupCart.objects.get(name=group_cart['reference'])
-        member = group_cart.members.filter(id=member['id'])[0]
+    def update_member_cart(cls, group_order, cart):
+        member = GroupCartMember.objects.get(id=group_order['member']['id'])
         member.cart = cart
         member.save()
+
+    @classmethod
+    def get_by_vendor(cls, request, vendor_uuid):
+        return next((v for k, v in cls.get(request).items() if v['vendor'] == str(vendor_uuid)), {})
+
+    @classmethod
+    def cancel(cls, request, token):
+        group_cart = GroupCart.objects.get(token=token)
+        slug = group_cart.vendor.slug
+        group_cart.delete()
+        GroupOrder.end_session(request, token)
+        return slug
+
+    @classmethod
+    def leave(cls, request, token):
+        group_order = cls.get(request, token)
+        member = GroupCartMember.objects.get(
+            group_cart__token=token,
+            id=group_order['member']['id']
+        )
+        member.leave_cart()
+        cls.end_session(request, token)

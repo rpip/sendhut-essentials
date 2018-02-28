@@ -154,15 +154,23 @@ $('body').on('click', '.cart-line .x-delete', function(e) {
 
 
 $('body').on('click', 'li.page-item', function() {
-$('li.page-item').removeClass('active');
-$(this).toggleClass("active");
-var limit = $(this).attr('data-limit');
-console.log(limit);
-if(limit == "xx") {
-   $("#other_limit").show();
-} else {
+  $('li.page-item').removeClass('active');
+  $(this).toggleClass("active");
+  var limit = $(this).attr('data-limit');
+  console.log(limit);
+  if(limit == "alt") {
+    $("#other_limit").show();
+  } else {
+    $("input#limit").val(limit);
+  }
+});
+
+
+
+$('body').on('change', '#other_limit', function() {
+  var limit = $(this).val();
+  console.log(limit);
   $("input#limit").val(limit);
-}
 });
 
 </script>

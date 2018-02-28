@@ -1,3 +1,4 @@
+from enum import Enum
 import json
 import os
 import hashlib
@@ -37,6 +38,7 @@ def image_upload_path(instance, filename):
     import os
     from django.utils.timezone import now
     filename_base, filename_ext = os.path.splitext(filename)
+
     return 'foods/%s%s' % (
         now().strftime("%Y%m%d%H%M%S"),
         filename_ext.lower()
@@ -98,3 +100,9 @@ def generate_password_token(phone):
 
 def check_password_token(token):
     return REDIS.get(token)
+
+
+class ChoiceEnum(Enum):
+    @classmethod
+    def choices(cls):
+        return tuple((x.name, x.value) for x in cls)

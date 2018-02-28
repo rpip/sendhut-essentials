@@ -5,6 +5,7 @@ from django.contrib import admin
 
 from sendhut.lunch import urls as lunch_urls
 from sendhut.accounts import urls as account_urls
+from sendhut.api import urls as api_urls
 from sendhut.accounts.views import LoginView, LogoutView, SignupView
 from sendhut.lunch.views import VendorSignupView
 from .views import (
@@ -22,11 +23,13 @@ urlpatterns = [
     url(r'^login/$', LoginView.as_view(), name='signin'),
     url(r'^logout/$', LogoutView.as_view(), name='logout'),
     url(r'^accounts/', include(account_urls, namespace='accounts')),
+    url(r'^lunch/', include(lunch_urls, namespace='lunch')),
+    url(r'^api/', include(api_urls)),
+    url(r'^api-auth/', include('rest_framework.urls')),
     # payment transaction callback
     url(r'^payments/ck$', payment_callback, name='payment_callback'),
     # instant payment notification
     url(r'^payments/ipn$', payment_webhook, name='payment_webhook'),
-    url(r'^lunch/', include(lunch_urls, namespace='lunch')),
     url(r'^admin/', include(admin.site.urls)),
 ]
 

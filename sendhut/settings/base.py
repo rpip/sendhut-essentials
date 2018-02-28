@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'templated_email',
     'raven.contrib.django.raven_compat',
     'safedelete',
+    'rest_framework',
 
     'sendhut.accounts',
     'sendhut.lunch'
@@ -164,7 +165,7 @@ CACHES = {
 
 CART_SESSION_ID = 'cart'
 
-GROUP_CART_SESSION_ID = 'group_cart'
+GROUP_CART_SESSION_ID = 'group_orders'
 
 MESSAGE_TAGS = {
     messages.DEBUG: 'alert-info',
@@ -215,3 +216,8 @@ EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool)
 # TODO(yao): personalize email with 'Yao from Sendhut'
 DEFAULT_FROM_EMAIL = 'hello@sendhut.com'
+
+
+# SMS
+JUSIBE_PUBLIC_KEY = "a21e294d898ca47299bd575e5db983dd"
+JUSIBE_ACCESS_TOKEN = "8dcdee5ff5d7504570ffb0d74e1fc755"

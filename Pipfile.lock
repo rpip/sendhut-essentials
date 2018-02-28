@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "5fa511290f94caa3a2e010bbdcbd3ddcdd87362df42355dd79cd0f5fc790fa40"
+            "sha256": "1438074cd8326cc3a1a23b15f004879a42c24c934b09eb8578e2a31b1dd4e626"
         },
         "host-environment-markers": {
             "implementation_name": "cpython",
@@ -83,6 +83,13 @@
             ],
             "version": "==1.7.9"
         },
+        "django-filter": {
+            "hashes": [
+                "sha256:ea204242ea83790e1512c9d0d8255002a652a6f4986e93cee664f28955ba0c22",
+                "sha256:ec0ef1ba23ef95b1620f5d481334413700fb33f45cd76d56a63f4b0b1d76976a"
+            ],
+            "version": "==1.1.0"
+        },
         "django-money": {
             "hashes": [
                 "sha256:099bc28ebc2dc6a550b57376d54eea624f4145c72918a96fd75d93f7b9a08143",
@@ -134,6 +141,13 @@
                 "sha256:0baee0b905286fde028fdbd0dd1d985d4656dab472b0fd4ca4cd556ee38a047e"
             ],
             "version": "==1.4.1"
+        },
+        "djangorestframework": {
+            "hashes": [
+                "sha256:1f6baf40ed456ed2af6bd1a4ff8bbc3503cebea16509993aea2b7085bc097766",
+                "sha256:9f9e94e8d22b100ed3a43cee8c47a7ff7b185e778a1f2da9ec5c73fc4e081b87"
+            ],
+            "version": "==3.7.7"
         },
         "docutils": {
             "hashes": [
@@ -190,6 +204,13 @@
                 "sha256:4136aed38142f5fec14fb0dc64c33d57ae3bc8bd319f3f4c2b484218b7dc969e"
             ],
             "version": "==0.3"
+        },
+        "markdown": {
+            "hashes": [
+                "sha256:9ba587db9daee7ec761cfc656272be6aabe2ed300fece21208e4aab2e457bc8f",
+                "sha256:a856869c7ff079ad84a3e19cd87a64998350c2b94e9e08e44270faef33400f81"
+            ],
+            "version": "==2.6.11"
         },
         "newrelic": {
             "hashes": [

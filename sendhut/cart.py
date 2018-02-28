@@ -8,7 +8,7 @@ from sendhut.lunch.models import Option
 
 
 # signal
-cart_updated = Signal(providing_args=['group_cart', 'cart', 'member'])
+cart_updated = Signal(providing_args=['group_order', 'cart'])
 
 
 class ItemLine:
@@ -99,7 +99,7 @@ class Cart:
     A Cart object represents a shopping cart
     """
 
-    def __init__(self, request, items=None):
+    def __init__(self, request, items=None, group_session=None):
         """
         Initialize the cart.
 
@@ -109,6 +109,7 @@ class Cart:
         self.modified = False
         self.session = request.session
         self._state = []
+        self._group_session = group_session
         cart = self.session.get(settings.CART_SESSION_ID)
         if not cart:
             # save an empty in the session
@@ -137,8 +138,7 @@ class Cart:
         if not line:
             line = self.create_line(item, int(quantity), data)
             self._state.append(line)
-            group_order = bool(self.session.get(settings.GROUP_CART_SESSION_ID))
-            self.save(group_order)
+            self.save()
 
     def match_line(self, item, quantity, data):
         "Matches: item uuid, extra (sides/options)"
@@ -160,11 +160,11 @@ class Cart:
         """
         return CartLine(item, quantity, data)
 
-    def save(self, broadcast=False):
+    def save(self):
         self.session[settings.CART_SESSION_ID] = self.serialize_lite()
         self.session.modified = True
         self.modified = True
-        if broadcast:
+        if self._group_session:
             self.broadcast_cart_update()
 
     def set_delivery_time(self, delivery_time):
@@ -192,8 +192,7 @@ class Cart:
         """Remove a item from the cart"""
         cart_line = self.get_line(line_id)
         self._state.remove(cart_line)
-        group_order = bool(self.session.get(settings.GROUP_CART_SESSION_ID))
-        self.save(group_order)
+        self.save()
 
     def get_subtotal(self):
         """
@@ -239,15 +238,12 @@ class Cart:
         }
 
     def broadcast_cart_update(self):
-        group_session = self.session.get(settings.GROUP_CART_SESSION_ID)
-        if group_session:
-            cart = self.serialize()
-            cart_updated.send(
-                sender=self.__class__,
-                group_cart=group_session,
-                cart={'cart': cart, 'sub_total': self.get_subtotal()},
-                member=group_session['member']
-            )
+        cart = self.serialize()
+        cart_updated.send(
+            sender=self.__class__,
+            group_session=self._group_session,
+            cart={'cart': cart, 'sub_total': self.get_subtotal()}
+        )
 
     def load(self, cart_json):
         """

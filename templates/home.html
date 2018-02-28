@@ -4,60 +4,56 @@
 {% block body_class %}body-home{% endblock %}
 
 {% block masthead %}
-<div class="row" id="how-it-works">
-  <div class="col-sm-4">
-    <div class="card">
-      <div class="card-body">
-        <p class="card-text">
-          <img class="icon" src="{% static 'images/icons/clock.svg' %}" alt="Twitter">
-          From Monday to Friday.
-          <br>Delivery from 11:30am to 2:30pm
-        </p>
+  <div class="row" id="how-it-works">
+    <div class="col-sm-4">
+      <div class="card">
+        <div class="card-body">
+          <p class="card-text">
+            <img class="icon" src="{% static 'images/icons/clock.svg' %}" alt="Twitter">
+            From Monday to Friday.
+            <br>Delivery from 11:30am to 2:30pm
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="card">
+        <div class="card-body">
+          <p class="card-text">
+            <img class="icon" src="{% static 'images/icons/bowl.svg' %}" alt="Twitter">
+            Every lunch menu is sourced from local chefs and restaurants offering a unique take on a cuisine.
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="card">
+        <div class="card-body">
+          <p class="card-text">
+            <img class="icon" src="{% static 'images/icons/credit-card.svg' %}" alt="Twitter">
+            Secure online payment. <br> Cash on delivery accepted
+          </p>
+        </div>
       </div>
     </div>
   </div>
-  <div class="col-sm-4">
-    <div class="card">
-      <div class="card-body">
-        <p class="card-text">
-          <img class="icon" src="{% static 'images/icons/bowl.svg' %}" alt="Twitter">
-          Every lunch menu is sourced from local chefs and restaurants offering a unique take on a cuisine.
-        </p>
-      </div>
-    </div>
-  </div>
-  <div class="col-sm-4">
-    <div class="card">
-      <div class="card-body">
-        <p class="card-text">
-          <img class="icon" src="{% static 'images/icons/credit-card.svg' %}" alt="Twitter">
-          Secure online payment. <br> Cash on delivery accepted
-        </p>
-      </div>
-    </div>
-  </div>
-</div>
 </div> <!--// how it works -->
-<hr>
 
 {% endblock %}
 {% block page_header %}
-What's for lunch?
+  What's for lunch?
 {% endblock %}
 
 {% block content %}
+  <br>
 
-<div>
-  Every lunch menu is sourced from local chefs and restaurants offering a unique take on a cuisine.
-</div> <br>
+  {% include "partials/vendor_list.html" %}
 
-{% include "partials/lunch_categories.html" %}
-
-{% include "partials/popular_tags.html" %}
+  {% include "partials/popular_tags.html" %}
 
 {% endblock %}
 
 {% block main_bottom %}
-{% include "partials/group_order_banner.html" %}
-{#% include "partials/download_app.html" %#}
+  {% include "partials/group_order_banner.html" %}
+  {#% include "partials/download_app.html" %#}
 {% endblock %}

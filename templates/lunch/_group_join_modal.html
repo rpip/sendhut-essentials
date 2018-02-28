@@ -12,7 +12,7 @@
            <p>{{ group_cart|group_cart_limit }}</p>
            <hr>
            <p>Tell us your name so we can identify your food.</p>
-           <form method="POST" action="{% url 'lunch:cart_join' group_cart.name  %}">
+           <form method="POST" action="{% url 'lunch:cart_join' group_cart.token  %}">
            {% csrf_token %}
             <div class="form-group">
               <input type="text" class="form-control" name="name"

@@ -23,19 +23,6 @@ class UserSerializer(serializers.ModelSerializer):
                   'username', 'phone', 'last_login', 'identity_verified')
 
 
-class GroupCartMemberSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = GroupCartMember
-        fields = ('name', 'cart')
-
-
-class GroupCartSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = GroupCart
-        fields = ('token', 'owner', 'vendor', 'monetary_limit', 'status')
-
-
 class MenuSerializer(serializers.ModelSerializer):
 
     tags = serializers.SerializerMethodField()
@@ -52,7 +39,6 @@ class MenuSerializer(serializers.ModelSerializer):
 class VendorSerializer(serializers.ModelSerializer):
 
     menus = MenuSerializer(many=True, read_only=True)
-
     tags = serializers.SerializerMethodField()
 
     def get_tags(self, obj):
@@ -62,7 +48,29 @@ class VendorSerializer(serializers.ModelSerializer):
         model = Vendor
         fields = ('name', 'manager_name', 'address', 'phone',
                   'logo', 'email', 'slug', 'banner', 'tags',
-                  'verified', 'available', 'menus')
+                  'verified', 'available', 'menus', 'uuid')
+
+
+class GroupCartMemberSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GroupCartMember
+        fields = ('name', 'cart', 'id')
+
+
+class GroupCartSerializer(serializers.ModelSerializer):
+    url = serializers.SerializerMethodField()
+    owner = UserSerializer(read_only=True)
+    vendor = serializers.SerializerMethodField()
+
+    def get_vendor(self, obj):
+        return str(obj.vendor.uuid)
+
+    def get_url(self, obj):
+        return obj.get_absolute_url()
+
+    class Meta:
+        model = GroupCart
+        fields = ('token', 'owner', 'vendor', 'monetary_limit', 'status', 'url')
 
 
 class ImageSerializer(serializers.ModelSerializer):

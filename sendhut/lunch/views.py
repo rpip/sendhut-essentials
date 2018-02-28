@@ -20,8 +20,37 @@ from sendhut import utils
 from .models import (
     Item, Vendor, Order, OrderLine, GroupCart, GroupCartMember, FOOD_TAGS
 )
-from .forms import CheckoutForm, VendorSignupForm
+from .forms import CheckoutForm, VendorSignupForm, GroupOrderForm
 from .group_order import GroupOrder
+
+
+def food_detail(request, slug):
+    template = 'lunch/_item_detail.html'
+    item = Item.objects.get(slug=slug)
+    context = {
+        'item': item,
+        'page_title': item.name,
+        'group_cart_token': request.GET.get('cart_ref')
+    }
+    return render(request, template, context)
+
+
+def cartline_detail(request, line_id, slug):
+    template = 'lunch/_item_detail.html'
+    item = Item.objects.get(slug=slug)
+    cart = Cart(request)
+    context = {
+        'item': item,
+        'page_title': item.name,
+        'cart_line': cart.get_line(line_id).serialize(),
+        'group_cart_token': request.GET.get('cart_ref')
+    }
+    return render(request, template, context)
+
+
+def cartline_delete(request, line_id):
+    Cart(request).remove(line_id)
+    return JsonResponse({'status': 'OK'}, encoder=utils.JSONEncoder)
 
 
 class VendorSignupView(FormView):
@@ -42,8 +71,6 @@ class VendorSignupView(FormView):
 
 
 def search(request, tag):
-    # TODO(yao): Move search into component
-    # TODO(yao): search food and menus tags
     subtags = FOOD_TAGS.tags_for(tag)
     results = Vendor.objects.filter(
         reduce(operator.or_, (Q(tags__name__icontains=q) for q in subtags)))
@@ -55,17 +82,50 @@ def search(request, tag):
     return render(request, 'lunch/search.html', context)
 
 
+@login_required
+def order_list(request):
+    orders = Order.objects.filter(user=request.user)
+    return render(request, 'lunch/order_history.html', {'orders': orders})
+
+
+@login_required
+def order_details(request, ref):
+    context = {
+        'order': get_object_or_404(Order, user=request.user, reference=ref)
+    }
+    return render(request, 'lunch/order_details.html', context)
+
+
+class GroupOrderView(LoginRequiredMixin, View):
+
+    template_name = 'lunch/group_order.html'
+
+    def post(self, request, *args, **kwargs):
+        form = GroupOrderForm(data=request.POST)
+        if form.is_valid():
+            vendor = form.cleaned_data['vendor']
+            limit = form.cleaned_data['limit']
+            GroupOrder.create(request, vendor, limit)
+            messages.info(request, "Group order created!")
+            return redirect(reverse('lunch:vendor_details', args=(vendor,)))
+
+        return redirect(request.META.get('HTTP_REFERER'))
+
+
 def vendor_page(request, slug):
     template = 'lunch/vendor_details.html'
     vendor = get_object_or_404(Vendor, slug=slug)
     context = {
         'vendor': vendor,
-        'page_title': vendor.name,
+        'page_title': vendor.name
     }
-    if GroupOrder.get(request):
-        data = GroupOrder.get(request)
-        context.update(data)
-        context['group_cart'] = GroupCart.objects.get(name=data['reference'])
+    group_order = GroupOrder.get_by_vendor(request, vendor.uuid)
+    if group_order:
+        group_cart = GroupCart.objects.get(token=group_order['token'])
+        context['group_order'] = group_order
+        context['group_cart'] = group_cart
+        context['cart_url'] = request.build_absolute_uri(
+            group_cart.get_absolute_url())
     else:
         messages.info(request, "You can order in lunch with coworkers or \
         friends with the group order.")
@@ -73,31 +133,36 @@ def vendor_page(request, slug):
     return render(request, template, context)
 
 
-def food_detail(request, slug):
-    template = 'lunch/_item_detail.html'
-    item = Item.objects.get(slug=slug)
-    context = {
-        'item': item,
-        'page_title': item.name
-    }
-    return render(request, template, context)
+class CartJoin(View):
 
+    def get(self, request, *args, **kwargs):
+        token = kwargs['token']
+        group_cart = get_object_or_404(GroupCart, token=token)
 
-def cartline_detail(request, line_id, slug):
-    template = 'lunch/_item_detail.html'
-    item = Item.objects.get(slug=slug)
-    cart = Cart(request)
-    context = {
-        'item': item,
-        'page_title': item.name,
-        'cart_line': cart.get_line(line_id).serialize()
-    }
-    return render(request, template, context)
+        # already in group cart
+        if GroupOrder.get(request, token):
+            return redirect(reverse('lunch:vendor_details',
+                                    args=(group_cart.vendor.slug,)))
 
+        context = {
+            'group_cart': group_cart,
+            'vendor': group_cart.vendor,
+            'cart_url': request.build_absolute_uri(group_cart.get_absolute_url())
+        }
 
-def cartline_delete(request, line_id):
-    Cart(request).remove(line_id)
-    return JsonResponse({'status': 'OK'}, encoder=utils.JSONEncoder)
+        return render(request, 'lunch/cart_join.html', context)
+
+    def post(self, request, *args, **kwargs):
+        token = kwargs['token']
+        group_cart = get_object_or_404(GroupCart, token=token)
+        name = request.POST['name']
+        if not name:
+            return redirect(request.META.get('HTTP_REFERER'))
+
+        GroupOrder.join(request, group_cart, name)
+        msg = "You've joined {}'s group order".format(group_cart.owner.get_full_name())
+        messages.info(request, msg)
+        return redirect(reverse('lunch:vendor_details', args=(group_cart.vendor.slug,)))
 
 
 class CartView(View):
@@ -109,13 +174,20 @@ class CartView(View):
             Cart(request).clear()
 
         context = Cart(request).build_cart()
-        context.update(GroupOrder.build_cart(request))
+        token = request.GET.get('cart_ref')
+        if token:
+            context.update(GroupOrder.build_cart(request, token))
         return render(request, 'partials/sidebar_cart.html', context)
 
     def post(self, request):
         "This endpoints handle new cart additions and cart item updates"
-        cart = Cart(request)
         data = json.loads(request.body)
+        token = data['cart_token']
+        if token:
+            cart = Cart(request, group_session=GroupOrder.get(request, token))
+        else:
+            cart = Cart(request)
+
         # if line_id is present, it means it's an update
         # delete cart line and re-add
         if data and data.get('line_id'):
@@ -129,8 +201,9 @@ class CartView(View):
 
 @login_required
 def cart_summary(request):
+    ref = request.GET['cart_ref']
     context = Cart(request).build_cart()
-    context.update(GroupOrder.build_cart(request))
+    context.update(GroupOrder.build_cart(request, ref))
     context['form'] = CheckoutForm(data=request.POST)
     return render(request, 'lunch/cart_summary.html', context)
 
@@ -139,26 +212,13 @@ def cart_reload(request):
     group_session = GroupOrder.get(request)
     template = 'lunch/_cart_summary.html'
     if group_session:
+        ref = request.GET['cart_ref']
         template = 'lunch/_group_cart_summary.html'
-        context = GroupOrder.build_cart(request)
+        context = GroupOrder.build_cart(request, ref)
     else:
         context = Cart(request).build_cart()
 
     return render(request, template, context)
-
-
-@login_required
-def order_list(request):
-    orders = Order.objects.filter(user=request.user)
-    return render(request, 'lunch/order_history.html', {'orders': orders})
-
-
-@login_required
-def order_details(request, reference):
-    context = {
-        'order': get_object_or_404(Order, user=request.user, reference=reference)
-    }
-    return render(request, 'lunch/order_details.html', context)
 
 
 class CheckoutView(LoginRequiredMixin, View):
@@ -167,7 +227,8 @@ class CheckoutView(LoginRequiredMixin, View):
         form = CheckoutForm(data=request.POST)
         group_session = GroupOrder.get(request)
         if group_session:
-            context = GroupOrder.build_cart(request)
+            ref = request.GET['cart_ref']
+            context = GroupOrder.build_cart(request, ref)
         else:
             context = Cart(request).build_cart()
 
@@ -180,7 +241,8 @@ class CheckoutView(LoginRequiredMixin, View):
             messages.error(request, "Please complete the delivery form to proceed")
             group_session = GroupOrder.get(request)
             if group_session:
-                context = GroupOrder.build_cart(request)
+                ref = request.GET['cart_ref']
+                context = GroupOrder.build_cart(request, ref)
             else:
                 context = Cart(request).build_cart()
 
@@ -195,7 +257,8 @@ class CheckoutView(LoginRequiredMixin, View):
         cart = Cart(request)
         # TODO(yao): send invoice email, send sms confirmation/updates
         _cart = cart.build_cart()
-        group_session = GroupOrder.get(request)
+        ref = request.GET['cart_ref']
+        group_session = GroupOrder.get(request, ref)
         order = Order.objects.create(
             user=request.user,
             group_cart=group_cart,
@@ -229,67 +292,17 @@ class CheckoutView(LoginRequiredMixin, View):
         return redirect('home')
 
 
-class GroupOrderView(LoginRequiredMixin, View):
-
-    template_name = 'lunch/group_order.html'
-
-    def post(self, request, *args, **kwargs):
-        # HACK: own limit
-        # TODO(yao): refactor
-        limit = request.POST['limit']
-        other_limit = request.POST['other_limit']
-        limit = float(limit) if limit else None
-        limit = float(other_limit) if other_limit else limit
-        vendor_slug = request.POST['vendor'].strip()
-        vendor = Vendor.objects.get(slug=vendor_slug)
-        GroupOrder.new(request, vendor, limit)
-        messages.info(request, "Group order created!")
-        return redirect(reverse('lunch:vendor_details', args=(vendor.slug,)))
-
-
-class CartJoin(View):
-
-    def get(self, request, *args, **kwargs):
-        reference = kwargs['reference']
-        group_cart = get_object_or_404(GroupCart, name=reference)
-        GroupOrder.start_session(request, group_cart)
-        return redirect(reverse('lunch:vendor_details', args=(group_cart.vendor.slug,)))
-
-    def post(self, request, *args, **kwargs):
-        reference = kwargs['reference']
-        group_cart = get_object_or_404(GroupCart, name=reference)
-        name = request.POST['name']
-        if not name:
-            return redirect(request.META.get('HTTP_REFERER'))
-
-        found = group_cart.members.filter(name=name)
-        if not found:
-            member = GroupCartMember.objects.create(
-                group_cart=group_cart,
-                name=name
-            )
-            GroupOrder.join_cart(request, member)
-            msg = "You've joined {}'s group order".format(group_cart.owner.get_full_name())
-            messages.info(request, msg)
-
-        return redirect(reverse('lunch:vendor_details', args=(group_cart.vendor.slug,)))
-
-
-def leave_group_order(request, reference):
-    group_cart = get_object_or_404(GroupCart, name=reference)
-    member = GroupOrder.get_cart_member(request)
-    group_cart.members.filter(id=member['id']).delete()
-    msg = "You've been removed from {}'s cart".format(group_cart.owner.get_full_name())
+def leave_group_order(request, token):
+    group_cart = get_object_or_404(GroupCart, token=token)
+    GroupOrder.leave(request, token)
+    msg = "You've been removed from {}'s cart".format(
+        group_cart.owner.get_full_name())
     messages.info(request, msg)
-    GroupOrder.end_session(request)
-    return redirect(reverse('lunch:vendor_details', args=(group_cart.vendor.slug,)))
+    return redirect(reverse('lunch:vendor_details',
+                            args=(group_cart.vendor.slug,)))
 
 
-def cancel_group_order(request, reference):
-    group_cart = get_object_or_404(GroupCart, name=reference)
-    group_cart.delete()
-    vendor_slug = group_cart.vendor.slug
-    GroupOrder.end_session(request)
-    # TODO(yao): push/notify to all participating clients when group order is cancelled
+def cancel_group_order(request, token):
+    vendor_slug = GroupOrder.cancel(request, token)
     messages.info(request, "Group order deleted")
     return redirect(reverse('lunch:vendor_details', args=(vendor_slug,)))

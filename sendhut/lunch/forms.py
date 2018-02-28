@@ -12,6 +12,11 @@ class CheckoutForm(forms.Form):
     cash_delivery = forms.BooleanField(required=False)
 
 
+class GroupOrderForm(forms.Form):
+    limit = forms.FloatField(required=False)
+    vendor = forms.CharField()
+
+
 class VendorSignupForm(ModelForm):
     # number of locations
     # type of cuisine

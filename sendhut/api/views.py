@@ -21,11 +21,13 @@ class AddressViewSet(viewsets.ModelViewSet):
 class VendorViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.VendorSerializer
     queryset = Vendor.objects.all()
+    lookup_field = 'slug'
 
 
 class ItemViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.ItemSerializer
     queryset = Item.objects.all()
+    lookup_field = 'slug'
 
 
 class OrderViewSet(viewsets.ModelViewSet):

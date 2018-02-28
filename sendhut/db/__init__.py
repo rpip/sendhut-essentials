@@ -8,7 +8,16 @@ from safedelete.models import SafeDeleteModel
 from safedelete.models import SOFT_DELETE_CASCADE
 
 
-class BaseModel(SafeDeleteModel):
+class UpdateMixin(object):
+    def update(self, **kwargs):
+        if self._state.adding:
+            raise self.DoesNotExist
+        for field, value in kwargs.items():
+            setattr(self, field, value)
+        self.save(update_fields=kwargs.keys())
+
+
+class BaseModel(SafeDeleteModel, UpdateMixin):
     """
     An abstract base class model that provides
     self-updating ``created`` and ``modified`` fields.

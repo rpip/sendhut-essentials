@@ -5,6 +5,7 @@ import six
 
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
+from django.urls import reverse
 from django.conf import settings
 from taggit.managers import TaggableManager
 from djmoney.models.fields import MoneyField
@@ -52,16 +53,13 @@ class Vendor(BaseModel):
     "Food vendor"
     # TODO(yao): add allergy information
     # TODO(yao): add restaurant notes
-    # TODO(yao): Add boolean field showing if restaurant is open today
     name = models.CharField(max_length=100)
     manager_name = models.CharField(max_length=100, null=True, blank=True)
-    # TODO(yao): delete address
+    # TODO(yao): replace address with branches
     address = models.CharField(max_length=200, null=True, blank=True)
     # TODO(yao): add multiple vendor phones
     phone = models.CharField(max_length=30, null=True, blank=True, unique=True)
-    # TODO(yao): Add locations for multipe vendor locations
-    # VendorLocation: address, geo, phones
-    # location = models.CharField(max_length=30, null=True, blank=True)
+    # TODO(yao): Add Branch (address, geo, phones)
     logo = ImageField(upload_to=image_upload_path, null=True, blank=True)
     # banner is image displayed on restaurant's page
     email = models.EmailField(max_length=70, null=True, blank=True, unique=True)
@@ -69,10 +67,14 @@ class Vendor(BaseModel):
     banner = ImageField(upload_to=image_upload_path, null=True, blank=True)
     tags = TaggableManager()
     verified = models.BooleanField(default=False)
+    available = models.BooleanField(default=True)
 
     def tags_tx(self):
         tags = self.tags.all()
         return ', '.join([unslugify(x.name) for x in tags[:3]])
+
+    def get_absolute_url(self):
+        return reverse('lunch:vendor_detail', args=(self.self.slug, ))
 
     class Meta:
         db_table = "vendor"
@@ -144,6 +146,7 @@ class Item(BaseModel):
         (HEALTHY_FOOD, 'Healthy Food')
     )
 
+    # TODO(yao): Use http://github.com/jazzband/django-model-utils
     categories = ArrayField(
         models.IntegerField(
             choices=FOOD_CATEGORIES
@@ -348,11 +351,18 @@ class GroupCart(BaseModel):
     """
     Model for holding group orders.
     """
+    OPEN = 1
+    LOCKED = 2
+
+    STATUS_CHOICES = [
+        (OPEN, 'Open'),
+        (LOCKED, 'Locked')
+    ]
 
     class Meta:
         db_table = "group_cart"
 
-    name = models.CharField(max_length=20)
+    token = models.CharField(max_length=10)
     owner = models.ForeignKey(User, related_name='group_carts')
     vendor = models.ForeignKey(Vendor, related_name='group_carts')
     monetary_limit = MoneyField(
@@ -362,16 +372,30 @@ class GroupCart(BaseModel):
         null=True,
         blank=True
     )
+    status = models.IntegerField(
+        max_length=32, choices=STATUS_CHOICES, default=OPEN)
 
     def save(self, *args, **kwargs):
         # TODO(yao): generate Heroku-style names for the group order
         if not self.created:
-            self.name = generate_token(8)
+            self.token = generate_token(6)
         super().save(*args, **kwargs)
         return self
 
+    def lock(self):
+        self.update(status=self.LOCKED)
+
+    def unlock(self):
+        self.update(sttaus=self.OPEN)
+
+    def cancel(self):
+        self.delete()
+
+    def get_absolute_url(self):
+        return reverse('lunch:cart_join', args=(self.token, ))
+
     def __str__(self):
-        return self.name
+        return self.token
 
 
 class GroupCartMember(BaseModel):
@@ -382,7 +406,9 @@ class GroupCartMember(BaseModel):
     user = models.ForeignKey(User, related_name='joined_group_carts',
                              null=True, blank=True)
     group_cart = models.ForeignKey(GroupCart, related_name='members')
-    # TODO(yao): make name non nullable
-    name = models.CharField(max_length=40, null=True, blank=True)
-    # holds user's cart for current group order session. cleared after checkout
+    name = models.CharField(max_length=40)
+    # holds user's cart for current group order session
     cart = JSONField(null=True, blank=True)
+
+    def leave_cart(self):
+        self.delete()

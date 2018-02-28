@@ -18,8 +18,6 @@ def add_item_slug(sender, instance, created, **kwargs):
 
 @receiver(cart_updated, sender=Cart)
 def update_group_order(sender, **kwargs):
-    group_cart = kwargs['group_cart']
+    group_session = kwargs['group_session']
     cart = kwargs['cart']
-    member = kwargs['member']
-    if group_cart:
-        GroupOrder.update_member_cart(group_cart, cart, member)
+    GroupOrder.update_member_cart(group_session, cart)
