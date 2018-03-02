@@ -1,6 +1,6 @@
 {% load djmoney %}
 {% load lunch_extras %}
-{% if cart %}
+{% if group_order %}
   <div class="cart-header">
     <h4>Your Order</h4>
     <button type="button" class="close float-right" aria-label="Close">
@@ -17,24 +17,29 @@
 
 {% for member in group_cart.members.all %}
   <h6 class="group-section-header">{{ member.name }}'s Order</h6>
-  {% for line in member.cart.cart %}
+  {% for line in member.cart %}
     <div class="container-fluid cart-line">
       <div class="row">
         <div class="col-sm-1">{{ line.quantity }}</div>
         <div class="col-sm-10">
           <div class="container-fluid">
             <div class="row">
+              {% if member.id == group_order.member.id %}
               <div class="col-sm-10">
-              <a class="item-popup"
-                 data-href="{% url 'lunch:cartline_detail' line_id=line.line_id slug=line.slug %}?cart_ref={{ group_cart.token }}">
-                 {{ line.name }}
-              </a>
+                <a class="item-popup"
+                   data-href="{% url 'lunch:cartline_detail' line_id=line.data.line_id slug=line.data.slug %}?cart_ref={{ group_cart.token }}">
+                  {{ line.data.name }}
+                </a>
               </div>
-              {% if member.id == group_cart_session.member.id %}
               <div class="col-sm-1">{{ line.total }}<br>
-                <a data-href="{% url 'lunch:cartline_delete' line.line_id %}"
+                <a data-href="{% url 'lunch:cartline_delete' line.data.line_id %}"
                    href="#" class="delete">Remove</a>
               </div>
+              {% else %}
+              <div class="col-sm-10">
+                <a>{{ line.data.name }}</a>
+              </div>
+
               {% endif %}
             </div>
           </div>
@@ -44,7 +49,7 @@
   {% endfor %}
 {% endfor %}
 
-{% if cart %}
+{% if sub_total %}
   <div class="container cart-summary">
     <div class="row">
       <div class="col-sm-6 bold">
@@ -59,7 +64,7 @@
         Delivery
       </div>
       <div class="col-sm-6 bold">
-        {{ cart_delivery_fee }}
+        {{ delivery_fee }}
       </div>
     </div><!--//delivery -->
   </div>

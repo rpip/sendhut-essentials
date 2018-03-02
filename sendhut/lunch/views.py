@@ -13,7 +13,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse
 from django.db.models import Q
 
-from sendhut.cart import Cart
+from sendhut.cart import Cart, GroupMemberCart
 from sendhut import payments
 from sendhut import utils
 
@@ -38,13 +38,19 @@ def food_detail(request, slug):
 def cartline_detail(request, line_id, slug):
     template = 'lunch/_item_detail.html'
     item = Item.objects.get(slug=slug)
-    cart = Cart(request)
+    cart_ref = request.GET.get('cart_ref')
     context = {
         'item': item,
         'page_title': item.name,
-        'cart_line': cart.get_line(line_id).serialize(),
-        'group_cart_token': request.GET.get('cart_ref')
+        'group_cart_token': cart_ref
     }
+    if cart_ref:
+        cart_line = GroupOrder.get_line(request, cart_ref)
+    else:
+        cart = Cart(request)
+        cart_line = cart.get_line(line_id).serialize()
+
+    context['cart_line'] = cart_line
     return render(request, template, context)
 
 
@@ -122,7 +128,9 @@ def vendor_page(request, slug):
     group_order = GroupOrder.get_by_vendor(request, vendor.uuid)
     if group_order:
         group_cart = GroupCart.objects.get(token=group_order['token'])
+        member = group_cart.members.get(id=group_order['member']['id'])
         context['group_order'] = group_order
+        context['cart'] = member.cart
         context['group_cart'] = group_cart
         context['cart_url'] = request.build_absolute_uri(
             group_cart.get_absolute_url())
@@ -169,33 +177,29 @@ class CartView(View):
     # TODO(yao): implement dynamic delivery cost calculation
 
     def get(self, request):
-        # /cart
-        if request.GET.get('clear'):
-            Cart(request).clear()
-
-        context = Cart(request).build_cart()
         token = request.GET.get('cart_ref')
         if token:
-            context.update(GroupOrder.build_cart(request, token))
+            cart = GroupMemberCart(request, token)
+            context = cart.build_cart()
+            group_order = GroupOrder.get(request, token)
+        else:
+            context = Cart(request).build_cart()
+
         return render(request, 'partials/sidebar_cart.html', context)
 
     def post(self, request):
         "This endpoints handle new cart additions and cart item updates"
         data = json.loads(request.body)
-        token = data['cart_token']
+        token = data.get('cart_token')
         if token:
-            cart = Cart(request, group_session=GroupOrder.get(request, token))
+            cart = GroupMemberCart(request, token)
         else:
             cart = Cart(request)
 
-        # if line_id is present, it means it's an update
-        # delete cart line and re-add
-        if data and data.get('line_id'):
-            cart.remove(data.get('line_id'))
-
         item = Item.objects.get(uuid=data['uuid'])
         quantity = data.pop('quantity')
-        cart.add(item, int(quantity), data)
+        # if line_id is present, it means it's an update
+        cart.add(item, int(quantity), data, replace=data.get('line_id'))
         return JsonResponse(cart.build_cart(), encoder=utils.JSONEncoder)
 
 

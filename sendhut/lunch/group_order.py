@@ -3,7 +3,9 @@ from django.conf import settings
 from djmoney.money import Money
 
 from .models import GroupCart, GroupCartMember, Vendor
-from sendhut.api.serializers import GroupCartSerializer, GroupCartMemberSerializer
+from sendhut.api.serializers import (
+    GroupCartSerializer, GroupCartMemberSerializer
+)
 
 
 class GroupOrder:
@@ -63,33 +65,9 @@ class GroupOrder:
         return group_orders
 
     @classmethod
-    def build_cart(cls, request, cart_token):
-        group_order = cls.get(request, cart_token)
-        cart = {}
-        if group_order:
-            token = group_order['token']
-            group_cart = GroupCart.objects.get(token=token)
-            sub_total = sum([Money(x.cart['sub_total'], 'NGN') for x
-                             in group_cart.members.all() if x.cart])
-            delivery_fee = Money(settings.LUNCH_DELIVERY_FEE, 'NGN')
-            cart['group_cart_session'] = token
-            cart['group_cart'] = group_cart
-            cart['delivery_fee'] = delivery_fee
-            cart['sub_total'] = sub_total
-            cart['total'] = sub_total + delivery_fee
-
-        return cart
-
-    @classmethod
     def end_session(cls, request, token):
         del request.session[settings.GROUP_CART_SESSION_ID][token]
         request.session.modified = True
-
-    @classmethod
-    def update_member_cart(cls, group_order, cart):
-        member = GroupCartMember.objects.get(id=group_order['member']['id'])
-        member.cart = cart
-        member.save()
 
     @classmethod
     def get_by_vendor(cls, request, vendor_uuid):
@@ -105,10 +83,4 @@ class GroupOrder:
 
     @classmethod
     def leave(cls, request, token):
-        group_order = cls.get(request, token)
-        member = GroupCartMember.objects.get(
-            group_cart__token=token,
-            id=group_order['member']['id']
-        )
-        member.leave_cart()
         cls.end_session(request, token)

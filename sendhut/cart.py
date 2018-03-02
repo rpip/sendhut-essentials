@@ -4,7 +4,8 @@ from decimal import Decimal
 from django.conf import settings
 from django.dispatch import Signal
 
-from sendhut.lunch.models import Option
+from sendhut.lunch.models import Option, GroupCart, GroupCartMember
+from sendhut.lunch.group_order import GroupOrder
 
 
 # signal
@@ -98,8 +99,11 @@ class Cart:
     """
     A Cart object represents a shopping cart
     """
+    class Line(object):
+        def __init__(self, d):
+            self.__dict__ = d
 
-    def __init__(self, request, items=None, group_session=None):
+    def __init__(self, request, items=None):
         """
         Initialize the cart.
 
@@ -109,31 +113,32 @@ class Cart:
         self.modified = False
         self.session = request.session
         self._state = []
-        self._group_session = group_session
         cart = self.session.get(settings.CART_SESSION_ID)
         if not cart:
             # save an empty in the session
             cart = self.session[settings.CART_SESSION_ID] = []
 
-        class obj(object):
-            def __init__(self, d):
-                self.__dict__ = d
-
-        # cart._state is a list of dictionaries. convert to objects
-        for l in [obj(x) for x in cart]:
-            self.add(l, l.quantity, l.data)
+        self._preload_cart(cart)
 
         if items:
-            for l in [obj(x) for x in items]:
+            for l in [self.Line(x) for x in items]:
                 self.add(l, l.quantity, l.data)
 
-    def add(self, item, quantity=1, data=None):
+    def _preload_cart(self, cart):
+        # cart._state is a list of dictionaries. convert to objects
+        for l in [self.Line(x) for x in cart]:
+            self.add(l, l.quantity, l.data)
+
+    def add(self, item, quantity=1, data=None, replace=False):
         """
         Items are considered identical if both item and data are equal.
         This allows you to customize two copies of the same item
         (eg. choose different toppings) and track their quantities
         independently.
         """
+        if replace:
+            self.remove(data.get('line_id'))
+
         line = self.match_line(item, quantity, data)
         if not line:
             line = self.create_line(item, int(quantity), data)
@@ -164,16 +169,6 @@ class Cart:
         self.session[settings.CART_SESSION_ID] = self.serialize_lite()
         self.session.modified = True
         self.modified = True
-        if self._group_session:
-            self.broadcast_cart_update()
-
-    def set_delivery_time(self, delivery_time):
-        key = '{}-delivery-time'.format(settings.CART_SESSION_ID)
-        self.session[key] = delivery_time
-
-    def get_delivery_time(self):
-        key = '{}-delivery-time'.format(settings.CART_SESSION_ID)
-        return self.session.get(key)
 
     def serialize(self):
         return [x.serialize() for x in self._state]
@@ -181,12 +176,12 @@ class Cart:
     def serialize_lite(self):
         return [x.__dict__ for x in self._state]
 
-    def clear(self):
-        self._state = []
-        # remove cart from session
-        del self.session[settings.CART_SESSION_ID]
-        self.session.modified = True
-        self.modified = True
+    # def clear(self):
+    #     self._state = []
+    #     # remove cart from session
+    #     del self.session[settings.CART_SESSION_ID]
+    #     self.session.modified = True
+    #     self.modified = True
 
     def remove(self, line_id):
         """Remove a item from the cart"""
@@ -199,10 +194,6 @@ class Cart:
         Return the total price of the cart.
         """
         return sum([cart_line.get_total() for cart_line in self._state])
-
-    def process(self):
-        # TODO(yao): implement multiple step processor a la satchless
-        pass
 
     def __iter__(self):
         """
@@ -220,35 +211,52 @@ class Cart:
         return 'Cart(%r)' % (list(self),)
 
     def build_cart(self):
+        # cart_serialized = self.serialize()
+        #_cart = [(x, list(y)) for x, y in
+        #         groupby(cart_serialized, lambda x: x['vendor']['name'])]
+        # 'grouped_cart': _cart,
+        # TODO(yao): move delivery fee, sub_total to context processor
         sub_total = self.get_subtotal()
-        cart_serialized = self.serialize()
         delivery_fee = settings.LUNCH_DELIVERY_FEE
-        _cart = [(x, list(y)) for x, y in
-                 groupby(cart_serialized, lambda x: x['vendor']['name'])]
-        cart_delivery_fee = delivery_fee * len(_cart)
+        cart_delivery_fee = delivery_fee * len(self)
         total = sub_total + cart_delivery_fee
         return {
-            'cart': cart_serialized,
+            'cart': self.serialize_lite(),
             'sub_total': sub_total,
-            'grouped_cart': _cart,
             'delivery_fee': delivery_fee,
             'cart_delivery_fee': cart_delivery_fee,
-            'total': total,
-            'delivery_time': self.get_delivery_time()
+            'total': total
         }
 
-    def broadcast_cart_update(self):
-        cart = self.serialize()
-        cart_updated.send(
-            sender=self.__class__,
-            group_session=self._group_session,
-            cart={'cart': cart, 'sub_total': self.get_subtotal()}
-        )
-
-    def load(self, cart_json):
+    def load(self, data):
         """
         Loads cart from JSON data, built specifically for loading
         cart from group order member carts"""
-        cart = cart_json['cart']
-        for line in cart:
+        for line in data:
             self.add(line.pop('uuid'), line.pop('quantity'), data=line)
+
+
+class GroupMemberCart(Cart):
+
+    def __init__(self, request, cart_token):
+        """
+        Initialize the cart.
+
+        Attempts to load cart from session or adds items from the
+        items parameter passed. Items must list of serialized cart lines.
+        """
+        self.group_order = GroupOrder.get(request, cart_token)
+        member_id = self.group_order['member']['id']
+        self.member = GroupCartMember.objects.get(id=member_id)
+        self._state = []
+        self._preload_cart(self.member.cart)
+
+    def save(self):
+        self.member.cart = self.serialize_lite()
+        self.member.save()
+
+    def build_cart(self):
+        data = super().build_cart()
+        data['group_order'] = self.group_order
+        data['group_cart'] = self.member.group_cart
+        return data

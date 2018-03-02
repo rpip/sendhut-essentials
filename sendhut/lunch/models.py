@@ -372,8 +372,7 @@ class GroupCart(BaseModel):
         null=True,
         blank=True
     )
-    status = models.IntegerField(
-        max_length=32, choices=STATUS_CHOICES, default=OPEN)
+    status = models.IntegerField(choices=STATUS_CHOICES, default=OPEN)
 
     def save(self, *args, **kwargs):
         # TODO(yao): generate Heroku-style names for the group order
@@ -408,7 +407,7 @@ class GroupCartMember(BaseModel):
     group_cart = models.ForeignKey(GroupCart, related_name='members')
     name = models.CharField(max_length=40)
     # holds user's cart for current group order session
-    cart = JSONField(null=True, blank=True)
+    cart = JSONField(null=True, blank=True, default=[])
 
     def leave_cart(self):
         self.delete()

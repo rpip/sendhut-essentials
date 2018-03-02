@@ -12,7 +12,7 @@
      {% endthumbnail %}
 
      <div class="card-body">
-       <h4 class="card-title">{{ item.name }}</h4>
+       <h4 class="card-title">{{ item.name }} </h4>
        <p class="card-text text-muted">{{ item.description }}</p>
        {% include  "lunch/_dietary_labels.html" with item=item %}
        <form id="item-form" data-cart-submit>
@@ -28,7 +28,9 @@
          <input type="hidden" name="slug" value="{{ item.slug }}" />
          <input type="hidden" name="category" value="{{ category }}" />
          <input type="hidden" name="line_id" value="{{ cart_line.line_id }}" />
+         {% if group_cart_token %}
          <input type="hidden" name="cart_token" value="{{ group_cart_token }}" />
+         {% endif %}
          {% for opt_group in item.option_groups.all %}
            <h5>
              {{ opt_group.name }}
