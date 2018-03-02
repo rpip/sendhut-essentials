@@ -6,6 +6,9 @@ from django.dispatch import Signal
 
 from sendhut.lunch.models import Option, GroupCart, GroupCartMember
 from sendhut.lunch.group_order import GroupOrder
+from sendhut.api.serializers import (
+    GroupCartSerializer, GroupCartMemberSerializer
+)
 
 
 # signal
@@ -211,17 +214,18 @@ class Cart:
         return 'Cart(%r)' % (list(self),)
 
     def build_cart(self):
-        # cart_serialized = self.serialize()
-        #_cart = [(x, list(y)) for x, y in
-        #         groupby(cart_serialized, lambda x: x['vendor']['name'])]
-        # 'grouped_cart': _cart,
         # TODO(yao): move delivery fee, sub_total to context processor
         sub_total = self.get_subtotal()
         delivery_fee = settings.LUNCH_DELIVERY_FEE
         cart_delivery_fee = delivery_fee * len(self)
         total = sub_total + cart_delivery_fee
+        cart = self.serialize_lite()
+        vendor_grouped_cart = [
+            (x, list(y)) for x, y in
+            groupby(cart, lambda x: x['data']['vendor']['name'])]
         return {
-            'cart': self.serialize_lite(),
+            'cart': cart,
+            'vendor_grouped_cart': vendor_grouped_cart,
             'sub_total': sub_total,
             'delivery_fee': delivery_fee,
             'cart_delivery_fee': cart_delivery_fee,
@@ -258,5 +262,4 @@ class GroupMemberCart(Cart):
     def build_cart(self):
         data = super().build_cart()
         data['group_order'] = self.group_order
-        data['group_cart'] = self.member.group_cart
         return data

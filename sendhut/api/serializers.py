@@ -61,6 +61,7 @@ class GroupCartSerializer(serializers.ModelSerializer):
     url = serializers.SerializerMethodField()
     owner = UserSerializer(read_only=True)
     vendor = serializers.SerializerMethodField()
+    members = GroupCartMemberSerializer(many=True, read_only=True)
 
     def get_vendor(self, obj):
         return str(obj.vendor.uuid)
@@ -70,7 +71,10 @@ class GroupCartSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = GroupCart
-        fields = ('token', 'owner', 'vendor', 'monetary_limit', 'status', 'url')
+        fields = (
+            'token', 'owner', 'vendor', 'monetary_limit',
+            'status', 'url', 'members'
+        )
 
 
 class ImageSerializer(serializers.ModelSerializer):

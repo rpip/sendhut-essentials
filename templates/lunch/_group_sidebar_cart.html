@@ -32,7 +32,7 @@
                 </a>
               </div>
               <div class="col-sm-1">{{ line.total }}<br>
-                <a data-href="{% url 'lunch:cartline_delete' line.data.line_id %}"
+                <a data-href="{% url 'lunch:cartline_delete' line.data.line_id %}?cart_ref={{ group_cart.token }}"
                    href="#" class="delete">Remove</a>
               </div>
               {% else %}

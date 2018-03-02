@@ -45,17 +45,21 @@ def cartline_detail(request, line_id, slug):
         'group_cart_token': cart_ref
     }
     if cart_ref:
-        cart_line = GroupOrder.get_line(request, cart_ref)
+        cart = GroupMemberCart(request, cart_ref)
     else:
         cart = Cart(request)
-        cart_line = cart.get_line(line_id).serialize()
 
-    context['cart_line'] = cart_line
+    context['cart_line'] = cart.get_line(line_id).serialize()
     return render(request, template, context)
 
 
 def cartline_delete(request, line_id):
-    Cart(request).remove(line_id)
+    cart_ref = request.GET.get('cart_ref')
+    if cart_ref:
+        GroupMemberCart(request, cart_ref).remove(line_id)
+    else:
+        Cart(request).remove(line_id)
+
     return JsonResponse({'status': 'OK'}, encoder=utils.JSONEncoder)
 
 
@@ -181,7 +185,7 @@ class CartView(View):
         if token:
             cart = GroupMemberCart(request, token)
             context = cart.build_cart()
-            group_order = GroupOrder.get(request, token)
+            context['group_cart'] = cart.member.group_cart
         else:
             context = Cart(request).build_cart()
 
