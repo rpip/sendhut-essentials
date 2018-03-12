@@ -42,7 +42,7 @@ def payment_callback(request):
         success_message = "Payment confirmed. We'll deliver your lunch at {}".format(order.delivery_time)
         messages.info(request, success_message)
         Cart(request).clear()
-        GroupOrder.end_session(request)
+        # TODO(yao): end group order session, lock cart
         return redirect('home')
     else:
         error_message = "Payment failed. We can arrange for you to pay when the \

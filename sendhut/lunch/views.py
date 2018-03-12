@@ -209,9 +209,13 @@ class CartView(View):
 
 @login_required
 def cart_summary(request):
-    ref = request.GET['cart_ref']
-    context = Cart(request).build_cart()
-    context.update(GroupOrder.build_cart(request, ref))
+    group_session = GroupOrder.get(request)
+    if group_session:
+        ref = request.GET['cart_ref']
+        context = GroupOrder.build_cart(request, ref)
+    else:
+        context = Cart(request).build_cart()
+
     context['form'] = CheckoutForm(data=request.POST)
     return render(request, 'lunch/cart_summary.html', context)
 
@@ -245,9 +249,9 @@ class CheckoutView(LoginRequiredMixin, View):
 
     def post(self, request):
         form = CheckoutForm(data=request.POST)
+        group_session = GroupOrder.get(request)
         if not(form.is_valid()):
             messages.error(request, "Please complete the delivery form to proceed")
-            group_session = GroupOrder.get(request)
             if group_session:
                 ref = request.GET['cart_ref']
                 context = GroupOrder.build_cart(request, ref)
@@ -256,46 +260,37 @@ class CheckoutView(LoginRequiredMixin, View):
 
             return render(request, 'lunch/cart_summary.html', context)
 
-        delivery_time = form.cleaned_data['delivery_time']
-        hour, minute = delivery_time.split(':')
-        delivery_time = datetime.today().replace(hour=int(hour), minute=int(minute))
-        delivery_address = form.cleaned_data['delivery_address']
-        notes = form.cleaned_data['notes']
-        cash_delivery = form.cleaned_data['cash_delivery']
         cart = Cart(request)
+        cash_delivery = form.cleaned_data.pop('cash_delivery')
         # TODO(yao): send invoice email, send sms confirmation/updates
         _cart = cart.build_cart()
-        ref = request.GET['cart_ref']
-        group_session = GroupOrder.get(request, ref)
-        order = Order.objects.create(
+        group_cart = None
+        if group_session:
+            ref = request.GET['cart_ref']
+            group_cart = GroupOrder.get(request, ref)
+
+        order = Order.create_from_cart(
+            cart=cart,
             user=request.user,
             group_cart=group_cart,
-            delivery_time=delivery_time,
-            notes=notes,
             total_cost=_cart['total'],
-            delivery_address=delivery_address,
-            delivery_fee=_cart['delivery_fee']
-            #metadata={'session':  {x.id: x.cart for x in group_cart.members.all()}}
+            delivery_fee=_cart['delivery_fee'],
+            **form.cleaned_data
         )
-        for line in cart:
-            data = line.serialize()
-            OrderLine.objects.create(
-                item_id=line.id,
-                quantity=line.get_quantity(),
-                price=line.get_total(),
-                order=order,
-                special_instructions=data['note'],
-                metadata=utils.json_encode(data)
-            )
-        messages.info(request, "Order submitted for processing. reference {}".format(order.reference))
+
+        messages.info(
+            request,
+            "Order submitted for processing. reference {}".format(order.reference))
+
         if not(cash_delivery):
             amount = _cart['total']
-            response = payments.initialize_payment(order.reference, amount, request.user.email)
+            response = payments.initialize_payment(
+                order.reference, amount, request.user.email)
             if response['status']:
                 return redirect(response['data']['authorization_url'])
             else:
                 # TODO(yao): what to do if payment fails
-                messages.error(request, "Payment failed")
+                messages.error(request, "Payment failed. Please try again")
 
         return redirect('home')
 

@@ -23,7 +23,7 @@ urlpatterns = [
         cartline_delete, name='cartline_delete'),
     url(r'^cart/$', CartView.as_view(), name='cart'),
     url(r'^group-order$', GroupOrderView.as_view(), name='group_order'),
-    url(r'^orders/(?P<reference>[a-zA-Z0-9-]+)$', order_details,
+    url(r'^orders/(?P<ref>[a-zA-Z0-9-]+)$', order_details,
         name='order_details'),
     url(r'^orders/$', order_list, name='order_history'),
     url(r'^checkout$', CheckoutView.as_view(), name='checkout'),

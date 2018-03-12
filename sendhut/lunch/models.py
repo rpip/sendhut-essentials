@@ -12,7 +12,10 @@ from djmoney.models.fields import MoneyField
 from sorl.thumbnail import ImageField
 from jsonfield import JSONField
 
-from sendhut.utils import sane_repr, image_upload_path, generate_token, unslugify
+from sendhut.utils import (
+    sane_repr, image_upload_path,
+    generate_token, unslugify, json_encode
+)
 from sendhut.db import BaseModel
 from sendhut.accounts.models import User
 
@@ -330,6 +333,20 @@ class Order(BaseModel):
             hour, minute = time.split(':')
             schedule.append(datetime.today().replace(hour=int(hour), minute=int(minute)))
         return schedule
+
+    @classmethod
+    def create_from_cart(cls, cart, **kwargs):
+        order = cls.objects.create(**kwargs)
+        for line in cart:
+            OrderLine.objects.create(
+                item_id=line.id,
+                quantity=line.quantity,
+                price=line.data['total'],
+                order=order,
+                special_instructions=line.data['note'],
+                metadata=json_encode(line.data, False)
+            )
+        return order
 
     class Meta:
         db_table = "order"

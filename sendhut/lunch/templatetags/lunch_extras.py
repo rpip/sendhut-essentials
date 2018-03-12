@@ -33,11 +33,7 @@ def dietary_labels(label):
 
 @register.filter(name='subcart_total')
 def subcart_total(cart):
-    try:
-        total = sum(x['total'].amount for x in cart)
-    except:
-        total = sum(float(x['total']) for x in cart)
-
+    total = sum(float(x['data']['total']) for x in cart)
     return Money(total, 'NGN')
 
 

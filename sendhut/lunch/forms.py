@@ -1,6 +1,7 @@
 from django import forms
 from .models import Order, Vendor, GroupCart
 from django.forms import ModelForm
+from datetime import datetime
 
 
 class CheckoutForm(forms.Form):
@@ -10,6 +11,11 @@ class CheckoutForm(forms.Form):
     )
     notes = forms.CharField(max_length=300, required=False)
     cash_delivery = forms.BooleanField(required=False)
+
+    def clean_delivery_time(self):
+        delivery_time = self.cleaned_data['delivery_time']
+        hour, minute = delivery_time.split(':')
+        return datetime.today().replace(hour=int(hour), minute=int(minute))
 
 
 class GroupOrderForm(forms.Form):

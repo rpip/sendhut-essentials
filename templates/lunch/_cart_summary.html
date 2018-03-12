@@ -3,9 +3,6 @@
 
 <div class="cart" id="cart-confirm">
   <h2 class="text-center bold">Your Order</h2>
-  {% if vendor_grouped_cart|length > 1 %}
-    <h6 class="text-center">You have have added food from {{vendor_grouped_cart|length}} restaurants</h6>
-  {% endif %}
 
   <div class="row">
     <div class="col-md-6 left-pane">
@@ -13,17 +10,13 @@
         <div class="clearfix"></div>
         <h6 class="text-muted empty-cart-msg">Your basket is empty</h6>
       {% endif %}
-      {% for vendor_name, subcart in vendor_grouped_cart %}
-        <h5 class="subcart-header">{{ vendor_name }}</h5>
+        {% for vendor_name, subcart in vendor_grouped_cart %}
+          <h5 class="subcart-header">{{ vendor_name }}</h5>
         {% include "lunch/_subcart.html" %}
         <div class="container cart-summary">
           <div class="row">
-            <div class="col-md-3 offset-sm-7"><a>Subtotal</a></div>
-            <div class="col-md-1"><a>{{ subcart|subcart_total }}</a></div>
-          </div>
-          <div class="row">
-            <div class="col-md-3 offset-sm-7"><a>Delivery</a></div>
-            <div class="col-md-1"><a>{{ delivery_fee }}</a></div>
+            <div class="col-md-3 offset-sm-7">Subtotal</div>
+            <div class="col-md-1">{{ subcart|subcart_total }}</div>
           </div>
         </div><!--// cart cost -->
         <br>

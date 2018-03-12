@@ -27,7 +27,7 @@
          <input type="hidden" name="price" value="{{ item.price.amount }}" />
          <input type="hidden" name="slug" value="{{ item.slug }}" />
          <input type="hidden" name="category" value="{{ category }}" />
-         <input type="hidden" name="line_id" value="{{ cart_line.line_id }}" />
+         <input type="hidden" name="line_id" value="{{ cart_line.data.line_id }}" />
          {% if group_cart_token %}
          <input type="hidden" name="cart_token" value="{{ group_cart_token }}" />
          {% endif %}
@@ -47,7 +47,7 @@
                      type="checkbox"
                      name="extras[]"
                      value="{{ option.id }}"
-                     {% if cart_line and option.id in cart_line.extras %}checked{% endif %}>
+                     {% if cart_line and option.id in cart_line.data.extras %}checked{% endif %}>
                      {{ option.name }}
                  </label>
                  <span class="float-right">{{ option.price }}</span>
@@ -60,7 +60,7 @@
                      type="radio"
                      name="extras[]"
                      value="{{ option.id }}"
-                     {% if cart_line and option.id in cart_line.extras %}checked{% endif %}>
+                     {% if cart_line and option.id in cart_line.data.extras %}checked{% endif %}>
                      {{ option.name }}
                  </label>
                  <span class="float-right">{{ option.price }}</span>
@@ -72,7 +72,7 @@
            <label for="special-instructions">Special instructions (Optional)</label>
            <input type="text" class="form-control" name="note"
                   placeholder="Add note (e.g. allergies, extra spicy, etc.)"
-                  {% if cart_line %}value="{{ cart_line.note }}"{% endif %}>
+                  {% if cart_line %}value="{{ cart_line.data.note }}"{% endif %}>
          </div>
          <hr>
          <div class="input-group number-spinner mb-2 mr-sm-2 float-left"

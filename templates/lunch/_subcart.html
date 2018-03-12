@@ -7,17 +7,17 @@
         <div class="row">
           <div class="col-md-10">
             <a class="item-popup"
-               data-href="{% url 'lunch:cartline_detail' line_id=line.line_id slug=line.slug %}">
-              {{ line.name }}
+               data-href="{% url 'lunch:cartline_detail' line_id=line.data.line_id slug=line.data.slug %}">
+              {{ line.data.name }}
               <ul class="text-muted">
-                {% for x in line.extras_meta %}
+                {% for x in line.data.extras_meta %}
                 <li>{{x.name}}</li>
                 {% endfor %}
               </ul>
             </a>
           </div>
-          <div class="col-md-1">{{ line.total }}
-            <a data-href="{% url 'lunch:cartline_delete' line.line_id %}" href="#" class="x-delete">
+          <div class="col-md-1">{{ line.data.total }}
+            <a data-href="{% url 'lunch:cartline_delete' line.data.line_id %}" href="#" class="x-delete">
               Remove
             </a>
           </div>

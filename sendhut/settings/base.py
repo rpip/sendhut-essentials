@@ -221,3 +221,6 @@ DEFAULT_FROM_EMAIL = 'hello@sendhut.com'
 # SMS
 JUSIBE_PUBLIC_KEY = "a21e294d898ca47299bd575e5db983dd"
 JUSIBE_ACCESS_TOKEN = "8dcdee5ff5d7504570ffb0d74e1fc755"
+
+
+SESSION_SERIALIZER = 'sendhut.utils.JSONSerializer'

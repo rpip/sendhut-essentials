@@ -85,9 +85,14 @@ class ImageSerializer(serializers.ModelSerializer):
 
 
 class OptionSerializer(serializers.ModelSerializer):
+    parent = serializers.SerializerMethodField()
+
+    def get_parent(self, obj):
+        return obj.group.name
+
     class Meta:
         model = Option
-        fields = ('name', 'price')
+        fields = ('id', 'uuid', 'name', 'price', 'parent')
 
 
 class OptionGroupSerializer(serializers.ModelSerializer):

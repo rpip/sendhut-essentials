@@ -4,11 +4,12 @@ from decimal import Decimal
 from django.conf import settings
 from django.dispatch import Signal
 
-from sendhut.lunch.models import Option, GroupCart, GroupCartMember
+from sendhut.lunch.models import Option, GroupCartMember
 from sendhut.lunch.group_order import GroupOrder
-from sendhut.api.serializers import (
-    GroupCartSerializer, GroupCartMemberSerializer
-)
+from sendhut import utils
+#from sendhut.api.serializers import (
+#    GroupCartSerializer, GroupCartMemberSerializer
+#)
 
 
 # signal
@@ -68,7 +69,8 @@ class CartLine(ItemLine):
             extras = list(map(int, extras))
             for option in Option.objects.filter(id__in=extras):
                 _extras.append({
-                    'uuid': option.uuid,
+                    'id': option.id,
+                    'uuid': str(option.uuid),
                     'name': option.name,
                     'price': option.price.amount,
                     'parent': option.group.name
@@ -78,13 +80,12 @@ class CartLine(ItemLine):
 
     def _get_options_total(self):
         options = self._get_extras()
-        return Decimal(sum([x['price'] for x in options]))
+        return sum([x['price'] for x in options])
 
     def serialize(self):
         # TODO(yao): rename extras to options
         extras = self.data.get('extras', [])
         _data = {
-            'id': self.id,
             'quantity': self.quantity,
             'unit_price': self.get_price_per_item(),
             'base_price': self.get_base_price(),
@@ -93,9 +94,9 @@ class CartLine(ItemLine):
             'extras': list(map(int, extras))
         }
         import copy
-        json = copy.deepcopy(self.data)
-        json.update(_data)
-        return json
+        _line = copy.deepcopy(self.data)
+        _line.update(_data)
+        return {'id': self.id, 'quantity': self.quantity, 'data': _line}
 
 
 class Cart:
@@ -139,21 +140,24 @@ class Cart:
         (eg. choose different toppings) and track their quantities
         independently.
         """
+        line = self.match_line(item, quantity, data)
         if replace:
             self.remove(data.get('line_id'))
 
-        line = self.match_line(item, quantity, data)
-        if not line:
-            line = self.create_line(item, int(quantity), data)
-            self._state.append(line)
-            self.save()
+        if line:
+            self.remove(line.data['line_id'])
+
+        line = self.create_line(item, int(quantity), data)
+        self._state.append(line)
+        self.save()
 
     def match_line(self, item, quantity, data):
         "Matches: item uuid, extra (sides/options)"
+        extras = list(map(int, data.get('extras', [])))
         return next((line for line in self._state if
                      line.id == item.id and
                      line.quantity == quantity and
-                     line.data.get('extras') == data.get('extras')), None)
+                     line.data.get('extras') == extras), None)
 
     def get_line(self, line_id):
         """
@@ -169,7 +173,7 @@ class Cart:
         return CartLine(item, quantity, data)
 
     def save(self):
-        self.session[settings.CART_SESSION_ID] = self.serialize_lite()
+        self.session[settings.CART_SESSION_ID] = self.serialize()
         self.session.modified = True
         self.modified = True
 
@@ -179,12 +183,12 @@ class Cart:
     def serialize_lite(self):
         return [x.__dict__ for x in self._state]
 
-    # def clear(self):
-    #     self._state = []
-    #     # remove cart from session
-    #     del self.session[settings.CART_SESSION_ID]
-    #     self.session.modified = True
-    #     self.modified = True
+    def clear(self):
+        self._state = []
+        # remove cart from session
+        del self.session[settings.CART_SESSION_ID]
+        self.session.modified = True
+        self.modified = True
 
     def remove(self, line_id):
         """Remove a item from the cart"""
@@ -219,7 +223,7 @@ class Cart:
         delivery_fee = settings.LUNCH_DELIVERY_FEE
         cart_delivery_fee = delivery_fee * len(self)
         total = sub_total + cart_delivery_fee
-        cart = self.serialize_lite()
+        cart = self.serialize()
         vendor_grouped_cart = [
             (x, list(y)) for x, y in
             groupby(cart, lambda x: x['data']['vendor']['name'])]
@@ -256,7 +260,7 @@ class GroupMemberCart(Cart):
         self._preload_cart(self.member.cart)
 
     def save(self):
-        self.member.cart = self.serialize_lite()
+        self.member.cart = self.serialize()
         self.member.save()
 
     def build_cart(self):

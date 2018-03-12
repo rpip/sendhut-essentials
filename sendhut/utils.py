@@ -1,3 +1,5 @@
+from datetime import datetime
+from functools import singledispatch
 from enum import Enum
 import json
 import os
@@ -51,17 +53,6 @@ def generate_token(token_length=16):
     return token.decode('utf-8')
 
 
-class JSONEncoder(DjangoJSONEncoder):
-    def default(self, obj):
-        if isinstance(obj, Money):
-            return obj.amount
-        return super().default(obj)
-
-
-def json_encode(data):
-    return json.dumps(data, cls=JSONEncoder)
-
-
 def hash_data(data, hash_length=190, data_type=None):
     salt = "ValentinaIsTheMostAwsomeDogInTheWord"
     if data:
@@ -106,3 +97,47 @@ class ChoiceEnum(Enum):
     @classmethod
     def choices(cls):
         return tuple((x.name, x.value) for x in cls)
+
+
+@singledispatch
+def to_serializable(val):
+    """Used by default."""
+    return str(val)
+
+
+@to_serializable.register(datetime)
+def ts_datetime(val):
+    """Used if *val* is an instance of datetime."""
+    return val.isoformat() + "Z"
+
+
+@to_serializable.register(Money)
+def ts_money(val):
+    """Used if *val* is an instance of Money."""
+    return val.amount
+
+
+class JSONSerializer:
+    """
+    Simple wrapper around json for object serialization
+    """
+    def dumps(self, obj, encode=True):
+        serialized = json.dumps(obj, separators=(',', ':'), default=to_serializable)
+        if encode:
+            return serialized.encode('latin-1')
+
+        return serialized
+
+    def loads(self, data):
+        return json.loads(data.decode('latin-1'))
+
+
+# class JSONEncoder(DjangoJSONEncoder):
+#     def default(self, obj):
+#         if isinstance(obj, Money):
+#             return obj.amount
+#         return super().default(obj)
+
+
+def json_encode(data, encode=False):
+    return JSONSerializer().dumps(data, encode=False)
