@@ -114,10 +114,9 @@ class PasswordResetView(View):
             email = form.cleaned_data['email']
             token = utils.generate_password_token(email)
             notifications.send_password_reset(email, token)
-            return render(request, template)
 
-        template = 'registration/password_reset_form.html'
-        return render(request, template, {'form': form})
+        # if email doesn't exist, just ignore
+        return render(request, template)
 
 
 class PasswordResetConfirmView(View):
