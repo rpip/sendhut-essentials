@@ -41,3 +41,19 @@ DEFAULT_FILE_STORAGE = 'sendhut.storage_backends.MediaStorage'
 AWS_PUBLIC_MEDIA_LOCATION = 'media/public'
 
 THUMBNAIL_REDIS_PASSWORD = REDIS_URL.password
+
+RQ_QUEUES = {
+    'default': {
+        'URL': REDIS_URL.geturl(),
+        'DEFAULT_TIMEOUT': 500,
+        'USE_REDIS_CACHE': 'redis-cache',
+    },
+    'high': {
+        'USE_REDIS_CACHE': 'redis-cache',
+    },
+    'low': {
+        'USE_REDIS_CACHE': 'redis-cache',
+    }
+}
+
+INSTALLED_APPS += ['raven.contrib.django.raven_compat']

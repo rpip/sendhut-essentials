@@ -29,9 +29,21 @@ STATICFILES_STORAGE = 'sendhut.storage_backends.StaticStorage'
 DEFAULT_FILE_STORAGE = 'sendhut.storage_backends.MediaStorage'
 AWS_PUBLIC_MEDIA_LOCATION = 'media/public'
 
-EMAIL_HOST = config('EMAIL_HOST')
-EMAIL_PORT = config('EMAIL_PORT', default=1025)
-EMAIL_HOST_USER = config('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
-EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool)
-DEFAULT_FROM_EMAIL = 'hello@sendhut.com'
+
+RQ_QUEUES = {
+    'default': {
+        'URL': REDIS_URL.geturl(),
+        'DEFAULT_TIMEOUT': 500,
+        'USE_REDIS_CACHE': 'redis-cache',
+    },
+    'high': {
+        'USE_REDIS_CACHE': 'redis-cache',
+    },
+    'low': {
+        'USE_REDIS_CACHE': 'redis-cache',
+    }
+}
+
+INSTALLED_APPS += ['raven.contrib.django.raven_compat']
+
+ENABLE_SSL = True

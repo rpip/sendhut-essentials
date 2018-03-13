@@ -1,3 +1,4 @@
+from urllib.parse import urljoin
 from datetime import datetime
 from functools import singledispatch
 from enum import Enum
@@ -8,6 +9,9 @@ import binascii
 import re
 
 from django.conf import settings
+from django.utils.encoding import iri_to_uri
+from django.contrib.sites.models import Site
+
 from faker import Faker
 import redis
 from djmoney.money import Money
@@ -119,25 +123,32 @@ def ts_money(val):
 
 class JSONSerializer:
     """
-    Simple wrapper around json for object serialization
+    Simple wrapper around json for session serialization
     """
-    def dumps(self, obj, encode=True):
+    def dumps(self, obj):
         serialized = json.dumps(obj, separators=(',', ':'), default=to_serializable)
-        if encode:
-            return serialized.encode('latin-1')
-
-        return serialized
+        return serialized.encode('latin-1')
 
     def loads(self, data):
         return json.loads(data.decode('latin-1'))
 
 
-# class JSONEncoder(DjangoJSONEncoder):
-#     def default(self, obj):
-#         if isinstance(obj, Money):
-#             return obj.amount
-#         return super().default(obj)
+class JSONEncoder(DjangoJSONEncoder):
+    def default(self, obj):
+        try:
+            return super().default(obj)
+        except:
+            return json_encode(obj)
 
 
-def json_encode(data, encode=False):
-    return JSONSerializer().dumps(data, encode=False)
+def json_encode(data):
+    return json.dumps(data, default=to_serializable)
+
+
+def build_absolute_uri(location):
+    # type: (str, bool, saleor.site.models.SiteSettings) -> str
+    host = Site.objects.get_current().domain
+    protocol = 'https' if settings.ENABLE_SSL else 'http'
+    current_uri = '%s://%s' % (protocol, host)
+    location = urljoin(current_uri, location)
+    return iri_to_uri(location)

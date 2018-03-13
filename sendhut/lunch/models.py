@@ -70,7 +70,11 @@ class Vendor(BaseModel):
     banner = ImageField(upload_to=image_upload_path, null=True, blank=True)
     tags = TaggableManager()
     verified = models.BooleanField(default=False)
+    # TODO(yao): add is partner field
+    # store is opened or closed for some reason
     available = models.BooleanField(default=True)
+    # display this vendor on site?
+    display = models.BooleanField(default=True)
 
     def tags_tx(self):
         tags = self.tags.all()
@@ -315,7 +319,7 @@ class Order(BaseModel):
         choices=PAYMENT_SOURCE,
         default=CASH
     )
-    group_cart = models.OneToOneField('GroupCart', related_name='orders', null=True, blank=True)
+    group_cart = models.OneToOneField('GroupCart', related_name='order', null=True, blank=True)
 
     def save(self, *args, **kwargs):
         if not self.created:
@@ -344,7 +348,7 @@ class Order(BaseModel):
                 price=line.data['total'],
                 order=order,
                 special_instructions=line.data['note'],
-                metadata=json_encode(line.data, False)
+                metadata=json_encode(line.data)
             )
         return order
 
@@ -391,6 +395,13 @@ class GroupCart(BaseModel):
     )
     status = models.IntegerField(choices=STATUS_CHOICES, default=OPEN)
 
+    @staticmethod
+    def get_user_open_carts(user):
+        return GroupCart.objects.filter(
+            members__user=user,
+            status=GroupCart.OPEN
+        )
+
     def save(self, *args, **kwargs):
         # TODO(yao): generate Heroku-style names for the group order
         if not self.created:
@@ -402,7 +413,10 @@ class GroupCart(BaseModel):
         self.update(status=self.LOCKED)
 
     def unlock(self):
-        self.update(sttaus=self.OPEN)
+        self.update(status=self.OPEN)
+
+    def is_open(self):
+        return self.status == self.OPEN
 
     def cancel(self):
         self.delete()
@@ -425,6 +439,3 @@ class GroupCartMember(BaseModel):
     name = models.CharField(max_length=40)
     # holds user's cart for current group order session
     cart = JSONField(null=True, blank=True, default=[])
-
-    def leave_cart(self):
-        self.delete()

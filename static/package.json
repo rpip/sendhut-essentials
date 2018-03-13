@@ -12,7 +12,9 @@
     "watch": "gulp watch",
     "build": "gulp build",
     "deploy": "gulp deploy",
-    "test": "ava --tap | tap-nyan"
+    "test": "ava --tap | tap-nyan",
+    "heroku-postbuild": "npm run build-emails",
+    "build-emails": "mkdir -p templates/templated_email/compiled/ && find templates -name \"*.mjml\" -not -path \"templates/templated_email/source/*partials/*\" -not -path \"templates/templated_email/source/*shared/*\" -exec ./node_modules/.bin/mjml -l skip {} -o templates/templated_email/compiled/ \\;"
   },
   "author": "Maurizio Mangione",
   "license": "MIT",

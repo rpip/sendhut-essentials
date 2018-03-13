@@ -34,12 +34,15 @@ class GroupOrder:
     @classmethod
     def join(cls, request, group_cart, name=None):
         if request.user.is_authenticated():
-            GroupCartMember.objects.create(
-                user=request.user,
-                group_cart=group_cart,
-                name=request.user.get_full_name())
+            member = group_cart.members.filter(user=request.user).first()
+            if not member:
+                member = GroupCartMember.objects.create(
+                    user=request.user,
+                    group_cart=group_cart,
+                    name=request.user.get_full_name())
+        else:
+            member = GroupCartMember.objects.create(group_cart=group_cart, name=name)
 
-        member = GroupCartMember.objects.create(group_cart=group_cart, name=name)
         return cls.add_to_session(request, cls.serialize(group_cart), member)
 
     @classmethod

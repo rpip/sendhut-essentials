@@ -1,4 +1,4 @@
-<form id="delivery-time-form" action="{% url 'lunch:checkout' %}" method="POST">
+<form id="delivery-time-form" action="{% url 'lunch:checkout' %}?cart_ref={{ group_cart.token }}" method="POST">
   {% csrf_token %}
   <div class="form-group row">
     <label for="delivery_address" class="col-sm-4 col-form-label">Delivery Address</label>

@@ -28,8 +28,11 @@ urlpatterns = [
     url(r'^api-auth/', include('rest_framework.urls')),
     # payment transaction callback
     url(r'^payments/ck$', payment_callback, name='payment_callback'),
+    url(r'^django-rq/', include('django_rq.urls')),
     # instant payment notification
     url(r'^payments/ipn$', payment_webhook, name='payment_webhook'),
+    url(r'^jet/', include('jet.urls', 'jet')),  # Django JET URLS
+    url(r'^jet/dashboard/', include('jet.dashboard.urls', 'jet-dashboard')),  # Django JET dashboard URLS
     url(r'^admin/', include(admin.site.urls)),
 ]
 

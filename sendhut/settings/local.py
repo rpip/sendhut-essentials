@@ -13,3 +13,12 @@ MIDDLEWARE = MIDDLEWARE + [
 ]
 
 MESSAGE_LEVEL = message_constants.DEBUG
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': ''
+    }
+}
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

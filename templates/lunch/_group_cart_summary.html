@@ -15,7 +15,7 @@
       {% for member in group_cart.members.all %}
         <h5 class="subcart-header">{{ member.name }}'s Order</h5>
         {#% include "lunch/_subcart.html" with subcart=member.cart.cart %#}
-        {% for line in member.cart.cart %}
+        {% for line in member.cart %}
           <div class="container-fluid cart-line">
             <div class="row">
               <div class="col-md-1">{{line.quantity}}</div>
@@ -23,19 +23,28 @@
                 <div class="container-fluid">
                   <div class="row">
                     <div class="col-md-10">
+                      {% if member.id == group_order.member.id %}
                       <a class="item-popup"
-                         data-href="{% url 'lunch:cartline_detail' line_id=line.line_id slug=line.slug %}">
-                         {{ line.name }}
+                         data-href="{% url 'lunch:cartline_detail' line_id=line.data.line_id slug=line.data.slug %}?cart_ref={{ group_cart.token }}">
+                         {{ line.data.name }}
                          <ul class="text-muted">
-                           {% for x in line.extras_meta %}
+                           {% for x in line.data.extras_meta %}
                              <li>{{x.name}}</li>
                            {% endfor %}
                          </ul>
                       </a>
+                      {% else %}
+                      {{ line.data.name }}
+                      <ul class="text-muted">
+                        {% for x in line.data.extras_meta %}
+                        <li>{{x.name}}</li>
+                        {% endfor %}
+                      </ul>
+                      {% endif %}
                     </div>
                     <div class="col-sm-1">{{ line.total }}<br>
-                      {% if member.id == group_cart_session.member.id %}
-                      <a data-href="{% url 'lunch:cartline_delete' line.line_id %}" href="#" class="x-delete">
+                      {% if member.id == group_order.member.id %}
+                      <a data-href="{% url 'lunch:cartline_delete' line.data.line_id %}?cart_ref={{ group_cart.token }}" href="#" class="x-delete" data-cart="{{ group_cart.token }}">
                         Remove
                       </a>
                       {% endif %}
@@ -50,7 +59,7 @@
         <div class="container cart-summary">
           <div class="row">
             <div class="col-md-3 offset-sm-7"><a>Subtotal</a></div>
-            <div class="col-md-1"><a>{{ member.cart.cart|subcart_total }}</a></div>
+            <div class="col-md-1"><a>{{ member.cart|subcart_total }}</a></div>
           </div>
         </div><!--// cart cost -->
         <br>

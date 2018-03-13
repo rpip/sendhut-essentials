@@ -7,29 +7,62 @@
 {% endblock %}
 
 {% block content %}
-<br>
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th scope="col">Item</th>
-      <th scope="col">Quantity</th>
-      <th scope="col">Price</th>
-      <th scope="col">Special instructions</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for line in order.order_lines.all %}
-      <tr>
-        <td>
-          {{ line.item.name }}
-        </td>
-        <td>{{ line.quantity  }}</td>
-        <td>{{ line.price }}</td>
-        <td>{{ line.special_instructions }}</td>
-      </tr>
-    </a>
-    {% endfor %}
-  </tbody>
-</table>
+  <br>
+  {% if order.group_cart %}
+    {% for member in order.group_cart.members.all %}
+      <span class="badge badge-primary">{{ member.name }}</span>
+      <br><br>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">Item</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Price</th>
+            <th scope="col">Special instructions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for line in member.cart %}
+            <tr>
+              <td>
+                {{ line.data.name }}
+                <ul class="text-muted">
+                  {% for x in line.data.extras_meta %}
+                    <li>{{x.name}}</li>
+                  {% endfor %}
+                </ul>
 
+              </td>
+              <td>{{ line.quantity  }}</td>
+              <td>{{ line.data.price }}</td>
+              <td>{{ line.data.note }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% endfor %}
+  {% else %}
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">Item</th>
+          <th scope="col">Quantity</th>
+          <th scope="col">Price</th>
+          <th scope="col">Special instructions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for line in order.order_lines.all %}
+          <tr>
+            <td>
+              {{ line.item.name }}
+            </td>
+            <td>{{ line.quantity  }}</td>
+            <td>{{ line.price }}</td>
+            <td>{{ line.special_instructions }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% endif %}
 {% endblock %}

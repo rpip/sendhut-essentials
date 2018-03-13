@@ -1,10 +1,11 @@
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
 
 from django.views import View
 from django.shortcuts import redirect, render
 from django.contrib import messages
 from django.conf import settings
-from django.urls import reverse
 
 from sendhut.cart import Cart
 from sendhut import utils, notifications
@@ -110,12 +111,13 @@ class PasswordResetView(View):
         form = PasswordResetForm(data=request.POST)
         template = 'registration/password_reset_done.html'
         if form.is_valid():
-            phone = form.cleaned_data['phone']
-            token = utils.generate_password_token(phone)
-            url = self.request.build_absolute_uri(
-                reverse('accounts:password_reset_confirm', args=(token,)))
-            notifications.send_password_reset(phone, token, url)
+            email = form.cleaned_data['email']
+            token = utils.generate_password_token(email)
+            notifications.send_password_reset(email, token)
             return render(request, template)
+
+        template = 'registration/password_reset_form.html'
+        return render(request, template, {'form': form})
 
 
 class PasswordResetConfirmView(View):
@@ -123,17 +125,17 @@ class PasswordResetConfirmView(View):
     def get(self, request, *args, **kwargs):
         template = 'registration/password_reset_confirm.html'
         token = kwargs['token']
-        phone = utils.check_password_token(token)
-        user = User.objects.get(phone=phone) if phone else None
+        email = utils.check_password_token(token)
+        user = User.objects.get(email=email) if email else None
         validlink = bool(user)
         context = {
-            'form': PasswordResetConfirmForm(user=user, data={'phone': phone}),
+            'form': PasswordResetConfirmForm(user=user, data={'email': email}),
             'validlink': validlink
         }
         return render(self.request, template, context)
 
     def post(self, request, *args, **kwargs):
-        user = User.objects.get(phone=request.POST.get('phone').strip())
+        user = User.objects.get(email=request.POST.get('email').strip())
         form = PasswordResetConfirmForm(user=user, data=request.POST)
         template = 'registration/password_reset_confirm.html'
         if form.is_valid():
@@ -144,3 +146,20 @@ class PasswordResetConfirmView(View):
         return render(
             self.request, template,
             {'form': form, 'validlink': True})
+
+
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important!
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('change_password')
+        else:
+            messages.error(request, 'Please correct the error below.')
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, 'accounts/change_password.html', {
+        'form': form
+    })

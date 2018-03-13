@@ -368,6 +368,12 @@ main {
   }
 }
 
+#open-carts {
+  .list-group-item {
+    margin-bottom: 3px
+  }
+}
+
 #sidebar-cart {
   height: 700px;
   overflow-y: scroll;

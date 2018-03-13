@@ -137,13 +137,14 @@ $('body').on('click', '.cart-line .delete', function(e) {
 $('body').on('click', '.cart-line .x-delete', function(e) {
       e.preventDefault();
       var url = $(this).data('href');
+      var cart = $(this).data('cart');
       $.ajax({
       type: "POST",
       url: url,
       dataType: 'json',
       contentType: 'application/json',
       success: function(data, status) {
-      $('#cart-confirm').html('').load('/lunch/cart/reload', function() {});
+      $('#cart-confirm').html('').load('/lunch/cart/reload?cart_ref='+cart, function() {});
       var href = $('[data-slidepanel]').data('href');
       $('#slidepanel').html('').load(href, function() {});
       var x = $('#cart-item-count').html();

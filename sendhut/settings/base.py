@@ -21,8 +21,13 @@ TEMPLATE_DEBUG = config('TEMPLATE_DEBUG', default=False, cast=bool)
 
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv(), default='*')
 
+SITE_ID = 1
+
 # Application definition
 INSTALLED_APPS = [
+    'jet.dashboard',
+    'jet',
+    'django.contrib.sites',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -34,11 +39,11 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'storages',
     'djmoney',
+    'django_rq',
     'taggit',
     'sorl.thumbnail',
     'widget_tweaks',
     'templated_email',
-    'raven.contrib.django.raven_compat',
     'safedelete',
     'rest_framework',
 
@@ -154,14 +159,21 @@ MEDIA_URL = '/media/'
 
 AUTH_USER_MODEL = 'accounts.User'
 
+REDIS_URL = urlparse(os.environ.get('REDIS_URL', 'redis://localhost:6379/0'))
+
 # CACHING
 # ---------------------------------------------------------------
 CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'LOCATION': ''
+    "default": {
+         "BACKEND": "redis_cache.RedisCache",
+         "LOCATION": "{0}:{1}".format(REDIS_URL.hostname, REDIS_URL.port),
+         "OPTIONS": {
+             "PASSWORD": REDIS_URL.password,
+             "DB": 0,
+         }
     }
 }
+
 
 CART_SESSION_ID = 'cart'
 
@@ -187,18 +199,7 @@ LOGIN_URL = '/login'
 
 PAYSTACK_SECRET_KEY = config('PAYSTACK_SECRET_KEY')
 
-REDIS_URL = urlparse(os.environ.get('REDIS_URL'))
-
-CACHES = {
-    "default": {
-         "BACKEND": "redis_cache.RedisCache",
-         "LOCATION": "{0}:{1}".format(REDIS_URL.hostname, REDIS_URL.port),
-         "OPTIONS": {
-             "PASSWORD": REDIS_URL.password,
-             "DB": 0,
-         }
-    }
-}
+REDIS_URL = urlparse(os.environ.get('REDIS_URL', 'redis://localhost:6379/0'))
 
 # solr-thumbnail related settings
 THUMBNAIL_KVSTORE = 'sorl.thumbnail.kvstores.redis_kvstore.KVStore'
@@ -207,7 +208,6 @@ THUMBNAIL_REDIS_PORT = REDIS_URL.port
 # THUMBNAIL_DEBUG = True
 
 # Email settings
-# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 EMAIL_HOST = config('EMAIL_HOST', default='localhost')
 EMAIL_PORT = config('EMAIL_PORT', default=1025)
@@ -215,12 +215,23 @@ EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool)
 # TODO(yao): personalize email with 'Yao from Sendhut'
-DEFAULT_FROM_EMAIL = 'hello@sendhut.com'
-
+DEFAULT_FROM_EMAIL = 'Yao from Sendhut <hello@sendhut.com>'
 
 # SMS
 JUSIBE_PUBLIC_KEY = "a21e294d898ca47299bd575e5db983dd"
 JUSIBE_ACCESS_TOKEN = "8dcdee5ff5d7504570ffb0d74e1fc755"
 
-
 SESSION_SERIALIZER = 'sendhut.utils.JSONSerializer'
+
+
+RQ_QUEUES = {
+    'default': {
+        'URL': REDIS_URL.geturl(),
+        'DEFAULT_TIMEOUT': 500,
+        'USE_REDIS_CACHE': 'redis-cache',
+    }
+}
+
+RQ_SHOW_ADMIN_LINK = True
+
+ENABLE_SSL = False

@@ -4,15 +4,20 @@ from .models import User
 
 
 class PasswordResetForm(forms.Form):
-    phone = forms.CharField(
-        label='Mobile Phone',
+    email = forms.CharField(
+        label='Email',
         max_length=20,
-        widget=forms.TextInput(attrs={'placeholder': 'Enter your phone number'}))
+        widget=forms.TextInput(attrs={'placeholder': 'Enter your email address'}))
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if not User.objects.filter(email=email).exists():
+            raise forms.ValidationError("No account with {} email found.".format(email))
 
 
 class PasswordResetConfirmForm(SetPasswordForm):
-    phone = forms.CharField(
-        label='Mobile Phone',
+    email = forms.CharField(
+        label='Email',
         max_length=20,
         required=False,
         widget=forms.HiddenInput())
