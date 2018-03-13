@@ -2,11 +2,11 @@
 from django.contrib import admin
 
 from safedelete.admin import SafeDeleteAdmin, highlight_deleted
+from sorl.thumbnail.admin import AdminImageMixin
 
 from .models import (
     Vendor, Menu, Item, Image,
-    ItemImage, OptionGroup, Option, Order, OrderLine,
-    GroupCart
+    ItemImage, OptionGroup, Option, Order, OrderLine
 )
 
 
@@ -49,6 +49,22 @@ class MenuAdmin(BaseModelAdmin):
     search_fields = ('name',)
 
 
+@admin.register(Image)
+class ImageAdmin(BaseModelAdmin, AdminImageMixin):
+    list_display = (
+        'id',
+        'created',
+        'image',
+        'thumbnail_path',
+        'is_primary',
+    )
+    list_filter = ('created', 'is_primary')
+
+
+class ImageInlineModelAdmin(AdminImageMixin, admin.TabularInline):
+    model = Item.images.through
+
+
 @admin.register(Item)
 class ItemAdmin(BaseModelAdmin):
     list_display = (
@@ -68,18 +84,7 @@ class ItemAdmin(BaseModelAdmin):
     raw_id_fields = ('menu',)
     search_fields = ('name', 'slug')
     prepopulated_fields = {'slug': ['name']}
-
-
-@admin.register(Image)
-class ImageAdmin(BaseModelAdmin):
-    list_display = (
-        'id',
-        'created',
-        'image',
-        'thumbnail_path',
-        'is_primary',
-    )
-    list_filter = ('created', 'is_primary')
+    inlines = [ImageInlineModelAdmin]
 
 
 @admin.register(ItemImage)

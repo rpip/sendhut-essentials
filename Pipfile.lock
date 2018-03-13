@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "8c27fe823a6629c4b55eba3f077dba42f8d8a112d56b06994eeb2cd1e00faa15"
+            "sha256": "caeba65970ebe17c13f0c4b8b685c7e0461c957c3ee76257b90dee88ebcd0fc2"
         },
         "host-environment-markers": {
             "implementation_name": "cpython",
@@ -123,13 +123,6 @@
                 "sha256:2614ebaad93487d20e21306ac17fe518e13db4e91b175a6a2dbe7342f4bba1af"
             ],
             "version": "==0.12.3"
-        },
-        "django-post-office": {
-            "hashes": [
-                "sha256:831ed70b0cb03536463fcb3e46cd4f9be2a3e91397d076e1a039ee076d38fa23",
-                "sha256:d5258a0f65bc55b954ffa742cdef0e8cb099584aee9901ac8c5a571d159fb095"
-            ],
-            "version": "==3.0.4"
         },
         "django-redis-cache": {
             "hashes": [

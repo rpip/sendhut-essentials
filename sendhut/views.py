@@ -12,7 +12,7 @@ def home(request):
     messages.info(request, settings.WELCOME_MESSAGE)
     context = {
         'page_title': 'Home',
-        'restaurants': Vendor.objects.all()[:6]
+        'restaurants': Vendor.objects.filter(display=True)
     }
     return render(request, 'home.html', context)
 
