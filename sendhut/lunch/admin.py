@@ -23,8 +23,16 @@ class BaseModelAdmin(SafeDeleteAdmin):
         return tuple(self.list_filter) + self._list_filter
 
 
+from django.db.models import F
+
 @admin.register(Vendor)
 class VendorAdmin(BaseModelAdmin):
+
+    def toggle_display(modeladmin, request, queryset):
+        queryset.update(display=not(F('display')))
+
+    toggle_display.short_description = "Toggle the visibility of selected vendors"
+
     list_display = (
         'id',
         'created',
@@ -32,9 +40,11 @@ class VendorAdmin(BaseModelAdmin):
         'address',
         'phone',
         'verified',
+        'display'
     )
     list_filter = ('created', 'verified')
     search_fields = ('name',)
+    actions = [toggle_display]
 
 
 @admin.register(Menu)

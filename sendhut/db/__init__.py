@@ -29,7 +29,7 @@ class BaseModel(SafeDeleteModel, UpdateMixin):
     created = models.DateTimeField(auto_now_add=True, blank=True)
     updated = models.DateTimeField(auto_now=True, blank=True)
     deleted = models.DateTimeField(null=True, blank=True)
-    metadata = JSONField(blank=True, null=True)
+    metadata = JSONField(blank=True, null=True, max_length=360)
     uuid = models.UUIDField(
         default=uuid4, blank=True,
         editable=False, unique=True

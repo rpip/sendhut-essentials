@@ -35,13 +35,7 @@ class Command(BaseCommand):
     def _setup_vendor_menu(self, menu):
         self.stdout.write(self.style.SUCCESS('Creating menu items'))
         items = menu.items.all()
-        image_ids = [image.id for image in Image.objects.all()]
-        shuffle(image_ids)
-        for index, item in enumerate(items):
-            # create item images
-            self._create_item_images(item.id, image_ids)
-            item.categories = get_random_food_categories()
-            item.save()
+        for item in items:
             if choice([True, False]):
                 self.stdout.write(self.style.SUCCESS('Creating side menus'))
                 opt_group1 = OptionGroupFactory.create(item=item, multi_select=True)
@@ -50,16 +44,6 @@ class Command(BaseCommand):
                 # populate side menus
                 for opt_group in opt_groups:
                     OptionFactory.create_batch(choice([1, 3]), group=opt_group)
-
-    def _create_item_images(self, item_id, image_ids):
-        shuffle(image_ids)
-        _images = image_ids[:choice(range(1, 3))]
-        item_to_images = []
-        for _id in _images:
-            item_image = Item.images.through(item_id=item_id, image_id=_id)
-            item_to_images.append(item_image)
-
-        Item.images.through.objects.bulk_create(item_to_images, batch_size=10)
 
     def handle(self, *args, **options):
         self.stdout.write(self.style.SUCCESS('Creating ADMIN user'))
@@ -71,7 +55,7 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS('Creating vendors'))
         # create set of seed images
         ImageFactory.create_batch(12)
-        create_lagos_vendors()
+        create_lagos_vendors(with_images=True)
         for vendor in Vendor.objects.all():
             self._setup_vendor(vendor)
 

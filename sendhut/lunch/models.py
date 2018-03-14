@@ -162,7 +162,7 @@ class Item(BaseModel):
         blank=True
     )
     menu = models.ForeignKey(Menu, related_name='items')
-    name = models.CharField(max_length=120)
+    name = models.CharField(max_length=240)
     slug = models.CharField(max_length=240)
     description = models.TextField()
     price = MoneyField(max_digits=10, decimal_places=2, default_currency='NGN')
@@ -192,6 +192,37 @@ class Item(BaseModel):
 
     def __str__(self):
         return self.name
+
+
+class ItemVariant(models.Model):
+    name = models.CharField(max_length=100, blank=True)
+    price_override = MoneyField(
+        default_currency=settings.DEFAULT_CURRENCY,
+        max_digits=12,
+        decimal_places=2,
+        blank=True,
+        null=True)
+    item = models.ForeignKey(
+        Item, related_name='variants', on_delete=models.CASCADE)
+    attributes = JSONField(null=True, blank=True, default=[])
+    images = models.ManyToManyField('Image', through='VariantImage')
+
+    class Meta:
+        db_table = "variant"
+
+    def __str__(self):
+        return self.name
+
+
+class VariantImage(models.Model):
+    variant = models.ForeignKey('ItemVariant')
+    image = models.ForeignKey('Image')
+
+    class Meta:
+        db_table = "variant_image"
+        unique_together = (('variant', 'image'), )
+
+    __repr__ = sane_repr('variant', 'image')
 
 
 class Image(BaseModel):
@@ -238,7 +269,14 @@ class OptionGroup(BaseModel):
     - Soups
     """
     name = models.CharField(max_length=120)
-    item = models.ForeignKey(Item, related_name='option_groups', null=True, blank=True)
+    item = models.ForeignKey(
+        Item,
+        related_name='option_groups',
+        null=True, blank=True)
+    variant = models.ForeignKey(
+        ItemVariant,
+        related_name='option_groups',
+        null=True, blank=True)
     is_required = models.BooleanField(default=False)
     multi_select = models.BooleanField(default=True)
     menus = models.ManyToManyField(Menu, related_name='options', through='MenuOption')
@@ -250,7 +288,7 @@ class OptionGroup(BaseModel):
 class Option(BaseModel):
 
     name = models.CharField(max_length=60)
-    price = MoneyField(max_digits=10, decimal_places=2, default_currency='NGN')
+    price = MoneyField(max_digits=10, decimal_places=2, default_currency=settings.DEFAULT_CURRENCY)
     group = models.ForeignKey(OptionGroup, related_name='options')
 
     class Meta:
@@ -308,9 +346,17 @@ class Order(BaseModel):
     # TODO(yao): add helpers for calculating orders
     delivery_time = models.DateTimeField(default=datetime.now)
     delivery_address = models.CharField(max_length=120)
-    delivery_fee = MoneyField(max_digits=10, decimal_places=2, default_currency='NGN')
+    delivery_fee = MoneyField(
+        max_digits=10,
+        decimal_places=2,
+        default_currency=settings.DEFAULT_CURRENCY
+    )
     notes = models.CharField(max_length=300, null=True, blank=True)
-    total_cost = MoneyField(max_digits=10, decimal_places=2, default_currency='NGN')
+    total_cost = MoneyField(
+        max_digits=10,
+        decimal_places=2,
+        default_currency=settings.DEFAULT_CURRENCY
+    )
     payment = models.IntegerField(
         choices=PAYMENT_STATUS,
         default=PENDING

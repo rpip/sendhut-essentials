@@ -9,7 +9,7 @@ from . import payments
 
 
 def home(request):
-    messages.info(request, settings.WELCOME_MESSAGE)
+    # messages.info(request, settings.WELCOME_MESSAGE)
     context = {
         'page_title': 'Home',
         'restaurants': Vendor.objects.filter(display=True)

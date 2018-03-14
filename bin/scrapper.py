@@ -86,8 +86,8 @@ def get_delivery_hours(soup):
 def get_menus(menu_selectors):
     menus = []
     for menu_tag in menu_selectors:
-        name = menu_tag.find(class_="menu__category__title").get_text()
-        items_selectors = menu_tag.find_all(class_="menu-item ")
+        name = menu_tag.find(class_="menu__category__title").get_text().strip()
+        items_selectors = menu_tag.find_all(class_="menu-item")
         description = menu_tag.find(class_='menu__category__content')
         description = description.get_text().strip() if description else ""
         menu = {'name': name.strip(), 'description': description}
@@ -96,12 +96,23 @@ def get_menus(menu_selectors):
             title = item_tag.find(class_="menu-item__title").get_text().strip()
             description = menu_tag.find(class_="menu-item__description")
             description = description.get_text().strip() if description else ""
-            amount = get_amount(item_tag)
-            item = {
-                'title': title,
-                'description': description,
-                'amount': amount
-            }
+            # has_variants = 'has-variations' in [x.strip() for x in item_tag.get("class")]
+            variants = get_variants(item_tag)
+            if len(variants) == 1:
+                item = {
+                    'title': title,
+                    'description': description,
+                    'amount': variants[0]['price'],
+                    'options': variants[0]['options']
+                }
+            else:
+                item = {
+                    'title': title,
+                    'description': description,
+                    'amount': variants[0]['price'],
+                    'variants': variants
+                }
+
             items.append(item)
         menu['items'] = items
         menus.append(menu)
@@ -113,9 +124,36 @@ def fetch(url):
     return requests.get(url, verify=False).content
 
 
-def get_amount(item_tag):
-    amount = item_tag.find(class_="menu-item__variation__price").get_text().strip()
-    return float(''.join(amount[1:].split('.')[0].split(',')))
+def get_variants(item_tag):
+    variants_container = item_tag.find(class_="menu-item__variations")
+    variant_tags = variants_container.find_all('article', class_="menu-item__variation")
+    variants = []
+    for x in variant_tags:
+        title = x.find(class_="menu-item__variation__title").get_text().strip()
+        price = x.find(class_="menu-item__variation__price").get_text().strip()
+        price = float(''.join(price[1:].split('.')[0].split(',')))
+        has_options = False
+        url = x.find('form').get('action')
+        has_options = False if 'simple' in url else True
+        # options_page = fetch(urljoin(BASE_URL, url))
+        # soup = BeautifulSoup(options_page, 'html.parser')
+        # opt_groups = soup.find_all('div', class_='choices-toppings__elements__wrapper')
+        # for group in opt_groups:
+        #     title = group.find(class_="choices-toppings__title").get_text().strip()
+        #     subtitle = group.find(class_="choices-toppings__subtitle").get_text().strip()
+        #     is_optional = bool(group.find(class_="choices-toppings-optional"))
+        #     elems = group.find_all("li", class_="choices-toppings__element")
+        #     _elems = []
+        #     for e in elems:
+        #         elem_price = e.find(class_="choices-toppings__element__price")
+        #         elem_label = e.find(class_="choices-toppings__element__label")
+        #         _elems.append({'price': elem_price, 'label': elem_label})
+
+        #     options.append({'title': title, 'subtitle': subtitle, 'options': _elems})
+        # add variant to list
+        variants.append({'title': title, 'price': price, 'options': has_options})
+
+    return variants
 
 
 def test_get_restaurants():
