@@ -29,7 +29,9 @@ from django.db.models import F
 class VendorAdmin(BaseModelAdmin):
 
     def toggle_display(modeladmin, request, queryset):
-        queryset.update(display=not(F('display')))
+        for x in queryset:
+            x.display = not(x.display)
+            x.save()
 
     toggle_display.short_description = "Toggle the visibility of selected vendors"
 
