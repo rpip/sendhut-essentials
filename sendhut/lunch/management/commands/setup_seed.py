@@ -2,7 +2,7 @@ from random import choice, shuffle
 from django.core.management.base import BaseCommand, CommandError
 
 from sendhut.lunch.models import Item, OrderLine, Vendor, Image
-from .upload_foods import create_lagos_vendors
+from .load_menus import create_lagos_vendors
 from ._factory import (
     UserFactory, OptionGroupFactory, VendorFactory,
     OptionFactory, ImageFactory, OrderFactory, fake

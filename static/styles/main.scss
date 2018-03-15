@@ -128,14 +128,13 @@ a.no-deco {
 
 
 #popular-tags {
-
   .tag-row {
     @include rem(padding-top, 20px);
 
     .badge {
       float: left;
       @include rem(font-size, 19px);
-      //@include rem(padding, 8px);
+      //@include rem(padding, 6px);
     }
   }
 }
@@ -586,11 +585,6 @@ body.vendor-b2b-signup {
   -webkit-box-shadow: none!important;
   -moz-box-shadow: none!important;
   box-shadow: none!important;
-}
-
-.badge-happy {
-  @extend .badge;
-  @extend .bg-happy;
 }
 
 .diet-icon {

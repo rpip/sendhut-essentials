@@ -52,6 +52,11 @@ class FOOD_TAGS:
         return cls.tags.get(label, [])
 
 
+class VendorManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(display=True)
+
+
 class Vendor(BaseModel):
     "Food vendor"
     # TODO(yao): add allergy information
@@ -75,6 +80,8 @@ class Vendor(BaseModel):
     available = models.BooleanField(default=True)
     # display this vendor on site?
     display = models.BooleanField(default=True)
+
+    featured = VendorManager()
 
     def tags_tx(self):
         tags = self.tags.all()
@@ -108,7 +115,7 @@ class Menu(BaseModel):
 
     __repr__ = sane_repr('name', 'vendor')
 
-    def __unicode__(self):
+    def __str__(self):
         return "%s" % self.name
 
 
@@ -240,6 +247,9 @@ class Image(BaseModel):
         pieces = [six.text_type(x) for x in divmod(int(timestamp.strftime('%s')), ONE_DAY)]
         pieces.append(uuid4().hex)
         return u'/'.join(pieces)
+
+    def __str__(self):
+        return str(self.id)
 
 
 class ItemImage(BaseModel):

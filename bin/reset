@@ -16,4 +16,10 @@ echo "----------------------------------------------------------"
 echo "Creating fixtures..."
 echo "----------------------------------------------------------"
 
-python manage.py setup_seed
+if [[ $1 == "--dry" ]]; then
+  echo "LOADING vendor menus"
+  python manage.py load_menus --limit=200 --with-images=True
+else
+  echo "Creating dummy data"
+  python manage.py setup_seed
+fi

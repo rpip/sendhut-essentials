@@ -84,7 +84,7 @@ def add_vendor(data, with_images=False):
                 price=x.pop('amount'),
                 description=x.pop('description'),
                 menu=menu,
-                metadata={'options': False}
+                metadata=x
             )
 
     if with_images:

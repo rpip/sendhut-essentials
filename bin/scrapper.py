@@ -134,7 +134,7 @@ def get_variants(item_tag):
         price = float(''.join(price[1:].split('.')[0].split(',')))
         has_options = False
         url = x.find('form').get('action')
-        has_options = False if 'simple' in url else True
+        has_options = not('simple' in url)
         # options_page = fetch(urljoin(BASE_URL, url))
         # soup = BeautifulSoup(options_page, 'html.parser')
         # opt_groups = soup.find_all('div', class_='choices-toppings__elements__wrapper')

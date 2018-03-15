@@ -83,7 +83,7 @@ class VendorSignupView(FormView):
 
 def search(request, tag):
     subtags = FOOD_TAGS.tags_for(tag)
-    results = Vendor.objects.filter(
+    results = Vendor.featured.filter(
         reduce(operator.or_, (Q(tags__name__icontains=q) for q in subtags)))
     context = {
         'page_title': 'search',
