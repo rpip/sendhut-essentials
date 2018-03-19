@@ -1,14 +1,40 @@
 # -*- coding: utf-8 -*-
 from django.contrib import admin
-from django.forms.models import BaseInlineFormSet
+from django.utils.translation import ugettext_lazy as _
+from django.contrib.admin.widgets import AdminFileWidget
+from django.utils.safestring import mark_safe
+from django.forms import ModelForm
 
 from safedelete.admin import SafeDeleteAdmin, highlight_deleted
 from sorl.thumbnail.admin import AdminImageMixin
+from sorl.thumbnail import get_thumbnail
 
 from .models import (
-    Vendor, Menu, Item, Image,
-    ItemImage, OptionGroup, Option, Order, OrderLine
+    Store, Menu, Item, ItemVariant, Image,
+    OptionGroup, Option, Order, OrderLine, GroupCart,
+    GroupCartMember
 )
+
+
+def thumbnail(obj):
+    img = obj.image if isinstance(obj, Image) else obj.image.image
+    if img:
+        t = get_thumbnail(img, "128x128", crop="center")
+        return mark_safe('<img src="{}">'.format(t.url))
+    return None
+
+
+thumbnail.short_description = 'Image'
+
+
+class AdminImageWidget(AdminFileWidget):
+    def render(self, name, value, attrs=None):
+        output = []
+        if value and getattr(value, "url", None):
+            t = get_thumbnail(value, "585x312", crop="center")
+            output.append('<img src="{}">'.format(t.url))
+        output.append(super(AdminFileWidget, self).render(name, value, attrs))
+        return mark_safe(u''.join(output))
 
 
 class BaseModelAdmin(SafeDeleteAdmin):
@@ -24,15 +50,15 @@ class BaseModelAdmin(SafeDeleteAdmin):
         return tuple(self.list_filter) + self._list_filter
 
 
-@admin.register(Vendor)
-class VendorAdmin(BaseModelAdmin):
+@admin.register(Store)
+class StoreAdmin(BaseModelAdmin):
 
     def toggle_display(modeladmin, request, queryset):
         for x in queryset:
             x.display = not(x.display)
             x.save()
 
-    toggle_display.short_description = "Toggle the visibility of selected vendors"
+    toggle_display.short_description = "Toggle the visibility of selected stores"
 
     list_display = (
         'id',
@@ -40,12 +66,18 @@ class VendorAdmin(BaseModelAdmin):
         'name',
         'address',
         'phone',
+        'get_banner_img',
         'verified',
         'display'
     )
     list_filter = ('created', 'verified')
     search_fields = ('name',)
     actions = [toggle_display]
+    raw_id_fields = ('banner', 'logo')
+
+    def get_banner_img(self, obj):
+        t = get_thumbnail(obj.banner.image, "128x128", crop="center")
+        return mark_safe('<img src="{}">'.format(t.url))
 
 
 @admin.register(Menu)
@@ -54,26 +86,10 @@ class MenuAdmin(BaseModelAdmin):
         'id',
         'created',
         'name',
-        'vendor'
+        'store'
     )
     list_filter = ('created',)
     search_fields = ('name',)
-
-
-from django.contrib.admin.widgets import AdminFileWidget
-from django.utils.safestring import mark_safe
-from django.forms import ModelForm
-from sorl.thumbnail import get_thumbnail
-
-
-class AdminImageWidget(AdminFileWidget):
-    def render(self, name, value, attrs=None):
-        output = []
-        if value and getattr(value, "url", None):
-            t = get_thumbnail(value, "585x312", crop="center")
-            output.append('<img src="{}">'.format(t.url))
-        output.append(super(AdminFileWidget, self).render(name, value, attrs))
-        return mark_safe(u''.join(output))
 
 
 class ImageForm(ModelForm):
@@ -90,60 +106,59 @@ class ImageAdmin(BaseModelAdmin, AdminImageMixin):
     list_display = (
         'id',
         'created',
-        'thumbnail',
-        'is_primary',
+        thumbnail
     )
-    list_filter = ('created', 'is_primary')
+    list_filter = ('created',)
     form = ImageForm
 
-    def thumbnail(self, obj):
-        t = get_thumbnail(obj.image, "370x160", crop="center")
-        return mark_safe('<img src="{}">'.format(t.url))
 
-    thumbnail.short_description = 'Thumbnail'
+class ItemVariantInline(admin.TabularInline):
 
-
-class AdminItemImageWidget(AdminFileWidget):
-    def render(self, name, value, attrs=None):
-        output = []
-        if value:
-            img = Image.objects.get(id=value).image if isinstance(value, int) else value
-            t = get_thumbnail(img, "585x312", crop="center")
-            output.append('<img src="{}">'.format(t.url))
-        output.append(super(AdminFileWidget, self).render(name, value, attrs))
-        return mark_safe(u''.join(output))
-
-
-class ItemImageForm(ModelForm):
-    class Meta:
-        model = ItemImage
-        fields = ('image',)
-        widgets = {
-            'image': AdminItemImageWidget
-        }
-
-
-class ImageInlineFormset(BaseInlineFormSet):
-
-    def clean(self):
-        # errors: image required, image not part of choices
-        import pdb; pdb.set_trace()
-
-    def save_new(self, form, commit=True):
-        # return super().save_new(form, commit=commit)
-        import pdb; pdb.set_trace()
-
-    def save_existing(self, form, instance, commit=True):
-        #return form.save(commit=commit)
-        import pdb; pdb.set_trace()
-
-
-class ImageInlineModelAdmin(AdminImageMixin, admin.TabularInline):
-    model = Item.images.through
-    exclude = ('deleted', 'created', 'metadata')
+    model = ItemVariant
+    exclude = ('metadata', 'deleted', 'price_currency')
+    raw_id_fields = ['item']
     extra = 0
-    form = ItemImageForm
-    formset = ImageInlineFormset
+    form = ImageForm
+
+
+class VariantsListFilter(admin.SimpleListFilter):
+    title = _('has variants')
+
+    # Parameter for the filter that will be used in the URL query.
+    parameter_name = 'variants'
+
+    def lookups(self, request, model_admin):
+        return (
+            (1, _('Has variants')),
+            (0, _('No variants')),
+        )
+
+    def queryset(self, request, queryset):
+        if self.value():
+            if bool(int(self.value())):
+                return Item.objects.filter(variants__isnull=False)
+
+            return Item.objects.filter(variants__isnull=True)
+
+
+class ToppingsListFilter(admin.SimpleListFilter):
+    title = _('has toppings')
+
+    # Parameter for the filter that will be used in the URL query.
+    parameter_name = 'toppings'
+
+    def lookups(self, request, model_admin):
+        return (
+            (1, _('Has toppings')),
+            (0, _('No toppings')),
+        )
+
+    def queryset(self, request, queryset):
+        if self.value():
+            if bool(int(self.value())):
+                return Item.objects.filter(option_groups__isnull=False)
+
+            return Item.objects.filter(options_group__isnull=True)
 
 
 @admin.register(Item)
@@ -151,24 +166,28 @@ class ItemAdmin(BaseModelAdmin):
     # TODO(yao): limit menu filter to store menu
     list_display = (
         'id',
-        'created',
+        'name',
         'categories',
         'menu',
-        'name',
-        'slug',
         'description',
-        'price_currency',
         'price',
+        thumbnail,
         'dietary_labels',
         'available',
         'toppings',
-        'variants',
+        'variants'
     )
-    list_filter = ('created', 'available')
+    list_filter = (
+        'created',
+        'available',
+        VariantsListFilter,
+        ToppingsListFilter
+    )
     search_fields = ('name', 'slug', 'description')
     prepopulated_fields = {'slug': ['name']}
-    inlines = [ImageInlineModelAdmin]
     exclude = ('deleted', 'created', 'metadata')
+    raw_id_fields = ('image',)
+    inlines = [ItemVariantInline]
 
     def toppings(self, obj):
         return bool(obj.metadata.get('options'))
@@ -176,21 +195,9 @@ class ItemAdmin(BaseModelAdmin):
     toppings.boolean = True
 
     def variants(self, obj):
-        return bool(obj.metadata.get('variants'))
+        return obj.variants.count() > 0
 
     variants.boolean = True
-
-    def save_formset(self, request, form, formset, change):
-        import pdb; pdb.set_trace()
-        instances = formset.save(commit=False)
-        for instance in instances:
-            # Do something with `instance`
-            instance.save()
-            # instance.item.update_totals()
-
-        formset.save_m2m()
-
-    #def save_related(self, request, form, formsets, change):
 
 
 @admin.register(OptionGroup)
@@ -255,35 +262,20 @@ class OrderAdmin(BaseModelAdmin):
     inlines = [OrderLineInline]
 
 
-@admin.register(OrderLine)
-class OrderLineAdmin(BaseModelAdmin):
-    list_display = (
-        'id',
-        'created',
-        'item',
-        'quantity',
-        'price_currency',
-        'price',
-        'special_instructions',
-        'order',
-    )
-    list_filter = ('created', 'item', 'order')
+class GroupCartInline(admin.StackedInline):
 
-
-class GroupOrderInline(admin.StackedInline):
-
-    model = Order
+    model = GroupCartMember
     exclude = ('metadata',)
     raw_id_fields = ['group_cart']
     extra = 0
 
 
-# @admin.register(GroupCart)
-# class GroupCartAdmin(BaseModelAdmin):
-#     list_display = [
-#         'owner',
-#         'vendor',
-#         'monetary_limit',
-#         'created'
-#     ]
-#     inlines = [GroupOrderInline]
+@admin.register(GroupCart)
+class GroupCartAdmin(BaseModelAdmin):
+    list_display = [
+        'owner',
+        'store',
+        'monetary_limit',
+        'created'
+    ]
+    inlines = [GroupCartInline]

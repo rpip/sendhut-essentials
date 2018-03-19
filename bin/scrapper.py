@@ -172,5 +172,5 @@ def test_get_vendor_details(url):
 if __name__ == '__main__':
 
     restaurants = get_restaurants()
-    with open('lagos-vendors.json', 'w') as f:
+    with open('lagos-stores.json', 'w') as f:
         json.dump(restaurants, f)

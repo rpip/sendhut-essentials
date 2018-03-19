@@ -13,12 +13,12 @@
     {% endif %}
     <div class="row">
       <div class="col-sm-6">
-        <h2 class="bold">{{ vendor.name }}</h2>
+        <h2 class="bold">{{ store.name }}</h2>
         <div>
           <ol class="list-inline">
-            <li class="text-muted">{{ vendor.tags_tx }}</li>
-            <li class="text-muted">{{ vendor.address }}</li>
-            <li class="text-muted">{{ vendor.phone }}</li>
+            <li class="text-muted">{{ store.tags_tx }}</li>
+            <li class="text-muted">{{ store.address }}</li>
+            <li class="text-muted">{{ store.phone }}</li>
           </ol>
         </div>
         <div>
@@ -28,7 +28,7 @@
                 <button type="button" class="btn btn-primary">Create Group Order</button>
               </a>
             {% else %}
-              <a href="/login?next={% url 'lunch:vendor_details' vendor.slug %}">
+              <a href="/login?next={% url 'lunch:store_details' store.slug %}">
                 <button type="button" class="btn btn-primary">Create Group Order</button>
               </a>
             {% endif %}
@@ -37,7 +37,7 @@
         <br>
       </div>
       <div class="col-sm-5">
-        {% thumbnail vendor.banner "370x160" crop="center" as im %}
+        {% thumbnail store.banner.image "370x160" crop="center" as im %}
         <img class="card-img-top img-fluid"
              src="{{ im.url }}"
              alt="{{ item.title }}"
@@ -51,7 +51,7 @@
   <div class="row">
     <div class="container">
       <nav class="nav">
-        {% for menu in vendor.menus.all %}
+        {% for menu in store.menus.all %}
           <a class="nav-link" href="#{{ menu.name }}">{{ menu.name }}</a>
         {% endfor %}
       </nav>
@@ -60,19 +60,20 @@
   <hr>
   <div class="row">
     <div class="container">
-      {% for menu in vendor.menus.all %}
+      {% for menu in store.menus.all %}
         <h4 id="{{ menu.name }}"  class="menu-header bold">{{menu.name}}</h4>
-        <hr>
+        <br>
         <div class="row food-list">
           {% for item in menu.items.all %}
-            <div class="col-sm-6 menu-item">
+            <div class="col-sm-5 rounded menu-item {% if not item.image %}menu-item-no-image{% endif %}">
               <a
                 data-href="{% url 'lunch:food_detail' slug=item.slug %}?cart_ref={{ group_cart.token }}"
                 class="item-popup">
                 <div class="row">
-                  <div class="col-sm-3">
+                  {% if item.image %}
+                  <div class="col-sm-3 item-image-wrap">
                     {% if is_mobile %}
-                      {% thumbnail item.primary_image "350x160" crop="center" as im %}
+                      {% thumbnail item.image.image "350x160" crop="center" as im %}
                       <img class="img-fluid"
                            src="{{ im.url }}"
                            alt="{{ item.title }}"
@@ -80,7 +81,7 @@
                            height="{{ im.height }}">
                          {% endthumbnail %}
                        {% else %}
-                         {% thumbnail item.primary_image "128x128" crop="center" as im %}
+                         {% thumbnail item.image.image "128x128" crop="center" as im %}
                          <img class="img-fluid"
                               src="{{ im.url }}"
                               alt="{{ item.title }}"
@@ -89,7 +90,8 @@
                             {% endthumbnail %}
                           {% endif %}
                   </div>
-                  <div class="col-sm-9">
+                  {% endif %}
+                  <div class="{% if item.image %}col-sm-9{% else %}col-sm{% endif %} item-body">
                     <div class="card">
                       <div class="card-body">
                         <h6 class="card-title">{{ item.name }}</h6>

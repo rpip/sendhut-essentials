@@ -1,5 +1,4 @@
 from datetime import datetime
-from random import choice
 from uuid import uuid4
 import six
 
@@ -52,46 +51,57 @@ class FOOD_TAGS:
         return cls.tags.get(label, [])
 
 
-class VendorManager(models.Manager):
+class Partner(BaseModel):
+    "Partner is the parent org/merchant that owns the stores"
+    name = models.CharField(max_length=100)
+    business_name = models.CharField(max_length=100)
+    phone = models.CharField(max_length=30, null=True, blank=True, unique=True)
+    email = models.EmailField(max_length=70, null=True, blank=True, unique=True)
+    has_fleets = models.BooleanField(default=False)
+
+
+class StoreManager(models.Manager):
     def get_queryset(self):
         return super().get_queryset().filter(display=True)
 
 
-class Vendor(BaseModel):
-    "Food vendor"
+class Store(BaseModel):
+    "Food store"
+    # TODO(yao): rename store to Store
     # TODO(yao): add allergy information
     # TODO(yao): add restaurant notes
     name = models.CharField(max_length=100)
     manager_name = models.CharField(max_length=100, null=True, blank=True)
+    partner = models.ForeignKey('Partner', related_name='store', blank=True, null=True)
     # TODO(yao): replace address with branches
     address = models.CharField(max_length=200, null=True, blank=True)
-    # TODO(yao): add multiple vendor phones
+    # TODO(yao): add multiple store phones
     phone = models.CharField(max_length=30, null=True, blank=True, unique=True)
     # TODO(yao): Add Branch (address, geo, phones)
-    logo = ImageField(upload_to=image_upload_path, null=True, blank=True)
-    # banner is image displayed on restaurant's page
     email = models.EmailField(max_length=70, null=True, blank=True, unique=True)
     slug = models.CharField(max_length=200)
-    banner = ImageField(upload_to=image_upload_path, null=True, blank=True)
+    logo = models.ForeignKey('Image', related_name='store', blank=True, null=True)
+    # image displayed on restaurant's page
+    banner = models.ForeignKey('Image', related_name='for_store', blank=True, null=True)
     tags = TaggableManager()
     verified = models.BooleanField(default=False)
     # TODO(yao): add is partner field
     # store is opened or closed for some reason
     available = models.BooleanField(default=True)
-    # display this vendor on site?
+    # display this store on site?
     display = models.BooleanField(default=True)
 
-    featured = VendorManager()
+    featured = StoreManager()
 
     def tags_tx(self):
         tags = self.tags.all()
         return ', '.join([unslugify(x.name) for x in tags[:3]])
 
     def get_absolute_url(self):
-        return reverse('lunch:vendor_detail', args=(self.self.slug, ))
+        return reverse('lunch:store_detail', args=(self.self.slug, ))
 
     class Meta:
-        db_table = "vendor"
+        db_table = "store"
 
     def __str__(self):
         return self.name
@@ -101,19 +111,19 @@ class Vendor(BaseModel):
 
 class Menu(BaseModel):
     """
-    For food vendors that offer different sets of menus either for lunch
+    For food stores that offer different sets of menus either for lunch
     or on special occassions, menu labels can be used to group these menus.
     """
     # TODO(yao): Add related menus that'll show as options, e.g, soup, meat, fish
     name = models.CharField(max_length=40, null=True, blank=True)
-    vendor = models.ForeignKey(Vendor, related_name='menus')
+    store = models.ForeignKey(Store, related_name='menus')
     tags = TaggableManager()
     info = models.CharField(max_length=360, null=True, blank=True)
 
     class Meta:
         db_table = "menu"
 
-    __repr__ = sane_repr('name', 'vendor')
+    __repr__ = sane_repr('name', 'store')
 
     def __str__(self):
         return "%s" % self.name
@@ -171,7 +181,7 @@ class Item(BaseModel):
     menu = models.ForeignKey(Menu, related_name='items')
     name = models.CharField(max_length=240)
     slug = models.CharField(max_length=240)
-    description = models.TextField()
+    description = models.TextField(null=True, blank=True)
     price = MoneyField(max_digits=10, decimal_places=2, default_currency='NGN')
     dietary_labels = ArrayField(
         models.IntegerField(
@@ -180,19 +190,13 @@ class Item(BaseModel):
         default=list,
         blank=True
     )
-    images = models.ManyToManyField('Image', related_name='items', through='ItemImage')
+    image = models.ForeignKey('Image', related_name='items', blank=True, null=True)
     available = models.BooleanField(default=True)
 
     @classmethod
     def dietary_label_text(cls, label_id):
         labels = {k: v for k, v in cls.DIETARY_RESTRICTIONS}
         return labels[label_id]
-
-    @property
-    def primary_image(self):
-        # TODO(yao): Generate fixtures with primary image
-        im = choice(self.images.all())
-        return im.image
 
     class Meta:
         db_table = "item"
@@ -201,7 +205,7 @@ class Item(BaseModel):
         return self.name
 
 
-class ItemVariant(models.Model):
+class ItemVariant(BaseModel):
     name = models.CharField(max_length=100, blank=True)
     price_override = MoneyField(
         default_currency=settings.DEFAULT_CURRENCY,
@@ -211,8 +215,9 @@ class ItemVariant(models.Model):
         null=True)
     item = models.ForeignKey(
         Item, related_name='variants', on_delete=models.CASCADE)
-    attributes = JSONField(null=True, blank=True, default=[])
-    images = models.ManyToManyField('Image', through='VariantImage')
+    image = models.ForeignKey(
+        'Image', related_name='variants',
+        null=True, blank=True)
 
     class Meta:
         db_table = "variant"
@@ -221,24 +226,12 @@ class ItemVariant(models.Model):
         return self.name
 
 
-class VariantImage(models.Model):
-    variant = models.ForeignKey('ItemVariant')
-    image = models.ForeignKey('Image')
-
-    class Meta:
-        db_table = "variant_image"
-        unique_together = (('variant', 'image'), )
-
-    __repr__ = sane_repr('variant', 'image')
-
-
 class Image(BaseModel):
 
     ONE_DAY = 60 * 60 * 24
 
     image = ImageField(upload_to=image_upload_path)
     thumbnail_path = models.CharField(max_length=200)
-    is_primary = models.BooleanField(default=False)
 
     class Meta:
         db_table = "image"
@@ -250,18 +243,6 @@ class Image(BaseModel):
 
     def __str__(self):
         return str(self.id)
-
-
-class ItemImage(BaseModel):
-
-    item = models.ForeignKey(Item)
-    image = models.ForeignKey(Image)
-
-    class Meta:
-        db_table = 'item_image'
-        unique_together = (('item', 'image'), )
-
-    __repr__ = sane_repr('item', 'image')
 
 
 class OptionGroup(BaseModel):
@@ -306,7 +287,7 @@ class Option(BaseModel):
 
     __repr__ = sane_repr('name', 'price')
 
-    def __unicode__(self):
+    def __str__(self):
         return "%s" % self.name
 
 
@@ -441,7 +422,7 @@ class GroupCart(BaseModel):
 
     token = models.CharField(max_length=10)
     owner = models.ForeignKey(User, related_name='group_carts')
-    vendor = models.ForeignKey(Vendor, related_name='group_carts')
+    store = models.ForeignKey(Store, related_name='group_carts')
     monetary_limit = MoneyField(
         max_digits=10,
         decimal_places=2,

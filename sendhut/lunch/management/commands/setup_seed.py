@@ -1,11 +1,11 @@
 from random import choice, shuffle
 from django.core.management.base import BaseCommand, CommandError
 
-from sendhut.lunch.models import Item, OrderLine, Vendor, Image
-from .load_menus import create_lagos_vendors
+from sendhut.lunch.models import Item, OrderLine, Store
+from .load_menus import create_lagos_stores
 from ._factory import (
-    UserFactory, OptionGroupFactory, VendorFactory,
-    OptionFactory, ImageFactory, OrderFactory, fake
+    ImageFactory, UserFactory, OptionGroupFactory,
+    OptionFactory, OrderFactory, fake
 )
 
 
@@ -22,17 +22,15 @@ def get_random_food_categories():
 class Command(BaseCommand):
     help = 'Populates the database with dummy Sendhut data'
 
-    def _setup_vendor(self, vendor):
+    def _setup_store(self, store):
         self.stdout.write(self.style.SUCCESS('Creating menus'))
-        vendor.logo = VendorFactory._logo_img()
-        vendor.banner = VendorFactory._banner_img()
-        vendor.save()
-        for menu in vendor.menus.all():
-            self._setup_vendor_menu(menu)
+        store.save()
+        for menu in store.menus.all():
+            self._setup_store_menu(menu)
 
-        self.stdout.write(self.style.SUCCESS('Setup done for vendor'))
+        self.stdout.write(self.style.SUCCESS('Setup done for store'))
 
-    def _setup_vendor_menu(self, menu):
+    def _setup_store_menu(self, menu):
         self.stdout.write(self.style.SUCCESS('Creating menu items'))
         items = menu.items.all()
         for item in items:
@@ -52,12 +50,11 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS('Creating users'))
         UserFactory.create_batch(3, password=USER_PASSWORD)
 
-        self.stdout.write(self.style.SUCCESS('Creating vendors'))
-        # create set of seed images
+        self.stdout.write(self.style.SUCCESS('Creating stores'))
         ImageFactory.create_batch(12)
-        create_lagos_vendors(with_images=True)
-        for vendor in Vendor.objects.all():
-            self._setup_vendor(vendor)
+        create_lagos_stores(with_images=True)
+        for store in Store.objects.all():
+            self._setup_store(store)
 
         # create admin user
         self.stdout.write(self.style.SUCCESS('Setting up admin user'))
@@ -87,5 +84,5 @@ class Command(BaseCommand):
 
 
 # IDEA(yao):
-# create_fixture(vendor, menu_config)
+# create_fixture(store, menu_config)
 # menu_config = {menu_1: [category, n_items], menu_2: [category, n_items]}

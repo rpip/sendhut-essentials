@@ -1,5 +1,5 @@
 from django import forms
-from .models import Order, Vendor, GroupCart
+from .models import Order, Store, GroupCart, Partner
 from django.forms import ModelForm
 from datetime import datetime
 
@@ -20,18 +20,15 @@ class CheckoutForm(forms.Form):
 
 class GroupOrderForm(forms.Form):
     limit = forms.FloatField(required=False)
-    vendor = forms.CharField()
+    store = forms.CharField()
 
 
-class VendorSignupForm(ModelForm):
+class PartnerSignupForm(ModelForm):
     # number of locations
     # type of cuisine
     # estimated weekly to-go orders
     # do you currently offer delivery
     class Meta:
-        model = Vendor
-        fields = ['manager_name', 'phone', 'email', 'name']
-        labels = {
-            "manager_name": "Name",
-            "name": "Business Name"
-        }
+        # TODO(yao): map to Partner/Merchant
+        model = Partner
+        fields = ['name', 'business_name', 'phone', 'email']

@@ -7,7 +7,7 @@
 
 {% block content %}
   <div>
-    <p class="badge badge-primary">{{ team.vendor }}</p>
+    <p class="badge badge-primary">{{ team.store }}</p>
     {% if team.monetary_limit %}<p>{{ team|group_cart_limit }}</p>{% endif %}
     <p>{{ team.members.all|length }} members</p>
   </div>

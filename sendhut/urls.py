@@ -7,7 +7,7 @@ from sendhut.lunch import urls as lunch_urls
 from sendhut.accounts import urls as account_urls
 from sendhut.api import urls as api_urls
 from sendhut.accounts.views import LoginView, LogoutView, SignupView
-from sendhut.lunch.views import VendorSignupView
+from sendhut.lunch.views import PartnerSignupView
 from .views import (
     home, about, faqs, privacy_terms,
     payment_callback, payment_webhook
@@ -18,7 +18,7 @@ urlpatterns = [
     url(r'^about-us/$', about, name='about-us'),
     url(r'^faqs/$', faqs, name='faqs'),
     url(r'^privacy_terms/$', privacy_terms, name='privacy-terms'),
-    url(r'^business/$', VendorSignupView.as_view(), name='vendor-signup'),
+    url(r'^partner/$', PartnerSignupView.as_view(), name='partner-signup'),
     url(r'^signup/$', SignupView.as_view(), name='signup'),
     url(r'^login/$', LoginView.as_view(), name='signin'),
     url(r'^logout/$', LogoutView.as_view(), name='logout'),

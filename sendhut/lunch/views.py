@@ -19,9 +19,9 @@ from sendhut import utils
 from sendhut.accounts.models import User
 
 from .models import (
-    Item, Vendor, Order, OrderLine, GroupCart, GroupCartMember, FOOD_TAGS
+    Item, Store, Order, OrderLine, GroupCart, GroupCartMember, FOOD_TAGS
 )
-from .forms import CheckoutForm, VendorSignupForm, GroupOrderForm
+from .forms import CheckoutForm, PartnerSignupForm, GroupOrderForm
 from .group_order import GroupOrder
 
 
@@ -64,9 +64,9 @@ def cartline_delete(request, line_id):
     return JsonResponse({'status': 'OK'}, encoder=utils.JSONEncoder)
 
 
-class VendorSignupView(FormView):
-    template_name = 'vendor_signup.html'
-    form_class = VendorSignupForm
+class PartnerSignupView(FormView):
+    template_name = 'partner_signup.html'
+    form_class = PartnerSignupForm
     page_title = 'Deliver with Sendhut'
     success_url = '/business/'
 
@@ -76,14 +76,14 @@ class VendorSignupView(FormView):
         info we need to get you listed.
         """
         messages.info(self.request, info)
-        Vendor.objects.create(**form.cleaned_data)
+        Store.objects.create(**form.cleaned_data)
         # TODO(yao): send email and sms notification to merchant
         return super().form_valid(form)
 
 
 def search(request, tag):
     subtags = FOOD_TAGS.tags_for(tag)
-    results = Vendor.featured.filter(
+    results = Store.featured.filter(
         reduce(operator.or_, (Q(tags__name__icontains=q) for q in subtags)))
     context = {
         'page_title': 'search',
@@ -119,23 +119,23 @@ class GroupOrderView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         form = GroupOrderForm(data=request.POST)
         if form.is_valid():
-            vendor = form.cleaned_data['vendor']
+            store = form.cleaned_data['store']
             limit = form.cleaned_data['limit']
-            GroupOrder.create(request, vendor, limit)
+            GroupOrder.create(request, store, limit)
             messages.info(request, "Group order created!")
-            return redirect(reverse('lunch:vendor_details', args=(vendor,)))
+            return redirect(reverse('lunch:store_details', args=(store,)))
 
         return redirect(request.META.get('HTTP_REFERER'))
 
 
-def vendor_page(request, slug):
-    template = 'lunch/vendor_details.html'
-    vendor = get_object_or_404(Vendor, slug=slug)
+def store_page(request, slug):
+    template = 'lunch/store_details.html'
+    store = get_object_or_404(Store, slug=slug)
     context = {
-        'vendor': vendor,
-        'page_title': vendor.name
+        'store': store,
+        'page_title': store.name
     }
-    group_order = GroupOrder.get_by_vendor(request, vendor.uuid)
+    group_order = GroupOrder.get_by_store(request, store.uuid)
     if group_order:
         # TODO(yao): update all sessions when group_order (groupcart)
         # is locked (cancelled,checkout), remove from
@@ -173,16 +173,16 @@ class CartJoin(View):
             GroupOrder.join(request, group_cart, request.user.get_full_name())
             msg = "You've joined {}'s group order".format(group_cart.owner.get_full_name())
             messages.info(request, msg)
-            return redirect(reverse('lunch:vendor_details', args=(group_cart.vendor.slug,)))
+            return redirect(reverse('lunch:store_details', args=(group_cart.store.slug,)))
 
         # already in group cart
         if GroupOrder.get(request, token):
-            return redirect(reverse('lunch:vendor_details',
-                                    args=(group_cart.vendor.slug,)))
+            return redirect(reverse('lunch:store_details',
+                                    args=(group_cart.store.slug,)))
 
         context = {
             'group_cart': group_cart,
-            'vendor': group_cart.vendor,
+            'store': group_cart.store,
             'cart_url': request.build_absolute_uri(group_cart.get_absolute_url())
         }
 
@@ -198,7 +198,7 @@ class CartJoin(View):
         GroupOrder.join(request, group_cart, name)
         msg = "You've joined {}'s group order".format(group_cart.owner.get_full_name())
         messages.info(request, msg)
-        return redirect(reverse('lunch:vendor_details', args=(group_cart.vendor.slug,)))
+        return redirect(reverse('lunch:store_details', args=(group_cart.store.slug,)))
 
 
 class CartView(View):
@@ -329,11 +329,11 @@ def leave_group_order(request, token):
     msg = "You've been removed from {}'s cart".format(
         group_cart.owner.get_full_name())
     messages.info(request, msg)
-    return redirect(reverse('lunch:vendor_details',
-                            args=(group_cart.vendor.slug,)))
+    return redirect(reverse('lunch:store_details',
+                            args=(group_cart.store.slug,)))
 
 
 def cancel_group_order(request, token):
-    vendor_slug = GroupOrder.cancel(request, token)
+    store_slug = GroupOrder.cancel(request, token)
     messages.info(request, "Group order deleted")
-    return redirect(reverse('lunch:vendor_details', args=(vendor_slug,)))
+    return redirect(reverse('lunch:store_details', args=(store_slug,)))

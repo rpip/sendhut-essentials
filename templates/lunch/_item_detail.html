@@ -3,7 +3,7 @@
 {% load thumbnail %}
 
 <div class="item-detail-card">
-  {% thumbnail item.primary_image "585x312" crop="center" as im %}
+  {% thumbnail item.image.image "585x312" crop="center" as im %}
   <img class="card-img-top img-fluid"
        src="{{ im.url }}"
        alt="{{ item.title }"
@@ -19,10 +19,10 @@
          <input type="hidden" name="uuid" value="{{ item.uuid }}" />
          <input type="hidden" name="item_id" value="{{ item.id }}" />
          <input type="hidden" name="name" value="{{ item.name}}" />
-         <input type="hidden" name="vendor[name]" value="{{ item.menu.vendor.name }}" />
-         <input type="hidden" name="vendor[uuid]" value="{{ item.menu.vendor.uuid }}" />
-         <input type="hidden" name="vendor[address]" value="{{ item.menu.vendor.address }}"/>
-         <input type="hidden" name="vendor[location]" value="{{ item.menu.vendor.location }}"/>
+         <input type="hidden" name="store[name]" value="{{ item.menu.store.name }}" />
+         <input type="hidden" name="store[uuid]" value="{{ item.menu.store.uuid }}" />
+         <input type="hidden" name="store[address]" value="{{ item.menu.store.address }}"/>
+         <input type="hidden" name="store[location]" value="{{ item.menu.store.location }}"/>
          <input type="hidden" name="available" value="{{ item.available }}" />
          <input type="hidden" name="price" value="{{ item.price.amount }}" />
          <input type="hidden" name="slug" value="{{ item.slug }}" />

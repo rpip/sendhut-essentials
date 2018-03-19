@@ -115,13 +115,13 @@ a.no-deco {
   text-decoration: none;
 }
 
-.vendor-list {
+.store-list {
   .card {
     &:hover {
       background-color: $grey;
     }
   }
-  .vendor {
+  .store {
     @include rem(margin-bottom, 20px);
   }
 }
@@ -199,11 +199,20 @@ main {
     color: $black !important;
   }
   .menu-item {
-    //border: 1px solid darken($grey, .5);
+    border: 1px solid darken($grey, .5);
     @include rem(margin-bottom, 20px);
+    @include rem(margin-right, 10px);
     cursor: pointer;
     &:hover {
       background-color: $light-grey;
+    }
+    //width: 80%;
+    .item-image-wrap {
+     @include rem(padding-left, 0);
+     @include rem(padding-right, 0);
+    }
+    .item-body {
+      @include rem(padding, 10px);
     }
   }
   .card {
@@ -507,8 +516,8 @@ footer {
   }
 }
 
-body.vendor-b2b-signup {
-  #vendor-b2b-banner {
+body.store-b2b-signup {
+  #store-b2b-banner {
     .card-title {
       margin-top: 170px;
       display: block;
@@ -544,7 +553,7 @@ body.vendor-b2b-signup {
     }
   }
 
-  #vendor-marketing {
+  #store-marketing {
     .card {
       float: left;
       border: 0

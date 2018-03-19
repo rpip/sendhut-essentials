@@ -3,16 +3,17 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 
 from sendhut.cart import Cart
-from sendhut.lunch.models import Vendor, Order
-from sendhut.lunch.views import GroupOrder
+from sendhut.lunch.models import Store, Order
 from . import payments
 
 
 def home(request):
-    messages.info(request, settings.WELCOME_MESSAGE)
+    if settings.BETA_MODE:
+        messages.info(request, settings.BETA_MESSAGE)
+
     context = {
         'page_title': 'Home',
-        'restaurants': Vendor.featured.all()
+        'restaurants': Store.featured.all()
     }
     return render(request, 'home.html', context)
 

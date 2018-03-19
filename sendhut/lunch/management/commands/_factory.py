@@ -13,8 +13,8 @@ from factory import (
 
 from sendhut.accounts.models import User, Address
 from sendhut.lunch.models import (
-    Vendor, Menu, Item, OptionGroup, Option,
-    Image, ItemImage, OrderLine, Order, FOOD_TAGS
+    Store, Menu, Item, OptionGroup, Option,
+    Image, OrderLine, Order, FOOD_TAGS
 )
 
 
@@ -108,23 +108,27 @@ class AddressFactory(DjangoModelFactory):
     address_1 = 'Rukayyah, Atinuke Alaka Close Lekki Lagos 23401'
 
 
-class VendorFactory(DjangoModelFactory):
+class ImageFactory(DjangoModelFactory):
+
     class Meta:
-        model = Vendor
+        model = Image
 
-    def _logo_img():
-        images = glob.glob('./static/images/restaurant-logos/*')
-        return File(open(choice(images), 'rb'))
-
-    def _banner_img():
+    def _random_image():
         images = glob.glob('./static/images/fixtures/*/*')
         return File(open(choice(images), 'rb'))
+
+    image = LazyFunction(_random_image)
+
+
+class StoreFactory(DjangoModelFactory):
+    class Meta:
+        model = Store
 
     name = lazy_attribute(lambda o: fake.company())
     address = lazy_attribute(lambda o: fake.address())
     phone = choice(PHONE_NUMBERS)
-    logo = LazyFunction(_logo_img)
-    banner = LazyFunction(_banner_img)
+    logo = SubFactory(ImageFactory)
+    banner = SubFactory(ImageFactory)
 
     @post_generation
     def post(obj, create, extracted, **kwargs):
@@ -139,7 +143,7 @@ class MenuFactory(DjangoModelFactory):
         model = Menu
 
     name = lazy_attribute(lambda o: choice(MENU_NAMES))
-    vendor = SubFactory(Vendor)
+    store = SubFactory(Store)
 
     @post_generation
     def post(obj, create, extracted, **kwargs):
@@ -147,6 +151,8 @@ class MenuFactory(DjangoModelFactory):
 
 
 class ItemFactory(DjangoModelFactory):
+
+    # TODO(yao): Add variants generator
 
     class Meta:
         model = Item
@@ -156,27 +162,7 @@ class ItemFactory(DjangoModelFactory):
     description = lazy_attribute(lambda o: fake.text(max_nb_chars=100))
     price = choice([1200, 900, 3500, 800, 400, 1400, 1650, 850])
     dietary_labels = lazy_attribute(lambda o: random_diet_labels())
-
-
-class ImageFactory(DjangoModelFactory):
-
-    class Meta:
-        model = Image
-
-    def _random_image():
-        images = glob.glob('./static/images/fixtures/*/*')
-        return File(open(choice(images), 'rb'))
-
-    image = LazyFunction(_random_image)
-
-
-class ItemImageFactory(DjangoModelFactory):
-
-    class Meta:
-        model = ItemImage
-
     image = SubFactory(ImageFactory)
-    item = SubFactory(ItemFactory)
 
 
 class OptionGroupFactory(DjangoModelFactory):

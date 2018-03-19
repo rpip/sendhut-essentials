@@ -13,12 +13,18 @@ echo "----------------------------------------------------------"
 python manage.py migrate
 
 echo "----------------------------------------------------------"
+echo "Deleting images..."
+echo "----------------------------------------------------------"
+
+python manage.py thumbnail clear_delete_all
+
+echo "----------------------------------------------------------"
 echo "Creating fixtures..."
 echo "----------------------------------------------------------"
 
 if [[ $1 == "--dry" ]]; then
   echo "LOADING vendor menus"
-  python manage.py load_menus --limit=200 --with-images=True
+  python manage.py load_menus --limit=200
 else
   echo "Creating dummy data"
   python manage.py setup_seed

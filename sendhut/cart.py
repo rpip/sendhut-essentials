@@ -224,12 +224,12 @@ class Cart:
         cart_delivery_fee = delivery_fee * len(self)
         total = sub_total + cart_delivery_fee
         cart = self.serialize()
-        vendor_grouped_cart = [
+        store_grouped_cart = [
             (x, list(y)) for x, y in
-            groupby(cart, lambda x: x['data']['vendor']['name'])]
+            groupby(cart, lambda x: x['data']['store']['name'])]
         return {
             'cart': cart,
-            'vendor_grouped_cart': vendor_grouped_cart,
+            'store_grouped_cart': store_grouped_cart,
             'sub_total': sub_total,
             'delivery_fee': delivery_fee,
             'cart_delivery_fee': cart_delivery_fee,

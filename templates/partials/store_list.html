@@ -2,13 +2,13 @@
 {% load lunch_extras %}
 {% load thumbnail %}
 
-<div class="vendor-list">
+<div class="store-list">
   <div class="card-row">
-    {% for vendor in restaurants %}
-      <div class="col-sm-4 vendor">
-        <a href="{% url 'lunch:vendor_details' vendor.slug %}" class="no-deco">
+    {% for store in restaurants %}
+      <div class="col-sm-4 store">
+        <a href="{% url 'lunch:store_details' store.slug %}" class="no-deco">
           <div class="card">
-            {% thumbnail vendor.banner "350x187" crop="center" as im %}
+            {% thumbnail store.banner.image "350x187" crop="center" as im %}
             <img class="card-img-top img-fluid"
                  src="{{ im.url }}"
                  alt="{{ item.title }}"
@@ -16,8 +16,8 @@
                  height="{{ im.height }}">
                {% endthumbnail %}
                <div class="card-body">
-                 <h6 class="card-title">{{ vendor.name }}</h6>
-                 <h6 class="card-subtitle mb-2 text-muted">{{ vendor.tags_tx }}</h6>
+                 <h6 class="card-title">{{ store.name }}</h6>
+                 <h6 class="card-subtitle mb-2 text-muted">{{ store.tags_tx }}</h6>
                </div>
           </div>
         </a>

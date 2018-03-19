@@ -40,5 +40,5 @@ class Address(BaseModel):
 
     __repr__ = sane_repr('county', 'city', 'postcode')
 
-    def __unicode__(self):
+    def __str__(self):
         return self.address_1

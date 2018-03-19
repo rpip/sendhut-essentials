@@ -3,7 +3,7 @@ from rest_framework import serializers
 
 from sendhut.accounts.models import User, Address
 from sendhut.lunch.models import (
-    Vendor, Menu, Item, OptionGroup, Option,
+    Store, Menu, Item, OptionGroup, Option,
     Image, OrderLine, Order, GroupCart, GroupCartMember
 )
 
@@ -36,7 +36,7 @@ class MenuSerializer(serializers.ModelSerializer):
         depth = 1
 
 
-class VendorSerializer(serializers.ModelSerializer):
+class StoreSerializer(serializers.ModelSerializer):
 
     menus = MenuSerializer(many=True, read_only=True)
     tags = serializers.SerializerMethodField()
@@ -45,7 +45,7 @@ class VendorSerializer(serializers.ModelSerializer):
         return [x.name for x in obj.tags.all()]
 
     class Meta:
-        model = Vendor
+        model = Store
         fields = ('name', 'manager_name', 'address', 'phone',
                   'logo', 'email', 'slug', 'banner', 'tags',
                   'verified', 'available', 'menus', 'uuid')
@@ -60,11 +60,11 @@ class GroupCartMemberSerializer(serializers.ModelSerializer):
 class GroupCartSerializer(serializers.ModelSerializer):
     url = serializers.SerializerMethodField()
     owner = UserSerializer(read_only=True)
-    vendor = serializers.SerializerMethodField()
+    store = serializers.SerializerMethodField()
     members = GroupCartMemberSerializer(many=True, read_only=True)
 
-    def get_vendor(self, obj):
-        return str(obj.vendor.uuid)
+    def get_store(self, obj):
+        return str(obj.store.uuid)
 
     def get_url(self, obj):
         return obj.get_absolute_url()
@@ -72,7 +72,7 @@ class GroupCartSerializer(serializers.ModelSerializer):
     class Meta:
         model = GroupCart
         fields = (
-            'token', 'owner', 'vendor', 'monetary_limit',
+            'token', 'owner', 'store', 'monetary_limit',
             'status', 'url', 'members'
         )
 

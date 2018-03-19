@@ -192,8 +192,10 @@ LUNCH_DELIVERY_FEE = 300
 
 SENDHUT_EMAIL = 'hello@sendhut.com'
 
-WELCOME_MESSAGE = "We're not quite ready yet, but we'd love you to give it a try. \
-If you spot any glitches please let us know on phone 08169567963 or email hello@sendhut.com"
+BETA_MODE = config('BETA_MODE', default=True, cast=bool)
+
+BETA_MESSAGE = config('BETA_MESSAGE', default="We're not quite ready yet, but we'd love you to give it a try. \
+If you spot any glitches please let us know on phone 08169567963 or email hello@sendhut.com")
 
 LOGIN_URL = '/login'
 

@@ -2,7 +2,7 @@ from django.conf import settings
 
 from djmoney.money import Money
 
-from .models import GroupCart, GroupCartMember, Vendor
+from .models import GroupCart, GroupCartMember, Store
 from sendhut.api.serializers import (
     GroupCartSerializer, GroupCartMemberSerializer
 )
@@ -11,11 +11,11 @@ from sendhut.api.serializers import (
 class GroupOrder:
 
     @classmethod
-    def create(cls, request, vendor_slug, limit=None):
-        vendor = Vendor.objects.get(slug=vendor_slug)
+    def create(cls, request, store_slug, limit=None):
+        store = Store.objects.get(slug=store_slug)
         group_cart = GroupCart.objects.create(
             owner=request.user,
-            vendor=vendor,
+            store=store,
             monetary_limit=limit
         )
         member = GroupCartMember.objects.create(
@@ -73,13 +73,13 @@ class GroupOrder:
         request.session.modified = True
 
     @classmethod
-    def get_by_vendor(cls, request, vendor_uuid):
-        return next((v for k, v in cls.get(request).items() if v['vendor'] == str(vendor_uuid)), {})
+    def get_by_store(cls, request, store_uuid):
+        return next((v for k, v in cls.get(request).items() if v['store'] == str(store_uuid)), {})
 
     @classmethod
     def cancel(cls, request, token):
         group_cart = GroupCart.objects.get(token=token)
-        slug = group_cart.vendor.slug
+        slug = group_cart.store.slug
         group_cart.delete()
         GroupOrder.end_session(request, token)
         return slug

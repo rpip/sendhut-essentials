@@ -2,7 +2,7 @@ from rest_framework import viewsets
 
 from sendhut.accounts.models import User, Address
 from sendhut.lunch.models import (
-    Vendor, Item, Order, GroupCart
+    Store, Item, Order, GroupCart
 )
 
 from . import serializers
@@ -18,9 +18,9 @@ class AddressViewSet(viewsets.ModelViewSet):
     queryset = Address.objects.all()
 
 
-class VendorViewSet(viewsets.ModelViewSet):
-    serializer_class = serializers.VendorSerializer
-    queryset = Vendor.objects.all()
+class StoreViewSet(viewsets.ModelViewSet):
+    serializer_class = serializers.StoreSerializer
+    queryset = Store.objects.all()
     lookup_field = 'slug'
 
 
