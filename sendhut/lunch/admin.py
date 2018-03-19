@@ -77,8 +77,9 @@ class StoreAdmin(BaseModelAdmin):
     raw_id_fields = ('banner', 'logo')
 
     def get_banner_img(self, obj):
-        t = get_thumbnail(obj.banner.image, "128x128", crop="center")
-        return mark_safe('<img src="{}">'.format(t.url))
+        if obj.banner:
+            t = get_thumbnail(obj.banner.image, "128x128", crop="center")
+            return mark_safe('<img src="{}">'.format(t.url))
 
 
 @admin.register(Menu)
