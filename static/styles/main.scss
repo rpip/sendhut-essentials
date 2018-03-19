@@ -201,7 +201,7 @@ main {
   .menu-item {
     border: 1px solid darken($grey, .5);
     @include rem(margin-bottom, 20px);
-    @include rem(margin-right, 10px);
+    @include rem(margin-right, 30px);
     cursor: pointer;
     &:hover {
       background-color: $light-grey;
