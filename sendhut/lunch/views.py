@@ -248,7 +248,7 @@ def cart_summary(request):
 def cart_reload(request):
     template = 'lunch/cart_summary.html'
     ref = request.GET.get('cart_ref')
-    if ref:
+    if ref and ref != 'undefined':
         cart = GroupMemberCart(request, ref)
         context = cart.build_cart()
         context['group_cart'] = cart.member.group_cart
