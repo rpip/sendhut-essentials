@@ -17,10 +17,11 @@ from .models import (
 
 
 def thumbnail(obj):
-    img = obj.image if isinstance(obj, Image) else obj.image.image
-    if img:
-        t = get_thumbnail(img, "128x128", crop="center")
-        return mark_safe('<img src="{}">'.format(t.url))
+    if obj.image:
+        img = obj.image if isinstance(obj, Image) else obj.image.image
+        if img:
+            t = get_thumbnail(img, "128x128", crop="center")
+            return mark_safe('<img src="{}">'.format(t.url))
     return None
 
 
