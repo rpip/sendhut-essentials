@@ -72,7 +72,7 @@ class StoreAdmin(BaseModelAdmin):
         'display'
     )
     list_filter = ('created', 'verified')
-    search_fields = ('name',)
+    search_fields = ('name', 'address', 'phone')
     actions = [toggle_display]
     raw_id_fields = ('banner', 'logo')
 
