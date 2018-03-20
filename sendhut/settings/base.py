@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'templated_email',
     'safedelete',
     'rest_framework',
+    'multiupload',
 
     'sendhut.accounts',
     'sendhut.lunch'

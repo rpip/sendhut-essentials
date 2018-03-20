@@ -5,7 +5,7 @@ from jsonfield import JSONField
 
 # from .soft_delete import SoftDeletionModel
 from safedelete.models import SafeDeleteModel
-from safedelete.models import SOFT_DELETE_CASCADE
+from safedelete.models import SOFT_DELETE_CASCADE, HARD_DELETE
 
 
 class UpdateMixin(object):
@@ -34,6 +34,9 @@ class BaseModel(SafeDeleteModel, UpdateMixin):
         default=uuid4, blank=True,
         editable=False, unique=True
     )
+
+    def hard_delete(self):
+        self.delete(force_policy=HARD_DELETE)
 
     class Meta:
         abstract = True  # Set this model as Abstract

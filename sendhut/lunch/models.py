@@ -9,6 +9,7 @@ from django.conf import settings
 from taggit.managers import TaggableManager
 from djmoney.models.fields import MoneyField
 from sorl.thumbnail import ImageField
+from sorl.thumbnail import get_thumbnail
 from jsonfield import JSONField
 
 from sendhut.utils import (
@@ -231,7 +232,9 @@ class Image(BaseModel):
     ONE_DAY = 60 * 60 * 24
 
     image = ImageField(upload_to=image_upload_path)
-    thumbnail_path = models.CharField(max_length=200)
+
+    # TODO(yao): delete from cache and index
+    # from sorl.thumbnail import delete: delete(my_file)
 
     class Meta:
         db_table = "image"
@@ -240,6 +243,12 @@ class Image(BaseModel):
         pieces = [six.text_type(x) for x in divmod(int(timestamp.strftime('%s')), ONE_DAY)]
         pieces.append(uuid4().hex)
         return u'/'.join(pieces)
+
+    def thumb_sm(self):
+        return get_thumbnail(self.image, '128x128', crop='center')
+
+    def thumb_lg(self):
+        return get_thumbnail(self.image, '585x312', crop='center')
 
     def __str__(self):
         return str(self.id)

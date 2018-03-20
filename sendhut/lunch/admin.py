@@ -3,11 +3,13 @@ from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.admin.widgets import AdminFileWidget
 from django.utils.safestring import mark_safe
+from django.shortcuts import get_object_or_404
 from django.forms import ModelForm
 
 from safedelete.admin import SafeDeleteAdmin, highlight_deleted
 from sorl.thumbnail.admin import AdminImageMixin
 from sorl.thumbnail import get_thumbnail
+from multiupload.admin import MultiUploadAdmin
 
 from .models import (
     Store, Menu, Item, ItemVariant, Image,
@@ -104,7 +106,7 @@ class ImageForm(ModelForm):
 
 
 @admin.register(Image)
-class ImageAdmin(BaseModelAdmin, AdminImageMixin):
+class ImageAdmin(BaseModelAdmin, MultiUploadAdmin):
     list_display = (
         'id',
         'created',
@@ -112,6 +114,28 @@ class ImageAdmin(BaseModelAdmin, AdminImageMixin):
     )
     list_filter = ('created',)
     form = ImageForm
+    change_form_template = 'multiupload/change_form.html'
+    change_list_template = 'multiupload/change_list.html'
+    multiupload_template = 'multiupload/upload.html'
+    multiupload_list = True
+    multiupload_form = True
+    # min allowed filesize for uploads in bytes
+    multiupload_minfilesize = 0
+    # tuple with mimetype accepted
+    multiupload_acceptedformats = ("image/jpeg", "image/pjpeg", "image/png",)
+
+    def process_uploaded_file(self, uploaded, object, request):
+        f = self.model.objects.create(image=uploaded)
+        return {
+            'url': f.thumb_lg().url,
+            'thumbnail_url': f.thumb_sm().url,
+            'id': f.id,
+            'name': f.image.name
+        }
+
+    def delete_file(self, pk, request):
+        obj = get_object_or_404(self.queryset(request), pk=pk)
+        obj.delete()
 
 
 class ItemVariantInline(admin.TabularInline):
