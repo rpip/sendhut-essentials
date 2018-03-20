@@ -88,7 +88,7 @@ def search(request, tag):
     context = {
         'page_title': 'search',
         'search_term': utils.unslugify(tag),
-        'restaurants': results
+        'restaurants': results.distinct()
     }
     return render(request, 'lunch/search.html', context)
 
