@@ -58,13 +58,15 @@ def send_phone_verification(number, code):
 
 
 def send_order_confirmation(number, order):
+    "Receive a text message when you place an order"
     message = """
     Thanks for ordering. Your order will be delivered at {} to {}.
     """.format(order.delivery_time, order.delivery_address)
     _send_sms(number, message)
 
 
-def send_rider_update(phone):
+def send_delivery_update(phone):
+    "Receive text message updates when your order is being delivered"
     pass
 
 

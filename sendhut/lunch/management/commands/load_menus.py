@@ -2,6 +2,7 @@ import json
 from pathlib import Path
 from random import shuffle, choice
 
+import yaml
 from django.core.management.base import BaseCommand, CommandError
 from django.utils.text import slugify
 from sendhut.lunch.models import Store, Menu, Item, Image, ItemVariant
@@ -17,10 +18,15 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument('--limit', type=int, default=STORES_LIMIT)
         parser.add_argument('--with-images', type=bool, default=False)
+        parser.add_argument('-f', '--file', type=str, action='append')
 
     def handle(self, *args, **options):
         limit = options['limit']
         with_images = options['with_images']
+        menu_files = options['file']
+        if menu_files:
+            return self.load_from_menus(menu_files, with_images)
+
         self.stdout.write(self.style.SUCCESS('Loading JSON data'))
         if with_images:
             ImageFactory.create_batch(12)
@@ -28,6 +34,15 @@ class Command(BaseCommand):
         create_lagos_stores(limit, with_images=with_images)
 
         self.stdout.write(self.style.SUCCESS('DONE'))
+
+    def load_from_menus(self, menu_files, with_images=False):
+        for f in menu_files:
+            with open(f) as _f:
+                data = yaml.load(_f)
+                # add 'name' key for menu to match scrapped data format
+                data['menus'] = [dict({'name': k}, **v) for k, v in data['menus'].items()]
+                self.stdout.write(self.style.SUCCESS('CREATING {}'.format(data['name'])))
+                add_store(data, with_images=with_images)
 
 
 def create_lagos_stores(n=STORES_LIMIT, with_images=False):
@@ -57,8 +72,8 @@ def add_store(data, with_images=False):
     name = data.pop('name')
     address = data.pop('address')
     menus = data.pop('menus')
-    cuisines = data.pop('cuisines', [])
-    store = Store.objects.create(
+    cuisines = data.pop('cuisines', data.pop('tags', []))
+    store, _ = Store.objects.get_or_create(
         name=name,
         address=address,
         banner=choice(images) if with_images else None,
@@ -67,17 +82,17 @@ def add_store(data, with_images=False):
     store.tags.add(*[slugify(x) for x in cuisines])
     # menus -> Item -> OptionGroup -> Options
     for m in menus:
-        menu = Menu.objects.create(
+        menu, _ = Menu.objects.get_or_create(
             name=m['name'],
             store=store,
-            info=m['description']
+            info=m.get('description')
         )
         for x in m['items']:
             variants = x.pop('variants', [])
             item = Item.objects.create(
-                name=x.pop('title'),
-                price=x.pop('amount'),
-                description=x.pop('description'),
+                name=x.pop('title', x.pop('name')),
+                price=x.pop('amount', x.pop('price')),
+                description=x.pop('description', ''),
                 menu=menu,
                 image=choice(images) if with_images else None,
                 metadata=x

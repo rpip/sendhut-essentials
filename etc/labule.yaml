@@ -1,0 +1,160 @@
+#Labule Resturant Menu
+name: Labule
+cuisines:
+  - local
+  - nigerian
+  - african
+address: 3A Admiralty Rd, Lekki Phase 1, Lagos
+phone: 0813 303 6958
+menus:
+  Main Meals:
+    description: ""
+    items:
+      - name: Jollof Rice
+        price: 500
+      - name: Fried Rice
+        price: 500
+      - name: Ofada Rice
+        price: 400
+      - name: Rice & Beans
+        price: 600
+      - name: Spaghetti
+        price: 500
+      - name: Coconut Rice
+        price: 600
+      - name: Beans
+        price: 400
+      - name: Ewa Agonyi
+        price: 400
+      - name: Yam pottage
+        price: 500
+      - name: Fried Croaker
+        price: 900
+      - name: Fried Hake
+        price: 500
+      - name: Fried Titus
+        price: 500
+  Swallow:
+    items:
+      - name: Amala
+        price: 200
+      - name: Eba
+        price: 150
+      - name: Pounded/Poundo Yam
+        price: 300
+      - name: Fufu
+        price: 150
+      - name: Wheat
+        price: 200
+      - name: Tuwo
+        price: 200
+  Sauces:
+    items:
+      - name: Ofada Sauce
+        price: 500
+      - name: Fish Sauce
+        price: 200
+      - name: Corned Beef Sauce
+        price: 300
+      - name: Shredded Smoked fish Sauce
+        price: 200
+      - name: Fried Egg
+        price: 100
+      - name: Boiled Egg
+        price: 200
+  Drinks:
+    items:
+      - name: Water
+        price: 150
+      - name: Pet Drink
+        price: 250
+      - name: Zobo
+        price: 200
+      - name: Kunu
+        price: 200
+      - name: Hollandia Yoghurt
+        price: 400
+      - name: Fab Health Drinks
+        price: 1000
+  Breakfast Meals & Sides:
+    items:
+      - name: Boiled Yam
+        price: 100
+      - name: Boiled Plantain
+        price: 100
+      - name: Akara
+        price: 200
+      - name: Moi Moi
+        price: 250
+      - name: Plantain
+        price: 200
+      - name: Pap(Ogi)
+        price: 200
+      - name: Quaker Oats
+        price: 300
+  Vegetables:
+    items:
+      - name: Plantain Veg
+        price: 800
+      - name: Efo Riro
+        price: 500
+      - name: Egusi
+        price: 500
+      - name: Edikaikong
+        price: 500
+      - name: Affang
+        price: 500
+      - name: White Soup
+        price: 500
+      - name: Bitter Leaf Soup
+        price: 500
+  Draw Soup:
+    items:
+      - name: Ogbono
+        price: 300
+      - name: Mixed Okro
+        price: 400
+      - name: Seafood Okro
+        price: 1800
+  Fish:
+    items:
+      - name: Tilapia
+        price: 1500
+      - name: Barracuda/Shiny Nose
+        price: 1500
+      - name: Croaker
+        price: 1000
+      - name: Stock Fish(Panla)
+        price: 1500
+      - name: Smoked Catfish
+        price: 1500
+      - name: Smoked Panla
+        price: 1500
+  Chicken & Turkey:
+    items:
+      - name: Fried Chicken
+        price: 800
+      - name: Turkey
+        price: 800
+      - name: Smoked Chicken
+        price: 800
+  Assorted Meat(Orishii):
+    items:
+      - name: Assorted Meat
+        price: 400
+      - name: Beef
+        price: 300
+      - name: Shaki
+        price: 400
+      - name: White Ponmo
+        price: 250
+      - name: Black Ponmo
+        price: 250
+      - name: Cow Leg
+        price: 700
+      - name: Cow Tail
+        price: 600
+      - name: Goat Meat
+        price: 700
+      - name: Peppered Snail Meat
+        price: 900
