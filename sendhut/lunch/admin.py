@@ -94,7 +94,7 @@ class StoreAdmin(BaseModelAdmin, nested_admin.NestedModelAdmin):
     search_fields = ('name', 'address', 'phone')
     actions = [toggle_display]
     raw_id_fields = ('banner', 'logo')
-    inlines = [MenuInline]
+    #inlines = [MenuInline]
 
     def get_banner_img(self, obj):
         if obj.banner:
