@@ -7,9 +7,9 @@ from django.shortcuts import get_object_or_404
 from django.forms import ModelForm
 
 from safedelete.admin import SafeDeleteAdmin, highlight_deleted
-from sorl.thumbnail.admin import AdminImageMixin
 from sorl.thumbnail import get_thumbnail
 from multiupload.admin import MultiUploadAdmin
+import nested_admin
 
 from .models import (
     Store, Menu, Item, ItemVariant, Image,
@@ -53,8 +53,25 @@ class BaseModelAdmin(SafeDeleteAdmin):
         return tuple(self.list_filter) + self._list_filter
 
 
+class ItemInline(nested_admin.NestedTabularInline):
+
+    model = Item
+    exclude = ('metadata', 'deleted', 'slug', 'price_currency',)
+    #fields = ['name', 'items']
+    extra = 0
+
+
+class MenuInline(nested_admin.NestedStackedInline):
+
+    model = Menu
+    exclude = ('metadata', 'deleted')
+    #fields = ['name', 'items']
+    extra = 0
+    inlines = [ItemInline]
+
+
 @admin.register(Store)
-class StoreAdmin(BaseModelAdmin):
+class StoreAdmin(BaseModelAdmin, nested_admin.NestedModelAdmin):
 
     def toggle_display(modeladmin, request, queryset):
         for x in queryset:
@@ -77,6 +94,7 @@ class StoreAdmin(BaseModelAdmin):
     search_fields = ('name', 'address', 'phone')
     actions = [toggle_display]
     raw_id_fields = ('banner', 'logo')
+    inlines = [MenuInline]
 
     def get_banner_img(self, obj):
         if obj.banner:

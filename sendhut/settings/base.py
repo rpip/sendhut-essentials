@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'safedelete',
     'rest_framework',
     'multiupload',
+    'nested_admin',
 
     'sendhut.accounts',
     'sendhut.lunch'
