@@ -70,5 +70,9 @@
   </div>
 {% else %}
   <div class="clearfix"></div>
-  <h6 class="text-muted empty-cart-msg">Your basket is empty</h6>
+  <img src="{% static 'images/empty-cart.svg' %}" style="width: 300px; padding: 30px"/>
+  <div class="empty-cart-msg">
+    <h5 class="text-mute bold">Your basket is empty</h5>
+    <span class="text-muted mx-auto">Start adding meals!</span>
+  </div>
 {% endif %}

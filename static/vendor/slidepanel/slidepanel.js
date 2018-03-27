@@ -16,6 +16,7 @@
 
   Slidepanel.prototype.init = function() {
 
+    Document.slidepanel = this;
     var base = this;
 
     if ($('#slidepanel').length == 0) {

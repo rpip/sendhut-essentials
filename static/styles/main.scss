@@ -267,15 +267,16 @@ main {
 
   .close {
     cursor: pointer;
-    @include rem(font-size, 1.8rem);
+    @include rem(font-size, 2.6rem !important);
+    @include rem(padding-right, 2rem);
     &:hover {
       font-weight: bold;
     }
+
   }
 
   .empty-cart-msg {
     @include rem(font-size, 17px);
-    @include rem(margin-top, 150px);
     @include rem(padding, 40px);
   }
 

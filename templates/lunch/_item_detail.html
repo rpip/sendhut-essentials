@@ -75,17 +75,23 @@
                   {% if cart_line %}value="{{ cart_line.data.note }}"{% endif %}>
          </div>
          <hr>
-         <div class="input-group number-spinner mb-2 mr-sm-2 float-left"
-              style="width: 150px; height: 37px">
-              <button class="btn btn-default minus" data-dir="dwn"></button>
-              <input type="text" class="form-control text-center" name="quantity"
-                     value="{% if cart_line %}{{ cart_line.quantity }}{% else %}1{% endif %}">
-              <button class="btn btn-default plus" data-dir="up"></button>
+         <div class="row">
+         <div class="col-sm">
+           <div class="input-group number-spinner mb-2 mr-sm-2"
+                style="width: 150px; height: 37px">
+             <button class="btn btn-default minus" data-dir="dwn"></button>
+             <input type="text" class="form-control text-center" name="quantity"
+                    value="{% if cart_line %}{{ cart_line.quantity }}{% else %}1{% endif %}">
+             <button class="btn btn-default plus" data-dir="up"></button>
+           </div>
          </div>
-         <button type="submit" class="btn btn-primary float-right" id="add-to-cart"
-                 data-dismiss="modal">
-           Add to Order - {{ item.price }}
-         </button>
+         <div class="col-sm">
+           <button type="submit" class="btn btn-primary" id="add-to-cart"
+                   data-dismiss="modal">
+             Add to Order - {{ item.price }}
+           </button>
+         </div>
+         </div>
        </form>
      </div>
 </div>
