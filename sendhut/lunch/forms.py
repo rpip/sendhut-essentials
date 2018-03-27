@@ -31,4 +31,7 @@ class PartnerSignupForm(ModelForm):
     class Meta:
         # TODO(yao): map to Partner/Merchant
         model = Partner
-        fields = ['name', 'business_name', 'phone', 'email']
+        fields = ['name', 'business_name', 'phone', 'email', 'has_fleets']
+        labels = {
+            'has_fleets': 'Do you provide your own delivery drivers?'
+        }

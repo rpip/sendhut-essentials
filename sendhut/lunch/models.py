@@ -268,6 +268,7 @@ class OptionGroup(BaseModel):
     - Pizza sizes
     - Soups
     """
+    # TODO(yao): better error: You have selected too few options for "Choose Your Size"
     name = models.CharField(max_length=120)
     item = models.ForeignKey(
         Item,

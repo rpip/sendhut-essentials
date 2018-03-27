@@ -1,3 +1,17 @@
+"""
+TODO(yao): add user notifications settings
+
+- SMS Order Confirmations
+  Receive a text message when you place an order
+
+- SMS Delivery Notifications
+  Receive text message updates when your order is being delivered
+
+Messages:
+
+- "Today's lunch is from Debonairs! See full menu at ..."
+- Thanks! Your order has been placed. We'll text you once it's delivered.
+"""
 from django.conf import settings
 from django.urls import reverse
 from django.contrib.sites.models import Site
