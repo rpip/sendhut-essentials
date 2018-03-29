@@ -1,0 +1,10 @@
+<!-- Header -->
+<mj-head>
+  <mj-attributes>
+    <mj-all font-family="sans-serif" font-size="16px" color="#626262" />
+    <mj-button background-color="#F45E43" color="#fff" font-size="14px" />
+  </mj-attributes>
+  <mj-style>
+    .heading { padding-top: 15px; text-align: center; font-style: italic; font-size: 18px; font-family: "serif"; font-weight: "bold"}
+  </mj-style>
+</mj-head>

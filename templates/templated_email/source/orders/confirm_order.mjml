@@ -1,0 +1,28 @@
+<mjml>
+  <mj-include path="../shared/header.mjml" />
+  <mj-body>
+    <mj-container background-color="#eee">
+      <mj-include path="../shared/logo-header.mjml" />
+      <mj-section background-url="{{ banner_image_url }}" background-size="cover" background-repeat="no-repeat">
+        <mj-column>
+          <!-- Spacer component, used to give height to the background image. -->
+          <mj-spacer height="300px" />
+        </mj-column>
+      </mj-section>
+      <!-- Intro Section -->
+      <mj-section background-color="#fff">
+        <mj-column width="">
+          <mj-text>
+            <p>Hi {{ recipiet.name }},</p>
+          </mj-text>
+          <mj-text>
+          <p>Your order has been placed. {{ store.name }} is preparing your order now.</p>
+          <p>We'll text you once it's delivered.</p>
+          </mj-text>
+        </mj-column>
+      </mj-section>
+      <!-- Footer -->
+      <mj-include path="../shared/footer.mjml" />
+    </mj-container>
+  </mj-body>
+</mjml>

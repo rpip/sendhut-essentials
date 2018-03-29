@@ -1,0 +1,16 @@
+#! /bin/bash
+
+echo "----------------------------------------------------------"
+echo "Compiling MJML templates..."
+echo "----------------------------------------------------------"
+
+mkdir -p templates/templated_email/compiled && \
+find templates -name "*.mjml" -not -path \
+     "templates/templated_email/source/*partials/*" -not -path \
+     "templates/templated_email/source/*shared/*" \
+     -exec ./static/node_modules/.bin/mjml -l skip {} \
+     -o templates/templated_email/compiled/ \;
+
+echo "----------------------------------------------------------"
+echo "DONE..."
+echo "----------------------------------------------------------"

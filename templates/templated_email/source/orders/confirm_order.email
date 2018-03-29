@@ -1,0 +1,19 @@
+{% block subject %}
+  Sendhut - Order confirmed
+{% endblock %}
+
+{% block plain %}
+  Hi {{recipient.name}},
+
+  Your order has been placed. {{ store.name }} is preparing your order now.
+
+  We'll text you once it's delivered.
+
+  If you have any questions or concerns, you can just reply to this email or write to us at hello@sendhut.com.
+
+  As always, thanks for using Sendhut!,
+  Team Sendhut
+{% endblock %}
+{% block html %}
+  {% include 'templated_email/compiled/confirm_order.html' %}
+{% endblock %}

@@ -14,7 +14,7 @@
     "deploy": "gulp deploy",
     "test": "ava --tap | tap-nyan",
     "heroku-postbuild": "npm run build-emails",
-    "build-emails": "mkdir -p templates/templated_email/compiled/ && find templates -name \"*.mjml\" -not -path \"templates/templated_email/source/*partials/*\" -not -path \"templates/templated_email/source/*shared/*\" -exec ./node_modules/.bin/mjml -l skip {} -o templates/templated_email/compiled/ \\;"
+    "build-emails": "mkdir -p ../templates/templated_email/compiled/ && find ../templates -name \"*.mjml\" -not -path \"../templates/templated_email/source/*partials/*\" -not -path \"../templates/templated_email/source/*shared/*\" -exec ./node_modules/.bin/mjml -l skip {} -o ../templates/templated_email/compiled/ \\;"
   },
   "author": "Maurizio Mangione",
   "license": "MIT",
@@ -28,6 +28,7 @@
     "gulp-size": "^2.1.0",
     "jquery": "^3.2.1",
     "js-cookie": "^2.2.0",
+    "mjml": "^4.0.3",
     "popper.js": "1.12.6",
     "sass-rem": "^2.0.0",
     "scrollpos-styler": "^0.7.0",

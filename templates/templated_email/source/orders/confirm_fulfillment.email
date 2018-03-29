@@ -1,0 +1,21 @@
+{% block subject %}
+  Your invoice from Sendhut.
+{% endblock %}
+
+{% block plain %}
+
+  Thanks for choosing Sendhut, {{ recipient.name }}.
+
+  Receipt:
+  {% for line in order %}
+    {{ line.item.name }} x {{ line.quantity }}, {{ line.price }}
+  {% endfor %}
+
+  Enjoy!
+
+  Warm regards,
+  Team Sendhut
+{% endblock %}
+{% block html %}
+  {% include 'templated_email/compiled/confirm_fulfillment.html' %}
+{% endblock %}

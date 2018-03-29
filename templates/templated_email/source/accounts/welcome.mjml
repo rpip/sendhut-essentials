@@ -1,0 +1,63 @@
+<mjml>
+  <mj-include path="../shared/header.mjml" />
+  <mj-body>
+    <mj-container background-color="#eee">
+      <mj-include path="../shared/logo-header.mjml" />
+      <mj-section background-url="{{ banner_image_url }}" background-size="cover" background-repeat="no-repeat">
+        <mj-column>
+          <!-- Spacer component, used to give height to the background image. -->
+          <mj-spacer height="300px" />
+        </mj-column>
+      </mj-section>
+      <!-- Intro Section -->
+      <mj-section background-color="#fff">
+        <mj-column width="">
+          <mj-text>
+            <p>Hi {{ recipiet.name }},</p>
+          </mj-text>
+          <mj-text>
+            Thanks for choosing Sendhut, we're happy you're here.
+          </mj-text>
+          <mj-text>
+            With Sendhut, you can request delivery from your favourite restaurants or stores, or send a last-minute birthday gift to your friend.
+          </mj-text>
+        </mj-column>
+      </mj-section>
+
+      <!-- Popular products -->
+
+      <mj-section background-color="#fafafa">
+        <mj-column>
+
+          <mj-text>
+            <p class="heading">We Recommend</p>
+          </mj-text>
+
+        </mj-column>
+      </mj-section>
+      <mj-section background-color="#fff" padding="0 10px 10px">
+        <mj-column>
+
+          <mj-image src="{{ store_image_url_1 }}" padding-left="10px" padding-right="10px" />
+
+          <mj-image src="{{ store_image_url_2 }}" padding-left="10px" padding-right="10px" />
+
+        </mj-column>
+        <mj-column>
+
+          <mj-image src="{{ store_image_url_3 }}" padding-left="10px" padding-right="10px" />
+
+          <mj-text align="center" font-size="14" padding-top="15px" padding-bottom="10px">
+            <p style="max-width: 400px">{{ order_now_message }}</p>
+          </mj-text>
+
+          <mj-button padding-top="0" padding-bottom="15" href="{{ site_url }}">Order Now</mj-button>
+
+        </mj-column>
+      </mj-section>
+
+      <!-- Footer -->
+      <mj-include path="../shared/footer.mjml" />
+    </mj-container>
+  </mj-body>
+</mjml>

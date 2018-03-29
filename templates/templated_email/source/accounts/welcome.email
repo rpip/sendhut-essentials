@@ -1,5 +1,3 @@
-{% load i18n %}
-
 {% block subject %}
   Welcome to Sendhut, {{recipient.name}}!
 {% endblock %}
@@ -7,11 +5,15 @@
 {% block plain %}
   Hi {{recipient.name}},
 
-  Thanks for choosing Sendhut, we're happy you’re here.
+  Thanks for choosing Sendhut, we're happy you're here.
 
   With Sendhut, you can request lunch delivery across Lagos. Surprise your team in another office with lunch from a popular local spot, or send a last-minute birthday gift to your friend.
 
-  Making your life easier is our top priority. If you have any questions or concerns, we're here to help.
+  If you have any questions or concerns, you can just reply to this email or write to us at hello@sendhut.com.
 
+  Thank You,
   Team Sendhut
+{% endblock %}
+{% block html %}
+  {% include 'templated_email/compiled/welcome.html' %}
 {% endblock %}

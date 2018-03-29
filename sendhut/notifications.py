@@ -11,6 +11,27 @@ Messages:
 
 - "Today's lunch is from Debonairs! See full menu at ..."
 - Thanks! Your order has been placed. We'll text you once it's delivered.
+
+Sign-offs:
+- As always, thanks for using Sendhut!
+- All the best,
+- Thank You
+
+# email types
+- welcome.mjml
+- spicy.mjml
+  - holidays
+  - special deals
+  - feature release
+  - order confirmed
+
+- order invoice
+
+simple.mjml:
+- feedback
+- reset password
+- sorry
+
 """
 from django.conf import settings
 from django.urls import reverse

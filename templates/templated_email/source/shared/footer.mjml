@@ -1,0 +1,23 @@
+<mj-section background-color="#fff">
+  <mj-column>
+    <mj-text>
+      If you have any questions or concerns, you can just reply to this email or write to us at hello@sendhut.com.
+    </mj-text>
+    <mj-text>
+      <p>Thank You,</p>
+      Team Sendhut
+    </mj-text>
+  </mj-column>
+</mj-section>
+
+<mj-section background-color="#fafafa">
+  <mj-column>
+
+    <mj-text align="center" font-size="14">
+      <p>&copy; 2018 Sendhut</p>
+      <p>
+        House A, Jerry Iriabe, Off Admiralty Way, Lekki Phase 1, Lagos
+      </p>
+    </mj-text>
+  </mj-column>
+</mj-section>
