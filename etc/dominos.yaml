@@ -1,0 +1,147 @@
+#Dominos Menu
+########################################################
+# I included description in some menu items
+########################################################
+name: Dominos\'s Pizza
+cuisines:
+  - Pizza
+locations:
+  - address: 69B Admiralty Way, Lagos, Lekki, Lagos
+    tel: 08099900630
+  - address: 13 Agungi Road, Lekki, Lagos
+    tel: 07056505063
+  - address: VICTORIA ISLAND AJOSE ADEOGUN 1A Ajose Adeogun, Lagos
+    tel: 08090995777
+phone: 07056505054
+menus:
+  Pizza:
+    items:
+      - name: Cheese Base
+        variants:
+          - size: Medium
+            price: 2800
+          - size: Large
+            price: 3800
+      - name: Margarita
+        variants:
+          - size: Medium
+            price: 2900
+          - size: Large
+            price: 3900
+      - name: Classics
+        options:
+          - name: Pepperoni Supreme
+            description: Pepperoni and cheese
+          - name: Veggie Supreme
+            description: Onions, Green Pepper, Mushrooms and Olives
+          - name: BBQ Beef
+            description: Beef, Onions and BBQ Sauce
+          - name: BBQ Chicken
+            description: Grilled Chicken, Onions and BBQ Sauce
+        variants:
+          - size: Medium
+            price: 3100
+          - size: Large
+            price: 4400
+      - name: Favourites
+        options:
+          - name: Chicken Suya
+            description: Chicken Suya, Onions, Green Pepper, Chilli Pepper
+          - name: Deluxe
+            description: Pepperoni Beef Sausage, Onions, Green Pepper & Mushrooms
+          - name: Chicken Tikka
+            description: Grilled Chicken, Green Pepper, Onions, Mushrooms, Corn & Tikka Sauce
+          - name: Tex-Mex
+            description: Marinated Chicken, Green Pepper, Onions and Jalapeno
+        variants:
+          - size: Medium
+            price: 3400
+          - size: Large
+            price: 4800
+      - name: Premiums
+        options:
+          - name: Chicken Bali
+            description: Grilled Chicken, Pineapple, Mushrooms and Chilli Pepper
+          - name: Meatzza
+            description: Pepperoni, Beef and Beef Sausage
+          - name: Chicken Supreme
+            description: Grilled Chicken, Onions, Corn, Green Pepper and Cheddar Cheese
+        variants:
+          - size: Medium
+            price: 3600
+          - size: Large
+            price: 5000
+      - name: Extravaganza
+        options:
+          - name: Extravaganza
+            description: >
+              Pepperoni, Beef Sausage, Beef, Green Pepper, Mushrooms,
+              Onions, Olives and Extra Cheese
+        variants:
+          - size: Medium
+            price: 4000
+          - size: Large
+            price: 5400
+  Side Items:
+    description:
+    items:
+      - name: Breadsticks
+        price: 1000
+        description: Oven Baked breadsticks with dipping sauce
+      - name: Chessy Bread
+        price: 1200
+        description: Oven Baked topped with cheese and served with dipping sauce
+      - name: Chicken Kickers
+        price: 1600
+        description: >
+          Succulent pieces of white chicken breast coated in
+          mild spice and served with dipping sauce
+      - name: Pepperoni Stuffed Chessy Bread
+        price: 1600
+        description: >
+          Oven baked breadsticks stuffed with pepperoni and chilli pepper.
+          Covered with mozzarella, Cheddar and served with dipping sauce
+      - name: Chicken Stuffed Chessy Bread
+        price: 1600
+        description: >
+          Oven baked breadsticks stuffed with chicken, mushroom and corn.
+          Covered with mozzarella, Cheddar and served with dipping sauce
+      - name: Spicy Drum n Lap
+        price: 1600
+        description:  Delicious spicy Drum N Lap and served with dipping sauce
+      - name: Chicken Wings
+        price: 1800
+        description:  Delicious chicken wings Lap and served with dipping sauce
+  Side Items:
+    description:
+    items:
+      - name: Coke
+        variants:
+          - size: 50cl
+            price: 300
+          - size: 1.5 LTR
+            price: 600
+      - name: Fanta
+        variants:
+          - size: 50cl
+            price: 300
+          - size: 1.5 LTR
+            price: 600
+      - name: Sprite
+        variants:
+          - size: 50cl
+            price: 300
+          - size: 1.5 LTR
+            price: 600
+      - name: Coke Zero
+        price: 300
+        description: 50Cl
+      - name: Bitter Lemon
+        price: 300
+        description: 50Cl
+      - name: Eva Water
+        price: 250
+        description: 75Cl
+      - name: Pulpy
+        price: 400
+        description: 40Cl

@@ -60,7 +60,8 @@ class CartLine(ItemLine):
         return self.get_base_price() + self._get_options_total()
 
     def get_base_price(self):
-        return Decimal(self.data['price'])
+        price = self.data['price'] if self.data['price'] else 0
+        return Decimal(price)
 
     def _get_extras(self):
         extras = self.data.get('extras', [])

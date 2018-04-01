@@ -1,0 +1,217 @@
+#Fab Juice Bar Menu
+name: Fab Juice Bar
+cuisines:
+  - Fresh Juice
+  - Milkshakes
+  - Ice cream
+locations:
+  - address: Lekki Store, Circle Mall (Shop 47) Jakande Roundabout, Lekki, Lagos
+    tel: 07056505054
+  - address: Leisure Mall (Beside Shoprite), 97 Adeniran Ogunsanya, Surulere, Lagos
+    tel: 07056505063
+  - address: Novare Mall (Shop C03) Lekki-Epe Expressway, Sangotedo, Lagos
+    tel: 07056505061
+phone: 07056505054
+menus:
+  Sandwiches:
+    items:
+      - name: The Royal Club
+        price: 4840
+        description: >
+          Smoked turkey or chicken, Ham, Bacon, Swiss cheese, Hard boiled eggs, Lettuce,
+          Tomatoes and Mayonnaise served on wheat or white sliced bread
+        Choice:
+          - Smoked Turkey
+          - Chicken
+        Choice:
+          - White sliced bread
+          - Wheat bread
+      - name: Traditional Hot Dog
+        price: 3410
+        description: >
+          Beef hot dog with dijon mustard & ketchup, served on soft white bread
+          or baguette with chili beans and cheddar cheese
+      - name: Chicken Salad Sandwich
+        price: 2860
+        description: Chicken, mayonnaise, tomatoes, lettuce & pickles
+      - name: Tuna Salad Sandwich
+        price: 2860
+        description: Tuna, mayonnaise, tomatoes, lettuce & pickles
+      - name: Cheese Sandwich
+        price: 2860
+        description: American or Swiss cheese, butter, lettuce, tomatoes and ickles
+        choice:
+          - American cheese
+          - Swiss cheese
+      - name: Ham Sandwich
+        price: 3080
+        description: Ham, butter, lettuce, tomatoes and pickles
+        topping:
+          - name: Swiss cheese
+            price: 3,300
+      - name: Salami Sandwich
+        price: 3080
+        description: Salami, ham, cheese, mayonnaise, lettuce, tomatoes and pickles
+        topping:
+          - name: Swiss cheese
+            price: 3,300
+      - name: Italian Sub
+        price: 3300
+        description: Salami, ham, cheese, mayonnaise, lettuce, tomatoes and pickles
+      - name: Egg Mayo & Bacon
+        price: 3080
+        description: Boiled eggs, crispy bacon, mayonnaise, lettuce, tomatoes
+      - name: Turkey Sandwich
+        price: 3080
+        description: Smoked turkey, mayonnaise, lettuce, tomatoes & pickles
+        topping:
+          - name: Swiss cheese
+            price: 3,300
+      - name: Traditional Roast Beef
+        price: 3080
+        description: Roasted beef filet with lettuce, tomatoes, mustard & mayonnaise
+  Salad:
+    items:
+      - name: Chef\'s Salad
+        price: 3960
+        description: Ham, Swiss cheese, Hard boiled eggs, Lettuce, Tomatoes, Cucumber, Corn
+        Choice of dressing:
+          - French
+          - Thousand island
+          - Balsamic Vinaigrette
+          - Ranch Style
+          - Blue Cheese
+          - Lemon mustard
+      - name: Caesar Salad
+        price: 3520
+        description: Crispy romaine lettuce, roasted garlic crutons, parmesan cheese,
+        topping:
+          - name: Special Ceasar dressing with chicken
+            price: 4,400
+      - name: Greek Salad
+        price: 3960
+        description: >
+          An absolute classic, Feta cheese, black olives, lettuce tomatoes,
+          cucumbers, mint with our special lemon mustard dressing
+      - name: Salad Niçoise
+        price: 3960
+        description: Lettuce, tuna, potato, french beans, niçoise black olives, hard boiled eggs, anchovies.
+        Choice of dressing:
+          - Balsamic Vinaigrette
+          - Lemon mustard
+      - name: Santa-Fe Chicken Salad
+        price: 3960
+        description: >
+          Grilled chicken breast, black beans, corn , bite sized avocadoes,
+          lettuce & cheddar cheese, with a sweet lemon dressing
+  Panini Sandwiches:
+    items:
+      - name: Cheese
+        price: 1650
+      - name: Ham &Cheese
+        price: 1650
+      - name: Nutella Chocolate
+        price: 1650
+  Ice Cream:
+    description:
+    items:
+      - name: Chocolat Liégois
+        price: 2750
+        description: Chocolate ice cream topped with whispered cream, coffe sauce & nuts
+      - name: Strawberry Liégois
+        price: 2750
+        description: Strawberry ice cream topped with whispered cream, coffe sauce & nuts
+      - name: Caramel Liégois
+        price: 2750
+        description: Caramel ice cream topped with whispered cream, coffe sauce & nuts
+      - name: Café Liégois
+        price: 2750
+        description: Coffee ice cream topped with whispered cream, coffe sauce & nuts
+      - name: Profiteroles
+        price: 2750
+        description: Choux pastry with vanilla ice cream topped with whispered cream, coffe sauce & nuts
+    Crepes & Pancakes:
+      description:
+      items:
+        - name: Sugar
+          price: 1320
+        - name: Jam Crépe
+          price: 1320
+        - name: Nutella Banana Crépe
+          price: 1540
+        - name: Plain Pancake
+          price: 1540
+          description: topped with Maple syrup
+        - name: Banana Pancake
+          price: 1870
+          description: topped with Maple syrup
+    Milkshakes:
+      description:
+      items:
+        - name: Vanilla
+          price: 1320
+        - name: Chocolate
+          price: 1320
+        - name: Banana
+          price: 1320
+        - name: Strawberry
+          price: 1320
+        - name: Coffee
+          price: 1320
+    Frozen Fruit Drinks:
+      items:
+        - name: Pink Lady
+          price: 2200
+        - name: Takes two to mango
+          price: 2200
+        - name: Tropical Smoothie
+          price: 2200
+    Frozen Coffee Drinks:
+      items:
+        - name: Coffee Delight
+          price: 2750
+        - name: Frappuccino
+          price: 2750
+        - name: Chocobanana frolatte
+          price: 2750
+    Fresh Juices:
+      items:
+        - name: Orange
+          price: 990
+        - name: Pineapple
+          price: 990
+        - name: Fresh seasonal mixed fruit
+          price: 1320
+    Hot Royal Coffee:
+      items:
+        - name: Carame Macchiato
+          price: 1210
+        - name: African Coffee
+          price: 770
+        - name: Coffee
+          variants:
+            - type: Cappuccino
+              price: 935
+            - type: Cappuccino royal
+              price: 1100
+            - type: Espresso
+              price: 660
+            - type: Espresso royal
+              price: 770
+            - type: Espresso double royal
+              price: 990
+            - type: Mocha
+              price: 880
+            - type: Mocha royal
+              price: 990
+        - name: Chocolate
+          variants:
+            - type: Hot Chocolate
+              price: 990
+            - type: Hot Chocolate royal
+              price: 900
+        - name: Tea
+          price: 880
+          choice:
+            - Green tea
+            - Black tea

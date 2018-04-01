@@ -15,7 +15,7 @@ menus:
       - name: Orange
         options:
           - title: "Select size"
-            multi: True
+            multi: false
             items:
               - name: Cup
                 price: 800
@@ -26,7 +26,8 @@ menus:
       - name: Pineapple
         options:
           - title: "Select size"
-            multi: True
+            multi: false
+            required: true
             items:
               - name: Cup
                 price: 800
@@ -37,7 +38,8 @@ menus:
       - name: Watermelon
         options:
           - title: "Select size"
-            multi: True
+            multi: false
+            required: true
             items:
             - name: Cup
               price: 800
@@ -48,7 +50,8 @@ menus:
       - name: Citrus Red Grape fruit
         options:
           - title: "Select size"
-            multi: True
+            multi: false
+            required: true
             items:
             - name: Cup
               price: 1500
@@ -59,7 +62,8 @@ menus:
       - name: White Grape fruit
         options:
           - title: "Select size"
-            multi: True
+            multi: false
+            required: true
             items:
             - name: Cup
               price: 1500
@@ -70,7 +74,8 @@ menus:
       - name: Apple
         options:
           - title: "Select size"
-            multi: True
+            multi: false
+            required: true
             items:
             - name: Cup
               price: 1500
@@ -81,7 +86,8 @@ menus:
       - name: Lemon
         options:
           - title: "Select size"
-            multi: True
+            multi: false
+            required: true
             items:
             - name: Cup
               price: 2500
@@ -94,7 +100,8 @@ menus:
       - name: Watermelon & Pineapple
         options:
           - title: "Select size"
-            multi: True
+            multi: false
+            required: true
             items:
             - name: Cup
               price: 1000
@@ -106,7 +113,8 @@ menus:
         price: null
         options:
           - title: "Select size"
-            multi: True
+            multi: false
+            required: true
             items:
             - name: Cup
               price: 1000
@@ -117,7 +125,8 @@ menus:
       - name: Watermelon & Cucumber
         options:
           - title: "Select size"
-            multi: True
+            multi: false
+            required: true
             items:
             - name: Cup
               price: 1000
@@ -128,7 +137,8 @@ menus:
       - name: Orange & Pineapple
         options:
           - title: "Select size"
-            multi: True
+            multi: false
+            required: true
             items:
             - name: Cup
               price: 1000
@@ -139,7 +149,8 @@ menus:
       - name: Coconut & Pineapple
         options:
           - title: "Select size"
-            multi: True
+            multi: false
+            required: true
             items:
             - name: Cup
               price: 1000
@@ -150,7 +161,8 @@ menus:
       - name: Apple & Carrot
         options:
           - title: "Select size"
-            multi: True
+            multi: false
+            required: true
             items:
             - name: Cup
               price: 1400
@@ -164,7 +176,8 @@ menus:
         description: Pineapple, Apple, Orange and Lime
         options:
           - title: "Select size"
-            multi: True
+            multi: false
+            required: true
             items:
             - name: Cup
               price: 1200
@@ -176,7 +189,8 @@ menus:
         description: Coconut, Pineapple and Orange
         options:
           - title: "Select size"
-            multi: True
+            multi: false
+            required: true
             items:
             - name: Cup
               price: 1200
@@ -188,7 +202,8 @@ menus:
         description: Orange, Tangerine, Grape, Lime and Lemon
         options:
           - title: "Select size"
-            multi: True
+            multi: false
+            required: true
             items:
             - name: Cup
               price: 1200
@@ -200,7 +215,8 @@ menus:
         description: Watermelon, Orange, Pineapple and Lime
         options:
           - title: "Select size"
-            multi: True
+            multi: false
+            required: true
             items:
             - name: Cup
               price: 1200
@@ -212,7 +228,8 @@ menus:
         description: Orange, Apple, Sweet Pear and Ginger
         options:
           - title: "Select size"
-            multi: True
+            multi: false
+            required: true
             items:
             - name: Cup
               price: 1200
@@ -224,7 +241,8 @@ menus:
         description: Lemon, Apple, Pineapple and Ginger
         options:
           - title: "Select size"
-            multi: True
+            multi: false
+            required: true
             items:
             - name: Cup
               price: 1200
@@ -238,7 +256,8 @@ menus:
         description: Apple, Beetroot and Carrot
         options:
           - title: "Select size"
-            multi: True
+            multi: false
+            required: true
             items:
             - name: Cup
               price: 1200
@@ -250,7 +269,8 @@ menus:
         description: Carrot, Spinach, Parsley and Apple
         options:
           - title: "Select size"
-            multi: True
+            multi: false
+            required: true
             items:
             - name: Cup
               price: 1200
@@ -262,7 +282,8 @@ menus:
         description: Cucumber, Celery Pineapple and Apple
         options:
           - title: "Select size"
-            multi: True
+            multi: false
+            required: true
             items:
             - name: Cup
               price: 1200
@@ -274,7 +295,8 @@ menus:
         description: Spinach, Cucumber, Pineapple and Mint leaves
         options:
           - title: "Select size"
-            multi: True
+            multi: false
+            required: true
             items:
             - name: Cup
               price: 1200
@@ -287,7 +309,8 @@ menus:
         description: Carrot, Orange, Celery and Watermelon
         options:
           - title: "Select size"
-            multi: True
+            multi: false
+            required: true
             items:
             - name: Cup
               price: 1200
@@ -301,7 +324,8 @@ menus:
         description: Apple, Banana, Pineapple and Beetroot
         options:
           - title: "Select size"
-            multi: True
+            multi: false
+            required: true
             items:
             - name: Cup
               price: 1200
@@ -313,7 +337,8 @@ menus:
         description: Sour-sop, Pineapple and Apple
         options:
           - title: "Select size"
-            multi: True
+            multi: false
+            required: true
             items:
             - name: Cup
               price: 1200
@@ -325,7 +350,8 @@ menus:
         description: Mango, Apple, Pineapple and Watermelon
         options:
           - title: "Select size"
-            multi: True
+            multi: false
+            required: true
             items:
             - name: Cup
               price: 1200
@@ -337,7 +363,8 @@ menus:
         description: Pineapple, Agbalumo(African Cherry), Red Apple and Banana
         options:
           - title: "Select size"
-            multi: True
+            multi: false
+            required: true
             items:
             - name: Cup
               price: 1200
@@ -349,7 +376,8 @@ menus:
         description: Apple, Banana, Sweet Pear, Pineapple and Watermelon
         options:
           - title: "Select size"
-            multi: True
+            multi: false
+            required: true
             items:
             - name: Cup
               price: 1200
@@ -361,7 +389,8 @@ menus:
         description: Avocado, Pineapple, Sweet Pear and Ginger
         options:
           - title: "Select size"
-            multi: True
+            multi: false
+            required: true
             items:
             - name: Cup
               price: 1200
@@ -375,7 +404,8 @@ menus:
         description: Strawberry, Pineapple and Banana (Choice of berry can be varied)
         options:
           - title: "Select size"
-            multi: True
+            multi: false
+            required: true
             items:
             - name: Cup
               price: 1400
@@ -387,7 +417,8 @@ menus:
         description: Grapes, Pear, Banana and Pineapple
         options:
           - title: "Select size"
-            multi: True
+            multi: false
+            required: true
             items:
             - name: Cup
               price: 1400
@@ -399,7 +430,8 @@ menus:
         description: Kiwi, Banana, Pineapple, Sweet Pear
         options:
           - title: "Select size"
-            multi: True
+            multi: false
+            required: true
             items:
             - name: Cup
               price: 1400
@@ -411,7 +443,8 @@ menus:
         description: Strawberry, Blueberry, Sweet Pear and Pineapple (Choice of berry can be varied)
         options:
           - title: "Select size"
-            multi: True
+            multi: false
+            required: true
             items:
             - name: Cup
               price: 1600
@@ -425,7 +458,8 @@ menus:
         description: Spinach, Bananas, Green Apple and Celery
         options:
           - title: "Select size"
-            multi: True
+            multi: false
+            required: true
             items:
             - name: Cup
               price: 1200
@@ -437,7 +471,8 @@ menus:
         description: Kale, Lettuce, Pineapple and Banana
         options:
           - title: "Select size"
-            multi: True
+            multi: false
+            required: true
             items:
             - name: Cup
               price: 1200
@@ -449,7 +484,8 @@ menus:
         description: Green Apple, Spinach, Avocado and Pineapple
         options:
           - title: "Select size"
-            multi: True
+            multi: false
+            required: true
             items:
             - name: Cup
               price: 1200
@@ -461,7 +497,8 @@ menus:
         description: Kale, Bananas, Celery, Sweet Pear and Lemon
         options:
           - title: "Select size"
-            multi: True
+            multi: false
+            required: true
             items:
             - name: Cup
               price: 1400
@@ -473,7 +510,8 @@ menus:
         description: Strawberry, Lettuce, Banana, Spinach and Ginger (Choice of berry can be varied)
         options:
           - title: "Select size"
-            multi: True
+            multi: false
+            required: true
             items:
             - name: Cup
               price: 1400
@@ -485,7 +523,8 @@ menus:
         description: Kale, Kiwi, Banana, Parsley and Lime
         options:
           - title: "Select size"
-            multi: True
+            multi: false
+            required: true
             items:
             - name: Cup
               price: 1400
@@ -500,7 +539,8 @@ menus:
         description: Bananas, Pear, Pineapple and Yoghurt
         options:
           - title: "Select size"
-            multi: True
+            multi: false
+            required: true
             items:
             - name: Cup
               price: 1200
@@ -512,7 +552,8 @@ menus:
         description: Mango, Pineapple and Yoghurt
         options:
           - title: "Select size"
-            multi: True
+            multi: false
+            required: true
             items:
             - name: Cup
               price: 1200
@@ -524,7 +565,8 @@ menus:
         description: Unsweetened Low Fat Yoghurt Banana, Pineapple, Agbalumo(African Cherry) and Red Apple
         options:
           - title: "Select size"
-            multi: True
+            multi: false
+            required: true
             items:
             - name: Cup
               price: 1200
@@ -536,7 +578,8 @@ menus:
         description: Banana, Pineapple and Yoghurt
         options:
           - title: "Select size"
-            multi: True
+            multi: false
+            required: true
             items:
             - name: Cup
               price: 1200
@@ -551,7 +594,8 @@ menus:
         description: Blueberry, Mango, Frozen Banana, Sweet Pear, Low Fat Unsweetened Yoghurt and Chia Seeds
         options:
           - title: "Select size"
-            multi: True
+            multi: false
+            required: true
             items:
             - name: 12 Oz
               price: 1500
@@ -561,7 +605,8 @@ menus:
         description: Red Apple, Beetroot, Strawberry, Frozen Banana, Low Fat Unsweetened Yoghurt, Coconut and Lime
         options:
           - title: "Select size"
-            multi: True
+            multi: false
+            required: true
             items:
             - name: 12 Oz
               price: 1500
@@ -571,7 +616,8 @@ menus:
         description: Sweet pear, Soursop, Pineapple, Frozen Banana, Low Fat Unsweetened Yoghurt, Coconut Milk and Lime
         options:
           - title: "Select size"
-            multi: True
+            multi: false
+            required: true
             items:
             - name: 12 Oz
               price: 1500
@@ -581,7 +627,8 @@ menus:
         description: Avocado, Frozen Banana, Green Apple, Frozen Pineapple, Lemon Coconut Milk and Almond Milk
         options:
           - title: "Select size"
-            multi: True
+            multi: false
+            required: true
             items:
             - name: 12 Oz
               price: 1500
