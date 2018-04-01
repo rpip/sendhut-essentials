@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "efac2e76f838486f72fb9b346c99b9c6e20a776d269e4812d48d017f43e3cba7"
+            "sha256": "a6f948f8a0a9128dc69f86621c04046fc28bfa9c7c112d2636d464cb0e8db947"
         },
         "host-environment-markers": {
             "implementation_name": "cpython",
@@ -29,17 +29,17 @@
     "default": {
         "boto3": {
             "hashes": [
-                "sha256:a814dab587a30848cc5498e88af40392685be26b8d6578e1f90c270373d19a5d",
-                "sha256:6ea4f4dddf759aa9bd4ce03499ffdd38ff6c1f40b75bc33ef8efcd013e599e3d"
+                "sha256:8ab5e005885f61cbb800331e8f40e44351336bf29d0aceeb2be7c9f6e91fc77e",
+                "sha256:c19170522d8d5b2282f50aeb1388d35ecc2f79ff023015fdc969d9a4f3251a3b"
             ],
-            "version": "==1.6.13"
+            "version": "==1.6.20"
         },
         "botocore": {
             "hashes": [
-                "sha256:6e685eca0e9a7856a1b3414b10b88805676f1782db99814ba2b4ddfa34e979db",
-                "sha256:e5e62140fc06750efcb600ffaabc65167a84f865fbb16c854cc01284c0b8da77"
+                "sha256:637820dd036d0d1c90f0008f423233536705a3eac80eb555fb8b0f02d1a0cc9d",
+                "sha256:cb8a4218cbbac1244b6ef8f12143d35e08f1ec613b154cb59bde6fb752d513d4"
             ],
-            "version": "==1.9.13"
+            "version": "==1.9.20"
         },
         "certifi": {
             "hashes": [
@@ -83,6 +83,13 @@
             ],
             "version": "==0.4.2"
         },
+        "dj-email-url": {
+            "hashes": [
+                "sha256:de8e062c1483d1bfc7a9a185c6601f9c822087bd529756989f81f1dc82855cee",
+                "sha256:84f32673156f58d740a14cab09f04ca92a65b2c8881b60e31e09e67d7853e544"
+            ],
+            "version": "==0.1.0"
+        },
         "django": {
             "hashes": [
                 "sha256:75ce405d60f092f6adf904058d023eeea0e6d380f8d9c36134bac73da736023d",
@@ -116,6 +123,12 @@
                 "sha256:64dae9356ac4f5f72ba5b2d7fd1a260612c74561b55b873553e2f2594bc15f3d"
             ],
             "version": "==1.0.7"
+        },
+        "django-mailgun": {
+            "hashes": [
+                "sha256:d795076d18c0aa66fbac37f8b428f036417a3ec7ecc2d6499c021d318d60bfff"
+            ],
+            "version": "==0.9.1"
         },
         "django-money": {
             "hashes": [
@@ -158,10 +171,10 @@
         },
         "django-storages": {
             "hashes": [
-                "sha256:ab6be1538cf29511400bce83d0e5ca74d2e935cad82086063bcf5e7edacc1661",
-                "sha256:bc8e4c1f483608c5dd1212072fd41042f3ef2d2a2896ec4fb12dbc62c82996a0"
+                "sha256:f1dd5668a4df9a23aff56c8321ea3aac3fda23d9d17473158d308d1b13e5363e",
+                "sha256:7339070cf0c8042f5a885783a0a909175a8dbb68e7f5697d597571c830a460c4"
             ],
-            "version": "==1.6.5"
+            "version": "==1.6.6"
         },
         "django-taggit": {
             "hashes": [
@@ -219,6 +232,13 @@
             ],
             "markers": "python_version == '2.6' or python_version == '2.7'",
             "version": "==3.1.1"
+        },
+        "geopy": {
+            "hashes": [
+                "sha256:2450f7f85b1fe980b0a3f2e09117ae1ace34e4b9034d52e2e782f486a5a8036c",
+                "sha256:d53a31df9cfb5591fa96a35da9f02ef3c67241e3c32d7cd82d4d94211d46d6a0"
+            ],
+            "version": "==1.12.0"
         },
         "gunicorn": {
             "hashes": [

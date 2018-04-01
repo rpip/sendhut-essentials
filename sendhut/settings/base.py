@@ -5,6 +5,7 @@ from django.contrib.messages import constants as messages
 
 from decouple import config, Csv
 import dj_database_url
+import dj_email_url
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = Path(__file__).parent.parent.parent
@@ -212,12 +213,23 @@ THUMBNAIL_REDIS_PORT = REDIS_URL.port
 # THUMBNAIL_DEBUG = True
 
 # Email settings
+# EMAIL_URL = config('EMAIL_URL', default='console://')
 
-EMAIL_HOST = config('EMAIL_HOST', default='localhost')
-EMAIL_PORT = config('EMAIL_PORT', default=1025)
-EMAIL_HOST_USER = config('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
-EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool)
+# email_config = dj_email_url.parse(EMAIL_URL)
+
+# EMAIL_FILE_PATH = email_config['EMAIL_FILE_PATH']
+# EMAIL_HOST_USER = email_config['EMAIL_HOST_USER']
+# EMAIL_HOST_PASSWORD = email_config['EMAIL_HOST_PASSWORD']
+# EMAIL_HOST = email_config['EMAIL_HOST']
+# EMAIL_PORT = email_config['EMAIL_PORT']
+# EMAIL_BACKEND = email_config['EMAIL_BACKEND']
+# EMAIL_USE_TLS = email_config['EMAIL_USE_TLS']
+# EMAIL_USE_SSL = email_config['EMAIL_USE_SSL']
+
+EMAIL_BACKEND = 'django_mailgun.MailgunBackend'
+MAILGUN_ACCESS_KEY = 'key-aae710e87fcc0a628b1fc9fbface936e'
+MAILGUN_SERVER_NAME = 'mg.sendhut.com'
+
 # TODO(yao): personalize email with 'Yao from Sendhut'
 DEFAULT_FROM_EMAIL = 'Yao from Sendhut <hello@sendhut.com>'
 
@@ -227,6 +239,7 @@ JUSIBE_ACCESS_TOKEN = "8dcdee5ff5d7504570ffb0d74e1fc755"
 
 SESSION_SERIALIZER = 'sendhut.utils.JSONSerializer'
 
+DEFAULT_DOMAIN = 'sendhut.com'
 
 RQ_QUEUES = {
     'default': {
@@ -241,3 +254,11 @@ RQ_SHOW_ADMIN_LINK = True
 ENABLE_SSL = False
 
 DEFAULT_CURRENCY = "NGN"
+
+try:
+    site = Site.objects.get_current()
+    site.name = 'Sendhut'
+    site.domain = 'sendhut.com'
+    site.save()
+except:
+    pass

@@ -49,3 +49,6 @@ rq-scheduler = "*"
 multiupload = {git = "git://github.com/gkuhn1/django-admin-multiupload.git"}
 django-nested-admin = "*"
 pyyaml = "*"
+geopy = "*"
+dj-email-url = "*"
+django-mailgun = "*"
