@@ -8,7 +8,6 @@ address: 3A Admiralty Rd, Lekki Phase 1, Lagos
 phone: 0813 303 6958
 menus:
   Main Meals:
-    description: ""
     items:
       - name: Jollof Rice
         price: 500
