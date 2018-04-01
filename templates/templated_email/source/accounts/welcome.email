@@ -1,9 +1,9 @@
 {% block subject %}
-  Welcome to Sendhut, {{recipient.name}}!
+  Welcome to Sendhut, {{recipient.first_name}}!
 {% endblock %}
 
 {% block plain %}
-  Hi {{recipient.name}},
+  Hi {{recipient.first_name}},
 
   Thanks for choosing Sendhut, we're happy you're here.
 

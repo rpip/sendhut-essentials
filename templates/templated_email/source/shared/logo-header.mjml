@@ -1,5 +1,5 @@
 <mj-section background-color="#fff">
   <mj-column>
-    <mj-image align="center" padding="10px" src="https://lh6.googleusercontent.com/ewcvJ6tqgL0yufQAU9O1KG9a_wXaKo5n1qR3FBMCWt_Z3u5ODpGU17GRaur0_2ElnIbwEVM_=w2880-h1678" width="128px"></mj-image>
+    <mj-image align="center" padding="10px" src="{{logo_url}}" width="128px"></mj-image>
   </mj-column>
 </mj-section>

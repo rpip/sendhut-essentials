@@ -13,11 +13,52 @@
       <mj-section background-color="#fff">
         <mj-column width="">
           <mj-text>
-            <p>Hi {{ recipiet.name }},</p>
+            Hi {{ recipient.first_name }},
+            <p>Your order has been placed.</p>
+            <p>We'll text you once it's delivered.</p>
           </mj-text>
+        </mj-column>
+      </mj-section>
+      <!-- Receipt -->
+      <mj-section background-color="#fff">
+        <mj-column>
+          <mj-table>
+            <thead class="table-header-row">
+              <tr>
+                <th>Item</th>
+                <th>Quantity</th>
+                <th>Price</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% if order.group_cart %}
+                {% for member in group_cart.members.all %}
+                  <tr>
+                    <td style="font-weight: bold">{{ member.name }}</td>
+                  </tr>
+                  {% for line in member.cart %}
+                    <tr class="table-item-row">
+                      <td>{{ line.data.name }}</td>
+                      <td>{{ line.quantity }}</td>
+                      <td>{{ line.total }}</td>
+                    </tr>
+                  {% endfor %}
+                {% endfor %}
+              {% else %}
+                {% for line in order %}
+                  <tr class="table-item-row">
+                    <td>{{ line.item.name }}</td>
+                    <td>{{ line.quantity }}</td>
+                    <td>{{ line.price }}</td>
+                  </tr>
+                {% endfor %}
+              {% endif %}
+            </tbody>
+          </mj-table>
           <mj-text>
-          <p>Your order has been placed. {{ store.name }} is preparing your order now.</p>
-          <p>We'll text you once it's delivered.</p>
+            If you have any questions or concerns, you can just reply to this email or write to us at hello@sendhut.com.
+            <p>Thank You,</p>
+            <p>Team Sendhut</p>
           </mj-text>
         </mj-column>
       </mj-section>

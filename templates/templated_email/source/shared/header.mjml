@@ -2,9 +2,25 @@
 <mj-head>
   <mj-attributes>
     <mj-all font-family="sans-serif" font-size="16px" color="#626262" />
-    <mj-button background-color="#F45E43" color="#fff" font-size="14px" />
+    <mj-button background-color="#2b486c" color="#fff" font-size="14px" />
   </mj-attributes>
   <mj-style>
-    .heading { padding-top: 15px; text-align: center; font-style: italic; font-size: 18px; font-family: "serif"; font-weight: "bold"}
+    .heading {
+      padding-top: 15px;
+      text-align: center;
+      font-size: 18px;
+      font-family: "serif";
+      font-weight: "bold"
+    }
+
+    .no-display { display: none; }
+
+    .no-padding td { padding: 0px; }
+
+    td, th { padding: 7px; text-align: left;}
+
+    .table-header-row { border-bottom: 2px solid #000; }
+
+    .table-item-row { border-bottom: 1px solid #D3D1D0; }
   </mj-style>
 </mj-head>

@@ -13,7 +13,7 @@
       <mj-section background-color="#fff">
         <mj-column width="">
           <mj-text>
-            <p>Hi {{ recipiet.name }},</p>
+            <p>Hi {{ recipient.first_name }},</p>
           </mj-text>
           <mj-text>
             Thanks for choosing Sendhut, we're happy you're here.
@@ -52,10 +52,19 @@
           </mj-text>
 
           <mj-button padding-top="0" padding-bottom="15" href="{{ site_url }}">Order Now</mj-button>
-
         </mj-column>
       </mj-section>
-
+      <mj-section background-color="#fff">
+        <mj-column>
+          <mj-text>
+            If you have any questions or concerns, you can just reply to this email or write to us at hello@sendhut.com.
+          </mj-text>
+          <mj-text>
+            <p>Thank You,</p>
+            Team Sendhut
+          </mj-text>
+        </mj-column>
+      </mj-section>
       <!-- Footer -->
       <mj-include path="../shared/footer.mjml" />
     </mj-container>

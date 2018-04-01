@@ -1,10 +1,10 @@
 {% block subject %}
-  Your invoice from Sendhut.
+  Your invoice from Sendhut
 {% endblock %}
 
 {% block plain %}
 
-  Thanks for choosing Sendhut, {{ recipient.name }}.
+  Thanks for choosing Sendhut, {{ recipient.first_name }}.
 
   Receipt:
   {% for line in order %}
