@@ -183,7 +183,9 @@ class Item(BaseModel):
     name = models.CharField(max_length=240)
     slug = models.CharField(max_length=240)
     description = models.TextField(null=True, blank=True)
-    price = MoneyField(max_digits=10, decimal_places=2, default_currency='NGN')
+    price = MoneyField(
+        max_digits=10, decimal_places=2,
+        default_currency='NGN', null=True, blank=True)
     dietary_labels = ArrayField(
         models.IntegerField(
             choices=DIETARY_RESTRICTIONS
@@ -256,7 +258,7 @@ class Image(BaseModel):
 
 class OptionGroup(BaseModel):
     """
-    Menu of complimentary dishes (sides/options) for the selected food item.
+    Menu of complimentary sides/options for the selected food item.
 
     Exampples:
     - Choice of Dressing (for Grilled Chicken salad)
@@ -342,7 +344,7 @@ class Order(BaseModel):
         '2:00',
         '2:30'
     )
-    user = models.ForeignKey(settings.AUTH_USER_MODEL)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='orders')
     reference = models.CharField(max_length=8, unique=True)
     # TODO(yao): add helpers for calculating orders
     delivery_time = models.DateTimeField(default=datetime.now)

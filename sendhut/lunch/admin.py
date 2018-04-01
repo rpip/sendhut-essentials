@@ -6,6 +6,7 @@ from django.utils.safestring import mark_safe
 from django.shortcuts import get_object_or_404
 from django.forms import ModelForm
 
+from safedelete.models import HARD_DELETE
 from safedelete.admin import SafeDeleteAdmin, highlight_deleted
 from sorl.thumbnail import get_thumbnail
 from multiupload.admin import MultiUploadAdmin
@@ -45,6 +46,13 @@ class BaseModelAdmin(SafeDeleteAdmin):
     exclude = ('metadata',)
     _list_display = (highlight_deleted,) + SafeDeleteAdmin.list_display
     _list_filter = SafeDeleteAdmin.list_filter
+    actions = ('hard_delete',) + SafeDeleteAdmin.actions
+
+    def hard_delete(self, request, queryset):
+        self.message_user(request, "{} successfully deleted".format(queryset.count()))
+        return queryset.delete(force_policy=HARD_DELETE)
+
+    hard_delete.short_description = "HARD Delete selected items"
 
     def get_list_display(self, request):
         return tuple(self.list_display) + self._list_display
@@ -73,7 +81,7 @@ class MenuInline(nested_admin.NestedStackedInline):
 @admin.register(Store)
 class StoreAdmin(BaseModelAdmin, nested_admin.NestedModelAdmin):
 
-    def toggle_display(modeladmin, request, queryset):
+    def toggle_display(self, request, queryset):
         for x in queryset:
             x.display = not(x.display)
             x.save()
@@ -208,6 +216,7 @@ class ToppingsListFilter(admin.SimpleListFilter):
 @admin.register(Item)
 class ItemAdmin(BaseModelAdmin):
     # TODO(yao): limit menu filter to store menu
+    # TODO(yao): inline options
     list_display = (
         'id',
         'name',
