@@ -1,217 +1,468 @@
-#Fab Juice Bar Menu
+#Fab Juice BAr Menu
 name: Fab Juice Bar
 cuisines:
   - Fresh Juice
   - Milkshakes
-  - Ice cream
-locations:
-  - address: Lekki Store, Circle Mall (Shop 47) Jakande Roundabout, Lekki, Lagos
+  - Smoothies
+location:
+  - address: "Lekki Store, Circle Mall (Shop 47) Jakande Roundabout, Lekki, Lagos "
     tel: 07056505054
-  - address: Leisure Mall (Beside Shoprite), 97 Adeniran Ogunsanya, Surulere, Lagos
+  - address: "Leisure Mall (Beside Shoprite), 97 Adeniran Ogunsanya, Surulere, Lagos  "
     tel: 07056505063
-  - address: Novare Mall (Shop C03) Lekki-Epe Expressway, Sangotedo, Lagos
+  - address: "Novare Mall (Shop C03)Lekki-Epe Expressway, Sangotedo, Lagos"
     tel: 07056505061
 phone: 07056505054
 menus:
-  Sandwiches:
+  Exotic Smoothies:
     items:
-      - name: The Royal Club
-        price: 4840
-        description: >
-          Smoked turkey or chicken, Ham, Bacon, Swiss cheese, Hard boiled eggs, Lettuce,
-          Tomatoes and Mayonnaise served on wheat or white sliced bread
-        Choice:
-          - Smoked Turkey
-          - Chicken
-        Choice:
-          - White sliced bread
-          - Wheat bread
-      - name: Traditional Hot Dog
-        price: 3410
-        description: >
-          Beef hot dog with dijon mustard & ketchup, served on soft white bread
-          or baguette with chili beans and cheddar cheese
-      - name: Chicken Salad Sandwich
-        price: 2860
-        description: Chicken, mayonnaise, tomatoes, lettuce & pickles
-      - name: Tuna Salad Sandwich
-        price: 2860
-        description: Tuna, mayonnaise, tomatoes, lettuce & pickles
-      - name: Cheese Sandwich
-        price: 2860
-        description: American or Swiss cheese, butter, lettuce, tomatoes and ickles
-        choice:
-          - American cheese
-          - Swiss cheese
-      - name: Ham Sandwich
-        price: 3080
-        description: Ham, butter, lettuce, tomatoes and pickles
-        topping:
-          - name: Swiss cheese
-            price: 3,300
-      - name: Salami Sandwich
-        price: 3080
-        description: Salami, ham, cheese, mayonnaise, lettuce, tomatoes and pickles
-        topping:
-          - name: Swiss cheese
-            price: 3,300
-      - name: Italian Sub
-        price: 3300
-        description: Salami, ham, cheese, mayonnaise, lettuce, tomatoes and pickles
-      - name: Egg Mayo & Bacon
-        price: 3080
-        description: Boiled eggs, crispy bacon, mayonnaise, lettuce, tomatoes
-      - name: Turkey Sandwich
-        price: 3080
-        description: Smoked turkey, mayonnaise, lettuce, tomatoes & pickles
-        topping:
-          - name: Swiss cheese
-            price: 3,300
-      - name: Traditional Roast Beef
-        price: 3080
-        description: Roasted beef filet with lettuce, tomatoes, mustard & mayonnaise
-  Salad:
+      - name: Manny’s Delight
+        price:
+        description: Blueberry, Banana, Orange /Low Fat Yogurt with Probiotics.
+        required: True
+        options:
+          - title: Choice of size
+            - size: Regular
+              price: 2000
+            - size: Small
+              price: 1500
+
+
+      - name: Mixed Berry Blush
+        price:
+        description: Strawberry, Cranberries, Blueberries, Cherries, Raspberries, Banana, Orange/Low Fat Yogurt with Probiotics.
+        required: True
+        options:
+          - size: Regular
+            price: 2000
+          - size: Small
+            price: 1500
+
+      - name: Plum – Berry
+        price:
+        description: Plum, Goji Berry, Banana, Orange/Low Fat Yogurt with Probiotics.
+        required: True
+        options:
+          - size: Regular
+            price: 2000
+          - size: Small
+            price: 1500
+
+      - name: Granola Crunch
+        price:
+        description: Granola, Banana, Coconut/Almond Milk, Low Fat Yogurt with Probiotics.
+        required: True
+        options:
+          - size: Regular
+            price: 2000
+          - size: Small
+            price: 1500
+
+      - name: Pink Beauty
+        price:
+        description: Beet, Plum, Pineapple, Banana, Orange/Low Fat Yogurt with Probiotics.
+        required: True
+        options:
+          - size: Regular
+            price: 2000
+          - size: Small
+            price: 1500
+
+
+      - name: Green Light
+        price:
+        description: Matcha Green Tea, Avocado/Banana, Pineapple, Coconut/Almond Milk, Low Fat Yogurt with Probiotics
+
+        required: True
+        options:
+          - size: Regular
+            price: 2000
+          - size: Small
+            price: 1500
+
+      - name: Fig Tree
+        description: Fig, Banana, Mango, Orange/Low Fat Yogurt with Probiotics
+        required: True
+        options:
+          - size: Regular
+            price: 2000
+          - size: Small
+            price: 1500
+
+  Classic Smoothies:
     items:
-      - name: Chef\'s Salad
-        price: 3960
-        description: Ham, Swiss cheese, Hard boiled eggs, Lettuce, Tomatoes, Cucumber, Corn
-        Choice of dressing:
-          - French
-          - Thousand island
-          - Balsamic Vinaigrette
-          - Ranch Style
-          - Blue Cheese
-          - Lemon mustard
-      - name: Caesar Salad
-        price: 3520
-        description: Crispy romaine lettuce, roasted garlic crutons, parmesan cheese,
-        topping:
-          - name: Special Ceasar dressing with chicken
-            price: 4,400
-      - name: Greek Salad
-        price: 3960
-        description: >
-          An absolute classic, Feta cheese, black olives, lettuce tomatoes,
-          cucumbers, mint with our special lemon mustard dressing
-      - name: Salad Niçoise
-        price: 3960
-        description: Lettuce, tuna, potato, french beans, niçoise black olives, hard boiled eggs, anchovies.
-        Choice of dressing:
-          - Balsamic Vinaigrette
-          - Lemon mustard
-      - name: Santa-Fe Chicken Salad
-        price: 3960
-        description: >
-          Grilled chicken breast, black beans, corn , bite sized avocadoes,
-          lettuce & cheddar cheese, with a sweet lemon dressing
-  Panini Sandwiches:
+      - name: Pineapple Paradise
+        description: Pineapple, Banana, Orange/Low Fat Yogurt with Probiotics.
+        required: True
+        options:
+          - size: Regular
+            price: 1500
+          - size: Small
+            price: 1000
+
+      - name: Mango Mania
+        description: Mango, Pineapple, Orange/Low Fat Yogurt with Probiotics.
+        required: True
+        options:
+          - size: Regular
+            price: 1500
+          - size: Small
+            price: 1000
+
+      - name: Banana Buzz
+        description: Banana, Coconut/Almond Milk, Low Fat Yogurt with Probiotics.
+        required: True
+        options:
+          - size: Regular
+            price: 1500
+          - size: Small
+            price: 1000
+
+      - name: Go Green
+        description: Kale, Spinach, Banana, Pineapple, Coconut/Almond Milk, Low Fat Yogurt with Probiotics.
+        required: True
+        options:
+          - size: Regular
+            price: 1500
+          - size: Small
+            price: 1000
+
+      - name: Banana Latte
+        description: Banana, Non dairy milk, Low Fat Yogurt with Probiotics, Coffee.
+        required: True
+        options:
+          - size: Regular
+            price: 1500
+          - size: Small
+            price: 1000
+
+      - name: Tropical Sunshine
+        description: Banana, Pineapple, Mango, Orange, Coconut Milk/Low Fat Yogurt with Probiotics.
+        required: True
+        options:
+          - size: Regular
+            price: 1500
+          - size: Small
+            price: 1000
+
+
+      - name: Chocolate Nice Cream
+        description: Banana, Raw Cacao, Coconut/Almond Milk, Low Fat Yogurt with Probiotics.
+        required: True
+        options:
+          - size: Regular
+            price: 1500
+          - size: Small
+            price: 1000
+
+      - name: Mango Lassi
+        description: Mango, Banana, orange/Low Fat Yogurt with Probiotics.
+        required: True
+        options:
+          - size: Regular
+            price: 1500
+          - size: Small
+            price: 1000
+
+      - name: Watermelon Hydra
+        description: Watermelon, Banana, Pineapple, orange/Low Fat Yogurt with Probiotics.
+        required: True
+        options:
+          - size: Regular
+            price: 1500
+          - size: Small
+            price: 1000
+
+  Protein Smoothies:
     items:
-      - name: Cheese
-        price: 1650
-      - name: Ham &Cheese
-        price: 1650
-      - name: Nutella Chocolate
-        price: 1650
-  Ice Cream:
-    description:
+      - name: Gym Ryder
+        description: Blueberry, Banana, Coconut/Almond Milk, Apple/Low Fat Yogurt with Probiotics + protein booster/Chia Seeds.
+        price: 2500
+
+      - name: Trim n Fit
+        description: Strawberry, Banana, Coconut/Almond Milk, Orange/Low Fat Yogurt with Probiotics + Trim and Fit booster.
+        price: 2500
+
+      - name: The Good Hemp
+        description: Fig, Banana, Mango, Coconut/Almond Milk, Orange/Low Fat Yogurt with Probiotics + Organic hemp protein powder
+        price: 2500
+
+
+  Herbal tea infusions:
     items:
-      - name: Chocolat Liégois
-        price: 2750
-        description: Chocolate ice cream topped with whispered cream, coffe sauce & nuts
-      - name: Strawberry Liégois
-        price: 2750
-        description: Strawberry ice cream topped with whispered cream, coffe sauce & nuts
-      - name: Caramel Liégois
-        price: 2750
-        description: Caramel ice cream topped with whispered cream, coffe sauce & nuts
-      - name: Café Liégois
-        price: 2750
-        description: Coffee ice cream topped with whispered cream, coffe sauce & nuts
-      - name: Profiteroles
-        price: 2750
-        description: Choux pastry with vanilla ice cream topped with whispered cream, coffe sauce & nuts
-    Crepes & Pancakes:
-      description:
-      items:
-        - name: Sugar
-          price: 1320
-        - name: Jam Crépe
-          price: 1320
-        - name: Nutella Banana Crépe
-          price: 1540
-        - name: Plain Pancake
-          price: 1540
-          description: topped with Maple syrup
-        - name: Banana Pancake
-          price: 1870
-          description: topped with Maple syrup
-    Milkshakes:
-      description:
-      items:
-        - name: Vanilla
-          price: 1320
-        - name: Chocolate
-          price: 1320
-        - name: Banana
-          price: 1320
-        - name: Strawberry
-          price: 1320
-        - name: Coffee
-          price: 1320
-    Frozen Fruit Drinks:
-      items:
-        - name: Pink Lady
-          price: 2200
-        - name: Takes two to mango
-          price: 2200
-        - name: Tropical Smoothie
-          price: 2200
-    Frozen Coffee Drinks:
-      items:
-        - name: Coffee Delight
-          price: 2750
-        - name: Frappuccino
-          price: 2750
-        - name: Chocobanana frolatte
-          price: 2750
-    Fresh Juices:
-      items:
-        - name: Orange
-          price: 990
-        - name: Pineapple
-          price: 990
-        - name: Fresh seasonal mixed fruit
-          price: 1320
-    Hot Royal Coffee:
-      items:
-        - name: Carame Macchiato
-          price: 1210
-        - name: African Coffee
-          price: 770
-        - name: Coffee
-          variants:
-            - type: Cappuccino
-              price: 935
-            - type: Cappuccino royal
-              price: 1100
-            - type: Espresso
-              price: 660
-            - type: Espresso royal
-              price: 770
-            - type: Espresso double royal
-              price: 990
-            - type: Mocha
-              price: 880
-            - type: Mocha royal
-              price: 990
-        - name: Chocolate
-          variants:
-            - type: Hot Chocolate
-              price: 990
-            - type: Hot Chocolate royal
-              price: 900
-        - name: Tea
-          price: 880
-          choice:
-            - Green tea
-            - Black tea
+      - name: Chamomile Tea
+        price: 500
+
+      - name: Spearmint Tea
+        price: 500
+
+      - name: Fig Tree
+        price: 1500
+
+      - name: Raspberry Tea
+        price: 500
+
+      - name: Peppermint Tea
+        price: 500
+
+      - name: Lemon Spice Tree
+        price: 1500
+
+      - name: Jasmine Green Tea
+        price: 500
+
+      - name: Black Currant Tea
+        price: 500
+
+
+  Coffee:
+    items:
+      - name: Deluxe House Coffee
+        price: 500
+
+      - name: Deluxe House Coffee (DECAF)
+        price: 500
+
+      - name: Simply Fab Coffee (DECAF)
+        price: 1500
+
+
+  Sandwiches & Wraps:
+    items:
+      - name: Chicken Avo Sandwich
+        description: grilled chicken, Hummus, Avocado (optional), lettuce, tomato, onion, and whole wheat bread.
+        price: 1000
+        options:
+          - with Avocado
+
+      - name: Guacamole Chicken Sandwich
+        description: grilled chicken, guacamole, lettuce, and whole wheat bread
+        price: 1000
+
+      - name: Chicken Fajita Wrap
+        description: Whole wheat tortilla wrap, grilled chicken, bell pepper, onion, guacamole/hummus
+        price: 1500
+
+
+  Frozen yoghurt:
+    items:
+      - name: Chicken Avo Sandwich
+        description: grilled chicken, Hummus, Avocado (optional), lettuce, tomato, onion, and whole wheat bread.
+        price: 1000
+        options:
+          - with Avocado
+
+      - name: Guacamole Chicken Sandwich
+        description: grilled chicken, guacamole, lettuce, and whole wheat bread
+        price: 1000
+
+      - name: Chicken Fajita Wrap
+        description: Whole wheat tortilla wrap, grilled chicken, bell pepper, onion, guacamole/hummus
+        price: 1500
+
+  Shakes:
+    items:
+      - name: Strawberry Shake
+        price: 2500
+
+      - name: Code Black
+        price: 2500
+
+      - name: Banana Shake
+        price: 2500
+
+      - name: Blueberry Kiss
+        price: 2000
+
+      - name: Pina Colada shake
+        price: 2000
+
+      - name: Cappucino shake
+        price: 2500
+
+      - name: Chocolate Shake
+        price: 2000
+
+
+  Salads:
+    items:
+      - name: FAB Chef Salad
+        price: 3500
+        description: Lettuce, tomato, bell pepper, croutons, cucumber, hard boiled eggs, avocado (optional), olives, Light Italian dressing, grilled chicken breast.
+        options:
+          - With avocado
+
+      - name: FAB Grilled Chicken Caesar Salad
+        price: 3000
+        description: Lettuce, Croutons, olives, Parmesan cheese (optional) Light Italian dressing, grilled chicken breast.
+        options:
+          - With Parmesan cheese
+
+      - name: FAB Greek Salad (without grilled Chicken breast)
+        price: 2500
+        description: Lettuce, tomato, bell pepper, Onion (optional), cucumber, feta cheese (optional), olives, Light Italian dressing.
+        options:
+          - With Onion
+          - With feta cheese
+
+      - name: FAB Greek Salad (with grilled Chicken breast)
+        price: 3000
+        description: Lettuce, tomato, bell pepper, cucumber, feta cheese (optional), olives, Light Italian dressing, grilled chicken breast.
+        options:
+          - With feta cheese
+
+      - name: FAB Garden Salad (without grilled Chicken breast)
+        price: 1500
+        description: Lettuce, Cabbage (green or purple), Carrot, Cucumber, Light Italian dressing
+
+      - name: FAB Garden Salad (with grilled Chicken breast)
+        price: 2000
+        description: Lettuce, Cabbage (green or purple), Carrot, Cucumber, Light Italian dressing
+
+  Parfait:
+    items:
+      - name: Granola Parfait
+        price: 1500
+        description: Granola, Raisins, Banana, Apple, Greek Yogurt
+
+
+      - name: Granola Crunch
+        description: Granola, Banana, Coconut/Almond Milk, Low Fat Yogurt with Probiotics
+        options:
+          - size: Regular
+            price: 2000
+          - size: Small
+            price: 2000
+
+      - name: Nutty Granola Parfait
+        price: 2000
+        description: Almonds, Brazil nuts, Walnut, Cashew, Peanuts, Pumpkin seeds, Soy beans, Sunflower seeds, Granola, Raisins, Banana, Apple, Greek Yogurt)
+
+      - name: Mixed Berry Parfait
+        price: 2000
+        description: Granola, grapes, Blueberry, Raisins, Strawberry, Banana, Apple, Greek Yogurt.
+
+  Cold Press Juice:
+    items:
+      - name: De-Stress
+        price: 1000
+        description: Pineapple, Apple, Orange, Beet
+
+      - name: Detox 101 Medley
+        price: 1000
+        description: Apple, Celery Cucumber, Lemon
+
+      - name: Detox 201 Defender
+        price: 1000
+        description: Kale, Parsley, Celery, cucumber, Apple, Pineapple
+
+      - name: Detox 301 Celeb
+        price: 1000
+        description: Celery, Parsley, Kale, Cucumber, Apple, Lemon
+
+      - name: Detox 302 Spicy Celeb
+        price: 1000
+        description: Celery, Parsley, Kale, Cucumber, Apple, Lemon, Ginger
+
+      - name: Nature’s Lemonade
+        price: 1000
+        description: Celery, Parsley, Kale, Cucumber, Apple, Lemon, Ginger
+
+      - name: Watermelon Crush
+        price: 1500
+        description: Watermelon, Pineapple, Apple
+
+      - name: Watermelon Lemonade
+        price: 1000
+        description: Watermelon, Apple, Lemon
+
+      - name: Pineapple Passion
+        price: 1000
+        description:  Pineapple, Apple, Orange
+
+      - name: Pure Orange Juice
+        price: 1000
+        description: Just oranges
+
+      - name: Pure Pineapple Juice
+        price: 1000
+        description: Just pineapples
+
+      - name: Pure Sugarcane Juice
+        price: 1000
+        description: Sugarcanes
+
+      - name: Pure Watermelon Juice
+        price: 1500
+        description: Just Watermelon Juice
+
+      - name: Remedy
+        price: 1000
+        description:  Orange, Carrot, Turmeric, Pineapple, Apple
+
+      - name: Restore
+        price: 1000
+        description: Carrot, Orange, Apple, Pineapple
+
+
+      - name: Revive
+        price: 1000
+        description: Carrot, Apple, Orange, Pineapple, Lime, Ginger
+
+      - name: Beet Lemonade
+        price: 1000
+        description: Beet, Apple, Cucumber, Lemon
+
+      - name: Beet Revolution
+        price: 1000
+        description: Beet, Carrot, Celery, Apple, Orange
+
+  Boosters - super food sdd-ons:
+    items:
+      - name: Whey protein powder
+        price: 300
+
+      - name: Trim & Fit Booster
+        description: Inulin, L-carnitine 67%, Garcina Cambogia, Chromium picoinate
+        price: 300
+
+      - name: Protein Booster
+        description: Soy Protein, Whey protein, inulin
+        price: 300
+
+      - name: Organic Wheat Grass
+        price: 300
+
+      - name: Organic Hemp Seeds
+        price: 300
+
+      - name: Organic Hemp Protein Powder
+        price: 500
+
+      - name: Organic Chia Seeds
+        price: 300
+
+      - name: Multi-mineral Supplement
+        description: magnessium, Zinc, Selenium, Copper, Manganese, Molybdenium,
+        price: 300
+
+      - name: Matcha Green Tea Powder
+        price: 300
+
+      - name: Immune Support Booster
+        description: Vitamin C, Zinc, Echinacea angustifolia
+        price: 300
+
+      - name: Hawthorn Berry
+        price: 300
+
+      - name: Hair, Nail and Skin Booster
+        description: Quercetin, Biotin, Borage oil powder, Fax seed oil powder, Lutein, Lycopene, Aloe powder, Sea buckthorn powder, Co-enzyme Q-10
+        price: 300
+
+      - name: Detox Green Booster
+        description: Ricebran, Flax seed. alfafa powder, Barley grass powder , wheat grass powder, spirulina powder, chlorela powder
+        price: 300
+
+      - name: Antioxidant booster
+        description: Milk thiste, Green tea powder, Tomato powder, Celery powder, spinach powder
+        price: 300
