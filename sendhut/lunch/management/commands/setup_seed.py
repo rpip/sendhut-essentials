@@ -1,12 +1,12 @@
 from random import choice, shuffle
 from django.core.management.base import BaseCommand, CommandError
 
-from sendhut.lunch.models import Item, OrderLine, Store
-from .load_menus import create_lagos_stores
-from ._factory import (
+from sendhut.lunch.models import Item, Store
+from sendhut.factory import (
     ImageFactory, UserFactory, OptionGroupFactory,
-    OptionFactory, OrderFactory, fake
+    OptionFactory, OrderFactory, create_orderlines
 )
+from .load_menus import create_lagos_stores
 
 
 ADMIN_PASSWORD = USER_PASSWORD = 'h3ll02018!'
@@ -67,20 +67,9 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS('Creating Orders'))
         orders = OrderFactory.create_batch(2, user=admin)
         for x in orders:
-            self.create_orderlines(x)
+            create_orderlines(x)
 
         self.stdout.write(self.style.SUCCESS('DONE'))
-
-    def create_orderlines(self, order):
-        for x in range(1, choice([2, 5])):
-            items = Item.objects.all()
-            OrderLine.objects.create(
-                quantity=choice(range(1, 6)),
-                price=choice([1200, 900, 3500, 800, 400, 1400, 1650, 850]),
-                special_instructions=fake.sentence(),
-                order=order,
-                item=choice(items)
-            )
 
 
 # IDEA(yao):

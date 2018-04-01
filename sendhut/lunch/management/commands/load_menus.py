@@ -5,8 +5,11 @@ from random import shuffle, choice
 import yaml
 from django.core.management.base import BaseCommand, CommandError
 from django.utils.text import slugify
-from sendhut.lunch.models import Store, Menu, Item, Image, ItemVariant
-from ._factory import ImageFactory
+from sendhut.lunch.models import (
+    Store, Menu, Item, Image, ItemVariant,
+    Option, OptionGroup
+)
+from sendhut.factory import ImageFactory
 
 STORES_LIMIT = 15
 
@@ -70,7 +73,12 @@ def add_store(data, with_images=False):
     images = Image.objects.all()
 
     name = data.pop('name')
-    address = data.pop('address')
+    locations = data.pop('locations', None)
+    if locations:
+        # TODO(yao): create branches for each location
+        address = locations[0]['address']
+    else:
+        address = data.pop('address')
     menus = data.pop('menus')
     cuisines = data.pop('cuisines', data.pop('tags', []))
     store, _ = Store.objects.get_or_create(
@@ -87,19 +95,35 @@ def add_store(data, with_images=False):
             store=store,
             info=m.get('description')
         )
+        variant_key = m.get('variant_key')
         for x in m['items']:
             variants = x.pop('variants', [])
+            options = x.pop('options', [])
             item = Item.objects.create(
                 name=x.pop('title', x.pop('name')),
-                price=x.pop('amount', x.pop('price')),
+                price=x.pop('amount', x.pop('price', None)),
                 description=x.pop('description', ''),
                 menu=menu,
                 image=choice(images) if with_images else None,
                 metadata=x
             )
+            for opt in options:
+                opt_group = OptionGroup.objects.create(
+                    name=opt['title'],
+                    multi_select=opt.get('multi', True),
+                    is_required=opt.get('required', False),
+                    item=item
+                )
+                for x in opt['items']:
+                    Option.objects.create(
+                        name=x['name'],
+                        price=x['price'],
+                        group=opt_group
+                    )
+
             for v in variants:
                 ItemVariant.objects.create(
-                    name=v.pop('title'),
+                    name=v.pop('title', v.pop(variant_key)),
                     price_override=v.pop('price'),
                     image=choice(images) if with_images else None,
                     item=item

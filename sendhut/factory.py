@@ -36,6 +36,18 @@ def random_diet_labels():
     return items[0:_len]
 
 
+def create_orderlines(order):
+    for x in range(1, choice([2, 5])):
+        items = Item.objects.all()
+        OrderLine.objects.create(
+            quantity=choice(range(1, 6)),
+            price=choice([1200, 900, 3500, 800, 400, 1400, 1650, 850]),
+            special_instructions=fake.sentence(),
+            order=order,
+            item=choice(items)
+        )
+
+
 PHONE_NUMBERS = ('08096699966', '08169567693')
 
 MENU_NAMES = (
