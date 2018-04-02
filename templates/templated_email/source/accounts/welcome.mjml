@@ -11,7 +11,7 @@
       </mj-section>
       <!-- Intro Section -->
       <mj-section background-color="#fff">
-        <mj-column width="">
+        <mj-column>
           <mj-text>
             <p>Hi {{ recipient.first_name }},</p>
           </mj-text>

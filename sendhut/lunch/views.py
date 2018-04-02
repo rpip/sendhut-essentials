@@ -14,8 +14,7 @@ from django.db.models import Q
 from djmoney.money import Money
 
 from sendhut.cart import Cart, GroupMemberCart
-from sendhut import payments
-from sendhut import utils
+from sendhut import notifications, payments, utils
 from sendhut.accounts.models import User
 
 from .models import (
@@ -294,14 +293,17 @@ class CheckoutView(LoginRequiredMixin, View):
             group_cart = GroupCart.objects.get(token=cart_ref)
             group_cart.lock()
 
+        user = request.user
         order = Order.create_from_cart(
             cart=cart,
-            user=request.user,
+            user=user,
             group_cart=group_cart,
             total_cost=_cart['total'],
             delivery_fee=_cart['delivery_fee'],
             **form.cleaned_data
         )
+        # TODO(yao): separate emails to group cart owner and participants
+        notifications.send_order_confirmation(user.email, order)
 
         messages.info(
             request,

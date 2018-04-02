@@ -98,7 +98,7 @@ class StoreAdmin(BaseModelAdmin, nested_admin.NestedModelAdmin):
         'verified',
         'display'
     )
-    list_filter = ('created', 'verified')
+    list_filter = ('created', 'display')
     search_fields = ('name', 'address', 'phone')
     actions = [toggle_display]
     raw_id_fields = ('banner', 'logo')

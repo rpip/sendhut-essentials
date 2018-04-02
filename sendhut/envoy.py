@@ -15,3 +15,7 @@ Stays on phone for 7 seconds. If order is not picked, dispatch to the next
 nearest available rider if not picked for the same amount of time.
 Repeats to all riders within that radius until the order is confirmed.
 """
+from django.conf import settings
+from geopy.geocoders import GoogleV3
+
+geolocator = GoogleV3(api_key=settings.GOOGLE_MAPS_API_KEY)

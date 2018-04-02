@@ -231,7 +231,7 @@ MAILGUN_ACCESS_KEY = 'key-aae710e87fcc0a628b1fc9fbface936e'
 MAILGUN_SERVER_NAME = 'mg.sendhut.com'
 
 # TODO(yao): personalize email with 'Yao from Sendhut'
-DEFAULT_FROM_EMAIL = 'Yao from Sendhut <hello@sendhut.com>'
+DEFAULT_FROM_EMAIL = 'hello@sendhut.com'
 
 # SMS
 JUSIBE_PUBLIC_KEY = "a21e294d898ca47299bd575e5db983dd"
@@ -262,3 +262,6 @@ try:
     site.save()
 except:
     pass
+
+
+GOOGLE_MAPS_API_KEY = 'AIzaSyDP1XjGHjAlrxiSICFk5-Q7uEYVrpcZHFk'

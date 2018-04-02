@@ -38,6 +38,7 @@ from django.urls import reverse
 from django.contrib.sites.models import Site
 from templated_email import send_templated_mail
 from django.contrib.staticfiles.storage import staticfiles_storage
+from django_rq import enqueue
 
 from jusibe.core import Jusibe
 
@@ -52,8 +53,7 @@ CONFIRM_FULFILLMENT_TEMPLATE = 'source/orders/confirm_fulfillment'
 
 
 def collect_data_for_email(email, template):
-    user = User.objects.filter(email=email).first()
-    # user = UserSerializer(instance=user).data if user else {'email': email}
+    user = User.objects.get(email=email)
     site = Site.objects.get_current()
     return dict(
         template=template,
@@ -94,26 +94,29 @@ def send_phone_verification(phone, code):
     _send_sms(phone, message)
 
 
-def send_order_confirmation(phone, email, order):
+def send_order_confirmation(email, order):
     "Receive a text message when you place an order"
-    message = """
-    Thanks for ordering. Your order will be delivered at {} to {}.
-    """.format(order.delivery_time, order.delivery_address)
-    #_send_sms(phone, message)
-    _send_email(email, CONFIRM_ORDER_TEMPLATE, {'order': order})
-
-
-def send_order_fulfillment(phone, email, order):
-    #_send_sms(phone, "Your order is ready. Delivery on the way!")
-    _send_email(email, CONFIRM_FULFILLMENT_TEMPLATE)
+    # message = """
+    # Thanks for ordering. Your order will be delivered at {} to {}.
+    # """.format(order.delivery_time, order.delivery_address)
+    # send_sms(phone, message)
+    enqueue(_send_email, email, CONFIRM_ORDER_TEMPLATE, {'order': order})
 
 
 # EMAILS
-def send_welcome_email(email, context):
-    _send_email(email, WELCOME_TEMPLATE, context)
+def send_welcome_email(email):
+    ctx = dict(
+        store_image_url_1=staticfiles_storage.url('images/rice-dodo.jpeg'),
+        store_image_url_2=staticfiles_storage.url('images/burger.jpg'),
+        store_image_url_3=staticfiles_storage.url('images/salad.jpg'),
+        explore_message='Try our selection of tasty Nigerian dishes, \
+        Oven-baked Pizza, Fresh salads, and more.'
+    )
+    enqueue(_send_email, email, WELCOME_TEMPLATE, ctx)
 
 
 def send_password_reset(email, token):
     url = utils.build_absolute_uri(
         reverse('accounts:password_reset_confirm', args=(token,)))
-    _send_email(email, PASSWORD_RESET_TEMPLATE, {'password_reset_url': url})
+    ctx = {'password_reset_url': url}
+    enqueue(_send_email, email, PASSWORD_RESET_TEMPLATE, ctx)

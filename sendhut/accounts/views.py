@@ -91,6 +91,7 @@ class SignupView(LoginView):
             if user:
                 cart_data = Cart(request).serialize_lite()
                 login(request, user)
+                notifications.send_welcome_email(user.email)
                 # restore cart from anonymous user sesssion
                 Cart(request, cart_data)
                 return redirect(settings.LOGIN_REDIRECT_URL)
