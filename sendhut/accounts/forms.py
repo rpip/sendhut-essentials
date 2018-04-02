@@ -14,6 +14,8 @@ class PasswordResetForm(forms.Form):
         if not User.objects.filter(email=email).exists():
             raise forms.ValidationError("No account with {} email found.".format(email))
 
+        return email
+
 
 class PasswordResetConfirmForm(SetPasswordForm):
     email = forms.CharField(

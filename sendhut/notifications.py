@@ -55,6 +55,7 @@ CONFIRM_FULFILLMENT_TEMPLATE = 'source/orders/confirm_fulfillment'
 def collect_data_for_email(email, template):
     user = User.objects.get(email=email)
     site = Site.objects.get_current()
+
     return dict(
         template=template,
         recipient=user,
