@@ -94,29 +94,37 @@ def send_phone_verification(phone, code):
     _send_sms(phone, message)
 
 
-def send_order_confirmation(email, order):
+def send_order_confirmation(email, order, async=True):
     "Receive a text message when you place an order"
     # message = """
     # Thanks for ordering. Your order will be delivered at {} to {}.
     # """.format(order.delivery_time, order.delivery_address)
     # send_sms(phone, message)
-    enqueue(_send_email, email, CONFIRM_ORDER_TEMPLATE, {'order': order})
+    if async:
+        return enqueue(_send_email, email, CONFIRM_ORDER_TEMPLATE, {'order': order})
+
+    _send_email(email, CONFIRM_ORDER_TEMPLATE, {'order': order})
 
 
 # EMAILS
-def send_welcome_email(email):
+def send_welcome_email(email, async=True):
     ctx = dict(
         store_image_url_1=staticfiles_storage.url('images/rice-dodo.jpeg'),
         store_image_url_2=staticfiles_storage.url('images/burger.jpg'),
         store_image_url_3=staticfiles_storage.url('images/salad.jpg'),
         explore_message='Try our selection of tasty Nigerian dishes, \
-        Oven-baked Pizza, Fresh salads, and more.'
-    )
-    enqueue(_send_email, email, WELCOME_TEMPLATE, ctx)
+        Oven-baked Pizza, Fresh salads, and more.')
+    if async:
+        return enqueue(_send_email, email, WELCOME_TEMPLATE, ctx)
+
+    _send_email(email, WELCOME_TEMPLATE, ctx)
 
 
-def send_password_reset(email, token):
+def send_password_reset(email, token, async=True):
     url = utils.build_absolute_uri(
         reverse('accounts:password_reset_confirm', args=(token,)))
     ctx = {'password_reset_url': url}
-    enqueue(_send_email, email, PASSWORD_RESET_TEMPLATE, ctx)
+    if async:
+        return enqueue(_send_email, email, PASSWORD_RESET_TEMPLATE, ctx)
+
+    return _send_email(email, PASSWORD_RESET_TEMPLATE, ctx)

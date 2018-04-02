@@ -27,9 +27,9 @@ class NotificationsTestClass(TestCase):
     def test_send_emails(self):
         user = User.objects.get(email='yao@sendhut.com')
         order = user.orders.first()
-        notifications.send_welcome_email(user.email)
-        notifications.send_password_reset(user.email, 'jh5f5678')
-        notifications.send_order_confirmation(user.email, order)
+        notifications.send_welcome_email(user.email, False)
+        notifications.send_password_reset(user.email, 'jh5f5678', False)
+        notifications.send_order_confirmation(user.email, order, False)
 
     @override_settings(EMAIL_BACKEND='django_mailgun.MailgunBackend')
     def test_send_sms(self):
