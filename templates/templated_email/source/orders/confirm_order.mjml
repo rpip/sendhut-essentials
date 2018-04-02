@@ -3,12 +3,6 @@
   <mj-body>
     <mj-container background-color="#eee">
       <mj-include path="../shared/logo-header.mjml" />
-      <mj-section background-url="{{ banner_image_url }}" background-size="cover" background-repeat="no-repeat">
-        <mj-column>
-          <!-- Spacer component, used to give height to the background image. -->
-          <mj-spacer height="300px" />
-        </mj-column>
-      </mj-section>
       <!-- Intro Section -->
       <mj-section background-color="#fff">
         <mj-column width="">
