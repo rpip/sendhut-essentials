@@ -142,6 +142,8 @@ class StoreFactory(DjangoModelFactory):
     logo = SubFactory(ImageFactory)
     banner = SubFactory(ImageFactory)
 
+    # TODO(yao): Add menu and items to store generation
+
     @post_generation
     def post(obj, create, extracted, **kwargs):
         obj.location = (choice(FOOD_LOCATIONS))

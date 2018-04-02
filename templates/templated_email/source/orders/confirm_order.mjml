@@ -45,7 +45,7 @@
                   {% endfor %}
                 {% endfor %}
               {% else %}
-                {% for line in order %}
+                {% for line in order.order_lines.all %}
                   <tr class="table-item-row">
                     <td>{{ line.item.name }}</td>
                     <td>{{ line.quantity }}</td>

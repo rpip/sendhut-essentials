@@ -100,31 +100,34 @@ def add_store(data, with_images=False):
             variants = x.pop('variants', [])
             options = x.pop('options', [])
             item = Item.objects.create(
-                name=x.pop('title', x.pop('name')),
-                price=x.pop('amount', x.pop('price', None)),
+                name=x.pop('title', x.get('name')),
+                price=x.pop('amount', x.get('price', None)),
                 description=x.pop('description', ''),
                 menu=menu,
                 image=choice(images) if with_images else None,
                 metadata=x
             )
-            for opt in options:
-                opt_group = OptionGroup.objects.create(
-                    name=opt['title'],
-                    multi_select=opt.get('multi', True),
-                    is_required=opt.get('required', False),
-                    item=item
-                )
-                for x in opt['items']:
-                    Option.objects.create(
-                        name=x['name'],
-                        price=x['price'],
-                        group=opt_group
+            # HACK(yao):
+            if isinstance(options, list):
+                for opt in options:
+                    opt_group = OptionGroup.objects.create(
+                        name=opt['title'],
+                        multi_select=opt.get('multi', True),
+                        is_required=opt.get('required', False),
+                        item=item
                     )
+                    for x in opt['items']:
+                        Option.objects.create(
+                            name=x['name'],
+                            price=x['price'],
+                            group=opt_group
+                        )
 
-            for v in variants:
-                ItemVariant.objects.create(
-                    name=v.pop('title', v.pop(variant_key)),
-                    price_override=v.pop('price'),
-                    image=choice(images) if with_images else None,
-                    item=item
-                )
+            if isinstance(variants, list):
+                for v in variants:
+                    ItemVariant.objects.create(
+                        name=v.pop('title', v.get(variant_key)),
+                        price_override=v.pop('price'),
+                        image=choice(images) if with_images else None,
+                        item=item
+                    )
