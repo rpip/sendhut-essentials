@@ -32,12 +32,12 @@
          <input type="hidden" name="cart_token" value="{{ group_cart_token }}" />
          {% endif %}
          {% for opt_group in item.option_groups.all %}
-           <h5>
+           <h6>
              {{ opt_group.name }}
              <span class="text-muted float-right">
                {% if opt_group.is_required %} Required {% else %} Optional {% endif %}
              </span>
-           </h5>
+           </h6>
            {% for option in opt_group.options.all %}
              {% if opt_group.multi_select %}
                <div class="form-check">

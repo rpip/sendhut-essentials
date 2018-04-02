@@ -144,10 +144,15 @@ class Cart:
         line = self.match_line(item, quantity, data)
         if replace:
             self.remove(data.get('line_id'))
+            return self._add(item, quantity, data)
 
         if line:
             self.remove(line.data['line_id'])
+            return self._add(item, quantity, data)
 
+        return self._add(item, quantity, data)
+
+    def _add(self, item, quantity, data):
         line = self.create_line(item, int(quantity), data)
         self._state.append(line)
         self.save()
