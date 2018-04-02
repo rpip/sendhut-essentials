@@ -119,7 +119,7 @@ def add_store(data, with_images=False):
                     for x in opt['items']:
                         Option.objects.create(
                             name=x['name'],
-                            price=x['price'],
+                            price=x.get('price'),
                             group=opt_group
                         )
 

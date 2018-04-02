@@ -4,7 +4,7 @@ cuisines:
   - Fresh Juice
   - Milkshakes
   - Smoothies
-location:
+locations:
   - address: "Lekki Store, Circle Mall (Shop 47) Jakande Roundabout, Lekki, Lagos "
     tel: 07056505054
   - address: "Leisure Mall (Beside Shoprite), 97 Adeniran Ogunsanya, Surulere, Lagos  "
@@ -18,159 +18,187 @@ menus:
       - name: Manny’s Delight
         price:
         description: Blueberry, Banana, Orange /Low Fat Yogurt with Probiotics.
-        required: True
         options:
           - title: Choice of size
-            - size: Regular
+            required: True
+            items:
+            - name: Regular
               price: 2000
-            - size: Small
+            - name: Small
               price: 1500
 
 
       - name: Mixed Berry Blush
         price:
         description: Strawberry, Cranberries, Blueberries, Cherries, Raspberries, Banana, Orange/Low Fat Yogurt with Probiotics.
-        required: True
         options:
-          - size: Regular
-            price: 2000
-          - size: Small
-            price: 1500
+          - title: Choice of size
+            required: True
+            items:
+            - name: Regular
+              price: 2000
+            - name: Small
+              price: 1500
 
       - name: Plum – Berry
         price:
         description: Plum, Goji Berry, Banana, Orange/Low Fat Yogurt with Probiotics.
-        required: True
         options:
-          - size: Regular
-            price: 2000
-          - size: Small
-            price: 1500
+          - title: Choice of size
+            required: True
+            items:
+            - name: Regular
+              price: 2000
+            - name: Small
+              price: 1500
 
       - name: Granola Crunch
         price:
         description: Granola, Banana, Coconut/Almond Milk, Low Fat Yogurt with Probiotics.
-        required: True
         options:
-          - size: Regular
-            price: 2000
-          - size: Small
-            price: 1500
+          - title: Choice of size
+            required: True
+            items:
+            - name: Regular
+              price: 2000
+            - name: Small
+              price: 1500
 
       - name: Pink Beauty
         price:
         description: Beet, Plum, Pineapple, Banana, Orange/Low Fat Yogurt with Probiotics.
-        required: True
         options:
-          - size: Regular
-            price: 2000
-          - size: Small
-            price: 1500
+          - title: Choice of size
+            required: True
+            items:
+            - name: Regular
+              price: 2000
+            - name: Small
+              price: 1500
 
 
       - name: Green Light
         price:
         description: Matcha Green Tea, Avocado/Banana, Pineapple, Coconut/Almond Milk, Low Fat Yogurt with Probiotics
-
-        required: True
         options:
-          - size: Regular
-            price: 2000
-          - size: Small
-            price: 1500
+          - title: Choice of size
+            required: True
+            items:
+            - name: Regular
+              price: 2000
+            - name: Small
+              price: 1500
 
       - name: Fig Tree
         description: Fig, Banana, Mango, Orange/Low Fat Yogurt with Probiotics
-        required: True
         options:
-          - size: Regular
-            price: 2000
-          - size: Small
-            price: 1500
+          - title: Choice of size
+            required: True
+            items:
+            - name: Regular
+              price: 2000
+            - name: Small
+              price: 1500
 
   Classic Smoothies:
     items:
       - name: Pineapple Paradise
         description: Pineapple, Banana, Orange/Low Fat Yogurt with Probiotics.
-        required: True
         options:
-          - size: Regular
-            price: 1500
-          - size: Small
-            price: 1000
+          - title: Choice of size
+            required: True
+            items:
+            - name: Regular
+              price: 1500
+            - name: Small
+              price: 1000
 
       - name: Mango Mania
         description: Mango, Pineapple, Orange/Low Fat Yogurt with Probiotics.
-        required: True
         options:
-          - size: Regular
-            price: 1500
-          - size: Small
-            price: 1000
+          - title: Choice of size
+            required: True
+            items:
+            - name: Regular
+              price: 1500
+            - name: Small
+              price: 1000
 
       - name: Banana Buzz
         description: Banana, Coconut/Almond Milk, Low Fat Yogurt with Probiotics.
-        required: True
         options:
-          - size: Regular
-            price: 1500
-          - size: Small
-            price: 1000
+          - title: Choice of size
+            required: True
+            items:
+            - name: Regular
+              price: 1500
+            - name: Small
+              price: 1000
 
       - name: Go Green
         description: Kale, Spinach, Banana, Pineapple, Coconut/Almond Milk, Low Fat Yogurt with Probiotics.
-        required: True
         options:
-          - size: Regular
-            price: 1500
-          - size: Small
-            price: 1000
+          - title: Choice of size
+            required: True
+            items:
+            - name: Regular
+              price: 1500
+            - name: Small
+              price: 1000
 
       - name: Banana Latte
         description: Banana, Non dairy milk, Low Fat Yogurt with Probiotics, Coffee.
         required: True
         options:
-          - size: Regular
-            price: 1500
-          - size: Small
-            price: 1000
+          - title: Choice of size
+            items:
+            - name: Regular
+              price: 1500
+            - name: Small
+              price: 1000
 
       - name: Tropical Sunshine
         description: Banana, Pineapple, Mango, Orange, Coconut Milk/Low Fat Yogurt with Probiotics.
-        required: True
         options:
-          - size: Regular
-            price: 1500
-          - size: Small
-            price: 1000
-
-
+          - title: Choice of size
+            required: True
+            items:
+            - name: Regular
+              price: 1500
+            - name: Small
+              price: 1000
       - name: Chocolate Nice Cream
         description: Banana, Raw Cacao, Coconut/Almond Milk, Low Fat Yogurt with Probiotics.
-        required: True
         options:
-          - size: Regular
-            price: 1500
-          - size: Small
-            price: 1000
+          - title: Choice of size
+            required: True
+            items:
+            - name: Regular
+              price: 1500
+            - name: Small
+              price: 1000
 
       - name: Mango Lassi
         description: Mango, Banana, orange/Low Fat Yogurt with Probiotics.
-        required: True
         options:
-          - size: Regular
-            price: 1500
-          - size: Small
-            price: 1000
+          - title: Choice of size
+            required: True
+            items:
+            - name: Regular
+              price: 1500
+            - name: Small
+              price: 1000
 
       - name: Watermelon Hydra
         description: Watermelon, Banana, Pineapple, orange/Low Fat Yogurt with Probiotics.
-        required: True
         options:
-          - size: Regular
-            price: 1500
-          - size: Small
-            price: 1000
+          - title: Choice of size
+            required: True
+            items:
+            - name: Regular
+              price: 1500
+            - name: Small
+              price: 1000
 
   Protein Smoothies:
     items:
@@ -232,7 +260,9 @@ menus:
         description: grilled chicken, Hummus, Avocado (optional), lettuce, tomato, onion, and whole wheat bread.
         price: 1000
         options:
-          - with Avocado
+          - title: Add ons
+            items:
+              - name: with Avocado
 
       - name: Guacamole Chicken Sandwich
         description: grilled chicken, guacamole, lettuce, and whole wheat bread
@@ -249,7 +279,9 @@ menus:
         description: grilled chicken, Hummus, Avocado (optional), lettuce, tomato, onion, and whole wheat bread.
         price: 1000
         options:
-          - with Avocado
+          - title: Add ons
+            items:
+              - name: with Avocado
 
       - name: Guacamole Chicken Sandwich
         description: grilled chicken, guacamole, lettuce, and whole wheat bread
@@ -289,26 +321,35 @@ menus:
         price: 3500
         description: Lettuce, tomato, bell pepper, croutons, cucumber, hard boiled eggs, avocado (optional), olives, Light Italian dressing, grilled chicken breast.
         options:
-          - With avocado
+          - title: Add ons
+            items:
+              - name: With avocado
 
       - name: FAB Grilled Chicken Caesar Salad
         price: 3000
         description: Lettuce, Croutons, olives, Parmesan cheese (optional) Light Italian dressing, grilled chicken breast.
         options:
-          - With Parmesan cheese
+          - title: Add ons
+            items:
+              - name: With Parmesan cheese
 
       - name: FAB Greek Salad (without grilled Chicken breast)
         price: 2500
         description: Lettuce, tomato, bell pepper, Onion (optional), cucumber, feta cheese (optional), olives, Light Italian dressing.
         options:
-          - With Onion
-          - With feta cheese
+          - title: Add ons
+            multi: true
+            items:
+              - name: With Onion
+              - name: With feta cheese
 
       - name: FAB Greek Salad (with grilled Chicken breast)
         price: 3000
         description: Lettuce, tomato, bell pepper, cucumber, feta cheese (optional), olives, Light Italian dressing, grilled chicken breast.
         options:
-          - With feta cheese
+          - title: Add ons
+            items:
+              - name: With feta cheese
 
       - name: FAB Garden Salad (without grilled Chicken breast)
         price: 1500
@@ -328,10 +369,12 @@ menus:
       - name: Granola Crunch
         description: Granola, Banana, Coconut/Almond Milk, Low Fat Yogurt with Probiotics
         options:
-          - size: Regular
-            price: 2000
-          - size: Small
-            price: 2000
+          - title: Choice of size
+            items:
+            - name: Regular
+              price: 2000
+            - name: Small
+              price: 2000
 
       - name: Nutty Granola Parfait
         price: 2000
@@ -363,7 +406,7 @@ menus:
         price: 1000
         description: Celery, Parsley, Kale, Cucumber, Apple, Lemon, Ginger
 
-      - name: Nature’s Lemonade
+      - name: Nature\'s Lemonade
         price: 1000
         description: Celery, Parsley, Kale, Cucumber, Apple, Lemon, Ginger
 

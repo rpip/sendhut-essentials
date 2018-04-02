@@ -291,7 +291,12 @@ class OptionGroup(BaseModel):
 class Option(BaseModel):
 
     name = models.CharField(max_length=60)
-    price = MoneyField(max_digits=10, decimal_places=2, default_currency=settings.DEFAULT_CURRENCY)
+    price = MoneyField(
+        max_digits=10,
+        decimal_places=2,
+        default_currency=settings.DEFAULT_CURRENCY,
+        null=True, blank=True
+    )
     group = models.ForeignKey(OptionGroup, related_name='options')
 
     class Meta:

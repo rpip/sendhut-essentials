@@ -73,7 +73,7 @@ class CartLine(ItemLine):
                     'id': option.id,
                     'uuid': str(option.uuid),
                     'name': option.name,
-                    'price': option.price.amount,
+                    'price': option.price.amount if option.price else 0,
                     'parent': option.group.name
                 })
 
