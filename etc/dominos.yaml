@@ -145,3 +145,219 @@ menus:
       - name: Pulpy
         price: 400
         description: 40Cl
+
+
+#Dominos Combo
+  Combos:
+    items:
+      - name: Combo 1
+        price: 3500
+        description: 1 Medium pizza  plus 2 drinks(60cl). For 2 people. Save as much as NGN 750
+        options:
+          - name: Classics
+            multi: False
+            linked: # When linked, a specified number of item can be selected from both item list
+              - Classics
+            link_item_select: 1 # Specified number of items that can be selected across both menus
+            items:
+              - name: Pepperoni Supreme
+                description: "Pepperoni and cheese"
+              - name: Veggie Supreme
+                description: "Onions, Green Pepper, Mushrooms and Olives"
+              - name: BBQ Beef
+                description: "Beef, Onions and BBQ Sauce"
+              - name: BBQ Chicken
+                description: "Grilled Chicken, Onions and BBQ Sauce"
+          - name: Favourites
+            multi: False
+            # cart_limit: 4000
+            linked: # When linked, a specified number of item can be selected from both item list
+              - Classics
+            link_item_select: 1 # Specified number of items that can be selected across both menus
+            items:
+              - name: Chicken Suya
+                description: Chicken Suya, Onions, Green Pepper, Chilli Pepper
+              - name: Deluxe
+                description: "Pepperoni Beef Sausage, Onions, Green Pepper & Mushrooms"
+              - name: Chicken Tikka
+                description: "Grilled Chicken, Green Pepper, Onions, Mushrooms, Corn & Tikka Sauce"
+              - name: Tex-Mex
+                description: "Marinated Chicken, Green Pepper, Onions and Jalapeno"
+          - name: Drinks
+            max_item_quantuty: 2 #total number of item
+            multi: True
+            items:
+              - name: Coke
+                size: '50cl'
+              - name: Fanta
+                size: '50cl'
+              - name: Sprite
+                size: '50cl'
+
+
+      - name: Combo 2
+        price: 5000
+        description: 1 large pizza  plus 3 drinks(60cl). For 3 people. Save as much as NGN 900
+        options:
+          - name: Classics
+            multi: False
+            items:
+              - name: Pepperoni Supreme
+                description: "Pepperoni and cheese"
+              - name: Veggie Supreme
+                description: "Onions, Green Pepper, Mushrooms and Olives"
+              - name: BBQ Beef
+                description: "Beef, Onions and BBQ Sauce"
+              - name: BBQ Chicken
+                description: "Grilled Chicken, Onions and BBQ Sauce"
+
+          - name: Favourites
+            multi: False
+            linked:
+              - Classics
+              - Premiums
+            link_item_select: 1
+            items:
+              - name: Chicken Suya
+                description: "Chicken Suya, Onions, Green Pepper, Chilli Pepper"
+              - name: Deluxe
+                description: "Pepperoni Beef Sausage, Onions, Green Pepper & Mushrooms"
+              - name: Chicken Tikka
+                description: "Grilled Chicken, Green Pepper, Onions, Mushrooms, Corn & Tikka Sauce"
+              - name: Tex-Mex
+                description: "Marinated Chicken, Green Pepper, Onions and Jalapeno"
+
+          - name: Premiums
+            multi: False
+            linked:
+              - Classics
+              - Favourites
+            link_item_select: 1
+            items:
+              - name: Chicken Bali
+                description: "Grilled Chicken, Pineapple, Mushrooms and Chilli Pepper"
+              - name: Meatzza
+                description: "Pepperoni, Beef and Beef Sausage"
+              - name: Chicken Supreme
+                description: "Grilled Chicken, Onions, Corn, Green Pepper and Cheddar Cheese"
+        options2:
+          - name: Drinks
+            max_item_quantuty: 3 #total number of item
+            multi: True
+            items:
+              - name: Coke
+                size: '50cl'
+              - name: Fanta
+                size: '50cl'
+              - name: Sprite
+                size: '50cl'
+
+
+
+      - name: Combo 3
+        price: 6300
+        description: 2 Medium pizza  plus 1 Large drinks(1.5l). For 4 people. Save as much as NGN 1100
+        options:
+          - name: Classics
+            multi: True
+            linked:
+              - Favourites
+            link_item_select: 2
+            items:
+              - name: Pepperoni Supreme
+                description: "Pepperoni and cheese"
+              - name: Veggie Supreme
+                description: "Onions, Green Pepper, Mushrooms and Olives"
+              - name: BBQ Beef
+                description: "Beef, Onions and BBQ Sauce"
+              - name: BBQ Chicken
+                description: "Grilled Chicken, Onions and BBQ Sauce"
+          - name: Favourites
+            multi: True
+            linked:
+              - Classics
+            link_item_select: 2
+            items:
+              - name: Chicken Suya
+                description: "Chicken Suya, Onions, Green Pepper, Chilli Pepper"
+              - name: Deluxe
+                description: "Pepperoni Beef Sausage, Onions, Green Pepper & Mushrooms"
+              - name: Chicken Tikka
+                description: "Grilled Chicken, Green Pepper, Onions, Mushrooms, Corn & Tikka Sauce"
+              - name: Tex-Mex
+                description: "Marinated Chicken, Green Pepper, Onions and Jalapeno"
+        options2:
+          - name: Drinks
+            max_item_quantuty: 1 #total number of item
+            multi: False
+            items:
+              - name: Coke
+                size: '1.5l'
+              - name: Fanta
+                size: '1.5l'
+              - name: Sprite
+                size: '1.5l'
+
+
+
+      - name: Combo 4
+        price: 8500
+        description: 2 large pizza  plus 1 large drinks(1.5l). For 6 people. Save as much as NGN 2100
+        options:
+          # Can  select two item(total quantity of 2) in the listed options, it is required
+          - name: Classics
+            multi: True
+            linked:
+              - Favourites
+              - Premiums
+            link_item_select: 2
+            items:
+              - name: Pepperoni Supreme
+                description: "Pepperoni and cheese"
+              - name: Veggie Supreme
+                description: "Onions, Green Pepper, Mushrooms and Olives"
+              - name: BBQ Beef
+                description: "Beef, Onions and BBQ Sauce"
+              - name: BBQ Chicken
+                description: "Grilled Chicken, Onions and BBQ Sauce"
+
+          - name: Favourites
+            multi: True
+            linked:
+              - Classics
+              - Premiums
+            link_item_select: 2
+            items:
+              - name: Chicken Suya
+                description: "Chicken Suya, Onions, Green Pepper, Chilli Pepper"
+              - name: Deluxe
+                description: "Pepperoni Beef Sausage, Onions, Green Pepper & Mushrooms"
+              - name: Chicken Tikka
+                description: "Grilled Chicken, Green Pepper, Onions, Mushrooms, Corn & Tikka Sauce"
+              - name: Tex-Mex
+                description: "Marinated Chicken, Green Pepper, Onions and Jalapeno"
+
+          - name: Premiums
+            multi: True
+            linked:
+              - Favourites
+              - Classics
+            link_item_select: 2
+            items:
+              - name: Chicken Bali
+                description: "Grilled Chicken, Pineapple, Mushrooms and Chilli Pepper"
+              - name: Meatzza
+                description: "Pepperoni, Beef and Beef Sausage"
+              - name: Chicken Supreme
+                description: "Grilled Chicken, Onions, Corn, Green Pepper and Cheddar Cheese"
+        options2:
+          - name: Drinks
+            max_item_quantuty: 1 #total number of item
+            multi: False
+            items:
+              - name: Coke
+                size: '50cl'
+              - name: Fanta
+                size: '50cl'
+              - name: Sprite
+                size: '50cl'
