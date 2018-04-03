@@ -87,9 +87,9 @@ def is_mobile(request):
         return False
 
 
-def generate_password_token(phone):
+def generate_password_token(email):
     token = generate_token(13)
-    REDIS.setex(token, 60 * 5, phone)
+    REDIS.setex(token, 60 * 5, email)
     return token
 
 
