@@ -6,7 +6,7 @@ from .models import User
 class PasswordResetForm(forms.Form):
     email = forms.CharField(
         label='Email',
-        max_length=20,
+        max_length=40,
         widget=forms.TextInput(attrs={'placeholder': 'Enter your email address'}))
 
     def clean_email(self):
@@ -20,7 +20,7 @@ class PasswordResetForm(forms.Form):
 class PasswordResetConfirmForm(SetPasswordForm):
     email = forms.CharField(
         label='Email',
-        max_length=60,
+        max_length=40,
         required=False,
         widget=forms.HiddenInput())
 
@@ -53,7 +53,7 @@ class SignupForm(forms.Form):
         widget=forms.PasswordInput(attrs={'placeholder': 'Password'}))
     email = forms.EmailField(
          label='Email',
-         max_length=30,
+         max_length=40,
          widget=forms.TextInput(attrs={'placeholder': 'e.g. name@example.com'}))
 
 

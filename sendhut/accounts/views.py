@@ -1,3 +1,5 @@
+import logging
+
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
@@ -14,6 +16,9 @@ from .forms import (
     LoginForm, SignupForm, ProfileForm, PasswordResetForm,
     PasswordResetConfirmForm
 )
+
+
+logger = logging.getLogger(__file__)
 
 
 class ProfileView(View):
@@ -127,7 +132,7 @@ class PasswordResetConfirmView(View):
         token = kwargs['token']
         email = utils.check_password_token(token)
         user = User.objects.get(email=email) if email else None
-        print("{} {}".format(user, email))
+        logger.debug("%s %s", user, email)
         validlink = bool(user)
         context = {
             'form': PasswordResetConfirmForm(user=user, data={'email': email}),
