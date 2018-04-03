@@ -228,7 +228,7 @@ class Cart:
         sub_total = self.get_subtotal()
         delivery_fee = settings.LUNCH_DELIVERY_FEE
         cart_delivery_fee = delivery_fee * len(self)
-        total = sub_total + cart_delivery_fee
+        total = sub_total + delivery_fee
         cart = self.serialize()
         store_grouped_cart = [
             (x, list(y)) for x, y in
