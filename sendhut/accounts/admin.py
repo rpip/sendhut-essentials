@@ -8,18 +8,12 @@ from .models import User, Address
 class UserAdmin(admin.ModelAdmin):
     list_display = (
         'id',
-        'password',
         'is_superuser',
-        'username',
         'first_name',
         'last_name',
         'email',
         'is_staff',
-        'is_active',
-        'date_joined',
         'created',
-        'updated',
-        'deleted',
         'phone',
         'last_login',
         'identity_verified',
