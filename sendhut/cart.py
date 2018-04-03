@@ -238,7 +238,7 @@ class Cart:
             'store_grouped_cart': store_grouped_cart,
             'sub_total': sub_total,
             'delivery_fee': delivery_fee,
-            'cart_delivery_fee': cart_delivery_fee,
+            'cart_delivery_fee': delivery_fee,
             'total': total
         }
 
