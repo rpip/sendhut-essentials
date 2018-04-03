@@ -127,6 +127,7 @@ class PasswordResetConfirmView(View):
         token = kwargs['token']
         email = utils.check_password_token(token)
         user = User.objects.get(email=email) if email else None
+        print("{} {}".format(user, email))
         validlink = bool(user)
         context = {
             'form': PasswordResetConfirmForm(user=user, data={'email': email}),

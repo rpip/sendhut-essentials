@@ -20,7 +20,7 @@ class PasswordResetForm(forms.Form):
 class PasswordResetConfirmForm(SetPasswordForm):
     email = forms.CharField(
         label='Email',
-        max_length=20,
+        max_length=60,
         required=False,
         widget=forms.HiddenInput())
 
