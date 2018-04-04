@@ -142,8 +142,7 @@ def store_page(request, slug):
         # if group_order is cancelled or locked, return to prev with error as
         # cancelled or 500 page with custom error message
         group_cart = GroupCart.objects.filter(token=group_order['token']).first()
-        #if group_cart and group_cart.is_open():
-        if group_cart:
+        if group_cart and group_cart.is_open():
             member = group_cart.members.get(id=group_order['member']['id'])
             context['group_order'] = group_order
             context['cart'] = member.cart

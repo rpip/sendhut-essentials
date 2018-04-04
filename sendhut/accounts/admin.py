@@ -6,6 +6,7 @@ from .models import User, Address
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
+    exclude = ('password',)
     list_display = (
         'id',
         'is_superuser',
