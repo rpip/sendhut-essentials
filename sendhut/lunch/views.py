@@ -143,6 +143,7 @@ def store_page(request, slug):
         # cancelled or 500 page with custom error message
         group_cart = GroupCart.objects.filter(token=group_order['token']).first()
         if group_cart and group_cart.is_open():
+            messages.info(request, "Open the sidebar to see the group order cart")
             member = group_cart.members.get(id=group_order['member']['id'])
             context['group_order'] = group_order
             context['cart'] = member.cart
