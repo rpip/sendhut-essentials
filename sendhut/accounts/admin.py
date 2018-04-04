@@ -29,6 +29,8 @@ class UserAdmin(admin.ModelAdmin):
         'identity_verified',
     )
 
+    change_form_template = 'loginas/change_form.html'
+
 
 @admin.register(Address)
 class AddressAdmin(admin.ModelAdmin):

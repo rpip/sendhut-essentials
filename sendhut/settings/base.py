@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'multiupload',
     'nested_admin',
+    'loginas',
 
     'sendhut.accounts',
     'sendhut.lunch'

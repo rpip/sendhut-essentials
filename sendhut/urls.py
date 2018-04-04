@@ -34,7 +34,8 @@ urlpatterns = [
     url(r'^jet/', include('jet.urls', 'jet')),  # Django JET URLS
     url(r'^jet/dashboard/', include('jet.dashboard.urls', 'jet-dashboard')),  # Django JET dashboard URLS
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^nested_admin/', include('nested_admin.urls'))
+    url(r'^admin/', include('loginas.urls')),
+    url(r'^nested_admin/', include('nested_admin.urls')),
 ]
 
 
