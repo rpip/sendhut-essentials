@@ -274,15 +274,17 @@
                             <th>Price</th>
                           </tr>
                         </thead>
-                        <tbody> {% if order.group_cart %} {% for member in group_cart.members.all %}
+                        <tbody> {% if order.group_cart %} {% for member in order.group_cart.members.all %} {% if not member.is_cart_owner %}
                           <tr>
                             <td style="font-weight: bold">{{ member.name }}</td>
                           </tr> {% for line in member.cart %}
                           <tr class="table-item-row">
-                            <td>{{ line.data.name }}</td>
+                            <td>{{ line.data.name }} {% if line.data.extras_meta %}
+                              <ul class="text-muted"> {% for x in line.data.extras_meta %}
+                                <li>{{x.name}}</li> {% endfor %} </ul> {% endif %} </td>
                             <td>{{ line.quantity }}</td>
-                            <td>{{ line.total }}</td>
-                          </tr> {% endfor %} {% endfor %} {% else %} {% for line in order.order_lines.all %}
+                            <td>&#x20A6;{{ line.data.total }}</td>
+                          </tr> {% endfor %} {% endif %} {% endfor %} {% else %} {% for line in order.order_lines.all %}
                           <tr class="table-item-row">
                             <td>{{ line.item.name }}</td>
                             <td>{{ line.quantity }}</td>

@@ -11,6 +11,7 @@ from djmoney.models.fields import MoneyField
 from sorl.thumbnail import ImageField
 from sorl.thumbnail import get_thumbnail
 from jsonfield import JSONField
+from djmoney.money import Money
 
 from sendhut.utils import (
     sane_repr, image_upload_path,
@@ -493,3 +494,9 @@ class GroupCartMember(BaseModel):
     name = models.CharField(max_length=40)
     # holds user's cart for current group order session
     cart = JSONField(null=True, blank=True, default=[])
+
+    def is_cart_owner(self):
+        return self.user == self.group_cart.owner
+
+    def get_total(self):
+        return Money('NGN', sum(x['data']['total'] for x in self.cart))

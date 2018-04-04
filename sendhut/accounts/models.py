@@ -13,9 +13,8 @@ class User(AbstractUser, BaseModel):
 
     __repr__ = sane_repr('id')
 
-    @property
-    def is_business_account(self):
-        return self.group_carts
+    def __str__(self):
+        return '{} {}'.format(self.first_name, self.last_name)
 
     class Meta:
         db_table = 'user'

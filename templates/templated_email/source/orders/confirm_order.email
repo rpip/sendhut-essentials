@@ -1,5 +1,7 @@
+{% load djmoney %}
+
 {% block subject %}
-  Sendhut - Order confirmed
+  Sendhut - {% if order.group_cart %}Group{% endif %} Order confirmed
 {% endblock %}
 
 {% block plain %}

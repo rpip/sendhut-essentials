@@ -1,4 +1,6 @@
+from pathlib import Path
 from random import choice, shuffle
+import json
 import glob
 
 from django.conf import settings
@@ -14,7 +16,7 @@ from factory import (
 from sendhut.accounts.models import User, Address
 from sendhut.lunch.models import (
     Store, Menu, Item, OptionGroup, Option,
-    Image, OrderLine, Order, FOOD_TAGS
+    Image, OrderLine, Order, FOOD_TAGS, GroupCart, GroupCartMember
 )
 
 
@@ -223,3 +225,28 @@ class OrderLineFactory(DjangoModelFactory):
     special_instructions = lazy_attribute(lambda o: fake.sentence())
     order = SubFactory(OrderFactory)
     item = SubFactory(ItemFactory)
+
+
+class GroupCartFactory(DjangoModelFactory):
+
+    class Meta:
+        model = GroupCart
+
+    owner = SubFactory(UserFactory)
+    store = SubFactory(Store)
+    monetary_limit = lazy_attribute(lambda o: choice([1000, 2000, 3000, None]))
+
+
+class GroupCartMemberFactory(DjangoModelFactory):
+
+    class Meta:
+        model = GroupCartMember
+
+    def _cart():
+        carts = json.load(open('sendhut/fixtures/group_member_carts.json', 'r'))
+        return carts[:choice(range(2, 4))]
+
+    user = SubFactory(UserFactory)
+    group_cart = SubFactory(GroupCart)
+    name = lazy_attribute(lambda o: fake.name())
+    cart = LazyFunction(_cart)
