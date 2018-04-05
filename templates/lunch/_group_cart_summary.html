@@ -42,7 +42,7 @@
                       </ul>
                       {% endif %}
                     </div>
-                    <div class="col-sm-1">{{ line.total }}<br>
+                    <div class="col-sm-1">{{ line.data.total }}<br>
                       {% if member.id == group_order.member.id %}
                       <a data-href="{% url 'lunch:cartline_delete' line.data.line_id %}?cart_ref={{ group_cart.token }}" href="#" class="x-delete" data-cart="{{ group_cart.token }}">
                         Remove
