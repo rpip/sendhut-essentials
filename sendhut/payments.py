@@ -12,7 +12,7 @@ def initialize_payment(reference, amount, email):
         reference=reference,
         amount=amount,
         email=email,
-        callback_url=reverse('lunch:cart_summary')
+        callback_url=reverse('lunch:checkout')
     )
 
 

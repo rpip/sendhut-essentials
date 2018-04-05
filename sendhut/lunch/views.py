@@ -232,20 +232,6 @@ class CartView(View):
         return JsonResponse(cart.build_cart(), encoder=utils.JSONEncoder)
 
 
-@login_required
-def cart_summary(request):
-    ref = request.GET.get('cart_ref')
-    if ref:
-        cart = GroupMemberCart(request, ref)
-        context = cart.build_cart()
-        context['group_cart'] = cart.member.group_cart
-    else:
-        context = Cart(request).build_cart()
-
-    context['form'] = CheckoutForm(data=request.POST)
-    return render(request, 'lunch/cart_summary.html', context)
-
-
 def cart_reload(request):
     template = 'lunch/cart_summary.html'
     ref = request.GET.get('cart_ref')
@@ -265,7 +251,9 @@ class CheckoutView(LoginRequiredMixin, View):
         form = CheckoutForm(data=request.POST)
         ref = request.GET.get('cart_ref')
         if ref:
-            context = GroupOrder.build_cart(request, ref)
+            cart = GroupMemberCart(request, ref)
+            context = cart.build_cart()
+            context['group_cart'] = cart.member.group_cart
         else:
             context = Cart(request).build_cart()
 
@@ -274,12 +262,13 @@ class CheckoutView(LoginRequiredMixin, View):
 
     def post(self, request):
         form = CheckoutForm(data=request.POST)
-        group_session = GroupOrder.get(request)
+        ref = request.GET.get('cart_ref')
         if not(form.is_valid()):
             messages.error(request, "Please complete the delivery form to proceed")
-            if group_session:
-                ref = request.GET['cart_ref']
-                context = GroupOrder.build_cart(request, ref)
+            if ref:
+                cart = GroupMemberCart(request, ref)
+                context = cart.build_cart()
+                context['group_cart'] = cart.member.group_cart
             else:
                 context = Cart(request).build_cart()
 

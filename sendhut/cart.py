@@ -142,6 +142,7 @@ class Cart:
         independently.
         """
         line = self.match_line(item, quantity, data)
+        # used if an update
         if replace:
             self.remove(data.get('line_id'))
             return self._add(item, quantity, data)
@@ -158,11 +159,14 @@ class Cart:
         self.save()
 
     def match_line(self, item, quantity, data):
-        "Matches: item uuid, extra (sides/options)"
+        "Matches: item id, qty, extra (sides/options)"
         extras = list(map(int, data.get('extras', [])))
+        # TODO(yao): what to when user adds same item and quantity:
+        # update cartline or add as separate item?
         return next((line for line in self._state if
                      line.id == item.id and
                      line.quantity == quantity and
+                     line.data.get('note') == data.get('note') and
                      line.data.get('extras') == extras), None)
 
     def get_line(self, line_id):
