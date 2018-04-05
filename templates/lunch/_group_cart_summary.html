@@ -59,7 +59,7 @@
         <div class="container cart-summary">
           <div class="row">
             <div class="col-md-3 offset-sm-7"><a>Subtotal</a></div>
-            <div class="col-md-1"><a>{{ member.cart|subcart_total }}</a></div>
+            <div class="col-md-1"><a>{{ member.get_total }}</a></div>
           </div>
         </div><!--// cart cost -->
         <br>
@@ -69,7 +69,7 @@
       <div class="cart-summary">
         <div class="row">
           <div><h5 class="bold">Total</h5></div>
-          <div class="offset-sm-1 bold">{{ total }}</div>
+          <div class="offset-sm-1 bold">{{ group_cart.get_total }} (includes delivery fee 500)</div>
         </div>
       </div><!-- // cart-summary  -->
       <hr>

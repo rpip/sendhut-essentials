@@ -274,7 +274,7 @@
                             <th>Price</th>
                           </tr>
                         </thead>
-                        <tbody> {% if order.group_cart %} {% for member in order.group_cart.members.all %} {% if not member.is_cart_owner %}
+                        <tbody> {% if order.group_cart %} {% for member in order.group_cart.members.all %}
                           <tr>
                             <td style="font-weight: bold">{{ member.name }}</td>
                           </tr> {% for line in member.cart %}
@@ -284,7 +284,7 @@
                                 <li>{{x.name}}</li> {% endfor %} </ul> {% endif %} </td>
                             <td>{{ line.quantity }}</td>
                             <td>&#x20A6;{{ line.data.total }}</td>
-                          </tr> {% endfor %} {% endif %} {% endfor %} {% else %} {% for line in order.order_lines.all %}
+                          </tr> {% endfor %} {% endfor %} {% else %} {% for line in order.order_lines.all %}
                           <tr class="table-item-row">
                             <td>{{ line.item.name }}</td>
                             <td>{{ line.quantity }}</td>

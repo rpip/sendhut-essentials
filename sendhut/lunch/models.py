@@ -419,6 +419,10 @@ class OrderLine(BaseModel):
     special_instructions = models.TextField(null=True, blank=True)
     order = models.ForeignKey(Order, related_name='order_lines')
 
+    @property
+    def store(self):
+        return self.item.menu.store
+
     class Meta:
         db_table = "order_line"
 
@@ -476,8 +480,12 @@ class GroupCart(BaseModel):
     def cancel(self):
         self.delete()
 
+    def get_total(self):
+        subtotal = sum(x.get_total() for x in self.members.all())
+        return Money(subtotal.amount + settings.LUNCH_DELIVERY_FEE, 'NGN')
+
     def get_absolute_url(self):
-        return reverse('lunch:cart_join', args=(self.token, ))
+        return reverse('cart_join', args=(self.token, ))
 
     def __str__(self):
         return self.token
@@ -495,8 +503,8 @@ class GroupCartMember(BaseModel):
     # holds user's cart for current group order session
     cart = JSONField(null=True, blank=True, default=[])
 
+    def get_total(self):
+        return Money(sum(x['data']['total'] for x in self.cart), 'NGN')
+
     def is_cart_owner(self):
         return self.user == self.group_cart.owner
-
-    def get_total(self):
-        return Money('NGN', sum(x['data']['total'] for x in self.cart))

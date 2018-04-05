@@ -3,7 +3,7 @@ from .views import (
     CartView, CheckoutView, GroupOrderView,
     food_detail, cartline_detail, cartline_delete, store_page,
     cart_reload, order_list, order_details,
-    search, CartJoin, leave_group_order,
+    search, leave_group_order,
     cancel_group_order
 )
 
@@ -11,7 +11,6 @@ from .views import (
 urlpatterns = [
     url(r'^search/(?P<tag>[a-zA-Z0-9-]+)$', search, name='search'),
     url(r'^cart/reload$', cart_reload, name='cart_reload'),
-    url(r'^cart/(?P<token>[a-zA-Z0-9-]+)$', CartJoin.as_view(), name='cart_join'),
     url(r'^cart/(?P<token>[a-zA-Z0-9-]+)/leave$',
         leave_group_order, name='leave_group_order'),
     url(r'^cart/(?P<token>[a-zA-Z0-9-]+)/cancel$',

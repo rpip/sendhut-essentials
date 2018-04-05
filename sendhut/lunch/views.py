@@ -285,6 +285,7 @@ class CheckoutView(LoginRequiredMixin, View):
             group_cart.lock()
 
         user = request.user
+        # from django.db import IntegrityError
         order = Order.create_from_cart(
             cart=cart,
             user=user,
