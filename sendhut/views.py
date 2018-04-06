@@ -2,7 +2,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.shortcuts import render, redirect
 
-from sendhut.cart import Cart
+from sendhut.cart.models import Cart
 from sendhut.lunch.models import Store, Order
 from . import payments
 

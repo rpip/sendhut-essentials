@@ -35,8 +35,9 @@ class BaseModel(SafeDeleteModel, UpdateMixin):
         editable=False, unique=True
     )
 
-    def hard_delete(self):
-        self.delete(force_policy=HARD_DELETE)
-
     class Meta:
         abstract = True  # Set this model as Abstract
+        ordering = ('-updated',)
+
+    def hard_delete(self):
+        self.delete(force_policy=HARD_DELETE)

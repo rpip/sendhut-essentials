@@ -1,11 +1,23 @@
 from django.conf.urls import url
+from django.views import View
+
 from .views import (
-    CartView, CheckoutView, GroupOrderView,
+    CartView, CheckoutView,
     food_detail, cartline_detail, cartline_delete, store_page,
-    cart_reload, order_list, order_details,
-    search, leave_group_order,
-    cancel_group_order
+    cart_reload, order_list, order_details, search,
 )
+
+
+class GroupOrderView(View):
+    pass
+
+
+def leave_group_order(request):
+    pass
+
+
+def cancel_group_order(request):
+    pass
 
 
 urlpatterns = [

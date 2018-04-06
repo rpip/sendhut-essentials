@@ -9,7 +9,7 @@ from django.shortcuts import redirect, render
 from django.contrib import messages
 from django.conf import settings
 
-from sendhut.cart import Cart
+from sendhut.cart.models import Cart
 from sendhut import utils, notifications
 from sendhut.accounts.models import User
 from .forms import (
@@ -53,19 +53,20 @@ class LoginView(View):
     def post(self, request, *args, **kwargs):
         login_form = LoginForm(data=request.POST)
         signup_form = SignupForm()
+        next_url = request.GET.get('next', settings.LOGIN_REDIRECT_URL)
         if login_form.is_valid():
             username = login_form.cleaned_data['username']
             password = login_form.cleaned_data['password']
             remember_me = login_form.cleaned_data['remember_me']
             user = authenticate(request, username=username, password=password)
+            # on login, get anonymous cart and assign to user
             if user:
-                cart_data = Cart(request).serialize_lite()
+                cart = request.cart
                 login(request, user)
                 if not remember_me:
                     self.request.session.set_expiry(0)
                 # restore cart from anonymous user sesssion
-                Cart(request, cart_data)
-                next_url = request.GET.get('next') or settings.LOGIN_REDIRECT_URL
+                cart.change_user(user)
                 return redirect(next_url)
 
         return render(request, 'accounts/login.html', {

@@ -18,7 +18,6 @@ from sendhut.utils import (
     generate_token, unslugify, json_encode
 )
 from sendhut.db import BaseModel
-from sendhut.accounts.models import User
 
 
 class FOOD_TAGS:
@@ -91,6 +90,7 @@ class Store(BaseModel):
     # store is opened or closed for some reason
     available = models.BooleanField(default=True)
     # display this store on site?
+    # TODO(yao): rename to is_featured
     display = models.BooleanField(default=True)
 
     featured = StoreManager()
@@ -201,6 +201,13 @@ class Item(BaseModel):
     def dietary_label_text(cls, label_id):
         labels = {k: v for k, v in cls.DIETARY_RESTRICTIONS}
         return labels[label_id]
+
+    def get_price_per_item(self):
+        return self.price if self.price else 0
+
+    @property
+    def store(self):
+        return self.menu.store
 
     class Meta:
         db_table = "item"
@@ -443,7 +450,7 @@ class GroupCart(BaseModel):
         db_table = "group_cart"
 
     token = models.CharField(max_length=10)
-    owner = models.ForeignKey(User, related_name='group_carts')
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='group_carts')
     store = models.ForeignKey(Store, related_name='group_carts')
     monetary_limit = MoneyField(
         max_digits=10,
@@ -481,8 +488,7 @@ class GroupCart(BaseModel):
         self.delete()
 
     def get_total(self):
-        subtotal = sum(x.get_total() for x in self.members.all())
-        return Money(subtotal.amount + settings.LUNCH_DELIVERY_FEE, 'NGN')
+        return sum(x.get_total() for x in self.members.all())
 
     def get_absolute_url(self):
         return reverse('cart_join', args=(self.token, ))
@@ -496,8 +502,10 @@ class GroupCartMember(BaseModel):
     class Meta:
         db_table = "group_cart_member"
 
-    user = models.ForeignKey(User, related_name='joined_group_carts',
-                             null=True, blank=True)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        related_name='joined_group_carts',
+        null=True, blank=True)
     group_cart = models.ForeignKey(GroupCart, related_name='members')
     name = models.CharField(max_length=40)
     # holds user's cart for current group order session

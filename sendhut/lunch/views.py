@@ -9,19 +9,16 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.urls import reverse
+from django.conf import settings
 from django.db.models import Q
-from djmoney.money import Money
 
-from sendhut.cart import Cart, GroupMemberCart
 from sendhut import notifications, payments, utils
-from sendhut.accounts.models import User
+from sendhut.cart.utils import get_cart_data
+from .models import Item, Store, Order, FOOD_TAGS
+from .forms import CheckoutForm, PartnerSignupForm
 
-from .models import (
-    Item, Store, Order, OrderLine, GroupCart, GroupCartMember, FOOD_TAGS
-)
-from .forms import CheckoutForm, PartnerSignupForm, GroupOrderForm
-from .group_order import GroupOrder
+class Cart():
+    pass
 
 
 def food_detail(request, slug):
@@ -30,7 +27,6 @@ def food_detail(request, slug):
     context = {
         'item': item,
         'page_title': item.name,
-        'group_cart_token': request.GET.get('cart_ref')
     }
     return render(request, template, context)
 
@@ -38,29 +34,19 @@ def food_detail(request, slug):
 def cartline_detail(request, line_id, slug):
     template = 'lunch/_item_detail.html'
     item = Item.objects.get(slug=slug)
-    cart_ref = request.GET.get('cart_ref')
     context = {
         'item': item,
         'page_title': item.name,
-        'group_cart_token': cart_ref
     }
-    if cart_ref:
-        cart = GroupMemberCart(request, cart_ref)
-    else:
-        cart = Cart(request)
-
-    context['cart_line'] = cart.get_line(line_id).serialize()
+    cart = request.cart
+    context['cart_line'] = cart.lines.get(id=line_id)
     return render(request, template, context)
 
 
 def cartline_delete(request, line_id):
-    cart_ref = request.GET.get('cart_ref')
-    if cart_ref:
-        GroupMemberCart(request, cart_ref).remove(line_id)
-    else:
-        Cart(request).remove(line_id)
-
-    return JsonResponse({'status': 'OK'}, encoder=utils.JSONEncoder)
+    cart = request.cart
+    cart.remove_line(line_id)
+    return JsonResponse({'status': 'OK'})
 
 
 class PartnerSignupView(FormView):
@@ -94,12 +80,11 @@ def search(request, tag):
 
 @login_required
 def order_list(request):
-    open_carts = GroupCart.get_user_open_carts(user=request.user)
     orders = Order.objects.filter(user=request.user)
     return render(
         request,
         'lunch/order_history.html',
-        {'orders': orders, 'open_carts': open_carts}
+        {'orders': orders, 'open_carts': []}
     )
 
 
@@ -111,22 +96,6 @@ def order_details(request, ref):
     return render(request, 'lunch/order_details.html', context)
 
 
-class GroupOrderView(LoginRequiredMixin, View):
-
-    template_name = 'lunch/group_order.html'
-
-    def post(self, request, *args, **kwargs):
-        form = GroupOrderForm(data=request.POST)
-        if form.is_valid():
-            store = form.cleaned_data['store']
-            limit = form.cleaned_data['limit']
-            GroupOrder.create(request, store, limit)
-            messages.info(request, "Group order created!")
-            return redirect(reverse('lunch:store_details', args=(store,)))
-
-        return redirect(request.META.get('HTTP_REFERER'))
-
-
 def store_page(request, slug):
     template = 'lunch/store_details.html'
     store = get_object_or_404(Store, slug=slug)
@@ -134,143 +103,45 @@ def store_page(request, slug):
         'store': store,
         'page_title': store.name
     }
-    group_order = GroupOrder.get_by_store(request, store.uuid)
-    if group_order:
-        # TODO(yao): update all sessions when group_order (groupcart)
-        # is locked (cancelled,checkout), remove from
-        # TODO(yao): mixin/plug/middleware to inject group_order context for every/req
-        # if group_order is cancelled or locked, return to prev with error as
-        # cancelled or 500 page with custom error message
-        group_cart = GroupCart.objects.filter(token=group_order['token']).first()
-        # if group_cart and group_cart.is_open():
-        if group_cart:
-            messages.info(request, "Open the sidebar to see the group order cart")
-            member = group_cart.members.get(id=group_order['member']['id'])
-            context['group_order'] = group_order
-            context['cart'] = member.cart
-            context['group_cart'] = group_cart
-            context['cart_url'] = request.build_absolute_uri(
-                group_cart.get_absolute_url())
-        else:
-            # cancelled or locked for checkout
-            name = User.objects.get(email=group_order['owner']['email']).get_full_name()
-            limit = Money(group_order['monetary_limit'], 'NGN')
-            limit = ("({} limit)".format(limit) if limit else "")
-            error_msg = "{}'s {} group order has expired".format(name, limit)
-            messages.error(request, error_msg)
-    else:
-        messages.info(request, "You can order in lunch with coworkers or \
-        friends with the group order.")
-
+    messages.info(request, settings.GROUP_ORDER_MESSAGE)
     return render(request, template, context)
-
-
-class CartJoin(View):
-
-    def get(self, request, *args, **kwargs):
-        token = kwargs['token']
-        group_cart = get_object_or_404(GroupCart, token=token)
-        if request.user.is_authenticated():
-            GroupOrder.join(request, group_cart, request.user.get_full_name())
-            msg = "You've joined {}'s group order".format(group_cart.owner.get_full_name())
-            messages.info(request, msg)
-            return redirect(reverse('lunch:store_details', args=(group_cart.store.slug,)))
-
-        # already in group cart
-        if GroupOrder.get(request, token):
-            return redirect(reverse('lunch:store_details',
-                                    args=(group_cart.store.slug,)))
-
-        context = {
-            'group_cart': group_cart,
-            'store': group_cart.store,
-            'cart_url': request.build_absolute_uri(group_cart.get_absolute_url())
-        }
-
-        return render(request, 'lunch/cart_join.html', context)
-
-    def post(self, request, *args, **kwargs):
-        token = kwargs['token']
-        group_cart = get_object_or_404(GroupCart, token=token)
-        name = request.POST['name']
-        if not name:
-            return redirect(request.META.get('HTTP_REFERER'))
-
-        GroupOrder.join(request, group_cart, name)
-        msg = "You've joined {}'s group order".format(group_cart.owner.get_full_name())
-        messages.info(request, msg)
-        return redirect(reverse('lunch:store_details', args=(group_cart.store.slug,)))
 
 
 class CartView(View):
     # TODO(yao): implement dynamic delivery cost calculation
 
     def get(self, request):
-        token = request.GET.get('cart_ref')
-        if token:
-            cart = GroupMemberCart(request, token)
-            context = cart.build_cart()
-            context['group_cart'] = cart.member.group_cart
-        else:
-            context = Cart(request).build_cart()
-
-        return render(request, 'partials/sidebar_cart.html', context)
+        return render(request, 'partials/sidebar_cart.html', {})
 
     def post(self, request):
         "This endpoints handle new cart additions and cart item updates"
         data = json.loads(request.body)
-        token = data.get('cart_token')
-        if token:
-            cart = GroupMemberCart(request, token)
-        else:
-            cart = Cart(request)
-
+        cart = request.cart
         item = Item.objects.get(uuid=data['uuid'])
         quantity = data.pop('quantity')
         # if line_id is present, it means it's an update
-        cart.add(item, int(quantity), data, replace=data.get('line_id'))
-        return JsonResponse(cart.build_cart(), encoder=utils.JSONEncoder)
+        cart.add(item, int(quantity), data, replace=bool(data.get('line_id')))
+        return JsonResponse(get_cart_data(cart), encoder=utils.JSONEncoder)
 
 
 def cart_reload(request):
     template = 'lunch/cart_summary.html'
-    ref = request.GET.get('cart_ref')
-    if ref and ref != 'undefined':
-        cart = GroupMemberCart(request, ref)
-        context = cart.build_cart()
-        context['group_cart'] = cart.member.group_cart
-    else:
-        context = Cart(request).build_cart()
-
-    return render(request, template, context)
+    return render(request, template)
 
 
 class CheckoutView(LoginRequiredMixin, View):
 
     def get(self, request):
         form = CheckoutForm(data=request.POST)
-        ref = request.GET.get('cart_ref')
-        if ref:
-            cart = GroupMemberCart(request, ref)
-            context = cart.build_cart()
-            context['group_cart'] = cart.member.group_cart
-        else:
-            context = Cart(request).build_cart()
-
+        context = get_cart_data(request.cart)
         context['form'] = form
         return render(request, 'lunch/cart_summary.html', context)
 
     def post(self, request):
         form = CheckoutForm(data=request.POST)
-        ref = request.GET.get('cart_ref')
         if not(form.is_valid()):
             messages.error(request, "Please complete the delivery form to proceed")
-            if ref:
-                cart = GroupMemberCart(request, ref)
-                context = cart.build_cart()
-                context['group_cart'] = cart.member.group_cart
-            else:
-                context = Cart(request).build_cart()
+            context = Cart(request).build_cart()
 
             return render(request, 'lunch/cart_summary.html', context)
 
@@ -278,23 +149,16 @@ class CheckoutView(LoginRequiredMixin, View):
         cash_delivery = form.cleaned_data.pop('cash_delivery')
         # TODO(yao): send invoice email, send sms confirmation/updates
         _cart = cart.build_cart()
-        group_cart = None
-        cart_ref = request.GET.get('cart_ref')
-        if cart_ref:
-            group_cart = GroupCart.objects.get(token=cart_ref)
-            group_cart.lock()
-
         user = request.user
         # from django.db import IntegrityError
         order = Order.create_from_cart(
             cart=cart,
             user=user,
-            group_cart=group_cart,
             total_cost=_cart['total'],
             delivery_fee=_cart['delivery_fee'],
             **form.cleaned_data
         )
-        # TODO(yao): separate emails to group cart owner and participants
+        # TODO(yao): also notify group cart owner participants
         notifications.send_order_confirmation(user.email, order)
 
         messages.info(
@@ -311,23 +175,4 @@ class CheckoutView(LoginRequiredMixin, View):
                 # TODO(yao): what to do if payment fails
                 messages.error(request, "Payment failed. Please try again")
 
-        if group_cart:
-            GroupOrder.end_session(request, cart_ref)
-
         return redirect('home')
-
-
-def leave_group_order(request, token):
-    group_cart = get_object_or_404(GroupCart, token=token)
-    GroupOrder.leave(request, token)
-    msg = "You've been removed from {}'s cart".format(
-        group_cart.owner.get_full_name())
-    messages.info(request, msg)
-    return redirect(reverse('lunch:store_details',
-                            args=(group_cart.store.slug,)))
-
-
-def cancel_group_order(request, token):
-    store_slug = GroupOrder.cancel(request, token)
-    messages.info(request, "Group order deleted")
-    return redirect(reverse('lunch:store_details', args=(store_slug,)))

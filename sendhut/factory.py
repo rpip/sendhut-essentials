@@ -211,7 +211,7 @@ class OrderFactory(DjangoModelFactory):
     delivery_time = lazy_attribute(lambda o: choice(Order.get_today_delivery_schedules()))
     delivery_address = 'Lekki phase 1'
     notes = lazy_attribute(lambda o: fake.sentence())
-    delivery_fee = settings.LUNCH_DELIVERY_FEE
+    delivery_fee = settings.BASE_DELIVERY_FEE
     total_cost = choice([2300, 1200, 8000, 12000])
 
 

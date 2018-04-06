@@ -52,7 +52,8 @@ INSTALLED_APPS = [
     'loginas',
 
     'sendhut.accounts',
-    'sendhut.lunch'
+    'sendhut.lunch',
+    'sendhut.cart'
 ]
 
 MIDDLEWARE = [
@@ -64,6 +65,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'sendhut.middleware.site',
+    'sendhut.middleware.cart'
 ]
 
 ROOT_URLCONF = 'sendhut.urls'
@@ -81,7 +84,11 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.media',
-                'sendhut.context_processors.cart'
+                'sendhut.cart.context_processors.cart',
+                'sendhut.context_processors.default_currency',
+                'sendhut.context_processors.mobile_check',
+                'sendhut.context_processors.food_tags',
+                'sendhut.context_processors.delivery_schedule'
             ],
         },
     },
@@ -192,7 +199,9 @@ MESSAGE_TAGS = {
 }
 
 
-LUNCH_DELIVERY_FEE = 500
+DEFAULT_CURRENCY = 'NGN'
+
+BASE_DELIVERY_FEE = 500
 
 SENDHUT_EMAIL = 'hello@sendhut.com'
 
@@ -266,3 +275,5 @@ except:
 
 
 GOOGLE_MAPS_API_KEY = 'AIzaSyDP1XjGHjAlrxiSICFk5-Q7uEYVrpcZHFk'
+
+GROUP_ORDER_MESSAGE = "You can order in lunch with coworkers or friends with the group order."
