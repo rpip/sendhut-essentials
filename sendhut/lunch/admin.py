@@ -292,6 +292,7 @@ class OrderLineInline(admin.TabularInline):
     model = OrderLine
     exclude = ('metadata',)
     raw_id_fields = ['item']
+    extra = 0
 
 
 @admin.register(Order)
