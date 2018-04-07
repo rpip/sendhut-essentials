@@ -53,7 +53,8 @@ INSTALLED_APPS = [
 
     'sendhut.accounts',
     'sendhut.lunch',
-    'sendhut.cart'
+    'sendhut.cart',
+    'sendhut.grouporder'
 ]
 
 MIDDLEWARE = [
@@ -66,7 +67,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'sendhut.middleware.site',
-    'sendhut.middleware.cart'
+    'sendhut.middleware.cart',
+    'sendhut.middleware.group_order'
 ]
 
 ROOT_URLCONF = 'sendhut.urls'
@@ -88,7 +90,8 @@ TEMPLATES = [
                 'sendhut.context_processors.default_currency',
                 'sendhut.context_processors.mobile_check',
                 'sendhut.context_processors.food_tags',
-                'sendhut.context_processors.delivery_schedule'
+                'sendhut.context_processors.delivery_schedule',
+                'sendhut.grouporder.context_processors.group_order',
             ],
         },
     },

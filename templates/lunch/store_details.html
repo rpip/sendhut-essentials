@@ -8,7 +8,7 @@
 
 {% block content %}
   <div class="container">
-    {% if group_cart %}
+    {% if group_order %}
       {% include "lunch/_group_order_header.html" %}
     {% endif %}
     <div class="row">
@@ -21,7 +21,7 @@
           </ol>
         </div>
         <div>
-          {% if not group_cart %}
+          {% if not group_order %}
             {% if user.is_authenticated %}
               <a href="#" data-toggle="modal" data-target="#group-order-modal">
                 <button type="button" class="btn btn-primary">Create Group Order</button>

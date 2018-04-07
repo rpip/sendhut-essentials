@@ -8,11 +8,11 @@
            <h5 class="modal-title" id="group-join-modal-label">Join Group Order</h5>
          </div>
          <div class="modal-body">
-           <p>{{ group_cart.owner.get_full_name }}</p>
-           <p>{{ group_cart|group_cart_limit }}</p>
+           <p>{{ group_order.user.get_full_name }}</p>
+           <p>{{ group_order|group_cart_limit }}</p>
            <hr>
            <p>Tell us your name so we can identify your food.</p>
-           <form method="POST" action="{% url 'cart_join' group_cart.token  %}">
+           <form method="POST" action="{% url 'join-group-order' group_order.token  %}">
            {% csrf_token %}
             <div class="form-group">
               <input type="text" class="form-control" name="name"

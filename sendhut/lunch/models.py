@@ -10,8 +10,6 @@ from taggit.managers import TaggableManager
 from djmoney.models.fields import MoneyField
 from sorl.thumbnail import ImageField
 from sorl.thumbnail import get_thumbnail
-from jsonfield import JSONField
-from djmoney.money import Money
 
 from sendhut.utils import (
     sane_repr, image_upload_path,
@@ -54,6 +52,9 @@ class FOOD_TAGS:
 
 class Partner(BaseModel):
     "Partner is the parent org/merchant that owns the stores"
+    class Meta:
+        db_table = "partner"
+
     name = models.CharField(max_length=100)
     business_name = models.CharField(max_length=100)
     phone = models.CharField(max_length=30, null=True, blank=True, unique=True)
@@ -381,7 +382,7 @@ class Order(BaseModel):
         choices=PAYMENT_SOURCE,
         default=CASH
     )
-    group_cart = models.OneToOneField('GroupCart', related_name='order', null=True, blank=True)
+    # group_order = models.OneToOneField('GroupCart', related_name='order', null=True, blank=True)
 
     def save(self, *args, **kwargs):
         if not self.created:
@@ -432,87 +433,3 @@ class OrderLine(BaseModel):
 
     class Meta:
         db_table = "order_line"
-
-
-class GroupCart(BaseModel):
-    """
-    Model for holding group orders.
-    """
-    OPEN = 1
-    LOCKED = 2
-
-    STATUS_CHOICES = [
-        (OPEN, 'Open'),
-        (LOCKED, 'Locked')
-    ]
-
-    class Meta:
-        db_table = "group_cart"
-
-    token = models.CharField(max_length=10)
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='group_carts')
-    store = models.ForeignKey(Store, related_name='group_carts')
-    monetary_limit = MoneyField(
-        max_digits=10,
-        decimal_places=2,
-        default_currency='NGN',
-        null=True,
-        blank=True
-    )
-    status = models.IntegerField(choices=STATUS_CHOICES, default=OPEN)
-
-    @staticmethod
-    def get_user_open_carts(user):
-        return GroupCart.objects.filter(
-            members__user=user,
-            status=GroupCart.OPEN
-        )
-
-    def save(self, *args, **kwargs):
-        # TODO(yao): generate Heroku-style names for the group order
-        if not self.created:
-            self.token = generate_token(6)
-        super().save(*args, **kwargs)
-        return self
-
-    def lock(self):
-        self.update(status=self.LOCKED)
-
-    def unlock(self):
-        self.update(status=self.OPEN)
-
-    def is_open(self):
-        return self.status == self.OPEN
-
-    def cancel(self):
-        self.delete()
-
-    def get_total(self):
-        return sum(x.get_total() for x in self.members.all())
-
-    def get_absolute_url(self):
-        return reverse('cart_join', args=(self.token, ))
-
-    def __str__(self):
-        return self.token
-
-
-class GroupCartMember(BaseModel):
-
-    class Meta:
-        db_table = "group_cart_member"
-
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        related_name='joined_group_carts',
-        null=True, blank=True)
-    group_cart = models.ForeignKey(GroupCart, related_name='members')
-    name = models.CharField(max_length=40)
-    # holds user's cart for current group order session
-    cart = JSONField(null=True, blank=True, default=[])
-
-    def get_total(self):
-        return Money(sum(x['data']['total'] for x in self.cart), 'NGN')
-
-    def is_cart_owner(self):
-        return self.user == self.group_cart.owner

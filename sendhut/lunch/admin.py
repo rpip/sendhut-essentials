@@ -6,16 +6,14 @@ from django.utils.safestring import mark_safe
 from django.shortcuts import get_object_or_404
 from django.forms import ModelForm
 
-from safedelete.models import HARD_DELETE
-from safedelete.admin import SafeDeleteAdmin, highlight_deleted
 from sorl.thumbnail import get_thumbnail
 from multiupload.admin import MultiUploadAdmin
 import nested_admin
 
+from sendhut.db import BaseModelAdmin
 from .models import (
     Store, Menu, Item, ItemVariant, Image,
-    OptionGroup, Option, Order, OrderLine, GroupCart,
-    GroupCartMember
+    OptionGroup, Option, Order, OrderLine
 )
 
 
@@ -39,26 +37,6 @@ class AdminImageWidget(AdminFileWidget):
             output.append('<img src="{}">'.format(t.url))
         output.append(super(AdminFileWidget, self).render(name, value, attrs))
         return mark_safe(u''.join(output))
-
-
-class BaseModelAdmin(SafeDeleteAdmin):
-
-    exclude = ('metadata',)
-    _list_display = (highlight_deleted,) + SafeDeleteAdmin.list_display
-    _list_filter = SafeDeleteAdmin.list_filter
-    actions = ('hard_delete',) + SafeDeleteAdmin.actions
-
-    def hard_delete(self, request, queryset):
-        self.message_user(request, "{} successfully deleted".format(queryset.count()))
-        return queryset.delete(force_policy=HARD_DELETE)
-
-    hard_delete.short_description = "HARD Delete selected items"
-
-    def get_list_display(self, request):
-        return tuple(self.list_display) + self._list_display
-
-    def get_list_filter(self, request):
-        return tuple(self.list_filter) + self._list_filter
 
 
 class ItemInline(nested_admin.NestedTabularInline):
@@ -314,22 +292,3 @@ class OrderAdmin(BaseModelAdmin):
     )
     search_fields = ('reference',)
     inlines = [OrderLineInline]
-
-
-class GroupCartInline(admin.StackedInline):
-
-    model = GroupCartMember
-    exclude = ('metadata',)
-    raw_id_fields = ['group_cart']
-    extra = 0
-
-
-@admin.register(GroupCart)
-class GroupCartAdmin(BaseModelAdmin):
-    list_display = [
-        'owner',
-        'store',
-        'monetary_limit',
-        'created'
-    ]
-    inlines = [GroupCartInline]

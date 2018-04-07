@@ -15,7 +15,7 @@
           Once everyone has chosen their food and added it the cart, any of the participants can submit the order whenever ready.
         </p>
         <br>
-        <form method="post" action="{% url 'lunch:group_order' %}"
+        <form method="post" action="{% url 'group:new' %}"
               name="group-order-form" id="group-order-form">
           {% csrf_token %}
           <nav aria-label="...">

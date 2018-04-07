@@ -4,7 +4,7 @@ from rest_framework import serializers
 from sendhut.accounts.models import User, Address
 from sendhut.lunch.models import (
     Store, Menu, Item, OptionGroup, Option,
-    Image, OrderLine, Order, GroupCart, GroupCartMember
+    Image, OrderLine, Order
 )
 
 
@@ -51,32 +51,6 @@ class StoreSerializer(serializers.ModelSerializer):
                   'verified', 'available', 'menus', 'uuid')
 
 
-class GroupCartMemberSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = GroupCartMember
-        fields = ('name', 'cart', 'id')
-
-
-class GroupCartSerializer(serializers.ModelSerializer):
-    url = serializers.SerializerMethodField()
-    owner = UserSerializer(read_only=True)
-    store = serializers.SerializerMethodField()
-    members = GroupCartMemberSerializer(many=True, read_only=True)
-
-    def get_store(self, obj):
-        return str(obj.store.uuid)
-
-    def get_url(self, obj):
-        return obj.get_absolute_url()
-
-    class Meta:
-        model = GroupCart
-        fields = (
-            'token', 'owner', 'store', 'monetary_limit',
-            'status', 'url', 'members'
-        )
-
-
 class ImageSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -121,7 +95,6 @@ class OrderLineSerializer(serializers.ModelSerializer):
 
 
 class OrderSerializer(serializers.ModelSerializer):
-    group_cart = GroupCartSerializer(many=True, read_only=True)
     items = OrderLineSerializer(many=True, read_only=True)
 
     class Meta:

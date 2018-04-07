@@ -9,8 +9,8 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.utils.encoding import smart_str
 
 from sendhut.db import BaseModel
-from sendhut.lunch.models import Item
 from sendhut.utils import sane_repr
+from sendhut.lunch.models import Item
 
 
 # signal
@@ -27,11 +27,12 @@ class CartStatus:
 
     OPEN = 'open'
     CANCELED = 'canceled'
+    LOCKED = 'locked'
 
     CHOICES = [
         (OPEN,  'Open - currently active'),
-        (CANCELED, 'Canceled - canceled by user')
-
+        (CANCELED, 'Canceled - canceled by user'),
+        (LOCKED, 'Locked - locked by user checkout')
     ]
 
 
@@ -80,8 +81,7 @@ class Cart(BaseModel):
     status = models.CharField(
         max_length=32, choices=CartStatus.CHOICES, default=CartStatus.OPEN)
     user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, blank=True, null=True, related_name='carts',
-        on_delete=models.CASCADE)
+        settings.AUTH_USER_MODEL, blank=True, null=True, related_name='carts')
     token = models.UUIDField(primary_key=True, default=uuid4, editable=False)
 
     objects = CartQueryset.as_manager()
@@ -194,8 +194,7 @@ class CartLine(BaseModel):
     """
     cart = models.ForeignKey(
         Cart, related_name='lines', on_delete=models.CASCADE)
-    item = models.ForeignKey(
-        Item, related_name='+', on_delete=models.CASCADE)
+    item = models.ForeignKey(Item, related_name='+', on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(
         validators=[MinValueValidator(0), MaxValueValidator(999)])
     data = JSONField(blank=True, default={})

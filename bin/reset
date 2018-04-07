@@ -27,5 +27,5 @@ if [[ $1 == "--dry" ]]; then
   python manage.py load_menus --limit=200
 else
   echo "Creating dummy data"
-  python manage.py setup_seed
+  python manage.py populatedb
 fi

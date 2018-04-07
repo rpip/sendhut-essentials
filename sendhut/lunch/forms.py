@@ -1,5 +1,5 @@
 from django import forms
-from .models import Order, Store, GroupCart, Partner
+from .models import Order, Partner
 from django.forms import ModelForm
 from datetime import datetime
 
@@ -16,11 +16,6 @@ class CheckoutForm(forms.Form):
         delivery_time = self.cleaned_data['delivery_time']
         hour, minute = delivery_time.split(':')
         return datetime.today().replace(hour=int(hour), minute=int(minute))
-
-
-class GroupOrderForm(forms.Form):
-    limit = forms.FloatField(required=False)
-    store = forms.CharField()
 
 
 class PartnerSignupForm(ModelForm):

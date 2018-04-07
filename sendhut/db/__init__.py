@@ -5,6 +5,8 @@ from jsonfield import JSONField
 
 # from .soft_delete import SoftDeletionModel
 from safedelete.models import SafeDeleteModel
+from safedelete.models import HARD_DELETE
+from safedelete.admin import SafeDeleteAdmin, highlight_deleted
 from safedelete.models import SOFT_DELETE_CASCADE, HARD_DELETE
 
 
@@ -37,7 +39,27 @@ class BaseModel(SafeDeleteModel, UpdateMixin):
 
     class Meta:
         abstract = True  # Set this model as Abstract
-        ordering = ('-updated',)
+        #ordering = ('-updated',)
 
     def hard_delete(self):
         self.delete(force_policy=HARD_DELETE)
+
+
+class BaseModelAdmin(SafeDeleteAdmin):
+
+    exclude = ('metadata',)
+    _list_display = (highlight_deleted,) + SafeDeleteAdmin.list_display
+    _list_filter = SafeDeleteAdmin.list_filter
+    actions = ('hard_delete',) + SafeDeleteAdmin.actions
+
+    def hard_delete(self, request, queryset):
+        self.message_user(request, "{} successfully deleted".format(queryset.count()))
+        return queryset.delete(force_policy=HARD_DELETE)
+
+    hard_delete.short_description = "HARD Delete selected items"
+
+    def get_list_display(self, request):
+        return tuple(self.list_display) + self._list_display
+
+    def get_list_filter(self, request):
+        return tuple(self.list_filter) + self._list_filter

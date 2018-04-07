@@ -1,6 +1,7 @@
 from django.contrib.sites.models import Site
 
 from sendhut.cart.utils import get_or_create_cart_from_request, set_cart_cookie
+from sendhut.grouporder.utils import get_group_member_from_request
 
 
 def site(get_response):
@@ -30,5 +31,17 @@ def cart(get_response):
             set_cart_cookie(cart, response)
 
         return response
+
+    return middleware
+
+
+def group_order(get_response):
+    """
+    Get group order. Ensure matching views receive current group order
+    """
+    def middleware(request):
+        member = get_group_member_from_request(request)
+        request.group_member = member
+        return get_response(request)
 
     return middleware

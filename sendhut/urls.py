@@ -3,11 +3,11 @@ from django.conf.urls import include, url
 from django.conf import settings
 from django.contrib import admin
 
-from sendhut.lunch import urls as lunch_urls
-from sendhut.accounts import urls as account_urls
 from sendhut.api import urls as api_urls
 from sendhut.accounts.views import LoginView, LogoutView, SignupView
 from sendhut.lunch.views import PartnerSignupView
+from sendhut.grouporder.views import CartJoin
+
 from .views import (
     home, about, faqs, privacy_terms,
     payment_callback, payment_webhook
@@ -22,9 +22,10 @@ urlpatterns = [
     url(r'^signup/$', SignupView.as_view(), name='signup'),
     url(r'^login/$', LoginView.as_view(), name='signin'),
     url(r'^logout/$', LogoutView.as_view(), name='logout'),
-    url(r'^accounts/', include(account_urls, namespace='accounts')),
-    url(r'^lunch/', include(lunch_urls, namespace='lunch')),
-    # url(r'^cart/(?P<token>[a-zA-Z0-9-]+)$', CartJoin.as_view(), name='cart_join'),
+    url(r'^accounts/', include('sendhut.accounts.urls', namespace='accounts')),
+    url(r'^lunch/', include('sendhut.lunch.urls', namespace='lunch')),
+    url(r'^group/', include('sendhut.grouporder.urls', namespace='group')),
+    url(r'^cart/(?P<token>[a-zA-Z0-9-]+)$', CartJoin.as_view(), name='join-group-order'),
     url(r'^api/', include(api_urls)),
     url(r'^api-auth/', include('rest_framework.urls')),
     # payment transaction callback

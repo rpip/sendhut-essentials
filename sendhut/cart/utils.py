@@ -1,4 +1,6 @@
+from itertools import groupby
 from datetime import timedelta
+
 from .models import Cart
 from uuid import UUID
 
@@ -34,7 +36,8 @@ def get_or_create_anonymous_cart_from_token(
 
 def get_or_create_user_cart(user, cart_queryset=Cart.objects.all()):
     """Return an open cart for given user or create a new one."""
-    return cart_queryset.open().get_or_create(user=user)[0]
+    return cart_queryset.open().get_or_create(
+        user=user, group_member=None)[0]
 
 
 def get_or_create_cart_from_request(request, cart_queryset=Cart.objects.all()):
@@ -76,7 +79,6 @@ def get_user_cart(user, cart_queryset=Cart.objects.all()):
 
 def get_cart_data(cart):
     """Return a JSON-serializable representation of the cart."""
-    from itertools import groupby
     from django.conf import settings
     from djmoney.money import Money
     sub_total = cart.get_total()

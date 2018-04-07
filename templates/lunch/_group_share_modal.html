@@ -11,14 +11,14 @@
         </button>
       </div>
       <div class="modal-body">
-        <p>{{ group_cart.owner.get_full_name }}</p>
-        <p>{{ group_cart|group_cart_limit }}</p>
+        <p>{{ group_order.user.get_full_name }}</p>
+        <p>{{ group_order|group_cart_limit }}</p>
         <p>
           Copy and share this link with everyone who's going to add to the group order.
           Each member can then go in and order individually.
         </p>
         <div id="url-copy-row">
-          <div id="foo" class="col-sm-10">{{ cart_url }}</div>
+          <div id="foo" class="col-sm-10">{{ group_order.get_share_url }}</div>
           <div class="col-sm-2">
             <button type="button" class="btn btn-primary btn-sm copy" data-clipboard-target="#foo">Copy</button>
           </div>

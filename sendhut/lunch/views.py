@@ -17,9 +17,6 @@ from sendhut.cart.utils import get_cart_data
 from .models import Item, Store, Order, FOOD_TAGS
 from .forms import CheckoutForm, PartnerSignupForm
 
-class Cart():
-    pass
-
 
 def food_detail(request, slug):
     template = 'lunch/_item_detail.html'
@@ -103,7 +100,9 @@ def store_page(request, slug):
         'store': store,
         'page_title': store.name
     }
-    messages.info(request, settings.GROUP_ORDER_MESSAGE)
+    if not request.group_member:
+        messages.info(request, settings.GROUP_ORDER_MESSAGE)
+
     return render(request, template, context)
 
 
@@ -139,13 +138,13 @@ class CheckoutView(LoginRequiredMixin, View):
 
     def post(self, request):
         form = CheckoutForm(data=request.POST)
+        cart = request.cart
         if not(form.is_valid()):
             messages.error(request, "Please complete the delivery form to proceed")
-            context = Cart(request).build_cart()
+            context = get_cart_data(cart)
 
             return render(request, 'lunch/cart_summary.html', context)
 
-        cart = Cart(request)
         cash_delivery = form.cleaned_data.pop('cash_delivery')
         # TODO(yao): send invoice email, send sms confirmation/updates
         _cart = cart.build_cart()
