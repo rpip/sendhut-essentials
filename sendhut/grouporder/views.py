@@ -1,11 +1,14 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import redirect, get_object_or_404
 from django.contrib import messages
 from django.urls import reverse
 from django.views import View
 
 from sendhut.lunch.models import Store
 from .forms import GroupOrderForm
-from .utils import create_group_order
+from .utils import (
+    get_anonymous_group_order_token, create_group_order,
+    set_group_order_cookie, join_group_order, join_group_order_anonymous
+)
 from .models import GroupOrder
 
 
@@ -25,42 +28,42 @@ def new_group_order(request):
 class CartJoin(View):
 
     def get(self, request, *args, **kwargs):
-        token = kwargs['token']
-        group_cart = get_object_or_404(GroupCart, token=token)
-        if request.user.is_authenticated():
-            GroupOrder.join(request, group_cart, request.user.get_full_name())
-            msg = "You've joined {}'s group order".format(group_cart.owner.get_full_name())
-            messages.info(request, msg)
-            return redirect(reverse('lunch:store_details', args=(group_cart.store.slug,)))
+        token = kwargs['ref']
+        group_order = get_object_or_404(GroupOrder, token=token)
+        next_url = reverse('lunch:store_details', args=(group_order.store.slug,))
+        response = redirect(next_url)
+        if request.user.is_authenticated:
+            # TODO(yao): switch carts between group order and regular modes
+            join_group_order(request.user, group_order)
+        else:
+            member = get_anonymous_group_order_token(request, group_order.store)
+            if not member:
+                request.session['group_order'] = token
+                # set anonymous cart cookie
+                set_group_order_cookie(group_order, response)
 
-        # already in group cart
-        if GroupOrder.get(request, token):
-            return redirect(reverse('lunch:store_details',
-                                    args=(group_cart.store.slug,)))
-
-        context = {
-            'group_cart': group_cart,
-            'store': group_cart.store,
-            'cart_url': request.build_absolute_uri(group_cart.get_absolute_url())
-        }
-
-        return render(request, 'lunch/cart_join.html', context)
+        return response
 
     def post(self, request, *args, **kwargs):
-        token = kwargs['token']
-        group_cart = get_object_or_404(GroupCart, token=token)
-        name = request.POST['name']
-        if not name:
-            return redirect(request.META.get('HTTP_REFERER'))
-
-        GroupOrder.join(request, group_cart, name)
-        msg = "You've joined {}'s group order".format(group_cart.owner.get_full_name())
-        messages.info(request, msg)
-        return redirect(reverse('lunch:store_details', args=(group_cart.store.slug,)))
+        # join_group_order_anonymous(request, group_order, name)
+        token = kwargs['ref']
+        group_order = get_object_or_404(GroupOrder, token=token)
+        name = request.POST.get('name')
+        member = join_group_order_anonymous(request, group_order, name)
+        next_url = reverse('lunch:store_details', args=(group_order.store.slug,))
+        response = redirect(next_url)
+        set_group_order_cookie(group_order, response, member.cart.token)
+        return response
 
 
 def leave(request, ref):
-    pass
+    group_order = get_object_or_404(GroupOrder, token=ref)
+    request.group_member.leave()
+    fullname = group_order.user.get_full_name()
+    msg = "You've been removed from {}'s cart".format(fullname)
+    messages.info(request, msg)
+    next_url = reverse('lunch:store_details', args=(group_order.store.slug,))
+    return redirect(next_url)
 
 
 def cancel(request, ref):
@@ -71,8 +74,4 @@ def cancel(request, ref):
 
 
 def rejoin(request, ref):
-    pass
-
-
-def join(request, ref):
     pass

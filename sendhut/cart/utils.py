@@ -1,4 +1,3 @@
-from itertools import groupby
 from datetime import timedelta
 
 from .models import Cart

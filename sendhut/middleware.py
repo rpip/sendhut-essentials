@@ -22,26 +22,22 @@ def site(get_response):
 def cart(get_response):
     """
     Get or create cart. Ensure views always receive a saved cart instance
+    Also ensure matching views receive current group order
     """
     def middleware(request):
         cart = get_or_create_cart_from_request(request)
-        request.cart = cart
+        member = get_group_member_from_request(request)
+        request.group_member = None
+        if member:
+            request.group_member = member
+            request.cart = member.cart
+        else:
+            request.cart = cart
+
         response = get_response(request)
         if not request.user.is_authenticated:
             set_cart_cookie(cart, response)
 
         return response
-
-    return middleware
-
-
-def group_order(get_response):
-    """
-    Get group order. Ensure matching views receive current group order
-    """
-    def middleware(request):
-        member = get_group_member_from_request(request)
-        request.group_member = member
-        return get_response(request)
 
     return middleware

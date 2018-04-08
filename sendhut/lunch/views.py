@@ -14,6 +14,8 @@ from django.db.models import Q
 
 from sendhut import notifications, payments, utils
 from sendhut.cart.utils import get_cart_data
+from sendhut.grouporder.utils import get_anonymous_group_order_token
+from sendhut.grouporder.models import Member, GroupOrder
 from .models import Item, Store, Order, FOOD_TAGS
 from .forms import CheckoutForm, PartnerSignupForm
 
@@ -100,6 +102,16 @@ def store_page(request, slug):
         'store': store,
         'page_title': store.name
     }
+    if not request.group_member:
+        token = get_anonymous_group_order_token(request, store)
+        if token:
+            member = Member.objects.filter(cart__token=token).first()
+            if not member:
+                group_token = request.session['group_order']
+                group_order = GroupOrder.objects.get(token=group_token)
+                context['anonymous_group_join'] = True
+                context['group_order'] = group_order
+
     if not request.group_member:
         messages.info(request, settings.GROUP_ORDER_MESSAGE)
 

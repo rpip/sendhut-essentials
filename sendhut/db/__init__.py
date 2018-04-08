@@ -19,6 +19,9 @@ class UpdateMixin(object):
         self.save(update_fields=kwargs.keys())
 
 
+#class BaseModelQuerySet(SafeDeleteQuerySet):
+
+
 class BaseModel(SafeDeleteModel, UpdateMixin):
     """
     An abstract base class model that provides

@@ -8,7 +8,7 @@
 
 {% block content %}
   <div class="container">
-    {% if group_order %}
+    {% if group_order and member.is_active %}
       {% include "lunch/_group_order_header.html" %}
     {% endif %}
     <div class="row">
@@ -21,7 +21,7 @@
           </ol>
         </div>
         <div>
-          {% if not group_order %}
+          {% if not group_order or not member.is_active %}
             {% if user.is_authenticated %}
               <a href="#" data-toggle="modal" data-target="#group-order-modal">
                 <button type="button" class="btn btn-primary">Create Group Order</button>
@@ -135,12 +135,13 @@
     {% include "lunch/_group_share_modal.html" %}
     {% include "lunch/_group_join_modal.html" %}
   {% endif %}
+
   {% include "lunch/_group_order_modal.html" %}
 
 {% endblock %}
 
 {% block extra_js %}
-  {% if group_order and group_order.force_signup %}
+  {% if anonymous_group_join %}
     <script type="text/javascript">
       $('#group-join-modal').modal({backdrop: 'static', focus: true});
     </script>

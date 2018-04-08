@@ -25,7 +25,7 @@ urlpatterns = [
     url(r'^accounts/', include('sendhut.accounts.urls', namespace='accounts')),
     url(r'^lunch/', include('sendhut.lunch.urls', namespace='lunch')),
     url(r'^group/', include('sendhut.grouporder.urls', namespace='group')),
-    url(r'^cart/(?P<token>[a-zA-Z0-9-]+)$', CartJoin.as_view(), name='join-group-order'),
+    url(r'^cart/(?P<ref>[a-zA-Z0-9-]+)$', CartJoin.as_view(), name='join-group-order'),
     url(r'^api/', include(api_urls)),
     url(r'^api-auth/', include('rest_framework.urls')),
     # payment transaction callback

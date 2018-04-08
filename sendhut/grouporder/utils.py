@@ -1,4 +1,7 @@
 from django.core.urlresolvers import resolve
+from django.urls import reverse
+from datetime import timedelta
+from uuid import uuid4
 
 from sendhut.cart.models import Cart
 from sendhut.lunch.models import Store
@@ -8,6 +11,15 @@ from .models import GroupOrder, Member
 
 
 CART_PREFIX = 'group-order'
+
+
+def set_group_order_cookie(group_order, response, token=None):
+    """Update response with a group ordr token cookie."""
+    ten_years = timedelta(days=(365 * 10))
+    COOKIE_NAME = get_store_group_order_cookie_name(group_order.store)
+    token = token or uuid4()
+    response.set_signed_cookie(
+        COOKIE_NAME, token, max_age=int(ten_years.total_seconds()))
 
 
 def get_store_group_order_cookie_name(store):
@@ -54,15 +66,28 @@ def create_group_order(user, store, monetary_limit=None):
 
 def get_group_member_from_request(request):
     if request.GET.get('cart_ref'):
-        return GroupOrder.objects.get(request.GET['cart_ref'])
+        group_order = GroupOrder.objects.get(request.GET['cart_ref'])
+        store = group_order.store
 
     match = resolve(request.path)
     if match.url_name == 'store_details':
         store = Store.objects.get(slug=match.kwargs['slug'])
 
-        if request.user.is_authenticated:
-            user = request.user
+    if match.url_name in ['leave', 'rejoin', 'cancel']:
+        group_order = GroupOrder.objects.get(token=match.kwargs['ref'])
+        store = group_order.store
 
-            return Member.objects.filter(group_order__store=store, user=user).first()
-        # anonymous users
+    if request.user.is_authenticated:
+        user = request.user
+        return Member.objects.filter(group_order__store=store, user=user).first()
+
+    # anonymous users
+    try:
         return get_anonymous_group_order_member(request, store)
+    except:
+        pass
+
+
+def get_group_share_url(request, group_order):
+    url = reverse('join-group-order', args=(group_order.token,))
+    return request.build_absolute_uri(url)

@@ -67,8 +67,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'sendhut.middleware.site',
-    'sendhut.middleware.cart',
-    'sendhut.middleware.group_order'
+    'sendhut.middleware.cart'
 ]
 
 ROOT_URLCONF = 'sendhut.urls'

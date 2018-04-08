@@ -66,10 +66,6 @@ class GroupOrder(BaseModel):
     def get_absolute_url(self):
         return reverse('cart_join', args=(self.token, ))
 
-    def get_share_url(self):
-        url = reverse('join-group-order', args=(self.token,))
-        return build_absolute_uri(url)
-
     def __str__(self):
         return self.token
 
@@ -95,7 +91,7 @@ class Member(BaseModel):
     name = models.CharField(max_length=40)
     cart = models.OneToOneField(
         Cart, related_name='group_member', on_delete=models.CASCADE)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True)
     # if group order isn't locked/cancelled, user can go in/out anytime
     state = models.CharField(
         max_length=32, choices=MemberStatus.CHOICES, default=MemberStatus.IN)
@@ -110,10 +106,11 @@ class Member(BaseModel):
         return self.cart.user.get_full_name() if self.cart.user else self.name
 
     def leave(self):
-        self.mode = MemberStatus.OUT
+        self.state = MemberStatus.OUT
+        self.save(update_fields=['state'])
 
     def rejoin(self):
         self.mode = MemberStatus.IN
 
-    def is_in_session(self):
-        self.state == MemberStatus.IN
+    def is_active(self):
+        return self.state == MemberStatus.IN

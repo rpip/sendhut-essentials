@@ -1,4 +1,6 @@
 {% load lunch_extras %}
+{% load grouporder_extras %}
+
 <!-- cart share modal -->
 <div class="modal fade" id="group-share-modal" tabindex="-1" role="dialog"
      aria-labelledby="group-share-modal-label" aria-hidden="true">
@@ -18,7 +20,7 @@
           Each member can then go in and order individually.
         </p>
         <div id="url-copy-row">
-          <div id="foo" class="col-sm-10">{{ group_order.get_share_url }}</div>
+          <div id="foo" class="col-sm-10">{% shareable_link group_order %}</div>
           <div class="col-sm-2">
             <button type="button" class="btn btn-primary btn-sm copy" data-clipboard-target="#foo">Copy</button>
           </div>
