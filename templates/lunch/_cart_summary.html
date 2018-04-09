@@ -10,13 +10,17 @@
         <div class="clearfix"></div>
         <h6 class="text-muted empty-cart-msg">Your basket is empty</h6>
       {% endif %}
-        {% for partition in cart.partitions %}
-          <h5 class="subcart-header">{{ partition.store.name }}</h5>
+        {% for store, partition in cart.partitions %}
+        <h5 class="subcart-header">{{ store.name }}</h5>
         {% include "lunch/_subcart.html" %}
         <div class="container cart-summary">
           <div class="row">
             <div class="col-md-3 offset-sm-7">Subtotal</div>
             <div class="col-md-1">{{ partition.get_total }}</div>
+          </div>
+          <div class="row">
+            <div class="col-md-3 offset-sm-7">Delivery fee</div>
+            <div class="col-md-1">{{ delivery_fee }}</div>
           </div>
         </div><!--// cart cost -->
         <br>
@@ -26,7 +30,7 @@
       <div class="cart-summary">
         <div class="row">
           <div><h5 class="bold">Total</h5></div>
-          <div class="offset-sm-1 bold">{{ cart.get_total }}</div>
+          <div class="offset-sm-1 bold">{{ total }}</div>
         </div>
       </div><!-- // cart-summary  -->
       <hr>

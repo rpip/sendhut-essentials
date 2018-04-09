@@ -4,33 +4,38 @@
 
 
 {% block content %}
-<br>
-{% if open_carts %}
-<h5>Open Group Orders</h5>
-{% for cart in open_carts %}
-<div id="open-carts">
-  <ul class="list-group">
-    <li class="list-group-item">
-      <a href="{{ cart.get_absolute_url }}">{{ cart.owner.get_full_name}}'s cart  - {{ cart|group_cart_limit }}</a>
-    </li>
-  </ul>
-</div>
-{% endfor %}
-{% endif %}
-<br><br>
-<h5>Past Orders</h5>
-{% include "lunch/_order_history.html" with orders=orders %}
+  <br>
+  {% if open_carts %}
+    <h5>Open Group Orders</h5>
+    {% for cart in open_carts %}
+      <div id="open-carts">
+        <ul class="list-group">
+          <li class="list-group-item">
+            <a href="{{ cart.get_absolute_url }}">{{ cart.owner.get_full_name}}'s cart  - {{ cart|group_cart_limit }}</a>
+          </li>
+        </ul>
+      </div>
+    {% endfor %}
+  {% endif %}
+  <br><br>
+  <h5>Orders</h5>
+  {% if orders %}
+    {% include "lunch/_order_history.html" with orders=orders %}
+  {% else %}
+    <h6 class="bold">You haven't placed any orders yet!</h6>
+    Your orders will appear here.
+  {% endif %}
 
 {% endblock %}
 
 {% block extra_js %}
-<script type="text/javascript">
-  $('tr[data-href]').on("click",function(){
-  window.location = $(this).data('href');
-  return false;
-  });
-  $("td > a").on("click",function(e){
-  e.stopPropagation();
-  });
-</script>
+  <script type="text/javascript">
+    $('tr[data-href]').on("click",function(){
+      window.location = $(this).data('href');
+      return false;
+    });
+    $("td > a").on("click",function(e){
+      e.stopPropagation();
+    });
+  </script>
 {% endblock %}

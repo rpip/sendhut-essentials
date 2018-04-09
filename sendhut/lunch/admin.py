@@ -280,15 +280,15 @@ class OrderAdmin(BaseModelAdmin):
         'created',
         'user',
         'reference',
-        'delivery_time',
-        'delivery_address',
+        'time',
+        'address',
         'notes',
         'payment'
     )
     list_filter = (
         'created',
-        'delivery_time',
-        'delivery_address'
+        'time',
+        'address'
     )
     search_fields = ('reference',)
     inlines = [OrderLineInline]

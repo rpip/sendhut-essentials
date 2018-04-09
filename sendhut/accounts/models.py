@@ -33,6 +33,8 @@ class Address(BaseModel):
     address_1 = models.CharField(max_length=254)
     address_2 = models.CharField(max_length=254, null=True, blank=True)
     address_3 = models.CharField(max_length=254, null=True, blank=True)
+    # TODO(yao) Add delivery instructions, Apt number or company name, Phone number, name
+    # name and phone number default to user name and tel
 
     class Meta:
         db_table = 'address'

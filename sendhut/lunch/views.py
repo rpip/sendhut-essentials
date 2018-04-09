@@ -108,9 +108,12 @@ def store_page(request, slug):
             member = Member.objects.filter(cart__token=token).first()
             if not member:
                 group_token = request.session['group_order']
-                group_order = GroupOrder.objects.get(token=group_token)
-                context['anonymous_group_join'] = True
-                context['group_order'] = group_order
+                try:
+                    group_order = GroupOrder.objects.get(token=group_token)
+                    context['anonymous_group_join'] = True
+                    context['group_order'] = group_order
+                except GroupOrder.DoesNotExist:
+                    pass
 
     if not request.group_member:
         messages.info(request, settings.GROUP_ORDER_MESSAGE)
@@ -122,7 +125,9 @@ class CartView(View):
     # TODO(yao): implement dynamic delivery cost calculation
 
     def get(self, request):
-        return render(request, 'partials/sidebar_cart.html', {})
+        cart = request.cart
+        context = get_cart_data(cart)
+        return render(request, 'partials/sidebar_cart.html', context)
 
     def post(self, request):
         "This endpoints handle new cart additions and cart item updates"

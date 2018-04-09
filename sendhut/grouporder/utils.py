@@ -65,6 +65,7 @@ def create_group_order(user, store, monetary_limit=None):
 
 
 def get_group_member_from_request(request):
+    store = None
     if request.GET.get('cart_ref'):
         group_order = GroupOrder.objects.get(request.GET['cart_ref'])
         store = group_order.store
@@ -77,15 +78,13 @@ def get_group_member_from_request(request):
         group_order = GroupOrder.objects.get(token=match.kwargs['ref'])
         store = group_order.store
 
-    if request.user.is_authenticated:
-        user = request.user
-        return Member.objects.filter(group_order__store=store, user=user).first()
+    if store:
+        if request.user.is_authenticated:
+            user = request.user
+            return Member.objects.filter(group_order__store=store, user=user).first()
 
-    # anonymous users
-    try:
+        # anonymous users
         return get_anonymous_group_order_member(request, store)
-    except:
-        pass
 
 
 def get_group_share_url(request, group_order):

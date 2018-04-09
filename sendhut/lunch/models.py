@@ -6,14 +6,14 @@ from django.db import models
 from django.contrib.postgres.fields import ArrayField
 from django.urls import reverse
 from django.conf import settings
+from jsonfield import JSONField
 from taggit.managers import TaggableManager
 from djmoney.models.fields import MoneyField
 from sorl.thumbnail import ImageField
 from sorl.thumbnail import get_thumbnail
 
 from sendhut.utils import (
-    sane_repr, image_upload_path,
-    generate_token, unslugify, json_encode
+    sane_repr, image_upload_path, generate_token, unslugify
 )
 from sendhut.db import BaseModel
 
@@ -72,6 +72,7 @@ class Store(BaseModel):
     # TODO(yao): rename store to Store
     # TODO(yao): add allergy information
     # TODO(yao): add restaurant notes
+    # TODO(yao): display 'Pre-order.' for Restaurants allowing orders ahead of opening
     name = models.CharField(max_length=100)
     manager_name = models.CharField(max_length=100, null=True, blank=True)
     partner = models.ForeignKey('Partner', related_name='store', blank=True, null=True)
@@ -88,6 +89,7 @@ class Store(BaseModel):
     tags = TaggableManager()
     verified = models.BooleanField(default=False)
     # TODO(yao): add is partner field
+    # TODO(yao): Use choices to display availability: 'Closed',​'Unavailable'
     # store is opened or closed for some reason
     available = models.BooleanField(default=True)
     # display this store on site?
@@ -108,6 +110,9 @@ class Store(BaseModel):
 
     def __str__(self):
         return self.name
+
+    def __lt__(self, other):
+        return self.id < other.id
 
     __repr__ = sane_repr('name', 'address')
 
@@ -135,6 +140,12 @@ class Menu(BaseModel):
 class Item(BaseModel):
 
     # TODO(yao): Generate thumbnails on save
+    # TODO(yao): Add issue_resolution field
+    # If issue arises:
+    #   Go with the store's recommendation
+    #   Leave out the selected item
+    #   Cancel the entire order
+    #   Contact me
 
     # dietary restrictions
     GLUTEN_FREE = 0
@@ -278,6 +289,10 @@ class OptionGroup(BaseModel):
     - Choice of Protein (required)
     - Pizza sizes
     - Soups
+    - What sides would you like?
+    - Would you like an extra piece of chicken
+    When only one option/side?
+    - Would you like to add XYZ? [x] Add XYZ
     """
     # TODO(yao): better error: You have selected too few options for "Choose Your Size"
     name = models.CharField(max_length=120)
@@ -360,9 +375,12 @@ class Order(BaseModel):
     )
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='orders')
     reference = models.CharField(max_length=8, unique=True)
-    # TODO(yao): add helpers for calculating orders
-    delivery_time = models.DateTimeField(default=datetime.now)
-    delivery_address = models.CharField(max_length=120)
+    # TODO(yao): Add types of orders:
+    #   Orders that have already been placed:
+    #   Orders that are placed and paid for
+    #   Manual payment and order:
+    time = models.DateTimeField(default=datetime.now)
+    address = models.CharField(max_length=120)
     delivery_fee = MoneyField(
         max_digits=10,
         decimal_places=2,
@@ -382,7 +400,8 @@ class Order(BaseModel):
         choices=PAYMENT_SOURCE,
         default=CASH
     )
-    # group_order = models.OneToOneField('GroupCart', related_name='order', null=True, blank=True)
+    # group_order = models.OneToOneField('GroupOrder',
+    # related_name='order', null=True, blank=True)
 
     def save(self, *args, **kwargs):
         if not self.created:
@@ -390,8 +409,8 @@ class Order(BaseModel):
         super().save(*args, **kwargs)
         return self
 
-    def get_total_cost(self):
-        return sum(item.get_cost() for item in self.items.all())
+    def get_total(self):
+        return sum(line.get_total() for line in self.lines.all())
 
     @classmethod
     def get_today_delivery_schedules(cls):
@@ -401,20 +420,6 @@ class Order(BaseModel):
             schedule.append(datetime.today().replace(hour=int(hour), minute=int(minute)))
         return schedule
 
-    @classmethod
-    def create_from_cart(cls, cart, **kwargs):
-        order = cls.objects.create(**kwargs)
-        for line in cart:
-            OrderLine.objects.create(
-                item_id=line.id,
-                quantity=line.quantity,
-                price=line.data['total'],
-                order=order,
-                special_instructions=line.data['note'],
-                metadata=json_encode(line.data)
-            )
-        return order
-
     class Meta:
         db_table = "order"
 
@@ -423,13 +428,23 @@ class OrderLine(BaseModel):
 
     item = models.ForeignKey(Item)
     quantity = models.IntegerField()
-    price = MoneyField(max_digits=10, decimal_places=2, default_currency='NGN')
+    unit_price = MoneyField(max_digits=10, decimal_places=2, default_currency='NGN')
     special_instructions = models.TextField(null=True, blank=True)
-    order = models.ForeignKey(Order, related_name='order_lines')
+    order = models.ForeignKey(Order, related_name='lines', editable=False,
+                              on_delete=models.CASCADE)
+    data = JSONField(blank=True, default={})
+
+    def get_total(self):
+        return self.unit_price * self.quantity * self.get_options_total()
+
+    def get_options_total(self):
+        pass
 
     @property
     def store(self):
         return self.item.menu.store
+
+    __repr__ = sane_repr('item', 'quantity')
 
     class Meta:
         db_table = "order_line"

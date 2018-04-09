@@ -48,3 +48,9 @@ def group_cart_limit(group_cart):
 @register.filter(name='unslugify')
 def _unslugify(text):
     return unslugify(text)
+
+
+@register.simple_tag(takes_context=True)
+def cart_total(context, partition):
+    request = context['request']
+    request.cart.get_items_total(partition)
