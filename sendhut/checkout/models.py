@@ -8,6 +8,8 @@ from djmoney.models.fields import MoneyField
 
 from sendhut.db import BaseModel
 from sendhut.lunch.models import Item
+from sendhut.cart.core import ItemLine, ItemSet
+from sendhut.grouporder.models import GroupOrder
 from sendhut.utils import generate_token, sane_repr
 from . import PaymentStatus, PaymentSource, OrderStatus
 
@@ -28,7 +30,7 @@ class OrderQueryset(models.QuerySet):
     #         total_gross__lte=F('amount_paid'))
 
 
-class Order(BaseModel):
+class Order(BaseModel, ItemSet):
 
     DELIVERY_TIMES = (
         '11:30',
@@ -73,8 +75,8 @@ class Order(BaseModel):
         choices=PaymentSource.CHOICES,
         default=PaymentSource.CASH
     )
-    # group_order = models.OneToOneField('GroupOrder',
-    # related_name='order', null=True, blank=True)
+    group_order = models.OneToOneField(
+        GroupOrder, related_name='order', null=True, blank=True)
 
     def update_payment(self, status):
         self.payment_status = status
@@ -112,7 +114,7 @@ class Order(BaseModel):
         ordering = ('-updated',)
 
 
-class OrderLine(BaseModel):
+class OrderLine(BaseModel, ItemLine):
 
     item = models.ForeignKey(Item)
     quantity = models.IntegerField()
@@ -124,13 +126,6 @@ class OrderLine(BaseModel):
 
     def get_total(self):
         return self.unit_price * self.quantity * self.get_options_total()
-
-    def get_options_total(self):
-        pass
-
-    @property
-    def store(self):
-        return self.item.menu.store
 
     __repr__ = sane_repr('item', 'quantity')
 

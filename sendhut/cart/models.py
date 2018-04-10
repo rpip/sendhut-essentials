@@ -121,6 +121,15 @@ class Cart(BaseModel, ItemSet):
         "Return the cart split into delivery/store groups"
         return partition(self, lambda line: line.item.store, ItemList)
 
+    def is_in_group_order(self):
+        return bool(self.group_member)
+
+    def get_group_order(self):
+        return self.group_member.group_order
+
+    def lock(self):
+        self.update(status=CartStatus.LOCKED)
+
     def __len__(self):
         return self.lines.count()
 

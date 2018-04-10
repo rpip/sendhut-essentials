@@ -1,0 +1,38 @@
+{% load lunch_extras %}
+{% load grouporder_extras %}
+
+<!-- cart share modal -->
+<div class="modal fade" id="group-cancel-modal" tabindex="-1" role="dialog"
+     aria-labelledby="group-share-modal-label" aria-hidden="true">
+     <div class="modal-dialog" role="document">
+       <div class="modal-content">
+         <div class="modal-header">
+           <h5 class="modal-title" id="group-share-modal-label">Are you absolutely sure?</h5>
+           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+             <span aria-hidden="true">&times;</span>
+           </button>
+         </div>
+         <div class="modal-body">
+           <p>{{ group_order.members.count }} people in this group order</p>
+           <div>
+             <p>
+               This action cannot be undone. This will permanently delete the
+               this group order and remove all members and their carts.
+             </p>
+             <div class="row">
+               <div class="col-sm-6">
+                 <a href="{% url 'group:cancel' group_order.token %}">
+                   <button type="button" class="btn btn-outline-danger">Yes, delete this group order</button>
+                 </a>
+               </div>
+               <div class="col-sm-6">
+                 <button type="button" class="btn btn-primary" data-dismiss="modal" aria-label="Close">
+                   Back to menu
+                 </button>
+               </div>
+             </div>
+           </div>
+         </div>
+       </div>
+     </div>
+</div>

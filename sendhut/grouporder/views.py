@@ -7,7 +7,8 @@ from sendhut.lunch.models import Store
 from .forms import GroupOrderForm
 from .utils import (
     get_anonymous_group_order_token, create_group_order,
-    set_group_order_cookie, join_group_order, join_group_order_anonymous
+    set_group_order_cookie, join_group_order,
+    join_group_order_anonymous, get_store_group_order_cookie_name
 )
 from .models import GroupOrder
 
@@ -63,7 +64,12 @@ def leave(request, ref):
     msg = "You've been removed from {}'s cart".format(fullname)
     messages.info(request, msg)
     next_url = reverse('lunch:store_details', args=(group_order.store.slug,))
-    return redirect(next_url)
+    response = redirect(next_url)
+    if not request.user.is_authenticated:
+        cookie_name = get_store_group_order_cookie_name(group_order.store)
+        response.delete_cookie(cookie_name)
+
+    return response
 
 
 def cancel(request, ref):

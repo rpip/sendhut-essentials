@@ -27,11 +27,11 @@ def cart(get_response):
     def middleware(request):
         cart = get_or_create_cart_from_request(request)
         member = get_group_member_from_request(request)
-        request.group_member = None
         if member:
             request.group_member = member
             request.cart = member.cart
         else:
+            request.group_member = None
             request.cart = cart
 
         response = get_response(request)

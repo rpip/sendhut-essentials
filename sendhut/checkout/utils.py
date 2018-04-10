@@ -20,19 +20,34 @@ class Checkout:
         If any of the addresses is new and the user is logged in the address
         will also get saved to that user's address book.
         """
-        order = Order.objects.create(
+        if self.cart.is_in_group_order():
+            return self._create_group_order(time, address, notes)
+
+        return self._create_single_order(time, address, notes)
+
+    def _create_group_order(self, time, address=None, notes=None):
+        group_order = self.cart.get_group_order()
+        group_order.lock()
+        self.order = Order.objects.create(
+            user=self.user, time=time, address=address,
+            notes=notes, delivery_fee=self.calculate_delivery_cost(),
+            total_gross=self.get_total(), group_order=group_order,
+        )
+        return self.order
+
+    def _create_single_order(self, time, address=None, notes=None):
+        self.order = Order.objects.create(
             user=self.user, time=time, address=address,
             notes=notes, delivery_fee=self.calculate_delivery_cost(),
             total_gross=self.get_total()
         )
 
         for line in self.cart.lines.all():
-            self.add_item_to_order(order, line.item, line.quantity, line.data)
+            self.add_item_to_order(self.order, line.item, line.quantity, line.data)
 
-        self.order = order
-
-        # self.cart.delete()
-        return order
+        # delete cart after checkout
+        self.cart.delete()
+        return self.order
 
     def add_item_to_order(self, order, item, quantity, metadata):
         return OrderLine.objects.create(

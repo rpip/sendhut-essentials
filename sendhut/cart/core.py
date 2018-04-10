@@ -33,6 +33,10 @@ class ItemList(list, ItemSet):
 class ItemLine:
     "Represents a single item in a cart or basket"
 
+    @property
+    def store(self):
+        return self.item.menu.store
+
     def get_quantity(self):
         return self.quantity
 

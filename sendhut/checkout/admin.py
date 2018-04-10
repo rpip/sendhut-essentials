@@ -7,9 +7,13 @@ from .models import Order, OrderLine
 class OrderLineInline(admin.TabularInline):
 
     model = OrderLine
-    exclude = ('metadata',)
+    exclude = ('metadata', 'deleted', 'data')
     raw_id_fields = ['item']
     extra = 0
+    readonly_fields = ('store', 'special_instructions')
+
+    def special_instructions(self, obj):
+        return obj.special_instructions
 
 
 @admin.register(Order)

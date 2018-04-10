@@ -13,6 +13,7 @@ from .forms import CheckoutForm
 
 @login_required
 def cart_summary(request):
+    # TODO(yao): group order summary
     form = CheckoutForm(data=request.POST)
     context = get_cart_data(request.cart)
     context['form'] = form
@@ -36,7 +37,7 @@ def checkout(request):
     # TODO(yao): also notify group cart owner participants
     confirm_msg = "Order submitted for processing. reference {}".format(order.reference)
     messages.info(request, confirm_msg)
-    #notifications.send_order_confirmation(user.email, order)
+    notifications.send_order_confirmation(user.email, order)
 
     if not(cash_delivery):
         from sendhut.utils import quantize

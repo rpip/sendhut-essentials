@@ -9,6 +9,8 @@ from sendhut.lunch.models import Store
 from sendhut.cart.models import Cart, CartStatus
 from sendhut.utils import generate_token
 
+from . import MemberStatus
+
 
 class GroupOrder(BaseModel):
     """
@@ -44,13 +46,15 @@ class GroupOrder(BaseModel):
         return self
 
     def lock(self):
-        self.update(status=self.LOCKED)
+        self.update(status=CartStatus.LOCKED)
+        for member in self:
+            member.cart.lock()
 
     def unlock(self):
-        self.update(status=self.OPEN)
+        self.update(status=CartStatus.OPEN)
 
     def is_open(self):
-        return self.status == self.OPEN
+        return self.status == CartStatus.OPEN
 
     def cancel(self):
         for x in self.members.all():
@@ -59,25 +63,18 @@ class GroupOrder(BaseModel):
 
         self.hard_delete()
 
+    def get_subtotal(self):
+        return sum(x.get_cart_total() for x in self.members.all())
+
     def get_total(self):
-        return sum(x.get_total() for x in self.members.all())
+        # TODO(yao): get total + delivery
+        return self.get_subtotal()
 
     def get_absolute_url(self):
         return reverse('cart_join', args=(self.token, ))
 
     def __str__(self):
         return self.token
-
-
-class MemberStatus:
-    """Enum of possible member modes/states"""
-    IN = 'in'
-    OUT = 'out'
-
-    CHOICES = [
-        (IN,  'IN - currently active'),
-        (OUT, 'OUT - exited by user')
-    ]
 
 
 class Member(BaseModel):
@@ -102,7 +99,7 @@ class Member(BaseModel):
         return self.user == self.group_order.user
 
     def get_name(self):
-        return self.cart.user.get_full_name() if self.cart.user else self.name
+        return self.user.get_full_name() if self.is_cart_owner() else self.name
 
     def leave(self):
         self.state = MemberStatus.OUT

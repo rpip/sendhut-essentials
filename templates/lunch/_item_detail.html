@@ -28,7 +28,7 @@
          <input type="hidden" name="price" value="{{ item.price.amount }}" />
          <input type="hidden" name="slug" value="{{ item.slug }}" />
          <input type="hidden" name="category" value="{{ category }}" />
-         <input type="hidden" name="line_id" value="{{ cart_line.data.line_id }}" />
+         <input type="hidden" name="line_id" value="{{ cart_line.id }}" />
          {% if group_cart_token %}
          <input type="hidden" name="cart_token" value="{{ group_cart_token }}" />
          {% endif %}

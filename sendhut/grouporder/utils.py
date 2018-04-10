@@ -8,6 +8,7 @@ from sendhut.lunch.models import Store
 from sendhut.cart.utils import get_or_create_anonymous_cart_from_token
 
 from .models import GroupOrder, Member
+from . import MemberStatus
 
 
 CART_PREFIX = 'group-order'
@@ -70,19 +71,24 @@ def get_group_member_from_request(request):
     if ref:
         group_order = GroupOrder.objects.filter(token=ref).first()
         store = group_order.store if group_order else None
+    else:
+        match = resolve(request.path)
+        if match.url_name == 'store_details':
+            store = Store.objects.get(slug=match.kwargs['slug'])
 
-    match = resolve(request.path)
-    if match.url_name == 'store_details':
-        store = Store.objects.get(slug=match.kwargs['slug'])
-
-    if match.url_name in ['leave', 'rejoin', 'cancel']:
-        group_order = GroupOrder.objects.get(token=match.kwargs['ref'])
-        store = group_order.store
+        if match.url_name in ['leave', 'rejoin', 'cancel']:
+            group_order = GroupOrder.objects.get(token=match.kwargs['ref'])
+            store = group_order.store
 
     if store:
         if request.user.is_authenticated:
-            user = request.user
-            return Member.objects.filter(group_order__store=store, user=user).first()
+            # TODO(yao): filter for only groups users is active in NOW
+            member = Member.objects.filter(
+                group_order__store=store,
+                state=MemberStatus.IN,
+                user=request.user).first()
+
+            return member
 
         # anonymous users
         return get_anonymous_group_order_member(request, store)

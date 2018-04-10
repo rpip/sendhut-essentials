@@ -29,7 +29,7 @@
              Login
           </a>
         {% endif %}
-        <a href="#" data-href="{% url 'lunch:cart' %}?cart_ref={{group_cart.token}}" data-slidepanel="panel">
+        <a href="#" data-href="{% url 'lunch:cart' %}?cart_ref={{group_order.token}}" data-slidepanel="panel">
           <img class="icon" src="{% static 'images/icons/shopping-cart.svg' %}" alt="Your order">
           <span id="cart-item-count">{{ cart|length }}</span>
         </a>

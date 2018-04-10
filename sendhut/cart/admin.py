@@ -7,7 +7,8 @@ from .models import Cart, CartLine
 class CartLineInline(admin.TabularInline):
 
     model = CartLine
-    exclude = ('metadata', 'deleted', 'created')
+    exclude = ('metadata', 'deleted', 'created', 'data',)
+    readonly_fields = ('store',)
     raw_id_fields = ['item']
     extra = 0
 
@@ -21,6 +22,6 @@ class CartAdmin(admin.ModelAdmin):
         'user',
         'token',
     )
-    exclude = ('metadata', 'deleted', 'created')
+    exclude = ('metadata', 'deleted', 'created',)
     list_filter = ('user',)
     inlines = [CartLineInline]

@@ -34,8 +34,8 @@ $(function () {
     $('[data-slidepanel]').slidepanel({
         orientation: 'right',
         mode: 'overlay'
-});
-    // hide siderail
+   });
+   // hide siderail
    $('body').on('click', '.cart .close', function(e) { Document.slidepanel.collapse(); });
 
     // item quantity spinner
@@ -82,7 +82,7 @@ $('body').on('click', '#item-modal #add-to-cart', function(e) {
     var item = ($('#item-form').serializeObject())
     $.ajax({
       type: "POST",
-      url: '/lunch/cart/',
+      url: '/lunch/cart/?cart_ref='+ "{{ group_order.token }}",
       dataType: 'json',
       contentType: 'application/json',
       data: JSON.stringify(item),

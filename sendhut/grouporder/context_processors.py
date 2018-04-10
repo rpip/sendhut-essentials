@@ -6,6 +6,10 @@ def group_order(request):
     """Inject group order info into context"""
     member = get_group_member_from_request(request)
     if member:
-        return {'group_order': member.group_order, 'member': member}
+        return {
+            'group_order': member.group_order,
+            'member': member,
+            'cart': member.cart
+        }
 
     return {}

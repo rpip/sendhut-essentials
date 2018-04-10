@@ -12,7 +12,7 @@
   </div>
   <div class="offset-sm-2 col-sm-3" id="group-order-actions">
     {% if group_order.user == user %}
-      <a href="{% url 'group:cancel' group_order.token %}">
+      <a href="#" data-toggle="modal" data-target="#group-cancel-modal">
         <button type="button" class="btn btn-outline-danger">Cancel Order</button>
       </a>
     {% else %}

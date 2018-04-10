@@ -10,7 +10,7 @@
   <br>
   {% if order.group_order %}
     {% for member in order.group_order.members.all %}
-      <span class="badge badge-primary">{{ member.name }}</span>
+      <h4>{{ member.get_name }}</h4>
       <br><br>
       <table class="table table-striped">
         <thead>

@@ -14,7 +14,9 @@
       </div>
       <div class="modal-body">
         <p>{{ group_order.user.get_full_name }}</p>
-        <p>{{ group_order|group_cart_limit }}</p>
+        {% if group_order.monetary_limit %}
+          <p> Spending limit: {{ group_order.monetary_limit }}</p>
+        {% endif%}
         <p>
           Copy and share this link with everyone who's going to add to the group order.
           Each member can then go in and order individually.

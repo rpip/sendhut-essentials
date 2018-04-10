@@ -84,6 +84,7 @@ def store_page(request, slug):
         'store': store,
         'page_title': store.name
     }
+    # TODO(yao): refactor redirect afer anonymous user joins group
     if not request.group_member:
         token = get_anonymous_group_order_token(request, store)
         if token:
@@ -117,6 +118,7 @@ class CartView(View):
         cart = request.cart
         item = Item.objects.get(uuid=data['uuid'])
         quantity = data.pop('quantity')
+        # TODO(yao): prevent adding to locked group order carts
         # if line_id is present, it means it's an update
         cart.add(item, int(quantity), data, replace=bool(data.get('line_id')))
         return JsonResponse(get_cart_data(cart), encoder=utils.JSONEncoder)
