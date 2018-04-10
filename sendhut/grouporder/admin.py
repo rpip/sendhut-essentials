@@ -8,7 +8,7 @@ from .models import GroupOrder, Member
 class MemberInline(admin.StackedInline):
 
     model = Member
-    exclude = ('metadata', 'deleted', 'name')
+    exclude = ('metadata', 'deleted', 'name', 'state')
     raw_id_fields = ['cart']
     readonly_fields = ('member_name', 'items')
     extra = 0
@@ -52,12 +52,21 @@ class MemberInline(admin.StackedInline):
 
 
 @admin.register(GroupOrder)
-class GroupCartAdmin(BaseModelAdmin):
+class GroupOrderAdmin(BaseModelAdmin):
 
     list_display = [
         'user',
         'store',
         'monetary_limit',
+        'total',
+        'status',
         'created'
     ]
+
+    exclude = ('deleted',)
+    readonly_fields = ('total', 'status')
+    list_filter = ('status', 'created')
     inlines = [MemberInline]
+
+    def total(self, obj):
+        return obj.get_total()
