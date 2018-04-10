@@ -1,5 +1,7 @@
-from sendhut.lunch.models import Order, OrderLine
-from sendhut.utils import json_encode
+from django.conf import settings
+from djmoney.money import Money
+
+from .models import Order, OrderLine
 
 
 class Checkout:
@@ -12,16 +14,16 @@ class Checkout:
         self.delivery_time = None
         self.order = None
 
-    def create_order(self, time, address=None, note=None):
+    def create_order(self, time, address=None, notes=None):
         """Create an order from the checkout session.
 
         If any of the addresses is new and the user is logged in the address
         will also get saved to that user's address book.
         """
         order = Order.objects.create(
-            delivery_time=time,
-            address=address,
-            note=note
+            user=self.user, time=time, address=address,
+            notes=notes, delivery_fee=self.calculate_delivery_cost(),
+            total_gross=self.get_total()
         )
 
         for line in self.cart.lines.all():
@@ -29,7 +31,8 @@ class Checkout:
 
         self.order = order
 
-        self.cart.delete()
+        # self.cart.delete()
+        return order
 
     def add_item_to_order(self, order, item, quantity, metadata):
         return OrderLine.objects.create(
@@ -38,7 +41,7 @@ class Checkout:
             unit_price=item.price,
             quantity=quantity,
             special_instructions=metadata.pop('note', None),
-            metadata=json_encode(metadata)
+            metadata=metadata
         )
 
     def get_subtotal(self):
@@ -47,4 +50,7 @@ class Checkout:
 
     def get_total(self):
         """Calculate order total with shipping and discount amount."""
-        return self.cart.get_total() + self.calculate_delivery_cost()
+        return self.get_subtotal() + self.calculate_delivery_cost()
+
+    def calculate_delivery_cost(self):
+        return Money(settings.BASE_DELIVERY_FEE, settings.DEFAULT_CURRENCY)

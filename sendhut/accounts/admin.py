@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 from django.contrib import admin
 
+from sendhut.db import BaseModelAdmin
 from .models import User, Address
 
 
 @admin.register(User)
-class UserAdmin(admin.ModelAdmin):
+class UserAdmin(BaseModelAdmin):
     exclude = ('password',)
     list_display = (
         'id',
@@ -33,17 +34,15 @@ class UserAdmin(admin.ModelAdmin):
 
 
 @admin.register(Address)
-class AddressAdmin(admin.ModelAdmin):
+class AddressAdmin(BaseModelAdmin):
     list_display = (
         'id',
         'created',
         'user',
-        'postcode',
-        'county',
-        'city',
-        'location',
-        'address_1',
-        'address_2',
-        'address_3',
+        'apt_number',
+        'name',
+        'phone',
+        'address',
+        'instructions'
     )
     list_filter = ('created',)

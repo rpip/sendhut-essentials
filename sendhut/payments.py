@@ -6,13 +6,13 @@ from paystackapi.paystack import Paystack
 paystack = Paystack(secret_key=settings.PAYSTACK_SECRET_KEY)
 
 
-def initialize_payment(reference, amount, email):
+def init(reference, amount, email):
     # TODO(yao): confirm Paystack max amount, why 33578.00, appears as 335.78
     return paystack.transaction.initialize(
         reference=reference,
         amount=amount,
         email=email,
-        callback_url=reverse('lunch:checkout')
+        callback_url=reverse('checkout:ck')
     )
 
 

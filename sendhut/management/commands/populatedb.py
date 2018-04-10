@@ -4,7 +4,8 @@ from django.core.management.base import BaseCommand, CommandError
 from sendhut.lunch.models import Item, Store
 from sendhut.factory import (
     ImageFactory, UserFactory, OptionGroupFactory,
-    OptionFactory, OrderFactory, create_orderlines
+    CartFactory, GroupOrderFactory, MemberFactory,
+    OptionFactory, OrderFactory, create_orderlines,
 )
 from .load_menus import create_lagos_stores
 
@@ -57,17 +58,20 @@ class Command(BaseCommand):
             self._setup_store(store)
 
         # create admin user
-        self.stdout.write(self.style.SUCCESS('Setting up admin user'))
+        self.stdout.write(self.style.SUCCESS('Creating admin user'))
         admin = UserFactory.create(email='hello@sendhut.com', username='admin')
         admin.is_staff = True
         admin.is_superuser = True
         admin.set_password(ADMIN_PASSWORD)
         admin.save()
 
+        self.stdout.write(self.style.SUCCESS('Creating admin cart'))
+        # TODO(yao): add cart items from specific stores
+        cart = CartFactory.create(user=admin, stores=Store.objects.all()[:2])
         self.stdout.write(self.style.SUCCESS('Creating Orders'))
         orders = OrderFactory.create_batch(2, user=admin)
         for x in orders:
-            create_orderlines(x)
+            create_orderlines(x, [x.item for x in cart])
 
         self.stdout.write(self.style.SUCCESS('DONE'))
 

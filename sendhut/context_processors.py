@@ -1,6 +1,7 @@
 from django.conf import settings
 
-from sendhut.lunch.models import FOOD_TAGS, Order
+from sendhut.checkout.models import Order
+from sendhut.lunch.models import FOOD_TAGS
 from sendhut import utils
 
 

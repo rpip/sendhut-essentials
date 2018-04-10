@@ -1,4 +1,3 @@
-from datetime import datetime
 from uuid import uuid4
 import six
 
@@ -6,15 +5,12 @@ from django.db import models
 from django.contrib.postgres.fields import ArrayField
 from django.urls import reverse
 from django.conf import settings
-from jsonfield import JSONField
 from taggit.managers import TaggableManager
 from djmoney.models.fields import MoneyField
 from sorl.thumbnail import ImageField
 from sorl.thumbnail import get_thumbnail
 
-from sendhut.utils import (
-    sane_repr, image_upload_path, generate_token, unslugify
-)
+from sendhut.utils import sane_repr, image_upload_path, unslugify
 from sendhut.db import BaseModel
 
 
@@ -342,109 +338,3 @@ class MenuOption(BaseModel):
         unique_together = (('menu', 'option_group'), )
 
     __repr__ = sane_repr('menu', 'option_group')
-
-
-class Order(BaseModel):
-
-    PENDING = 1
-    CONFIRMED = 2
-    FAILED = 3
-
-    CASH = 1
-    ONLINE = 2
-
-    PAYMENT_STATUS = (
-        (PENDING, 'Pending'),
-        (CONFIRMED, 'Confirmed'),
-        (FAILED, 'Failed')
-    )
-
-    PAYMENT_SOURCE = (
-        (CASH, 'Cash'),
-        (ONLINE, 'Online')
-    )
-
-    DELIVERY_TIMES = (
-        '11:30',
-        '12:00',
-        '12:30',
-        '1:00',
-        '1:30',
-        '2:00',
-        '2:30'
-    )
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='orders')
-    reference = models.CharField(max_length=8, unique=True)
-    # TODO(yao): Add types of orders:
-    #   Orders that have already been placed:
-    #   Orders that are placed and paid for
-    #   Manual payment and order:
-    time = models.DateTimeField(default=datetime.now)
-    address = models.CharField(max_length=120)
-    delivery_fee = MoneyField(
-        max_digits=10,
-        decimal_places=2,
-        default_currency=settings.DEFAULT_CURRENCY
-    )
-    notes = models.CharField(max_length=300, null=True, blank=True)
-    total_cost = MoneyField(
-        max_digits=10,
-        decimal_places=2,
-        default_currency=settings.DEFAULT_CURRENCY
-    )
-    payment = models.IntegerField(
-        choices=PAYMENT_STATUS,
-        default=PENDING
-    )
-    payment_source = models.IntegerField(
-        choices=PAYMENT_SOURCE,
-        default=CASH
-    )
-    # group_order = models.OneToOneField('GroupOrder',
-    # related_name='order', null=True, blank=True)
-
-    def save(self, *args, **kwargs):
-        if not self.created:
-            self.reference = generate_token(8)
-        super().save(*args, **kwargs)
-        return self
-
-    def get_total(self):
-        return sum(line.get_total() for line in self.lines.all())
-
-    @classmethod
-    def get_today_delivery_schedules(cls):
-        schedule = []
-        for time in cls.DELIVERY_TIMES:
-            hour, minute = time.split(':')
-            schedule.append(datetime.today().replace(hour=int(hour), minute=int(minute)))
-        return schedule
-
-    class Meta:
-        db_table = "order"
-
-
-class OrderLine(BaseModel):
-
-    item = models.ForeignKey(Item)
-    quantity = models.IntegerField()
-    unit_price = MoneyField(max_digits=10, decimal_places=2, default_currency='NGN')
-    special_instructions = models.TextField(null=True, blank=True)
-    order = models.ForeignKey(Order, related_name='lines', editable=False,
-                              on_delete=models.CASCADE)
-    data = JSONField(blank=True, default={})
-
-    def get_total(self):
-        return self.unit_price * self.quantity * self.get_options_total()
-
-    def get_options_total(self):
-        pass
-
-    @property
-    def store(self):
-        return self.item.menu.store
-
-    __repr__ = sane_repr('item', 'quantity')
-
-    class Meta:
-        db_table = "order_line"

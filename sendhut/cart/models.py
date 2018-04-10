@@ -1,4 +1,3 @@
-from decimal import Decimal
 from collections import namedtuple
 
 from django.db import models
@@ -12,8 +11,6 @@ from sendhut.lunch.models import Item
 from . import CartStatus
 from .core import partition, ItemSet, ItemLine, ItemList
 
-
-CENTS = Decimal('0.01')
 
 SimpleCart = namedtuple('SimpleCart', ('quantity', 'total', 'token'))
 

@@ -5,19 +5,19 @@ import operator
 from django.views import View
 from django.views.generic.edit import FormView
 from django.http import JsonResponse
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.conf import settings
 from django.db.models import Q
 
-from sendhut import notifications, payments, utils
+from sendhut import utils
 from sendhut.cart.utils import get_cart_data
 from sendhut.grouporder.utils import get_anonymous_group_order_token
 from sendhut.grouporder.models import Member, GroupOrder
-from .models import Item, Store, Order, FOOD_TAGS
-from .forms import CheckoutForm, PartnerSignupForm
+from sendhut.checkout.models import Order
+from .models import Item, Store, FOOD_TAGS
+from .forms import PartnerSignupForm
 
 
 def food_detail(request, slug):
@@ -77,24 +77,6 @@ def search(request, tag):
     return render(request, 'lunch/search.html', context)
 
 
-@login_required
-def order_list(request):
-    orders = Order.objects.filter(user=request.user)
-    return render(
-        request,
-        'lunch/order_history.html',
-        {'orders': orders, 'open_carts': []}
-    )
-
-
-@login_required
-def order_details(request, ref):
-    context = {
-        'order': get_object_or_404(Order, user=request.user, reference=ref)
-    }
-    return render(request, 'lunch/order_details.html', context)
-
-
 def store_page(request, slug):
     template = 'lunch/store_details.html'
     store = get_object_or_404(Store, slug=slug)
@@ -141,54 +123,23 @@ class CartView(View):
 
 
 def cart_reload(request):
-    template = 'lunch/cart_summary.html'
+    template = 'checkout/cart_summary.html'
     return render(request, template)
 
 
-class CheckoutView(LoginRequiredMixin, View):
+@login_required
+def order_list(request):
+    orders = Order.objects.filter(user=request.user)
+    return render(
+        request,
+        'lunch/order_history.html',
+        {'orders': orders, 'open_carts': []}
+    )
 
-    def get(self, request):
-        form = CheckoutForm(data=request.POST)
-        context = get_cart_data(request.cart)
-        context['form'] = form
-        return render(request, 'lunch/cart_summary.html', context)
 
-    def post(self, request):
-        form = CheckoutForm(data=request.POST)
-        cart = request.cart
-        if not(form.is_valid()):
-            messages.error(request, "Please complete the delivery form to proceed")
-            context = get_cart_data(cart)
-
-            return render(request, 'lunch/cart_summary.html', context)
-
-        cash_delivery = form.cleaned_data.pop('cash_delivery')
-        # TODO(yao): send invoice email, send sms confirmation/updates
-        _cart = cart.build_cart()
-        user = request.user
-        # from django.db import IntegrityError
-        order = Order.create_from_cart(
-            cart=cart,
-            user=user,
-            total_cost=_cart['total'],
-            delivery_fee=_cart['delivery_fee'],
-            **form.cleaned_data
-        )
-        # TODO(yao): also notify group cart owner participants
-        notifications.send_order_confirmation(user.email, order)
-
-        messages.info(
-            request,
-            "Order submitted for processing. reference {}".format(order.reference))
-
-        if not(cash_delivery):
-            amount = _cart['total']
-            response = payments.initialize_payment(
-                order.reference, amount, request.user.email)
-            if response['status']:
-                return redirect(response['data']['authorization_url'])
-            else:
-                # TODO(yao): what to do if payment fails
-                messages.error(request, "Payment failed. Please try again")
-
-        return redirect('home')
+@login_required
+def order_details(request, ref):
+    context = {
+        'order': Order.objects.get(user=request.user, reference=ref)
+    }
+    return render(request, 'lunch/order_details.html', context)

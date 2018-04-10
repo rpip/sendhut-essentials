@@ -1,10 +1,8 @@
 from django.conf.urls import url
-from django.views import View
 
 from .views import (
-    CartView, CheckoutView,
-    food_detail, cartline_detail, cartline_delete, store_page,
-    cart_reload, order_list, order_details, search,
+    CartView, food_detail, cartline_detail, cartline_delete,
+    store_page, cart_reload, order_list, order_details, search
 )
 
 
@@ -19,7 +17,6 @@ urlpatterns = [
     url(r'^orders/(?P<ref>[a-zA-Z0-9-]+)$', order_details,
         name='order_details'),
     url(r'^orders/$', order_list, name='order_history'),
-    url(r'^checkout$', CheckoutView.as_view(), name='checkout'),
     url(r'^store/(?P<slug>[a-zA-Z0-9-]+)/$',
         store_page, name='store_details'),
     url(r'^item/(?P<slug>[a-zA-Z0-9-]+)/$',

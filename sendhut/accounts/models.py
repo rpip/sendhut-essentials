@@ -21,20 +21,19 @@ class User(AbstractUser, BaseModel):
 
 
 class Address(BaseModel):
+    # name and phone number default to user name and tel
     user = models.ForeignKey(User, related_name='addresses')
-    postcode = models.CharField(max_length=10, null=True, blank=True)
-    county = models.CharField(max_length=64, null=True, blank=True)
-    city = models.CharField(max_length=64)
+    # apt number or company name
+    apt_number = models.CharField(max_length=20, null=True, blank=True)
+    name = models.CharField(max_length=20, null=True, blank=True)
+    phone = models.CharField(max_length=20, null=True, blank=True)
+    address = models.CharField(max_length=120)
+    # eg: Delivery Instructions. Ex. Call me when you’re outside!
+    instructions = models.TextField(null=True, blank=True)
     # geo co-ordinates: lat,lon
     # from django.contrib.gis.geos import GEOSGeometry
     # GEOSGeometry('POINT(%s %s), 27700' % (lng, lat))
     # location = gis_models.PointField(max_length=64, null=True, blank=True)
-    location = models.CharField(max_length=30, null=True, blank=True)
-    address_1 = models.CharField(max_length=254)
-    address_2 = models.CharField(max_length=254, null=True, blank=True)
-    address_3 = models.CharField(max_length=254, null=True, blank=True)
-    # TODO(yao) Add delivery instructions, Apt number or company name, Phone number, name
-    # name and phone number default to user name and tel
 
     class Meta:
         db_table = 'address'

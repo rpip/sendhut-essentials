@@ -1,6 +1,7 @@
 {% load static %}
 {% load lunch_extras %}
 {% load thumbnail %}
+{% load debug %}
 
 <div class="item-detail-card">
   {% thumbnail item.image.image "585x312" crop="center" as im %}
@@ -47,7 +48,7 @@
                      type="checkbox"
                      name="extras[]"
                      value="{{ option.id }}"
-                     {% if cart_line and option.id in cart_line.data.extras %}checked{% endif %}>
+                     {% if cart_line|line_has_side:option  %}checked{% endif %}>
                      {{ option.name }}
                  </label>
                  <span class="float-right">{% if option.price %}{{ option.price }}{% endif %}</span>

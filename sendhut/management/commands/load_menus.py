@@ -11,7 +11,7 @@ from sendhut.lunch.models import (
 )
 from sendhut.factory import ImageFactory
 
-STORES_LIMIT = 15
+STORES_LIMIT = 6
 
 
 class Command(BaseCommand):

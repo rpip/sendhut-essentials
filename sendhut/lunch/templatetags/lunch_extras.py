@@ -50,6 +50,15 @@ def _unslugify(text):
     return unslugify(text)
 
 
+@register.filter(name='line_has_side')
+def line_has_side(cart_line, option):
+    try:
+        extras = [int(x) for x in cart_line.data['extras']]
+        return option.id in extras
+    except:
+        pass
+
+
 @register.simple_tag(takes_context=True)
 def cart_total(context, partition):
     request = context['request']

@@ -3,15 +3,12 @@ from django.conf.urls import include, url
 from django.conf import settings
 from django.contrib import admin
 
-from sendhut.api import urls as api_urls
 from sendhut.accounts.views import LoginView, LogoutView, SignupView
 from sendhut.lunch.views import PartnerSignupView
 from sendhut.grouporder.views import CartJoin
 
-from .views import (
-    home, about, faqs, privacy_terms,
-    payment_callback, payment_webhook
-)
+from .views import home, about, faqs, privacy_terms
+
 
 urlpatterns = [
     url(r'^$', home, name='home'),
@@ -26,13 +23,9 @@ urlpatterns = [
     url(r'^lunch/', include('sendhut.lunch.urls', namespace='lunch')),
     url(r'^group/', include('sendhut.grouporder.urls', namespace='group')),
     url(r'^cart/(?P<ref>[a-zA-Z0-9-]+)$', CartJoin.as_view(), name='join-group-order'),
-    url(r'^api/', include(api_urls)),
+    url(r'^checkout/', include('sendhut.checkout.urls', namespace='checkout')),
     url(r'^api-auth/', include('rest_framework.urls')),
-    # payment transaction callback
-    url(r'^payments/ck$', payment_callback, name='payment_callback'),
     url(r'^django-rq/', include('django_rq.urls')),
-    # instant payment notification
-    url(r'^payments/ipn$', payment_webhook, name='payment_webhook'),
     url(r'^jet/', include('jet.urls', 'jet')),  # Django JET URLS
     url(r'^jet/dashboard/', include('jet.dashboard.urls', 'jet-dashboard')),  # Django JET dashboard URLS
     url(r'^admin/', include(admin.site.urls)),

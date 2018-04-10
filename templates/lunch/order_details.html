@@ -8,8 +8,8 @@
 
 {% block content %}
   <br>
-  {% if order.group_cart %}
-    {% for member in order.group_cart.members.all %}
+  {% if order.group_order %}
+    {% for member in order.group_order.members.all %}
       <span class="badge badge-primary">{{ member.name }}</span>
       <br><br>
       <table class="table table-striped">
@@ -22,10 +22,10 @@
           </tr>
         </thead>
         <tbody>
-          {% for line in member.cart %}
+          {% for line in member.cart.lines.all %}
             <tr>
               <td>
-                {{ line.data.name }}
+                {{ line.item.name }}
                 <ul class="text-muted">
                   {% for x in line.data.extras_meta %}
                     <li>{{x.name}}</li>
@@ -52,13 +52,13 @@
         </tr>
       </thead>
       <tbody>
-        {% for line in order.order_lines.all %}
+        {% for line in order.lines.all %}
           <tr>
             <td>
               {{ line.item.name }}
             </td>
             <td>{{ line.quantity  }}</td>
-            <td>{{ line.price }}</td>
+            <td>{{ line.unit_price }}</td>
             <td>{{ line.special_instructions }}</td>
           </tr>
         {% endfor %}

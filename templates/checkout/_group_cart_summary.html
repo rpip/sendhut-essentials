@@ -14,7 +14,7 @@
     <div class="col-md-6 left-pane">
       {% for member in group_cart.members.all %}
         <h5 class="subcart-header">{{ member.name }}'s Order</h5>
-        {#% include "lunch/_subcart.html" with subcart=member.cart.cart %#}
+        {#% include "cart/_subcart.html" with subcart=member.cart.cart %#}
         {% for line in member.cart %}
           <div class="container-fluid cart-line">
             <div class="row">
@@ -73,7 +73,7 @@
         </div>
       </div><!-- // cart-summary  -->
       <hr>
-      {% include "lunch/_checkout_form.html" %}
+      {% include "checkout/_checkout_form.html" %}
     </div>
   </div> <!-- right-pane-->
 </div>

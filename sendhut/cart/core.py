@@ -2,6 +2,8 @@ from itertools import groupby
 
 from django.db import models
 from django.utils.encoding import smart_str
+from django.conf import settings
+from djmoney.money import Money
 
 from sendhut.lunch.models import Option
 
@@ -29,6 +31,7 @@ class ItemList(list, ItemSet):
 
 
 class ItemLine:
+    "Represents a single item in a cart or basket"
 
     def get_quantity(self):
         return self.quantity
@@ -49,7 +52,7 @@ class ItemLine:
             extras = list(map(int, extras))
             for option in Option.objects.filter(id__in=extras):
                 _extras.append({
-                    'id': option.id,
+                    'id': int(option.id),
                     'uuid': str(option.uuid),
                     'name': option.name,
                     'price': option.price.amount if option.price else 0,
@@ -60,7 +63,7 @@ class ItemLine:
 
     def _get_options_total(self):
         options = self._get_extras()
-        return sum([x['price'] for x in options])
+        return Money(sum([x['price'] for x in options]), settings.DEFAULT_CURRENCY)
 
     def __str__(self):
         return smart_str(self.item)

@@ -66,9 +66,10 @@ def create_group_order(user, store, monetary_limit=None):
 
 def get_group_member_from_request(request):
     store = None
-    if request.GET.get('cart_ref'):
-        group_order = GroupOrder.objects.get(request.GET['cart_ref'])
-        store = group_order.store
+    ref = request.GET.get('cart_ref')
+    if ref:
+        group_order = GroupOrder.objects.filter(token=ref).first()
+        store = group_order.store if group_order else None
 
     match = resolve(request.path)
     if match.url_name == 'store_details':

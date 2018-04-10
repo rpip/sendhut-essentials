@@ -5,7 +5,6 @@ from django.db import models
 from djmoney.models.fields import MoneyField
 
 from sendhut.db import BaseModel
-from sendhut.utils import build_absolute_uri
 from sendhut.lunch.models import Store
 from sendhut.cart.models import Cart, CartStatus
 from sendhut.utils import generate_token

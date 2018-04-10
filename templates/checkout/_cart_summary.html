@@ -1,4 +1,5 @@
 {% load lunch_extras %}
+{% load debug %}
 {% load thumbnail %}
 
 <div class="cart" id="cart-confirm">
@@ -9,10 +10,23 @@
       {% if not cart %}
         <div class="clearfix"></div>
         <h6 class="text-muted empty-cart-msg">Your basket is empty</h6>
-      {% endif %}
+        {% endif %}
         {% for store, partition in cart.partitions %}
-        <h5 class="subcart-header">{{ store.name }}</h5>
-        {% include "lunch/_subcart.html" %}
+        <!-- <div class="col-sm"> -->
+        {% thumbnail store.banner.image "576x288" crop="center" as im %}
+        <img class="img-fluid"
+             src="{{ im.url }}"
+             alt="{{ item.title }}"
+             width="{{ im.width }}"
+             height="{{ im.height }}">
+        {% endthumbnail %}
+        <!-- </div> -->
+        <h5 class="subcart-header">
+          <a href="{% url 'lunch:store_details' store.slug %}" class="no-deco">
+            {{ store.name }}
+          </a>
+        </h5>
+        {% include "cart/_subcart.html" %}
         <div class="container cart-summary">
           <div class="row">
             <div class="col-md-3 offset-sm-7">Subtotal</div>
@@ -34,7 +48,7 @@
         </div>
       </div><!-- // cart-summary  -->
       <hr>
-      {% include "lunch/_checkout_form.html" %}
+      {% include "checkout/_checkout_form.html" %}
     </div>
   </div> <!-- right-pane-->
 </div>

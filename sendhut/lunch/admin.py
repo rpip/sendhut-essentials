@@ -12,8 +12,7 @@ import nested_admin
 
 from sendhut.db import BaseModelAdmin
 from .models import (
-    Store, Menu, Item, ItemVariant, Image,
-    OptionGroup, Option, Order, OrderLine
+    Store, Menu, Item, ItemVariant, Image, OptionGroup, Option
 )
 
 
@@ -263,32 +262,3 @@ class OptionAdmin(BaseModelAdmin):
     list_filter = ('created',)
     raw_id_fields = ('group',)
     search_fields = ('name',)
-
-
-class OrderLineInline(admin.TabularInline):
-
-    model = OrderLine
-    exclude = ('metadata',)
-    raw_id_fields = ['item']
-    extra = 0
-
-
-@admin.register(Order)
-class OrderAdmin(BaseModelAdmin):
-    list_display = (
-        'id',
-        'created',
-        'user',
-        'reference',
-        'time',
-        'address',
-        'notes',
-        'payment'
-    )
-    list_filter = (
-        'created',
-        'time',
-        'address'
-    )
-    search_fields = ('reference',)
-    inlines = [OrderLineInline]

@@ -1,3 +1,4 @@
+from decimal import Decimal
 from urllib.parse import urljoin
 from datetime import datetime
 from functools import singledispatch
@@ -152,3 +153,8 @@ def build_absolute_uri(location):
     current_uri = '%s://%s' % (protocol, host)
     location = urljoin(current_uri, location)
     return iri_to_uri(location)
+
+
+def quantize(amount):
+    CENTS = Decimal('0.01')
+    return amount.quantize(CENTS)

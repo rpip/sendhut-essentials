@@ -51,10 +51,12 @@ INSTALLED_APPS = [
     'nested_admin',
     'loginas',
 
+    'sendhut',
     'sendhut.accounts',
     'sendhut.lunch',
     'sendhut.cart',
-    'sendhut.grouporder'
+    'sendhut.grouporder',
+    'sendhut.checkout'
 ]
 
 MIDDLEWARE = [

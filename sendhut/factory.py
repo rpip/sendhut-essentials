@@ -1,6 +1,4 @@
-from pathlib import Path
 from random import choice, shuffle
-import json
 import glob
 
 from django.conf import settings
@@ -10,14 +8,16 @@ from faker import Faker
 from factory import (
     DjangoModelFactory, SubFactory,
     LazyFunction, lazy_attribute, Sequence,
-    post_generation
+    post_generation, SelfAttribute
 )
 
 from sendhut.accounts.models import User, Address
+from sendhut.cart.models import Cart, CartLine
 from sendhut.lunch.models import (
     Store, Menu, Item, OptionGroup, Option,
-    Image, OrderLine, Order, FOOD_TAGS, GroupCart, GroupCartMember
+    Image, OrderLine, Order, FOOD_TAGS
 )
+from sendhut.grouporder.models import GroupOrder, Member
 
 
 fake = Faker()
@@ -38,12 +38,11 @@ def random_diet_labels():
     return items[0:_len]
 
 
-def create_orderlines(order):
+def create_orderlines(order, items=Item.objects.all()):
     for x in range(1, choice([2, 5])):
-        items = Item.objects.all()
         OrderLine.objects.create(
             quantity=choice(range(1, 6)),
-            price=choice([1200, 900, 3500, 800, 400, 1400, 1650, 850]),
+            unit_price=choice([1200, 900, 3500, 800, 400, 1400, 1650, 850]),
             special_instructions=fake.sentence(),
             order=order,
             item=choice(items)
@@ -116,10 +115,13 @@ class AddressFactory(DjangoModelFactory):
         model = Address
 
     user = SubFactory(UserFactory)
-    city = 'Lagos'
-    county = 'Lekki phase 1'
-    location = '6.446448, 3.472094'
-    address_1 = 'Rukayyah, Atinuke Alaka Close Lekki Lagos 23401'
+    # apt number or company name
+    apt_number = 'Q9'
+    name = lazy_attribute(lambda x: choice([None, 'Yao Adzaku']))
+    phone = lazy_attribute(lambda x: choice([None, '08169567693']))
+    # TODO(yao): build list of valid Lagos addresses
+    address = lazy_attribute(lambda x: fake.address())
+    instructions = lazy_attribute(lambda x: choice([None, fake.sentence()]))
 
 
 class ImageFactory(DjangoModelFactory):
@@ -208,8 +210,8 @@ class OrderFactory(DjangoModelFactory):
         model = Order
 
     user = SubFactory(UserFactory)
-    delivery_time = lazy_attribute(lambda o: choice(Order.get_today_delivery_schedules()))
-    delivery_address = 'Lekki phase 1'
+    time = lazy_attribute(lambda o: choice(Order.get_today_delivery_schedules()))
+    address = 'Lekki phase 1'
     notes = lazy_attribute(lambda o: fake.sentence())
     delivery_fee = settings.BASE_DELIVERY_FEE
     total_cost = choice([2300, 1200, 8000, 12000])
@@ -221,32 +223,68 @@ class OrderLineFactory(DjangoModelFactory):
         model = OrderLine
 
     quantity = lazy_attribute(lambda o: choice(range(1, 6)))
-    price = lazy_attribute(lambda o: choice([1200, 900, 3500, 800, 400, 1400, 1650, 850]))
+    unit_price = lazy_attribute(lambda o: choice([1200, 3500, 400, 1400, 850]))
     special_instructions = lazy_attribute(lambda o: fake.sentence())
     order = SubFactory(OrderFactory)
     item = SubFactory(ItemFactory)
 
 
-class GroupCartFactory(DjangoModelFactory):
+class CartFactory(DjangoModelFactory):
+    class Meta:
+        model = Cart
+
+    user = SubFactory(UserFactory)
+
+    class Params:
+        stores = None
+
+    @classmethod
+    def create(cls, **kwargs):
+        stores = kwargs.get('stores')
+        cart = super().create(**kwargs)
+        if stores:
+            cls._add_cartlines_from_stores(cart, stores)
+
+        return cart
+
+    @classmethod
+    def _add_cartlines_from_stores(cls, cart, stores):
+        for store in stores:
+            menus = [x for x in store.menus.all()]
+            items = [m.items.all() for m in menus]
+            items = [item for sublist in items for item in sublist]
+            for _ in range(2, choice(range(3, 5))):
+                CartLineFactory.create(cart=cart, item=choice(items))
+
+
+class CartLineFactory(DjangoModelFactory):
 
     class Meta:
-        model = GroupCart
+        model = CartLine
+
+    cart = SubFactory(CartFactory)
+    item = SubFactory(ItemFactory)
+    quantity = lazy_attribute(lambda o: choice(range(1, 6)))
+    # TODO(yao): Add options and note to data field
+    # data
+
+
+class GroupOrderFactory(DjangoModelFactory):
+
+    class Meta:
+        model = GroupOrder
 
     owner = SubFactory(UserFactory)
     store = SubFactory(Store)
     monetary_limit = lazy_attribute(lambda o: choice([1000, 2000, 3000, None]))
 
 
-class GroupCartMemberFactory(DjangoModelFactory):
+class MemberFactory(DjangoModelFactory):
 
     class Meta:
-        model = GroupCartMember
-
-    def _cart():
-        carts = json.load(open('sendhut/fixtures/group_member_carts.json', 'r'))
-        return carts[:choice(range(2, 4))]
+        model = Member
 
     user = SubFactory(UserFactory)
-    group_cart = SubFactory(GroupCart)
-    name = lazy_attribute(lambda o: fake.name())
-    cart = LazyFunction(_cart)
+    group_order = SubFactory(GroupOrderFactory)
+    name = lazy_attribute(lambda o: choice([fake.name(), fake.email()]))
+    cart = SubFactory(CartFactory)
