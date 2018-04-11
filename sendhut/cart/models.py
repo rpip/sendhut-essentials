@@ -71,7 +71,7 @@ class Cart(BaseModel, ItemSet):
         else:
             # TODO(yao): handle adding dif qty for line if same data
             line, created = self.lines.get_or_create(
-                item=item, data=data or {}, defaults={'quantity': 1})
+                item=item, data=data or {}, defaults={'quantity': quantity})
 
         return line
 
