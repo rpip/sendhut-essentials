@@ -5,22 +5,33 @@
 
 {% block content %}
   <br>
-  {% if open_carts %}
-    <h5>Group Orders</h5>
-    {% for cart in group_orders %}
-      <div id="open-carts">
-        <ul class="list-group">
-          <li class="list-group-item">
-            <a href="{{ cart.get_absolute_url }}">{{ cart.owner.get_full_name}}'s cart  - {{ cart|group_cart_limit }}</a>
-          </li>
-        </ul>
-      </div>
-    {% endfor %}
+  {% if active_group_orders %}
+    <h2>Active Group Orders</h2>
+    <div id="row" id="active-groups">
+      {% for group_order in active_group_orders %}
+        <div class="col-sm-4 float-left">
+          <a href="{% url 'group:rejoin' group_order.token %}" class="no-deco">
+            <div class="card">
+              {% thumbnail store.banner.image "318x180" crop="center" as im %}
+              <img class="card-img-top img-fluid"
+                   src="{{ im.url }}"
+                   alt="{{ item.title }}"
+                   width="{{ im.width }}"
+                   height="{{ im.height }}">
+                 {% endthumbnail %}
+                 <div class="card-body">
+                   <h6 class="card-title">{{ group_order.store.name }}</h6>
+                   <h6 class="card-subtitle mb-2 text-muted">{{ group_order.members.count }} people in this order</h6>
+                 </div>
+            </div>
+          </a>
+        </div>
+      {% endfor %}
+    </div>
   {% endif %}
-  <br><br>
   <h2 class="bold">Orders</h2>
   <hr>
-  {% if not orders %}
+  {% if orders %}
     {% include "lunch/_order_history.html" with orders=orders %}
   {% else %}
   <div class="text-center">

@@ -381,10 +381,8 @@ button.close {
   }
 }
 
-#open-carts {
-  .list-group-item {
-    margin-bottom: 3px
-  }
+#open-groups {
+  @include rem(margin-bottom, 30px);
 }
 
 #sidebar-cart {

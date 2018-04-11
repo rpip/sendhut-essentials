@@ -13,7 +13,9 @@ from django.db.models import Q
 
 from sendhut import utils
 from sendhut.cart.utils import get_cart_data
-from sendhut.grouporder.utils import get_anonymous_group_order_token
+from sendhut.grouporder.utils import (
+    get_anonymous_group_order_token, get_active_user_group_orders
+)
 from sendhut.grouporder.models import Member, GroupOrder
 from sendhut.checkout.models import Order
 from .models import Item, Store, FOOD_TAGS
@@ -132,10 +134,11 @@ def cart_reload(request):
 @login_required
 def order_list(request):
     orders = Order.objects.filter(user=request.user)
+    active_group_orders = get_active_user_group_orders(request.user)
     return render(
         request,
         'lunch/order_history.html',
-        {'orders': orders, 'open_carts': []}
+        {'orders': orders, 'active_group_orders': active_group_orders}
     )
 
 

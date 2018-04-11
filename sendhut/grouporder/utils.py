@@ -4,8 +4,9 @@ from datetime import timedelta
 from uuid import uuid4
 
 from sendhut.cart.models import Cart
-from sendhut.lunch.models import Store
+from sendhut.cart import CartStatus
 from sendhut.cart.utils import get_or_create_anonymous_cart_from_token
+from sendhut.lunch.models import Store
 
 from .models import GroupOrder, Member
 from . import MemberStatus
@@ -97,3 +98,8 @@ def get_group_member_from_request(request):
 def get_group_share_url(request, group_order):
     url = reverse('join-group-order', args=(group_order.token,))
     return request.build_absolute_uri(url)
+
+
+def get_active_user_group_orders(user):
+    return GroupOrder.objects.filter(
+        status=CartStatus.OPEN, members__user=user)

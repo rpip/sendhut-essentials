@@ -33,11 +33,6 @@ class GroupOrder(BaseModel):
     status = models.CharField(
         max_length=32, choices=CartStatus.CHOICES, default=CartStatus.OPEN)
 
-    @staticmethod
-    def get_user_open_carts(user):
-        return GroupOrder.objects.filter(
-            members__user=user, status=CartStatus.OPEN)
-
     def save(self, *args, **kwargs):
         # TODO(yao): generate Heroku-style names for the group order
         if not self.created:
@@ -55,6 +50,9 @@ class GroupOrder(BaseModel):
 
     def is_open(self):
         return self.status == CartStatus.OPEN
+
+    def find_member(self, user):
+        return Member.objects.filter(user=user).first()
 
     def cancel(self):
         for x in self.members.all():
@@ -106,7 +104,7 @@ class Member(BaseModel):
         self.save(update_fields=['state'])
 
     def rejoin(self):
-        self.mode = MemberStatus.IN
+        self.update(state=MemberStatus.IN)
 
     def is_active(self):
         return self.state == MemberStatus.IN

@@ -80,4 +80,6 @@ def cancel(request, ref):
 
 
 def rejoin(request, ref):
-    pass
+    group = get_object_or_404(GroupOrder, token=ref)
+    group.find_member(request.user).rejoin()
+    return redirect(reverse('lunch:store_details', args=(group.store.slug,)))
