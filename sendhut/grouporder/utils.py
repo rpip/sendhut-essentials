@@ -31,7 +31,7 @@ def get_store_group_order_cookie_name(store):
 def join_group_order(user, group_order):
     member = Member.objects.filter(group_order=group_order, user=user).first()
     if not member:
-        cart = Cart.objects.create(user=user)
+        cart = Cart.objects.create()
         Member.objects.create(cart=cart, group_order=group_order, user=user)
         return member
 
