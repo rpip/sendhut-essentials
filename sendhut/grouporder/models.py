@@ -42,7 +42,7 @@ class GroupOrder(BaseModel):
 
     def lock(self):
         self.update(status=CartStatus.LOCKED)
-        for member in self:
+        for member in self.members.all():
             member.cart.lock()
 
     def unlock(self):
