@@ -81,7 +81,9 @@ class Member(BaseModel):
         db_table = "member"
         unique_together = ('group_order', 'user')
 
-    group_order = models.ForeignKey(GroupOrder, related_name='members')
+    group_order = models.ForeignKey(
+        GroupOrder, related_name='members',
+        on_delete=models.CASCADE)
     name = models.CharField(max_length=40)
     cart = models.OneToOneField(
         Cart, related_name='group_member', on_delete=models.CASCADE)
