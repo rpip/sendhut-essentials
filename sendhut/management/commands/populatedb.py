@@ -4,8 +4,8 @@ from django.core.management.base import BaseCommand, CommandError
 from sendhut.lunch.models import Item, Store
 from sendhut.factory import (
     ImageFactory, UserFactory, OptionGroupFactory,
-    CartFactory, GroupOrderFactory, MemberFactory,
-    OptionFactory, OrderFactory, create_orderlines,
+    CartFactory, GroupOrderFactory, OptionFactory,
+    OrderFactory, create_orderlines,
 )
 from .load_menus import create_lagos_stores
 

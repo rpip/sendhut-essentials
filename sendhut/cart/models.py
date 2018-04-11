@@ -125,7 +125,7 @@ class Cart(BaseModel, ItemSet):
         return partition(self, lambda line: line.item.store, ItemList)
 
     def is_in_group_order(self):
-        return bool(self.group_member)
+        return getattr(self, 'group_member', None)
 
     def get_group_order(self):
         return self.group_member.group_order

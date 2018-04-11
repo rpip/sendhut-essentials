@@ -216,7 +216,9 @@
                   <tr>
                     <td align="left" style="font-size:0px;padding:10px 25px;word-break:break-word;">
                       <div style="font-family:sans-serif;font-size:16px;line-height:1;text-align:left;color:#626262;"> Hi {{ recipient.first_name }},
-                        <p>Your order has been placed.</p>
+                        <p>Your {% if order.group_order %}group{% endif %} order has been placed.</p>
+                        <p>Address: {{ order.address }}</p>
+                        <p>Time: {{ order.time }}</p>
                         <p>We'll text you once it's delivered.</p>
                       </div>
                     </td>
@@ -272,24 +274,32 @@
                             <th>Item</th>
                             <th>Quantity</th>
                             <th>Price</th>
+                            <th>Notes</th>
                           </tr>
                         </thead>
-                        <tbody> {% if order.group_cart %} {% for member in order.group_cart.members.all %}
+                        <tbody> {% if order.group_order %} {% for member in order.group_order.members.all %}
                           <tr>
-                            <td style="font-weight: bold">{{ member.name }}</td>
+                            <td style="font-weight: bold">{{ member.get_name }}</td>
                           </tr> {% for line in member.cart %}
                           <tr class="table-item-row">
-                            <td>{{ line.data.name }} {% if line.data.extras_meta %}
+                            <td>{{ line.item.name }} {% if line.data.extras_meta %}
                               <ul class="text-muted"> {% for x in line.data.extras_meta %}
                                 <li>{{x.name}}</li> {% endfor %} </ul> {% endif %} </td>
                             <td>{{ line.quantity }}</td>
-                            <td>&#x20A6;{{ line.data.total }}</td>
-                          </tr> {% endfor %} {% endfor %} {% else %} {% for line in order.order_lines.all %}
+                            <td>&#x20A6;{{ line.get_total }}</td>
+                            <td>{{ line.data.notes }}</td>
+                          </tr> {% endfor %} {% endfor %} {% else %} {% for store, partition in order.partitions %}
+                          <tr>
+                            <td style="font-weight: bold">{{ store.name }}</td>
+                          </tr> {% for line in partition %}
                           <tr class="table-item-row">
-                            <td>{{ line.item.name }}</td>
+                            <td> {{ line.item.name }} {% if line.data.extras_meta %}
+                              <ul class="text-muted"> {% for x in line.data.extras_meta %}
+                                <li>{{x.name}}</li> {% endfor %} </ul> {% endif %} </td>
                             <td>{{ line.quantity }}</td>
-                            <td>{{ line.price }}</td>
-                          </tr> {% endfor %} {% endif %} </tbody>
+                            <td>{{ line.get_total }}</td>
+                            <td>{{ line.special_instructions }}</td>
+                          </tr> {% endfor %} {% endfor %} {% endif %} </tbody>
                       </table>
                     </td>
                   </tr>

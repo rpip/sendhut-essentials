@@ -1,13 +1,17 @@
 {% load djmoney %}
 
 {% block subject %}
-  Sendhut - {% if order.group_cart %}Group{% endif %} Order confirmed
+  Sendhut - {% if order.group_order %}Group{% endif %} Order confirmed
 {% endblock %}
 
 {% block plain %}
   Hi {{recipient.first_name}},
 
-  Your order has been placed. {{ store.name }} is preparing your order now.
+  Your {% if order.group_order %}group{% endif %} order has been placed.
+
+  Address: {{ order.address }}
+
+  Time: {{ order.time }}
 
   We'll text you once it's delivered.
 

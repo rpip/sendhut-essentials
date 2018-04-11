@@ -8,7 +8,7 @@ from djmoney.models.fields import MoneyField
 
 from sendhut.db import BaseModel
 from sendhut.lunch.models import Item
-from sendhut.cart.core import ItemLine, ItemSet
+from sendhut.cart.core import ItemLine, ItemSet, ItemList, partition
 from sendhut.grouporder.models import GroupOrder
 from sendhut.utils import generate_token, sane_repr
 from . import PaymentStatus, PaymentSource, OrderStatus
@@ -88,8 +88,11 @@ class Order(BaseModel, ItemSet):
         super().save(*args, **kwargs)
         return self
 
-    def get_total(self):
-        return sum(line.get_total() for line in self.lines.all())
+    def __iter__(self):
+        """
+        Iterate over the items in the cart and get the items from the database
+        """
+        return self.lines.all().iterator()
 
     @classmethod
     def get_today_delivery_schedules(cls):
@@ -98,6 +101,11 @@ class Order(BaseModel, ItemSet):
             hour, minute = time.split(':')
             schedule.append(datetime.today().replace(hour=int(hour), minute=int(minute)))
         return schedule
+
+    def partitions(self):
+        "Return the cart split into pickup/store groups"
+        # TODO(yao): Add partitions for delivery time, address zone
+        return partition(self, lambda line: line.item.store, ItemList)
 
     def get_absolute_url(self):
         return reverse('order:details', kwargs={'token': self.token})
@@ -124,8 +132,8 @@ class OrderLine(BaseModel, ItemLine):
                               on_delete=models.CASCADE)
     data = JSONField(blank=True, default={})
 
-    def get_total(self):
-        return self.unit_price * self.quantity * self.get_options_total()
+    def get_price_per_item(self):
+        return self.unit_price + self.get_options_total()
 
     __repr__ = sane_repr('item', 'quantity')
 

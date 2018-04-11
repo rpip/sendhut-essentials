@@ -37,7 +37,7 @@ def checkout(request):
     # TODO(yao): also notify group cart owner participants
     confirm_msg = "Order submitted for processing. reference {}".format(order.reference)
     messages.info(request, confirm_msg)
-    notifications.send_order_confirmation(user.email, order)
+    notifications.send_order_confirmation(user, order)
 
     if not(cash_delivery):
         from sendhut.utils import quantize

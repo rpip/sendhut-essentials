@@ -14,9 +14,9 @@ from factory import (
 from sendhut.accounts.models import User, Address
 from sendhut.cart.models import Cart, CartLine
 from sendhut.lunch.models import (
-    Store, Menu, Item, OptionGroup, Option,
-    Image, OrderLine, Order, FOOD_TAGS
+    Store, Menu, Item, OptionGroup, Option, Image, FOOD_TAGS
 )
+from sendhut.checkout.models import Order, OrderLine
 from sendhut.grouporder.models import GroupOrder, Member
 
 
@@ -214,7 +214,7 @@ class OrderFactory(DjangoModelFactory):
     address = 'Lekki phase 1'
     notes = lazy_attribute(lambda o: fake.sentence())
     delivery_fee = settings.BASE_DELIVERY_FEE
-    total_cost = choice([2300, 1200, 8000, 12000])
+    total_gross = choice([2300, 1200, 8000, 12000])
 
 
 class OrderLineFactory(DjangoModelFactory):
@@ -274,7 +274,7 @@ class GroupOrderFactory(DjangoModelFactory):
     class Meta:
         model = GroupOrder
 
-    owner = SubFactory(UserFactory)
+    user = SubFactory(UserFactory)
     store = SubFactory(Store)
     monetary_limit = lazy_attribute(lambda o: choice([1000, 2000, 3000, None]))
 

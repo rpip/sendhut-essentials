@@ -47,7 +47,7 @@ class ItemLine:
 
     def get_price_per_item(self):
         """Return the unit price of the line."""
-        return self.item.get_price_per_item() + self._get_options_total()
+        return self.item.get_price_per_item() + self.get_options_total()
 
     def _get_extras(self):
         extras = self.data.get('extras', [])
@@ -65,7 +65,7 @@ class ItemLine:
 
         return _extras
 
-    def _get_options_total(self):
+    def get_options_total(self):
         options = self._get_extras()
         return Money(sum([x['price'] for x in options]), settings.DEFAULT_CURRENCY)
 

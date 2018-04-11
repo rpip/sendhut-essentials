@@ -83,7 +83,10 @@ def _send_email(email, template, context=None):
 
 def _send_sms(phone, message, sender_alias='Sendhut'):
     sms = Jusibe(settings.JUSIBE_PUBLIC_KEY, settings.JUSIBE_ACCESS_TOKEN)
-    return sms.send_message(phone, sender_alias, message)
+    try:
+        return sms.send_message(phone, sender_alias, message)
+    except:
+        pass
 
 
 # SMS
@@ -95,16 +98,25 @@ def send_phone_verification(phone, code):
     _send_sms(phone, message)
 
 
-def send_order_confirmation(email, order, async=True):
+def send_order_confirmation(user, order, async=True):
     "Receive a text message when you place an order"
-    # message = """
-    # Thanks for ordering. Your order will be delivered at {} to {}.
-    # """.format(order.delivery_time, order.delivery_address)
-    # send_sms(phone, message)
-    if async:
-        return enqueue(_send_email, email, CONFIRM_ORDER_TEMPLATE, {'order': order})
+    time = order.time.strftime('%H:%M %p, %a %d %b %Y')
+    ORDER_SMS = "Thanks for ordering. Your order will be delivered to {} at {}.".format(time, order.address)
 
-    _send_email(email, CONFIRM_ORDER_TEMPLATE, {'order': order})
+    # alert Tade and me
+    ADMIN_ALERT = "NEW ORDER from {}. Delivery at {}. #{}".format(
+        user.get_full_name(), time, order.reference)
+
+    if async:
+        enqueue(_send_email, user.email, CONFIRM_ORDER_TEMPLATE, {'order': order})
+        enqueue(_send_sms, '‭08096699966‬', ADMIN_ALERT)
+        enqueue(_send_sms, '08169567693', ADMIN_ALERT)
+        enqueue(_send_sms, user.phone, ORDER_SMS.format(order.time, order.address))
+    else:
+        _send_email(user.email, CONFIRM_ORDER_TEMPLATE, {'order': order})
+        _send_sms('‭08096699966‬', ADMIN_ALERT)
+        _send_sms('08169567693', ADMIN_ALERT)
+        _send_sms(user.phone, ORDER_SMS)
 
 
 # EMAILS
