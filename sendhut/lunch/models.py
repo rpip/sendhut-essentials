@@ -280,7 +280,7 @@ class OptionGroup(BaseModel):
     - Choice of Dressing (for Grilled Chicken salad)
     - Choice of Flavor
     - Choice of size
-    - Add ons
+    - Add ons (Choose between $min and $max)
     - Appetizers
     - Choice of Protein (required)
     - Pizza sizes
