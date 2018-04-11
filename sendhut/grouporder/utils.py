@@ -73,13 +73,16 @@ def get_group_member_from_request(request):
         group_order = GroupOrder.objects.filter(token=ref).first()
         store = group_order.store if group_order else None
     else:
-        match = resolve(request.path)
-        if match.url_name == 'store_details':
-            store = Store.objects.get(slug=match.kwargs['slug'])
+        try:
+            match = resolve(request.path)
+            if match.url_name == 'store_details':
+                store = Store.objects.get(slug=match.kwargs['slug'])
 
-        if match.url_name in ['leave', 'rejoin', 'cancel']:
-            group_order = GroupOrder.objects.get(token=match.kwargs['ref'])
-            store = group_order.store
+            if match.url_name in ['leave', 'rejoin', 'cancel']:
+                group_order = GroupOrder.objects.get(token=match.kwargs['ref'])
+                store = group_order.store
+        except:
+            pass
 
     if store:
         if request.user.is_authenticated:
