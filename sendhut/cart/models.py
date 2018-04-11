@@ -75,6 +75,9 @@ class Cart(BaseModel, ItemSet):
 
         return line
 
+    def load_from_cart(self, other_cart):
+        return other_cart.lines.update(cart=self)
+
     def create_line(self, item, quantity, data):
         """Create a cart line for given item, quantity and optional data.
         The `data` parameter may be used to differentiate between items with

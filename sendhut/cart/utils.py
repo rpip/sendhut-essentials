@@ -90,3 +90,11 @@ def get_cart_data(cart):
         'cart_delivery_fee': delivery_fee,
         'total': total
     }
+
+
+def transfer_prelogin_cart(prelogin_cart, user):
+    "Transfers items added before login to the user"
+    cart = get_user_cart(user)
+    cart.load_from_cart(prelogin_cart)
+    prelogin_cart.hard_delete()
+    return cart

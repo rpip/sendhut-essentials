@@ -11,6 +11,7 @@ from django.conf import settings
 
 from sendhut.cart.models import Cart
 from sendhut import utils, notifications
+from sendhut.cart.utils import transfer_prelogin_cart
 from sendhut.accounts.models import User
 from .forms import (
     LoginForm, SignupForm, ProfileForm, PasswordResetForm,
@@ -59,14 +60,13 @@ class LoginView(View):
             password = login_form.cleaned_data['password']
             remember_me = login_form.cleaned_data['remember_me']
             user = authenticate(request, username=username, password=password)
-            # on login, get anonymous cart and assign to user
             if user:
-                cart = request.cart
+                # restore cart from anonymous user sesssion
+                transfer_prelogin_cart(request.cart, user)
                 login(request, user)
                 if not remember_me:
                     self.request.session.set_expiry(0)
-                # restore cart from anonymous user sesssion
-                cart.change_user(user)
+
                 return redirect(next_url)
 
         return render(request, 'accounts/login.html', {
@@ -78,10 +78,7 @@ class LoginView(View):
 class LogoutView(View):
 
     def get(self, request, *args, **kwargs):
-        cart_data = Cart(request).serialize_lite()
         logout(request)
-        # restore cart from anonymous user sesssion
-        Cart(request, cart_data)
         return redirect(settings.LOGIN_REDIRECT_URL)
 
 
