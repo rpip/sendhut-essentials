@@ -83,10 +83,12 @@ def unslugify(text):
 
 def is_mobile(request):
     """Return True if the request comes from a mobile device."""
-    if MOBILE_AGENT_RE.match(request.META['HTTP_USER_AGENT']):
-        return True
-    else:
-        return False
+    UA = request.META.get('HTTP_USER_AGENT')
+    if UA:
+        if MOBILE_AGENT_RE.match(UA):
+            return True
+
+    return False
 
 
 def generate_password_token(email):
