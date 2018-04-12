@@ -30,4 +30,8 @@ def food_tags(request):
 def delivery_schedule(request):
     return {'delivery_schedule': Order.DELIVERY_TIMES}
 
+
+def paystack_config(request):
+    return {'PAYSTACK_PUBLIC_KEY': settings.PAYSTACK_PUBLIC_KEY}
+
 # TODO(yao): add delivery fee context processor

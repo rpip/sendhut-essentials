@@ -210,7 +210,6 @@ class OrderFactory(DjangoModelFactory):
         model = Order
 
     user = SubFactory(UserFactory)
-    time = lazy_attribute(lambda o: choice(Order.get_today_delivery_schedules()))
     address = 'Lekki phase 1'
     notes = lazy_attribute(lambda o: fake.sentence())
     delivery_fee = settings.BASE_DELIVERY_FEE

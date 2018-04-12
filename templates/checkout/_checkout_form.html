@@ -1,10 +1,10 @@
-<form id="delivery-time-form" action="{% url 'checkout:getit' %}?cart_ref={{ group_order.token }}" method="POST">
+<form id="checkout" action="{% url 'checkout:getit' %}?cart_ref={{ group_order.token }}" method="POST">
   {% csrf_token %}
   <div class="form-group row">
     <label for="address" class="col-sm-4 col-form-label">Delivery Address</label>
     <div class="col-sm-8">
-      <input type="text" class="form-control" name="address"
-             placeholder="Enter location or landmark" />
+      <input type="text" class="form-control" name="address" id="address"
+             placeholder="Enter location or landmark" required/>
       {% with field_errors=form.errors.address %}
         {% for error in field_errors %}
           <div class="invalid-feedback">
@@ -38,17 +38,16 @@
               {% endwith %}
   </div>
   <br>
-  <small class="form-text">
-    Online payments processed by <a href="http://paystack.com" target="_blank">Paystack</a>
-  </small>
+  <div id="paystackEmbedContainer"></div>
   <br>
   <div class="form-check">
     <label class="form-check-label text-muted">
-      <input type="checkbox" class="form-check-input" name="cash_delivery">
+      <input type="checkbox" class="form-check-input" name="cash" id="cash">
       Cash on delivery
     </label>
   </div>
 
   <br>
-  <button type="submit" class="btn btn-warning">GET IT</button>
+  <button type="submit" id="btn_submit"
+          class="btn btn-warning">GET IT</button>
 </form>

@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from django.urls import reverse
 from django.conf import settings
 from django.db import models
@@ -10,7 +8,7 @@ from sendhut.db import BaseModel
 from sendhut.lunch.models import Item
 from sendhut.cart.core import ItemLine, ItemSet, ItemList, partition
 from sendhut.grouporder.models import GroupOrder
-from sendhut.utils import generate_token, sane_repr
+from sendhut.utils import generate_token, sane_repr, asap_delivery_estimate
 from . import PaymentStatus, PaymentSource, OrderStatus
 
 
@@ -33,13 +31,13 @@ class OrderQueryset(models.QuerySet):
 class Order(BaseModel, ItemSet):
 
     DELIVERY_TIMES = (
-        '11:30',
-        '12:00',
-        '12:30',
-        '1:00',
-        '1:30',
-        '2:00',
-        '2:30'
+        '11:30 AM - 12:00 PM',
+        '12:00 PM - 12:30 PM',
+        '12:30 PM - 1:00 PM',
+        '1:00 PM - 1:30 PM',
+        '1:30 PM - 2:00 PM',
+        '2:00 PM - 2:30 PM',
+        '2:30 PM - 3:00 PM'
     )
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='orders')
     reference = models.CharField(max_length=8, unique=True)
@@ -47,7 +45,8 @@ class Order(BaseModel, ItemSet):
     #   Orders that have already been placed:
     #   Orders that are placed and paid for
     #   Manual payment and order:
-    time = models.DateTimeField(default=datetime.now)
+    time_window_start = models.DateTimeField(default=asap_delivery_estimate)
+    time_window_end = models.DateTimeField(default=asap_delivery_estimate)
     address = models.CharField(max_length=120)
     delivery_fee = MoneyField(
         max_digits=10,
@@ -82,6 +81,14 @@ class Order(BaseModel, ItemSet):
         self.payment_status = status
         self.save(update_fields=['payment_status'])
 
+    def set_payment_cash(self):
+        self.payment_source = PaymentSource.CASH
+        self.save(update_fields=['payment_source'])
+
+    def set_payment_online(self):
+        self.payment_source = PaymentSource.ONLINE
+        self.save(update_fields=['payment_source'])
+
     def save(self, *args, **kwargs):
         if not self.created:
             self.reference = generate_token(8)
@@ -96,11 +103,7 @@ class Order(BaseModel, ItemSet):
 
     @classmethod
     def get_today_delivery_schedules(cls):
-        schedule = []
-        for time in cls.DELIVERY_TIMES:
-            hour, minute = time.split(':')
-            schedule.append(datetime.today().replace(hour=int(hour), minute=int(minute)))
-        return schedule
+        return cls.DELIVERY_TIMES
 
     def partitions(self):
         "Return the cart split into pickup/store groups"
@@ -116,6 +119,12 @@ class Order(BaseModel, ItemSet):
     def is_open(self):
         statuses = {OrderStatus.UNFULFILLED, OrderStatus.PARTIALLY_FULFILLED}
         return self.status in statuses
+
+    @property
+    def delivery_time(self):
+        start = self.time_window_start.strftime('%-I:%M %p')
+        end = self.time_window_end.strftime('%-I:%M %p')
+        return '{} - {}'.format(start, end)
 
     class Meta:
         db_table = "order"

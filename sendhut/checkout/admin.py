@@ -23,13 +23,15 @@ class OrderAdmin(BaseModelAdmin):
         'created',
         'user',
         'reference',
-        'time',
+        'time_window_start',
+        'time_window_end',
         'address',
         'notes',
     )
     list_filter = (
         'created',
-        'time',
+        'time_window_start',
+        'time_window_end',
         'address'
     )
     search_fields = ('reference',)

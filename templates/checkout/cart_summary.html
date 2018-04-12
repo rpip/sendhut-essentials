@@ -10,4 +10,33 @@
   {% else %}
     {% include "checkout/_cart_summary.html" %}
   {% endif %}
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://js.paystack.co/v1/inline.js"></script>
+<script>
+  PaystackPop.setup({
+    key: '{{ PAYSTACK_PUBLIC_KEY }}',
+    email: '{{ request.user.email }}',
+    amount: {{ unquantized_total }},
+    container: 'paystackEmbedContainer',
+    callback: function(response){
+      //alert('successfully subscribed. transaction ref is ' + response.reference);
+      // set payment reference
+      // if delivery address is set, submit cart
+      if ($.trim($('#address').val()).length) {
+        $('#checkout').submit();
+      }
+    }
+  });
+
+$('#cash').change(function() {
+  if($(this).is(":checked")) {
+    $('#paystackEmbedContainer').hide();
+  } else {
+    $('#paystackEmbedContainer').show();
+  }
+});
+</script>
 {% endblock %}

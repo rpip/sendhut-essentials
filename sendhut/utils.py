@@ -1,6 +1,6 @@
 from decimal import Decimal
 from urllib.parse import urljoin
-from datetime import datetime
+from datetime import datetime, timedelta
 from functools import singledispatch
 from enum import Enum
 import json
@@ -9,6 +9,7 @@ import hashlib
 import binascii
 import re
 
+from dateutil import parser
 from django.conf import settings
 from django.utils.encoding import iri_to_uri
 from django.contrib.sites.models import Site
@@ -158,3 +159,17 @@ def build_absolute_uri(location):
 def quantize(amount):
     CENTS = Decimal('0.01')
     return amount.quantize(CENTS)
+
+
+def unquantize_for_paystack(amount):
+    "Removes decimal point separators, required for Paystack format"
+    return ''.join(str(amount).split('.'))
+
+
+def asap_delivery_estimate():
+    return datetime.now() + timedelta(minutes=35)
+
+
+def windows_from_time_string(time_str):
+    start, end = time_str.split('-')
+    return parser.parse(start.strip()), parser.parse(end.strip())

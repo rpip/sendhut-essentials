@@ -8,9 +8,4 @@ class CheckoutForm(forms.Form):
     time = forms.ChoiceField(
         choices=((x, x) for x in Order.DELIVERY_TIMES))
     notes = forms.CharField(max_length=300, required=False)
-    cash_delivery = forms.BooleanField(required=False)
-
-    def clean_time(self):
-        delivery_time = self.cleaned_data['time']
-        hour, minute = delivery_time.split(':')
-        return datetime.today().replace(hour=int(hour), minute=int(minute))
+    cash = forms.BooleanField(required=False)

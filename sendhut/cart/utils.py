@@ -1,5 +1,6 @@
 from datetime import timedelta
 
+from sendhut.utils import unquantize_for_paystack
 from .models import Cart
 from uuid import UUID
 
@@ -88,7 +89,8 @@ def get_cart_data(cart):
         'sub_total': sub_total,
         'delivery_fee': delivery_fee,
         'cart_delivery_fee': delivery_fee,
-        'total': total
+        'total': total,
+        'unquantized_total': unquantize_for_paystack(total.amount)
     }
 
 

@@ -1,6 +1,8 @@
 from django.conf import settings
 from djmoney.money import Money
 
+from sendhut.grouporder.utils import get_store_group_order_cookie_name
+from sendhut.utils import windows_from_time_string
 from .models import Order, OrderLine
 
 
@@ -14,32 +16,48 @@ class Checkout:
         self.delivery_time = None
         self.order = None
 
-    def create_order(self, time, address=None, notes=None):
+    def create_order(self, time, address=None, notes=None, cash=None):
         """Create an order from the checkout session.
 
         If any of the addresses is new and the user is logged in the address
         will also get saved to that user's address book.
         """
         if self.cart.is_in_group_order():
-            return self._create_group_order(time, address, notes)
+            order = self._create_group_order(time, address, notes)
+        else:
+            order = self._create_single_order(time, address, notes)
 
-        return self._create_single_order(time, address, notes)
+        if not(cash):
+            order.set_payment_online()
+
+        return order
 
     def _create_group_order(self, time, address=None, notes=None):
+        time_window_start, time_window_end = windows_from_time_string(time)
         group_order = self.cart.get_group_order()
         group_order.lock()
         self.order = Order.objects.create(
-            user=self.user, time=time, address=address,
-            notes=notes, delivery_fee=self.calculate_delivery_cost(),
-            total_gross=self.get_total(), group_order=group_order,
+            user=self.user,
+            time_window_start=time_window_start,
+            time_window_end=time_window_end,
+            address=address,
+            notes=notes,
+            total_gross=self.get_total(),
+            group_order=group_order,
+            delivery_fee=self.calculate_delivery_cost()
         )
         return self.order
 
     def _create_single_order(self, time, address=None, notes=None):
+        time_window_start, time_window_end = windows_from_time_string(time)
         self.order = Order.objects.create(
-            user=self.user, time=time, address=address,
-            notes=notes, delivery_fee=self.calculate_delivery_cost(),
-            total_gross=self.get_total()
+            user=self.user,
+            time_window_start=time_window_start,
+            time_window_end=time_window_end,
+            address=address,
+            delivery_fee=self.calculate_delivery_cost(),
+            total_gross=self.get_total(),
+            notes=notes
         )
 
         for line in self.cart.lines.all():
@@ -69,3 +87,9 @@ class Checkout:
 
     def calculate_delivery_cost(self):
         return Money(settings.BASE_DELIVERY_FEE, settings.DEFAULT_CURRENCY)
+
+
+def do_checkout_cleanup(response, order):
+    if order.group_order:
+        cookie_name = get_store_group_order_cookie_name(order.group_order.store)
+        response.delete_cookie(cookie_name)

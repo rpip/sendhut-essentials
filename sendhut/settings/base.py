@@ -92,6 +92,7 @@ TEMPLATES = [
                 'sendhut.context_processors.mobile_check',
                 'sendhut.context_processors.food_tags',
                 'sendhut.context_processors.delivery_schedule',
+                'sendhut.context_processors.paystack_config',
                 'sendhut.grouporder.context_processors.group_order',
             ],
         },
@@ -217,6 +218,8 @@ If you spot any glitches please let us know on phone 08169567963 or email hello@
 LOGIN_URL = '/login'
 
 PAYSTACK_SECRET_KEY = config('PAYSTACK_SECRET_KEY')
+
+PAYSTACK_PUBLIC_KEY = config('PAYSTACK_PUBLIC_KEY')
 
 REDIS_URL = urlparse(os.environ.get('REDIS_URL', 'redis://localhost:6379/0'))
 
