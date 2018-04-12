@@ -92,7 +92,7 @@ TEMPLATES = [
                 'sendhut.context_processors.mobile_check',
                 'sendhut.context_processors.food_tags',
                 'sendhut.context_processors.delivery_schedule',
-                'sendhut.context_processors.paystack_config',
+                'sendhut.context_processors.vendor_configs',
                 'sendhut.grouporder.context_processors.group_order',
             ],
         },
@@ -281,6 +281,6 @@ except:
     pass
 
 
-GOOGLE_MAPS_API_KEY = 'AIzaSyDP1XjGHjAlrxiSICFk5-Q7uEYVrpcZHFk'
+GOOGLE_MAPS_API_KEY = 'AIzaSyDVZn9gbIfivvhXOI1eAY1tu2M-yo2LO9w'
 
 GROUP_ORDER_MESSAGE = "You can order in lunch with coworkers or friends with the group order."

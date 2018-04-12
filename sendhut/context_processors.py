@@ -31,7 +31,10 @@ def delivery_schedule(request):
     return {'delivery_schedule': Order.DELIVERY_TIMES}
 
 
-def paystack_config(request):
-    return {'PAYSTACK_PUBLIC_KEY': settings.PAYSTACK_PUBLIC_KEY}
+def vendor_configs(request):
+    return {
+        'PAYSTACK_PUBLIC_KEY': settings.PAYSTACK_PUBLIC_KEY,
+        'GOOGLE_MAPS_API_KEY': settings.GOOGLE_MAPS_API_KEY
+    }
 
 # TODO(yao): add delivery fee context processor

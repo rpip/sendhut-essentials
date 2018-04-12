@@ -1,4 +1,6 @@
 {% load static %}
+<link rel="stylesheet" href="{% static 'vendor/slidepanel/slidepanel.css' %}">
+
 <script src="{% static 'vendor/jquery.js' %}"></script>
 <script src="{% static 'vendor/clipboard.min.js' %}"></script>
 <script src="{% static 'vendor/popper.js' %}"></script>
@@ -8,7 +10,7 @@
 <script src="{% static 'vendor/js.cookie.js' %}"></script>
 <script src="{% static 'vendor/jquery.serialize-object.min.js' %}"></script>
 <script src="{% static 'vendor/slidepanel/slidepanel.js' %}"></script>
-<link rel="stylesheet" href="{% static 'vendor/slidepanel/slidepanel.css' %}">
+<script src="https://maps.googleapis.com/maps/api/js?key={{ GOOGLE_MAPS_API_KEY }}&libraries=places">
 
 <script src="{% static 'js/app.js' %}"></script>
 
