@@ -69,6 +69,9 @@ def collect_data_for_email(email, template):
 
 
 def _send_email(email, template, context=None):
+    if settings.DEBUG:
+        return
+
     ctx = collect_data_for_email(email, template)
     if context:
         ctx.update(context)
@@ -82,6 +85,9 @@ def _send_email(email, template, context=None):
 
 
 def _send_sms(phone, message, sender_alias='Sendhut'):
+    if settings.DEBUG:
+        return
+
     sms = Jusibe(settings.JUSIBE_PUBLIC_KEY, settings.JUSIBE_ACCESS_TOKEN)
     try:
         return sms.send_message(phone, sender_alias, message)
@@ -100,7 +106,7 @@ def send_phone_verification(phone, code):
 
 def send_order_confirmation(user, order, async=True):
     "Receive a text message when you place an order"
-    time = order.time.strftime('%H:%M %p, %a %d %b %Y')
+    time = order.delivery_time
     ORDER_SMS = "Thanks for ordering. Your order will be delivered to {} at {}.".format(time, order.address)
 
     # alert Tade and me
@@ -111,7 +117,7 @@ def send_order_confirmation(user, order, async=True):
         enqueue(_send_email, user.email, CONFIRM_ORDER_TEMPLATE, {'order': order})
         enqueue(_send_sms, '‭08096699966‬', ADMIN_ALERT)
         enqueue(_send_sms, '08169567693', ADMIN_ALERT)
-        enqueue(_send_sms, user.phone, ORDER_SMS.format(order.time, order.address))
+        enqueue(_send_sms, user.phone, ORDER_SMS.format(order.delivery_time, order.address))
     else:
         _send_email(user.email, CONFIRM_ORDER_TEMPLATE, {'order': order})
         _send_sms('‭08096699966‬', ADMIN_ALERT)
