@@ -45,7 +45,9 @@ def get_anonymous_group_order_token(request, store):
 
 def get_anonymous_group_order_member(request, store):
     token = get_anonymous_group_order_token(request, store)
-    return Member.objects.filter(cart__token=token).first()
+    return Member.objects.filter(
+        cart__token=token,
+        group_order__status=CartStatus.OPEN).first()
 
 
 def join_group_order_anonymous(request, group_order, name):
@@ -89,6 +91,7 @@ def get_group_member_from_request(request):
             # TODO(yao): filter for only groups users is active in NOW
             member = Member.objects.filter(
                 group_order__store=store,
+                group_order__status=CartStatus.OPEN,
                 state=MemberStatus.IN,
                 user=request.user).first()
 
