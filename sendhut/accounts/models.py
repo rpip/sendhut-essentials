@@ -7,7 +7,7 @@ from sendhut.db import BaseModel
 
 class User(AbstractUser, BaseModel):
 
-    phone = models.CharField(max_length=20)
+    phone = models.CharField(max_length=20, unique=True)
     last_login = models.DateTimeField(null=True, blank=True)
     identity_verified = models.BooleanField(default=False)
 

@@ -7,7 +7,7 @@ from .models import User, Address
 
 @admin.register(User)
 class UserAdmin(BaseModelAdmin):
-    exclude = ('password',)
+    exclude = ('password', 'metadata')
     list_display = (
         'id',
         'is_superuser',
