@@ -92,11 +92,10 @@ class SignupView(LoginView):
             user.username = utils.generate_random_name()
             user.save()
             if user:
-                cart_data = Cart(request).serialize_lite()
+                # restore cart from anonymous user sesssion
+                transfer_prelogin_cart(request.cart, user)
                 login(request, user)
                 notifications.send_welcome_email(user.email)
-                # restore cart from anonymous user sesssion
-                Cart(request, cart_data)
                 return redirect(settings.LOGIN_REDIRECT_URL)
 
         return render(request, 'accounts/login.html', {
