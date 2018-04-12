@@ -9,9 +9,8 @@ from django.shortcuts import redirect, render
 from django.contrib import messages
 from django.conf import settings
 
-from sendhut.cart.models import Cart
 from sendhut import utils, notifications
-from sendhut.cart.utils import transfer_prelogin_cart
+from sendhut.cart.utils import transfer_prelogin_cart, get_or_create_user_cart
 from sendhut.accounts.models import User
 from .forms import (
     LoginForm, SignupForm, ProfileForm, PasswordResetForm,
@@ -93,6 +92,7 @@ class SignupView(LoginView):
             user.save()
             if user:
                 # restore cart from anonymous user sesssion
+                get_or_create_user_cart(user)
                 transfer_prelogin_cart(request.cart, user)
                 login(request, user)
                 notifications.send_welcome_email(user.email)
