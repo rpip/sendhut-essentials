@@ -16,19 +16,22 @@ class Checkout:
         self.delivery_time = None
         self.order = None
 
-    def create_order(self, time, address=None, notes=None, cash=None):
+    def create_order(self, **kwargs):
         """Create an order from the checkout session.
 
         If any of the addresses is new and the user is logged in the address
         will also get saved to that user's address book.
         """
+        payment_reference = kwargs.pop('payment_reference', None)
+        cash = kwargs.pop('cash')
+
         if self.cart.is_in_group_order():
-            order = self._create_group_order(time, address, notes)
+            order = self._create_group_order(**kwargs)
         else:
-            order = self._create_single_order(time, address, notes)
+            order = self._create_single_order(**kwargs)
 
         if not(cash):
-            order.set_payment_online()
+            order.set_payment_online(payment_reference)
 
         return order
 

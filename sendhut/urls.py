@@ -33,6 +33,10 @@ urlpatterns = [
     url(r'^nested_admin/', include('nested_admin.urls')),
 ]
 
+# Change admin site title
+admin.site.site_header = "Sendhut"
+admin.site.site_title = "Sendhut Admin"
+
 
 if settings.DEBUG:
     import debug_toolbar

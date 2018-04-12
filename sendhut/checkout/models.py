@@ -64,6 +64,7 @@ class Order(BaseModel, ItemSet):
         choices=OrderStatus.CHOICES,
         default=OrderStatus.PENDING
     )
+    payment_reference = models.CharField(max_length=32, blank=True, null=True)
     payment_status = models.CharField(
         max_length=32,
         choices=PaymentStatus.CHOICES,
@@ -85,9 +86,10 @@ class Order(BaseModel, ItemSet):
         self.payment_source = PaymentSource.CASH
         self.save(update_fields=['payment_source'])
 
-    def set_payment_online(self):
+    def set_payment_online(self, reference=None):
         self.payment_source = PaymentSource.ONLINE
-        self.save(update_fields=['payment_source'])
+        self.payment_reference = reference
+        self.save(update_fields=['payment_source', 'payment_reference'])
 
     def save(self, *args, **kwargs):
         if not self.created:

@@ -22,11 +22,11 @@ class OrderAdmin(BaseModelAdmin):
         'id',
         'created',
         'user',
-        'reference',
-        'time_window_start',
-        'time_window_end',
+        'delivery_time',
         'address',
         'notes',
+        'reference',
+        'payment_reference',
     )
     list_filter = (
         'created',

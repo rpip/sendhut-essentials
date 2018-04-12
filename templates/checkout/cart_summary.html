@@ -22,10 +22,10 @@
     amount: {{ unquantized_total }},
     container: 'paystackEmbedContainer',
     callback: function(response){
-      //alert('successfully subscribed. transaction ref is ' + response.reference);
-      // set payment reference
       // if delivery address is set, submit cart
       if ($.trim($('#address').val()).length) {
+        // set payment reference
+        $('#payment_reference').val(response.reference);
         $('#checkout').submit();
       }
     }
