@@ -1,4 +1,5 @@
 from django import forms
+from django.forms import ValidationError
 from django.contrib.auth.forms import AuthenticationForm, UsernameField, SetPasswordForm
 from .models import User
 
@@ -55,6 +56,20 @@ class SignupForm(forms.Form):
          label='Email',
          max_length=40,
          widget=forms.TextInput(attrs={'placeholder': 'e.g. name@example.com'}))
+
+    def clean_phone(self):
+        phone = self.cleaned_data['phone']
+        if User.objects.filter(phone=phone).exists():
+            raise ValidationError('This phone number is already in use.')
+
+        return phone
+
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        if User.objects.filter(email=email).exists():
+            raise ValidationError('This email is already in use.')
+
+        return email
 
 
 class ProfileForm(forms.ModelForm):
