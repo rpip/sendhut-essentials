@@ -80,3 +80,32 @@ class ProfileForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ('first_name', 'last_name', 'email', 'phone')
+
+    email = forms.EmailField(
+         label='Email',
+         max_length=40,
+         widget=forms.TextInput(attrs={'placeholder': 'e.g. name@example.com'}))
+
+    phone = forms.CharField(
+        label='Mobile Phone',
+        max_length=20,
+        widget=forms.TextInput(attrs={'placeholder': 'Your mobile phone number'}))
+
+    def clean(self):
+        return self.cleaned_data
+
+    def clean_phone(self):
+        phone = self.cleaned_data['phone']
+        if phone != self.instance.phone:
+            if User.objects.filter(phone=phone).exists():
+                raise ValidationError('This phone number is already in use.')
+
+        return phone
+
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        if email != self.instance.email:
+            if User.objects.filter(email=email).exists():
+                raise ValidationError('This email is already in use.')
+
+        return email

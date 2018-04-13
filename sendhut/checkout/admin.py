@@ -26,6 +26,7 @@ class OrderAdmin(BaseModelAdmin):
         'address',
         'notes',
         'reference',
+        'group_order',
         'payment_reference',
     )
     list_filter = (
@@ -34,5 +35,6 @@ class OrderAdmin(BaseModelAdmin):
         'time_window_end',
         'address'
     )
+    readonly_fields = ('group_order',)
     search_fields = ('reference',)
     inlines = [OrderLineInline]
