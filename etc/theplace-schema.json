@@ -1,0 +1,2911 @@
+{
+  "@context": "http://schema.org",
+  "@type": "Restaurant",
+  "@id": "n2iz",
+  "name": "The Place - Lekki Phase 1",
+  "description": "...It's just the place to be",
+  "url": "https://food.jumia.com.ng/restaurant/n2iz/the-place-lekki-phase-1",
+  "menu": "https://food.jumia.com.ng/restaurant/n2iz/the-place-lekki-phase-1",
+  "logo": "https://africa-public.food.jumia.com/assets/production/ng/images/vendors/n7fv.jpg?v=20150731112958",
+  "paymentAccepted": [
+    "Debit card on Delivery",
+    "mCash mobile money",
+    "GTBank 737",
+    "Cash on Delivery"
+  ],
+  "currenciesAccepted": "NGN",
+  "servesCuisine": [
+    "African",
+    "Pasta",
+    "Nigerian"
+  ],
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Plot 3b Block A10, Admiralty Way, Lekki Phase1",
+    "addressCountry": "NG",
+    "addressLocality": "Lagos",
+    "addressRegion": "Lagos"
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": 4.3,
+    "reviewCount": 1402
+  },
+  "review": [
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Uchenna O"
+      },
+      "datePublished": "2018-04-14",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 1
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "vanessa o"
+      },
+      "datePublished": "2018-04-13",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 3
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "HENRY O"
+      },
+      "datePublished": "2018-04-13",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Kolawole L"
+      },
+      "datePublished": "2018-04-12",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 4
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "RABI I"
+      },
+      "datePublished": "2018-04-11",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 4
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "HENRY O"
+      },
+      "datePublished": "2018-04-10",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "SODIQ B"
+      },
+      "datePublished": "2018-04-10",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 4
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "EMORUWA TOLU T"
+      },
+      "datePublished": "2018-04-10",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "PHOEBE A"
+      },
+      "datePublished": "2018-04-06",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 4
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Ifeoma O"
+      },
+      "datePublished": "2018-04-06",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 4
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "HENRY O"
+      },
+      "datePublished": "2018-04-05",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Gabriella J"
+      },
+      "datePublished": "2018-04-02",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 3
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "NIKE O"
+      },
+      "datePublished": "2018-04-02",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 4
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "DAMIETE O"
+      },
+      "datePublished": "2018-04-01",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 3
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Favour J"
+      },
+      "datePublished": "2018-03-30",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Ifeoma O"
+      },
+      "datePublished": "2018-03-30",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "MARY O"
+      },
+      "datePublished": "2018-03-30",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "IDRIS L"
+      },
+      "datePublished": "2018-03-30",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Joshua O"
+      },
+      "datePublished": "2018-03-29",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Akunna U"
+      },
+      "datePublished": "2018-03-29",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 4
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "DOYIN O"
+      },
+      "datePublished": "2018-03-29",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "IHEME J"
+      },
+      "datePublished": "2018-03-29",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "WILLIAMS D"
+      },
+      "datePublished": "2018-03-27",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 4
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Favour J"
+      },
+      "datePublished": "2018-03-27",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Tayo A"
+      },
+      "datePublished": "2018-03-27",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 4
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "HENRY O"
+      },
+      "datePublished": "2018-03-26",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Gabriella J"
+      },
+      "datePublished": "2018-03-26",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Blessing O"
+      },
+      "datePublished": "2018-03-23",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "AMINAT O"
+      },
+      "datePublished": "2018-03-21",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "IHEME J"
+      },
+      "datePublished": "2018-03-21",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "FUNKE O"
+      },
+      "datePublished": "2018-03-20",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "CHINWENDU E"
+      },
+      "datePublished": "2018-03-19",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "JOSHUA D"
+      },
+      "datePublished": "2018-03-14",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "IHEME J"
+      },
+      "datePublished": "2018-03-14",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "IJEOMA A"
+      },
+      "datePublished": "2018-03-13",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Jolie M"
+      },
+      "datePublished": "2018-03-13",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 3
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Joshua O"
+      },
+      "datePublished": "2018-03-13",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "OBIAGELI O"
+      },
+      "datePublished": "2018-03-12",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Segun M"
+      },
+      "datePublished": "2018-03-11",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 3
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "AVERTI A"
+      },
+      "datePublished": "2018-03-11",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "TOMIWA A"
+      },
+      "datePublished": "2018-03-10",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Rafferty O"
+      },
+      "datePublished": "2018-03-09",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Ogochukwu O"
+      },
+      "datePublished": "2018-03-09",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "IHEME J"
+      },
+      "datePublished": "2018-03-09",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 3
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "IHEME J"
+      },
+      "datePublished": "2018-03-09",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "DAMI O"
+      },
+      "datePublished": "2018-03-08",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 4
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "ADRIAN C"
+      },
+      "datePublished": "2018-03-08",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Joshua O"
+      },
+      "datePublished": "2018-03-08",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "IHEME J"
+      },
+      "datePublished": "2018-03-07",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "IHEME G"
+      },
+      "datePublished": "2018-03-07",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "IFE A"
+      },
+      "datePublished": "2018-03-07",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "chrys c"
+      },
+      "datePublished": "2018-03-07",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 3
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Remi O"
+      },
+      "datePublished": "2018-03-05",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "OSARUMEN O"
+      },
+      "datePublished": "2018-03-05",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 4
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Flora U"
+      },
+      "datePublished": "2018-03-04",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "MICHAEL O"
+      },
+      "datePublished": "2018-03-04",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 1
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "HENRY O"
+      },
+      "datePublished": "2018-03-03",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "TONI D"
+      },
+      "datePublished": "2018-03-01",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "OSARUMEN O"
+      },
+      "datePublished": "2018-03-01",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 4
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "JACQUELINE E"
+      },
+      "datePublished": "2018-02-27",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "IBUKUN O"
+      },
+      "datePublished": "2018-02-26",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Joseph K"
+      },
+      "datePublished": "2018-02-25",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Rafferty O"
+      },
+      "datePublished": "2018-02-25",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Ebele E"
+      },
+      "datePublished": "2018-02-25",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Ifeanyichukwu U"
+      },
+      "datePublished": "2018-02-25",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 1
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "IFEOLUWASOLAPE F"
+      },
+      "datePublished": "2018-02-25",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Theresa T"
+      },
+      "datePublished": "2018-02-24",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Joseph K"
+      },
+      "datePublished": "2018-02-23",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 4
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Jennifer O"
+      },
+      "datePublished": "2018-02-22",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Rita E"
+      },
+      "datePublished": "2018-02-21",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Nelita O"
+      },
+      "datePublished": "2018-02-21",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Rafferty O"
+      },
+      "datePublished": "2018-02-21",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Osas O"
+      },
+      "datePublished": "2018-02-21",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Peace B"
+      },
+      "datePublished": "2018-02-20",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 4
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Nelita O"
+      },
+      "datePublished": "2018-02-20",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Jolie M"
+      },
+      "datePublished": "2018-02-20",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 4
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "OBIAGELI O"
+      },
+      "datePublished": "2018-02-20",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Osahenrumwen V"
+      },
+      "datePublished": "2018-02-19",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 4
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "EMEKA A"
+      },
+      "datePublished": "2018-02-17",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 4
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Vivian S"
+      },
+      "datePublished": "2018-02-15",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 3
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "HENRY O"
+      },
+      "datePublished": "2018-02-15",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "APAMPA O"
+      },
+      "datePublished": "2018-02-14",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Ishmael I"
+      },
+      "datePublished": "2018-02-14",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 4
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "NOTEY A"
+      },
+      "datePublished": "2018-02-13",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 1
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "CHINWENDU E"
+      },
+      "datePublished": "2018-02-13",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "EMEKA A"
+      },
+      "datePublished": "2018-02-12",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "CHIDERA N"
+      },
+      "datePublished": "2018-02-10",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 4
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "CHINWENDU E"
+      },
+      "datePublished": "2018-02-08",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "JACQUELINE E"
+      },
+      "datePublished": "2018-02-06",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "UGWUOHA A"
+      },
+      "datePublished": "2018-02-06",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "BECKY U"
+      },
+      "datePublished": "2018-02-06",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 4
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "YETUNDE O"
+      },
+      "datePublished": "2018-02-05",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 4
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Sammie O"
+      },
+      "datePublished": "2018-02-05",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Glory S"
+      },
+      "datePublished": "2018-02-04",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Jennifer O"
+      },
+      "datePublished": "2018-02-04",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Adeleye D"
+      },
+      "datePublished": "2018-02-04",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Daphne D"
+      },
+      "datePublished": "2018-02-03",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "cufele c"
+      },
+      "datePublished": "2018-02-03",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 2
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "AZEEZAT A"
+      },
+      "datePublished": "2018-02-03",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 1
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "ALEXANDER N"
+      },
+      "datePublished": "2018-02-03",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "BERTHA D"
+      },
+      "datePublished": "2018-02-03",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 3
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "OBIAGELI O"
+      },
+      "datePublished": "2018-02-03",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "ADRIAN C"
+      },
+      "datePublished": "2018-02-02",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Jolie M"
+      },
+      "datePublished": "2018-02-02",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Jolie M"
+      },
+      "datePublished": "2018-02-01",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Opeyemi O"
+      },
+      "datePublished": "2018-02-01",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Princess B"
+      },
+      "datePublished": "2018-02-01",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 4
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Nasir A"
+      },
+      "datePublished": "2018-01-30",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "ADRIAN C"
+      },
+      "datePublished": "2018-01-29",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Olayinka A"
+      },
+      "datePublished": "2018-01-28",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "OLUSEYI A"
+      },
+      "datePublished": "2018-01-28",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Sammie O"
+      },
+      "datePublished": "2018-01-28",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Jennifer O"
+      },
+      "datePublished": "2018-01-28",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Princess B"
+      },
+      "datePublished": "2018-01-25",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 1
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Abby U"
+      },
+      "datePublished": "2018-01-21",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Rafferty O"
+      },
+      "datePublished": "2018-01-18",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Shalewa A"
+      },
+      "datePublished": "2018-01-18",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "ADRIAN C"
+      },
+      "datePublished": "2018-01-18",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "KENE O"
+      },
+      "datePublished": "2018-01-17",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "HENRY O"
+      },
+      "datePublished": "2018-01-16",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Joseph K"
+      },
+      "datePublished": "2018-01-15",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "EFE O"
+      },
+      "datePublished": "2018-01-15",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 1
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "ADAOBI O"
+      },
+      "datePublished": "2018-01-14",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "ADAOBI O"
+      },
+      "datePublished": "2018-01-14",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Bisong O"
+      },
+      "datePublished": "2018-01-13",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 4
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "LUSIA O"
+      },
+      "datePublished": "2018-01-13",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 4
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Stephany O"
+      },
+      "datePublished": "2018-01-13",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 3
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "AKINTOBI T"
+      },
+      "datePublished": "2018-01-13",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Precious A"
+      },
+      "datePublished": "2018-01-11",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "HENRY O"
+      },
+      "datePublished": "2018-01-11",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Mayowa A"
+      },
+      "datePublished": "2018-01-09",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "JAMYLAH A"
+      },
+      "datePublished": "2018-01-08",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Alexander D"
+      },
+      "datePublished": "2018-01-07",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 4
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Natasha C"
+      },
+      "datePublished": "2018-01-05",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 2
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "OGOCHUKWU O"
+      },
+      "datePublished": "2018-01-03",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Olusayo A"
+      },
+      "datePublished": "2018-01-03",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Ifeoma E"
+      },
+      "datePublished": "2018-01-03",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Timi A"
+      },
+      "datePublished": "2018-01-02",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Jennifer O"
+      },
+      "datePublished": "2018-01-01",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Becky N"
+      },
+      "datePublished": "2018-01-01",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Nneka O"
+      },
+      "datePublished": "2018-01-01",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 3
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "DR SHAYO F"
+      },
+      "datePublished": "2018-01-01",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 2
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "FOLAWEWO A"
+      },
+      "datePublished": "2017-12-29",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Lovelyn A"
+      },
+      "datePublished": "2017-12-29",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "MATTHEW O"
+      },
+      "datePublished": "2017-12-29",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Jennifer O"
+      },
+      "datePublished": "2017-12-28",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Natasha C"
+      },
+      "datePublished": "2017-12-27",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Henry O"
+      },
+      "datePublished": "2017-12-24",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "ALICIA O"
+      },
+      "datePublished": "2017-12-24",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Jennifer O"
+      },
+      "datePublished": "2017-12-24",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "David A"
+      },
+      "datePublished": "2017-12-23",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 3
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Gift M"
+      },
+      "datePublished": "2017-12-23",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Kikelomo A"
+      },
+      "datePublished": "2017-12-22",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 3
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Joshua O"
+      },
+      "datePublished": "2017-12-22",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Henry O"
+      },
+      "datePublished": "2017-12-21",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Nelita O"
+      },
+      "datePublished": "2017-12-19",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Jennifer O"
+      },
+      "datePublished": "2017-12-19",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Abubakar A"
+      },
+      "datePublished": "2017-12-18",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 1
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Jennifer O"
+      },
+      "datePublished": "2017-12-18",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Tsolaye A"
+      },
+      "datePublished": "2017-12-18",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Miss B"
+      },
+      "datePublished": "2017-12-18",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Bukola D"
+      },
+      "datePublished": "2017-12-16",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Funmi J"
+      },
+      "datePublished": "2017-12-15",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 4
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Jennifer O"
+      },
+      "datePublished": "2017-12-14",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "BLESSING U"
+      },
+      "datePublished": "2017-12-12",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Rudolf S"
+      },
+      "datePublished": "2017-12-11",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 3
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Esther P"
+      },
+      "datePublished": "2017-12-11",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "MS LONPE A"
+      },
+      "datePublished": "2017-12-11",
+      "name": "Just amazing!",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Uchenna O"
+      },
+      "datePublished": "2017-12-10",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 3
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Amenawon E"
+      },
+      "datePublished": "2017-12-10",
+      "name": "Just amazing!",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Onyeka U"
+      },
+      "datePublished": "2017-12-09",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "CALEB A"
+      },
+      "datePublished": "2017-12-08",
+      "name": "Just amazing!",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Favour O"
+      },
+      "datePublished": "2017-12-08",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Favour O"
+      },
+      "datePublished": "2017-12-08",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "deji a"
+      },
+      "datePublished": "2017-12-07",
+      "name": "Just amazing!",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Funmi J"
+      },
+      "datePublished": "2017-12-07",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Miss B"
+      },
+      "datePublished": "2017-12-07",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 4
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Ndu J"
+      },
+      "datePublished": "2017-12-07",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Tunji O"
+      },
+      "datePublished": "2017-12-06",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "OLAMIDE A"
+      },
+      "datePublished": "2017-12-06",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 4
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "UFUOMA J"
+      },
+      "datePublished": "2017-12-06",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "OLAMIDE A"
+      },
+      "datePublished": "2017-12-06",
+      "name": "Good experience!",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 4
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "deji a"
+      },
+      "datePublished": "2017-12-06",
+      "name": "Just amazing!",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Ayokunle O"
+      },
+      "datePublished": "2017-12-06",
+      "name": "Good experience!",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 4
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Osas O"
+      },
+      "datePublished": "2017-12-05",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "ANDOR A"
+      },
+      "datePublished": "2017-12-05",
+      "name": "Just amazing!",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "deji a"
+      },
+      "datePublished": "2017-12-04",
+      "name": "Just amazing!",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Chuks I"
+      },
+      "datePublished": "2017-12-04",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "DAFE S"
+      },
+      "datePublished": "2017-12-04",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "HANNAH K"
+      },
+      "datePublished": "2017-12-03",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Mitchelle S"
+      },
+      "datePublished": "2017-12-02",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 2
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Civian B"
+      },
+      "datePublished": "2017-12-02",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 1
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Obi H"
+      },
+      "datePublished": "2017-12-01",
+      "name": "Just amazing!",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Iduwari A"
+      },
+      "datePublished": "2017-12-01",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 3
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "OGBODO O"
+      },
+      "datePublished": "2017-11-30",
+      "name": "Everything went as expected!",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 3
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "OLAMIDE A"
+      },
+      "datePublished": "2017-11-29",
+      "name": "Good experience!",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 4
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "Jennifer O"
+      },
+      "datePublished": "2017-11-27",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "barakat m"
+      },
+      "datePublished": "2017-11-27",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 3
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "CHINWENDU E"
+      },
+      "datePublished": "2017-11-27",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 5
+      }
+    },
+    {
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "givenName": "NNEKA O"
+      },
+      "datePublished": "2017-11-26",
+      "name": "",
+      "reviewBody": "",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": 3
+      }
+    }
+  ],
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": 6.43939,
+    "longitude": 3.456073
+  },
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": "Monday",
+      "opens": "10:00:00",
+      "closes": "21:00:00"
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": "Tuesday",
+      "opens": "10:00:00",
+      "closes": "21:00:00"
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": "Wednesday",
+      "opens": "10:00:00",
+      "closes": "21:00:00"
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": "Thursday",
+      "opens": "10:00:00",
+      "closes": "21:00:00"
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": "Friday",
+      "opens": "10:00:00",
+      "closes": "21:00:00"
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": "Saturday",
+      "opens": "10:00:00",
+      "closes": "21:00:00"
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": "Sunday",
+      "opens": "10:00:00",
+      "closes": "21:00:00"
+    }
+  ],
+  "potentialAction": {
+    "@type": "OrderAction",
+    "target": {
+      "@type": "EntryPoint",
+      "urlTemplate": "https://food.jumia.com.ng/restaurant/n2iz/the-place-lekki-phase-1",
+      "inLanguage": "en",
+      "actionPlatform": [
+        "http://schema.org/DesktopWebPlatform",
+        "http://schema.org/MobileWebPlatform"
+      ]
+    },
+    "deliveryMethod": [
+      "http://purl.org/goodrelations/v1#DeliveryModeOwnFleet"
+    ],
+    "priceSpecification": {
+      "@type": "DeliveryChargeSpecification",
+      "appliesToDeliveryMethod": "http://purl.org/goodrelations/v1#DeliveryModeOwnFleet",
+      "priceCurrency": "NGN",
+      "price": 400,
+      "eligibleTransactionVolume": {
+        "@type": "PriceSpecification",
+        "priceCurrency": "NGN",
+        "price": 1200
+      }
+    }
+  }
+}
