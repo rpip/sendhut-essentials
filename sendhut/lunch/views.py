@@ -19,7 +19,6 @@ from sendhut.grouporder.utils import (
 from sendhut.grouporder.models import Member, GroupOrder
 from sendhut.checkout.models import Order
 from .models import Item, Store, FOOD_TAGS
-from .forms import PartnerSignupForm
 
 
 def food_detail(request, slug):
@@ -48,23 +47,6 @@ def cartline_delete(request, line_id):
     cart = request.cart
     cart.remove_line(line_id)
     return JsonResponse({'status': 'OK'})
-
-
-class PartnerSignupView(FormView):
-    template_name = 'partner_signup.html'
-    form_class = PartnerSignupForm
-    page_title = 'Deliver with Sendhut'
-    success_url = '/business/'
-
-    def form_valid(self, form):
-        info = """
-        We will get back to you quickly, and we'll collect any more
-        info we need to get you listed.
-        """
-        messages.info(self.request, info)
-        Store.objects.create(**form.cleaned_data)
-        # TODO(yao): send email and sms notification to merchant
-        return super().form_valid(form)
 
 
 def search(request, tag):

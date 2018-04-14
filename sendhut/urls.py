@@ -4,7 +4,6 @@ from django.conf import settings
 from django.contrib import admin
 
 from sendhut.accounts.views import LoginView, LogoutView, SignupView
-from sendhut.lunch.views import PartnerSignupView
 from sendhut.grouporder.views import CartJoin
 
 from .views import home, about, faqs, privacy_terms
@@ -15,7 +14,6 @@ urlpatterns = [
     url(r'^about-us/$', about, name='about-us'),
     url(r'^faqs/$', faqs, name='faqs'),
     url(r'^privacy_terms/$', privacy_terms, name='privacy-terms'),
-    url(r'^partner/$', PartnerSignupView.as_view(), name='partner-signup'),
     url(r'^signup/$', SignupView.as_view(), name='signup'),
     url(r'^login/$', LoginView.as_view(), name='signin'),
     url(r'^logout/$', LogoutView.as_view(), name='logout'),

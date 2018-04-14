@@ -28,7 +28,10 @@ def food_tags(request):
 
 
 def delivery_schedule(request):
-    return {'delivery_schedule': Order.DELIVERY_TIMES}
+    return {
+        'delivery_schedule': Order.DELIVERY_TIMES,
+        'BASE_DELIVERY_FEE': settings.BASE_DELIVERY_FEE
+    }
 
 
 def vendor_configs(request):
