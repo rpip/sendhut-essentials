@@ -3,72 +3,93 @@
 {% block content %}
   <div id="faqs" class="col-sm-10">
     <h4 class="title">Frequently Asked Questions </h4>
-    <a class="question">
+    <ul id="faqs-menu">
+      <li><a href="#q0">What are your delivery hours?</a></li>
+      <li><a href="#q1">Where do you deliver?</a></li>
+      <li><a href="#q2">How fast do you deliver?</a></li>
+      <li><a href="#q3">What kind of restaurants are listed on SendHut?</a></li>
+      <li><a href="#q4">Can I suggest a new restaurant for SendHut?</a></li>
+      <li><a href="#q5">What if I have a suggestion or feedback?</a></li>
+      <li><a href="#q7">How much does delivery cost?</a></li>
+      <li><a href="#q8">Do I have to tip? </a></li>
+      <li><a href="#q9">Can I order from different restaurants at the same time?</a></li>
+      <li><a href="#q10">What if I have allergies?</a></li>
+      <li><a href="#q11">How do I pay?</a></li>
+      <li><a href="#q12">What if I've received the wrong items?</a></li>
+      <li><a href="#q13">What sort of drivers does Sendhut employ?</a></li>
+      <li><a href="#q14">Can I place orders in advance?</a></li>
+      <li><a href="#q15">Can I collect</a></li>
+      <li><a href="#q16">What if my food is late, or the food arrives cold?</a></li>
+    </ul>
+
+    <h4 id="q0">Answers</h4>
+    <hr>
+    <a class="question" id="q1">
       What are your delivery hours?
     </a>
     <p>Everyday, we deliver lunch from 11:30 AM - 2:00 PM</p>
 
-    <a class="question">Where do you deliver? </a>
+    <a class="question" id="q2">Where do you deliver?</a>
     <p>
       We're currently on offer in Lekki phase 1, Lagos, with new locations being added soon. If you're outside of our service area, still share your interest — it'll help us pick our next location.
     </p>
 
-    <a class="question"> How fast do you deliver?</a>
+    <a class="question" id="q3">How fast do you deliver?</a>
     <p>
       Fast, like magic!
 
       If, for any reason, your delivery takes longer than an hour, we'll waiver your delivery fee. Regardless of the situation, we will always notify you of your order status.
     </p>
 
-    <a class="question">What kind of restaurants are listed on SendHut? </a>
+    <a class="question" id="q4">What kind of restaurants are listed on SendHut?</a>
     <p>
       In selecting our restaurants, we curate a list of high-quality and a diverse selection of restaurants based on our personal experience and recommendations from friends and people like you.
       Not seeing your favourite? Let us know.
     </p>
 
-    <a class="question">Can I suggest a new restaurant for SendHut? </a>
+    <a class="question" id="q5">Can I suggest a new restaurant for SendHut?</a>
     <p>Let us know by emailing <a href="mailto:hello@sendhut.com">hello@sendhut.com</a>. Once received, we will run them through our assessment program and we will do our best to make it happen, just <em>'cuz you told us to.'</em></p>
 
-    <a class="question">What if I have a suggestion or feedback?</a>
+    <a class="question" id="q6">What if I have a suggestion or feedback?</a>
     <p>Yes! Please email us at <a href="mailto:hello@sendhut.com">hello@sendhut.com</a></p>
 
-    <a class="question">How much does delivery cost?</a>
+    <a class="question" id="q7">How much does delivery cost?</a>
     <p>Delivery charges range between NGN 300 - NGN 500.</p>
 
-    <a class="question"> Do I have to tip? </a>
+    <a class="question" id="q8"> Do I have to tip? </a>
     <p>This is completely up to you. Our riders make the magic happen, so tips are appreciated but  not required. Riders receive 100% of all tips.</p>
 
-    <a class="question">Can I order from different restaurants at the same time?</a>
+    <a class="question" id="q9">Can I order from different restaurants at the same time?</a>
 
     <p>Yes! We charge a flat fee of ₦{{ BASE_DELIVERY_FEE }} for every restaurant where you place an order. For example, If you place an order for meal items at SoFresh and another item at The Place, you'll pay ₦{% widthratio BASE_DELIVERY_FEE 1 2 %}.
     </p>
 
-    <a class="question">What if I have allergies?</a>
+    <a class="question" id="q10">What if I have allergies?</a>
     <p>If you have specific allergies and are concerned about any items on a menu you can specify allergies in the Special Instructions box and restaurants will pay special attention to them when preparing your food.</p>
 
-    <a class="question">How do I pay?</a>
+    <a class="question" id="q11">How do I pay?</a>
     <p>
       You pay online on our website. Card payments let us provide you with the best possible experience. It also creates a safer working environment for our riders, too. All payments are handled securely through
       <a href="https://paystack.com" target="_blank">Paystack</a>. We take your personal information very seriously, and we're committed to ensuring that the information you provide is kept secure at all times.
       You may also pay cash on delivery or via our POS when the rider arrives.
     </p>
 
-    <a class="question">What if I've received the wrong items?</a>
+    <a class="question" id="q12">What if I've received the wrong items?</a>
     <p>Our drivers, along with the restaurant staff, check the items prior to leaving the restaurant,
       so hopefully this will not happen. However, if it does,
       please call us on 08096699966 / 08169567683, and we will fix the problem.</p>
 
-      <a class="question">What sort of drivers does Sendhut employ?</a>
+      <a class="question" id="q13">What sort of drivers does Sendhut employ?</a>
     <p>We are highly selective about our driver fleet. Our driver fleet is highly experienced, yet
       undergo a thorough training process prior to handling orders.</p>
 
-      <a class="question">Can I place orders in advance?</a>
+      <a class="question" id="q14">Can I place orders in advance?</a>
     <p>We currently do not offer the option to place orders in advance, but we are working on this functionality.</p>
 
-    <a class="question">Can I collect?</a>
+    <a class="question" id="q15">Can I collect?</a>
     <p>We currently do not offer the option to collect, but we are working on this functionality.</p>
 
-    <a class="question"> What if my food is late, or the food arrives cold?</a>
+    <a class="question" id="q16"> What if my food is late, or the food arrives cold?</a>
     <p>We started Sendhut to delight our customers. If you ever encounter an issue, please call us on 08096699966, or email us at <a href="mailto:hello@sendhut.com">hello@sendhut.com</a>. We'll make things right</p>
   </div>
 {% endblock %}
