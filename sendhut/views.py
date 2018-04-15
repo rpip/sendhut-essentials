@@ -24,7 +24,13 @@ def faqs(request):
     return render(request, 'faqs.html', {'page_title': 'FAQs'})
 
 
-def privacy_terms(request):
-    return render(request, 'privacy_terms.html', {
-        'page_title': 'Privacy & Terms'
+def privacy(request):
+    return render(request, 'privacy.html', {
+        'page_title': 'Privacy Policy'
+    })
+
+
+def terms(request):
+    return render(request, 'terms.html', {
+        'page_title': 'Terms and Conditions'
     })

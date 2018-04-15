@@ -6,14 +6,15 @@ from django.contrib import admin
 from sendhut.accounts.views import LoginView, LogoutView, SignupView
 from sendhut.grouporder.views import CartJoin
 
-from .views import home, about, faqs, privacy_terms
+from .views import home, about, faqs, privacy, terms
 
 
 urlpatterns = [
     url(r'^$', home, name='home'),
     url(r'^about-us/$', about, name='about-us'),
     url(r'^faqs/$', faqs, name='faqs'),
-    url(r'^privacy_terms/$', privacy_terms, name='privacy-terms'),
+    url(r'^terms/$', terms, name='terms'),
+    url(r'^privacy/$', privacy, name='privacy'),
     url(r'^signup/$', SignupView.as_view(), name='signup'),
     url(r'^login/$', LoginView.as_view(), name='signin'),
     url(r'^logout/$', LogoutView.as_view(), name='logout'),
