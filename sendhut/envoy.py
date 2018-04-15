@@ -6,8 +6,10 @@ distance between the pickup point and delivery point.
 
 - base fare of 300 NGN (a flat fee that covers the pickup price)
 - then increase with time and distance
-- dynamic pricing:
-  -  traffic, events, weather, timings and driver expertise
+- dynamic pricing (push vendor commission on to user):
+  - traffic, events, weather, timings and driver expertise
+  - distance
+  - location specific factors
   - demand
   - vehicle type
   - batched delivery or one-off
