@@ -328,6 +328,12 @@ button.close {
   }
 }
 
+
+#about-contact {
+  margin-top: 40px;
+  @include rem(border-left, 2px solid $grey);
+}
+
 .welcome-callout {
   font-family: stratos, Helvetica Neue, Helvetica, Arial, sans-serif
 }
