@@ -133,6 +133,9 @@ class Cart(BaseModel, ItemSet):
     def lock(self):
         self.update(status=CartStatus.LOCKED)
 
+    def is_empty(self):
+        return not(len(self))
+
     def __len__(self):
         return self.lines.count()
 
