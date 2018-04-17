@@ -1,0 +1,159 @@
+name: The Place
+store_id: null
+menus:
+  Rice:
+    items:
+      - name: Chinese Fried Rice
+        price: 450
+      - name: Coconut Rice
+        price: 500
+      - name: Fried Rice
+        price: 450
+      - name: Jambolaya Rice
+        price: 800
+      - name: Jollof Rice
+        price: 450
+      - name: Ofada Rice
+        price: 350
+      - name: Prawn Rice
+        price: 1200
+      - name: Special Fried Rice
+        price: 550
+      - name: Village Rice
+        price: 500
+      - name: White Rice
+        price: 300
+  Pasta/Noodles:
+    items:
+      - name: Spaghetti
+        price: 500
+  Beans:
+    items:
+      - name: Beans Pottage
+        price: 300
+  Yam/Plantain:
+    items:
+      - name: Boiled Yam
+        price: 150
+      - name: Crispy Fried Yam
+        price: 300
+      - name: Plantain Pottage
+        price: 500
+      - name: Yamarita
+        price: 200
+      - name: Yam Pottage
+        price: 550
+  Chicken:
+      - name: Barbecue Chicken (Small)
+        price: 500
+      - name: Barbecue Chicken (Big)
+        price: 900
+      - name: Crispy Chicken
+        price: 550
+      - name: Grilled Chicken
+        price: 900
+      - name: Grilled Chicken Wings
+        price: 150
+      - name: Peppered Chicken
+        price: 500
+  Meat:
+    items:
+      # confirm assorted price/servings
+      - name: Assorted Beef
+        price:
+      - name: In Pepper Sauce
+        price:  1000
+      - name: Beef
+        price: 300
+      - name: Gizzard
+        price: 450
+      - name: Jumbo Snail
+        price: 900
+      - name: Nkwobi
+        price: 1000
+      - name: Ponmo
+        price: 250
+      - name: Shaki
+        price: 300
+      - name: Snail
+        price: 600
+  Goat Meat:
+    items:
+      - name: Asun
+        price: 1100
+      - name: Goat meat pepper soup
+        price: 600
+  Salad:
+    items:
+      - name: Chicken Salad
+        price: 400
+      - name: Pasta / Vegetable Salad
+        price: 300
+  Fish:
+    items:
+      - name: Cat Fish
+        price: 800
+      - name: Croaker Fish
+        price: 1000
+      - name: Tilapia Fish
+        price: 900
+      - name: Titus Fish
+        price: 400
+  Sea Foods:
+    items:
+      - name: Prawn in Chili Sauce
+        price: 1700
+      - name: Prawn in Pepper
+        price: 2500
+  Sauce:
+    items:
+      - name: Egg Sauce
+        price: 350
+      - name: Ofada Sauce
+        price: 500
+  Soups:
+    items:
+      - name: Afang
+        price: 400
+      - name: Bitterleaf
+        price: 350
+      - name: Edikaikong
+        price: 450
+      - name: Efo Riro
+        price: 400
+      - name: Egusi
+        price: 400
+      - name: Okro
+        price: 350
+  Swallows:
+    items:
+      - name: Eba
+        price: 150
+      - name: Pounded Yam
+        price: 200
+      - name: Semo
+        price: 150
+  Sides:
+    items:
+      - name: Boiled egg
+        price: 100
+      - name: Fried Plantain
+        price: 300
+      - name: Moimoi - Plastic & Leaf
+        price: 250
+  Fruit Juice:
+    items:
+      - name: Apple Juice
+        price: 700
+      - name: Apple + Pineapple Juice
+        price: 700
+      - name: Apple + Watermelon Juice
+        price: 700
+      - name: Orange Juice
+        price: 500
+      - name: Pineapple Juice
+        price: 600
+      - name: Watermelon Juice
+        price: 500
+      - name: Watermelon and Pineapple Juice mix
+        price: 600
