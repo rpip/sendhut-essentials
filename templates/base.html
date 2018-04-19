@@ -10,6 +10,32 @@
     <!-- Custom styles -->
     <link rel="stylesheet" href="{% static 'css/main.css' %}">
     <link rel="shortcut icon" type="image/x-icon" href="{% static 'images/sendhut-icon.png' %}">
+    <script type="application/ld+json">
+    {
+      "@context": "http://schema.org",
+      "@type": "Organization",
+      "name": "Sendhut",
+      "url": "http://sendhut.com/",
+      "logo": "{% static 'images/icon-yellow.png' %}",
+      "sameAs": [
+        "https://twitter.com/sendhuthq",
+        "https://www.facebook.com/sendhuthq",
+        "https://www.instagram.com/sendhuthq"
+      ],
+      "contactPoint": [
+        {
+          "@type": "ContactPoint",
+          "telephone": "08096699966‬",
+          "contactType": "customer service"
+        },
+        {
+          "@type": "ContactPoint",
+          "telephone": "08169567693",
+          "contactType": "customer service"
+        }
+      ]
+    }
+  </script>
   </head>
   <body class="{% block body_class %}{% endblock %}">
    <div class="overlay"></div>

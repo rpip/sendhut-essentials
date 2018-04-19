@@ -1,0 +1,947 @@
+name: Chicken Republic
+cuisines:
+  - chicken
+  - nigerian
+  - african
+  - spiced
+locations:
+  - address: No 10 Admiralty Way, Lekki Phase 1
+  - address: 190 Awolowo road, Falomo, Ikoyi
+  - address: 271A Ajose Adeogun street
+menus:
+  Drinks:
+    items:
+    - id: 959
+      imageLabel: Mineral Water 75cl
+      imageUrl: http://order.chicken-republic.com/media/catalog/product/cache/1/small_image/500x/9df78eab33525d08d6e5fb8d27136e95/m/i/mineral-water-75cl_CR-2260006.jpg
+      minimalPrice: 250
+      name: Mineral Water 75cl
+      oldPrice: 250
+      price: 250
+      stickers:
+        new: 0
+        promo: 0
+        timer: 0
+      type: simple
+      url: http://order.chicken-republic.com/mineral-water-75cl.html
+    - id: 964
+      imageLabel: Coca-Cola 50cl
+      imageUrl: http://order.chicken-republic.com/media/catalog/product/cache/1/small_image/500x/9df78eab33525d08d6e5fb8d27136e95/c/o/coca-cola-50cl_CR-2260001-COCACOLA.jpg
+      minimalPrice: 300
+      name: Coca-Cola 50cl
+      oldPrice: 300
+      price: 300
+      stickers:
+        new: 0
+        promo: 0
+        timer: 0
+      type: simple
+      url: http://order.chicken-republic.com/coca-cola-50cl.html
+    - id: 965
+      imageLabel: Coca-Cola Zero 50cl
+      imageUrl: http://order.chicken-republic.com/media/catalog/product/cache/1/small_image/500x/9df78eab33525d08d6e5fb8d27136e95/c/o/cola-zero-50cl_CR-2260001-COLAZERO.jpg
+      minimalPrice: 300
+      name: Coca-Cola Zero 50cl
+      oldPrice: 300
+      price: 300
+      stickers:
+        new: 0
+        promo: 0
+        timer: 0
+      type: simple
+      url: http://order.chicken-republic.com/cola-zero-50cl.html
+    - id: 966
+      imageLabel: Fanta Orange 50cl
+      imageUrl: http://order.chicken-republic.com/media/catalog/product/cache/1/small_image/500x/9df78eab33525d08d6e5fb8d27136e95/f/a/fanta-orange-50cl_CR-2260001-FANTAOR.jpg
+      minimalPrice: 300
+      name: Fanta Orange 50cl
+      oldPrice: 300
+      price: 300
+      stickers:
+        new: 0
+        promo: 0
+        timer: 0
+      type: simple
+      url: http://order.chicken-republic.com/fanta-orange-50cl.html
+    - id: 968
+      imageLabel: Sprite 50cl
+      imageUrl: http://order.chicken-republic.com/media/catalog/product/cache/1/small_image/500x/9df78eab33525d08d6e5fb8d27136e95/s/p/sprite-50cl_CR-2260001-SPRITE.jpg
+      minimalPrice: 300
+      name: Sprite 50cl
+      oldPrice: 300
+      price: 300
+      stickers:
+        new: 0
+        promo: 0
+        timer: 0
+      type: simple
+      url: http://order.chicken-republic.com/sprite-50cl.html
+    - id: 1103
+      imageLabel: 5 Alive Pulpy Orange Juice 40 CL
+      imageUrl: http://order.chicken-republic.com/media/catalog/product/cache/1/small_image/500x/9df78eab33525d08d6e5fb8d27136e95/5/l/5live.png
+      minimalPrice: 400
+      name: 5 Alive Pulpy Orange Juice 40 CL
+      oldPrice: 400
+      price: 400
+      stickers:
+        new: 0
+        promo: 0
+        timer: 0
+      type: simple
+      url: http://order.chicken-republic.com/pulpy-orange-40.html
+    - id: 506
+      imageLabel: Five Alive 1L
+      imageUrl: http://order.chicken-republic.com/media/catalog/product/cache/1/small_image/500x/9df78eab33525d08d6e5fb8d27136e95/f/i/five-alive-1l_2260003.jpg
+      minimalPrice: 600
+      name: Five Alive 1L
+      oldPrice: 600
+      price: 600
+      stickers:
+        new: 0
+        promo: 0
+        timer: 0
+      type: simple
+      url: http://order.chicken-republic.com/five-alive-1l.html
+  Meals & Combos:
+    items:
+    - id: 1209
+      imageLabel: Naija 57 Meal
+      imageUrl: http://order.chicken-republic.com/media/catalog/product/cache/1/small_image/500x/9df78eab33525d08d6e5fb8d27136e95/i/m/imgpsh_fullsize_1_.png
+      minimalPrice: 1200
+      name: Naija 57 Meal
+      oldPrice: 1350
+      options:
+      - items:
+        - name: Coca-Cola
+          price: 0.0
+        - name: Coca-Cola Zero
+          price: 0.0
+        - name: Eva Bottled Water
+          price: 0.0
+        - name: Fanta
+          price: 0.0
+        - name: Sprite
+          price: 0.0
+        multi: false
+        title: Drinks
+      - items:
+        - name: Chips + Chicken Pie
+          price: 0.0
+        - name: Spicy Rice + Chicken Pie
+          price: 0.0
+        - name: Fried Rice + Chicken Pie
+          price: 0.0
+        - name: Rice & Beans + Chicken Pie
+          price: 50.0
+        - name: Amma-Jamma Spaghetti + Chicken Pie
+          price: 0.0
+        multi: false
+        title: CR2 Side Dish
+      price: 1200
+      stickers:
+        new: 0
+        promo: 1
+        timer: 0
+      type: configurable
+      url: http://order.chicken-republic.com/57-naija-meal.html
+    - id: 521
+      imageLabel: Citizens Meal
+      imageUrl: http://order.chicken-republic.com/media/catalog/product/cache/1/small_image/500x/9df78eab33525d08d6e5fb8d27136e95/c/i/citizens-meal-menu_2260012N.jpg
+      minimalPrice: 1350
+      name: Citizens Meal
+      oldPrice: 1350
+      options:
+      - items:
+        - name: Chips
+          price: 0.0
+        - name: Spicy Rice
+          price: 0.0
+        - name: Fried Rice
+          price: 0.0
+        - name: Rice & Beans
+          price: 0.0
+        - name: Amma-Jamma Spaghetti
+          price: 0.0
+        multi: false
+        title: Side Dish
+      - items:
+        - name: Coca-Cola
+          price: 0.0
+        - name: Coca-Cola Zero
+          price: 0.0
+        - name: Eva Bottled Water
+          price: 0.0
+        - name: Fanta
+          price: 0.0
+        - name: Sprite
+          price: 0.0
+        multi: false
+        title: Drinks
+      price: 1350
+      stickers:
+        new: 0
+        promo: 0
+        timer: 0
+      type: configurable
+      url: http://order.chicken-republic.com/citizens-meal-menu.html
+    - id: 542
+      imageLabel: Double Chickwizz Meal
+      imageUrl: http://order.chicken-republic.com/media/catalog/product/cache/1/small_image/500x/9df78eab33525d08d6e5fb8d27136e95/d/o/double-chickwizz-meal-menu_2260013N.jpg
+      minimalPrice: 1750
+      name: Double Chickwizz Meal
+      oldPrice: 1750
+      options:
+      - items:
+        - name: Chips
+          price: 0.0
+        multi: false
+        title: Side Dish
+      - items:
+        - name: Coca-Cola
+          price: 0.0
+        - name: Coca-Cola Zero
+          price: 0.0
+        - name: Eva Bottled Water
+          price: 0.0
+        - name: Fanta
+          price: 0.0
+        - name: Sprite
+          price: 0.0
+        multi: false
+        title: Drinks
+      price: 1750
+      stickers:
+        new: 0
+        promo: 0
+        timer: 0
+      type: configurable
+      url: http://order.chicken-republic.com/double-chickwizz-meal-menu.html
+    - id: 548
+      imageLabel: Chickwizz Meal
+      imageUrl: http://order.chicken-republic.com/media/catalog/product/cache/1/small_image/500x/9df78eab33525d08d6e5fb8d27136e95/c/h/chickwizz-meal-menu_22140002N.jpg
+      minimalPrice: 1250
+      name: Chickwizz Meal
+      oldPrice: 1250
+      options:
+      - items:
+        - name: Chips
+          price: 0.0
+        multi: false
+        title: Side Dish
+      - items:
+        - name: Coca-Cola
+          price: 0.0
+        - name: Coca-Cola Zero
+          price: 0.0
+        - name: Eva Bottled Water
+          price: 0.0
+        - name: Fanta
+          price: 0.0
+        - name: Sprite
+          price: 0.0
+        multi: false
+        title: Drinks
+      price: 1250
+      stickers:
+        new: 0
+        promo: 0
+        timer: 0
+      type: configurable
+      url: http://order.chicken-republic.com/chickwizz-meal-menu.html
+    - id: 554
+      imageLabel: 1/4 Rotisserie Meal
+      imageUrl: http://order.chicken-republic.com/media/catalog/product/cache/1/small_image/500x/9df78eab33525d08d6e5fb8d27136e95/1/-/1-4-rotisserie-meal-menu_2250008N.jpg
+      minimalPrice: 1400
+      name: 1/4 Rotisserie Meal
+      oldPrice: 1400
+      options:
+      - items:
+        - name: Spicy Rice
+          price: 0.0
+        - name: Fried Rice
+          price: 0.0
+        - name: Rice & Beans
+          price: 0.0
+        - name: Amma-Jamma Spaghetti
+          price: 0.0
+        multi: false
+        title: Side Dish
+      - items:
+        - name: Fanta
+          price: 0.0
+        - name: Coca-Cola Zero
+          price: 0.0
+        - name: Sprite
+          price: 0.0
+        - name: Eva Bottled Water
+          price: 0.0
+        - name: Coca-Cola
+          price: 0.0
+        multi: false
+        title: Drinks
+      price: 1400
+      stickers:
+        new: 0
+        promo: 0
+        timer: 0
+      type: configurable
+      url: http://order.chicken-republic.com/1-4-rotisserie-meal-menu.html
+    - id: 575
+      imageLabel: Express Meal
+      imageUrl: http://order.chicken-republic.com/media/catalog/product/cache/1/small_image/500x/9df78eab33525d08d6e5fb8d27136e95/e/x/express-meal-menu_2240013N.jpg
+      minimalPrice: 900
+      name: Express Meal
+      oldPrice: 1000
+      options:
+      - items:
+        - name: Chips
+          price: 0.0
+        - name: Spicy Rice
+          price: 0.0
+        - name: Fried Rice
+          price: 0.0
+        - name: Rice & Beans
+          price: 50.0
+        - name: Amma-Jamma Spaghetti
+          price: 0.0
+        multi: false
+        title: Side Dish
+      - items:
+        - name: Coca-Cola
+          price: 0.0
+        - name: Coca-Cola Zero
+          price: 0.0
+        - name: Eva Bottled Water
+          price: 0.0
+        - name: Fanta
+          price: 0.0
+        - name: Sprite
+          price: 0.0
+        - name: no drink
+          price: -100.0
+        multi: false
+        title: Drinks
+      price: 1000
+      stickers:
+        new: 0
+        promo: 0
+        timer: 0
+      type: configurable
+      url: http://order.chicken-republic.com/express-meal-menu.html
+    - id: 605
+      imageLabel: CHIEF BURGER MEAL
+      imageUrl: http://order.chicken-republic.com/media/catalog/product/cache/1/small_image/500x/9df78eab33525d08d6e5fb8d27136e95/c/h/chief-burger-meal_22100031.jpg
+      minimalPrice: 1750
+      name: CHIEF BURGER MEAL
+      oldPrice: 1750
+      options:
+      - items:
+        - name: Chips
+          price: 0.0
+        multi: false
+        title: Side Dish
+      - items:
+        - name: Coca-Cola
+          price: 0.0
+        - name: Coca-Cola Zero
+          price: 0.0
+        - name: Eva Bottled Water
+          price: 0.0
+        - name: Fanta
+          price: 0.0
+        - name: Sprite
+          price: 0.0
+        multi: false
+        title: Drinks
+      price: 1750
+      stickers:
+        new: 0
+        promo: 0
+        timer: 1
+      type: configurable
+      url: http://order.chicken-republic.com/chief-burger-meal.html
+    - id: 611
+      imageLabel: Wrap Star Meal
+      imageUrl: http://order.chicken-republic.com/media/catalog/product/cache/1/small_image/500x/9df78eab33525d08d6e5fb8d27136e95/r/a/rap-star-meal_2260014.jpg
+      minimalPrice: 1500
+      name: Wrap Star Meal
+      oldPrice: 1500
+      options:
+      - items:
+        - name: Chips
+          price: 0.0
+        - name: Fried Rice
+          price: 0.0
+        - name: Amma-Jamma Spaghetti
+          price: 0.0
+        multi: false
+        title: CR Side Dish
+      - items:
+        - name: Coca-Cola
+          price: 0.0
+        - name: Coca-Cola Zero
+          price: 0.0
+        - name: Eva Bottled Water
+          price: 0.0
+        - name: Fanta
+          price: 0.0
+        - name: Sprite
+          price: 0.0
+        multi: false
+        title: CR Drinks
+      price: 1500
+      stickers:
+        new: 0
+        promo: 0
+        timer: 0
+      type: configurable
+      url: http://order.chicken-republic.com/wrap-star-meal-1070.html
+    - id: 623
+      imageLabel: Zippy Burger Meal
+      imageUrl: http://order.chicken-republic.com/media/catalog/product/cache/1/small_image/500x/9df78eab33525d08d6e5fb8d27136e95/z/i/zippy-burger-meal_221200011.jpg
+      minimalPrice: 1000
+      name: Zippy Burger Meal
+      oldPrice: 1000
+      options:
+      - items:
+        - name: Chips
+          price: 0.0
+        multi: false
+        title: CR Side Dish
+      - items:
+        - name: Coca-Cola
+          price: 0.0
+        - name: Coca-Cola Zero
+          price: 0.0
+        - name: Eva Bottled Water
+          price: 0.0
+        - name: Fanta
+          price: 0.0
+        - name: Sprite
+          price: 0.0
+        multi: false
+        title: CR Drinks
+      price: 1000
+      stickers:
+        new: 0
+        promo: 0
+        timer: 1
+      type: configurable
+      url: http://order.chicken-republic.com/zippy-burger-meal.html
+    - id: 682
+      imageLabel: Crunchy Wings Meal (4 pieces)
+      imageUrl: http://order.chicken-republic.com/media/catalog/product/cache/1/small_image/500x/9df78eab33525d08d6e5fb8d27136e95/C/r/Crunchy-Wings-Meal-4pcs_2240024.jpg
+      minimalPrice: 1100
+      name: Crunchy Wings Meal (4 pieces)
+      oldPrice: 1100
+      options:
+      - items:
+        - name: Chips
+          price: 0.0
+        - name: Spicy Rice
+          price: 0.0
+        - name: Fried Rice
+          price: 0.0
+        - name: Rice & Beans
+          price: 0.0
+        - name: Amma-Jamma Spaghetti
+          price: 0.0
+        multi: false
+        title: CR Side Dish
+      - items:
+        - name: Coca-Cola
+          price: 0.0
+        - name: Coca-Cola Zero
+          price: 0.0
+        - name: Eva Bottled Water
+          price: 0.0
+        - name: Fanta
+          price: 0.0
+        - name: Sprite
+          price: 0.0
+        multi: false
+        title: CR Drinks
+      price: 1100
+      stickers:
+        new: 0
+        promo: 0
+        timer: 1
+      type: configurable
+      url: http://order.chicken-republic.com/crunchy-wings-meal.html
+    - id: 703
+      imageLabel: Crunchy Wings Meal (6 pieces)
+      imageUrl: http://order.chicken-republic.com/media/catalog/product/cache/1/small_image/500x/9df78eab33525d08d6e5fb8d27136e95/C/r/Crunchy-Wings-Meal-6pcs_22140003.jpg
+      minimalPrice: 1400
+      name: Crunchy Wings Meal (6 pieces)
+      oldPrice: 1400
+      options:
+      - items:
+        - name: Chips
+          price: 0.0
+        - name: Spicy Rice
+          price: 0.0
+        - name: Fried Rice
+          price: 0.0
+        - name: Rice & Beans
+          price: 0.0
+        - name: Amma-Jamma Spaghetti
+          price: 0.0
+        multi: false
+        title: CR Side Dish
+      - items:
+        - name: Coca-Cola
+          price: 0.0
+        - name: Coca-Cola Zero
+          price: 0.0
+        - name: Eva Bottled Water
+          price: 0.0
+        - name: Fanta
+          price: 0.0
+        - name: Sprite
+          price: 0.0
+        multi: false
+        title: CR Drinks
+      price: 1400
+      stickers:
+        new: 0
+        promo: 0
+        timer: 1
+      type: configurable
+      url: http://order.chicken-republic.com/crunchy.html
+    - id: 724
+      imageLabel: Citizens Crunchy Meal
+      imageUrl: http://order.chicken-republic.com/media/catalog/product/cache/1/small_image/500x/9df78eab33525d08d6e5fb8d27136e95/c/i/citizens-crunchy-meal_2230016.jpg
+      minimalPrice: 1350
+      name: Citizens Crunchy Meal
+      oldPrice: 1350
+      options:
+      - items:
+        - name: Chips
+          price: 0.0
+        - name: Spicy Rice
+          price: 0.0
+        - name: Fried Rice
+          price: 0.0
+        - name: Rice & Beans
+          price: 0.0
+        - name: Amma-Jamma Spaghetti
+          price: 0.0
+        multi: false
+        title: CR Side Dish
+      - items:
+        - name: Coca-Cola
+          price: 0.0
+        - name: Coca-Cola Zero
+          price: 0.0
+        - name: Eva Bottled Water
+          price: 0.0
+        - name: Fanta
+          price: 0.0
+        - name: Sprite
+          price: 0.0
+        multi: false
+        title: CR Drinks
+      price: 1350
+      stickers:
+        new: 0
+        promo: 0
+        timer: 1
+      type: configurable
+      url: http://order.chicken-republic.com/citizens-crunchy-meal.html
+    - id: 758
+      imageLabel: Pot Lovers Menu
+      imageUrl: http://order.chicken-republic.com/media/catalog/product/cache/1/small_image/500x/9df78eab33525d08d6e5fb8d27136e95/p/o/pot-lovers-menu_potlovers.jpg
+      minimalPrice: 5900
+      name: Pot Lovers Menu
+      oldPrice: 5900
+      options:
+      - items:
+        - name: 8 Fried Pieces
+          price: 0.0
+        multi: false
+        title: Pieces
+      - items:
+        - name: 4 Spicy Rice
+          price: 0.0
+        - name: 4 Rice & Beans
+          price: 0.0
+        - name: 4 Fried Rice
+          price: 0.0
+        - name: 4 Regular Chips
+          price: 0.0
+        - name: 2 Spicy Rice & 2 Regular Chips
+          price: 0.0
+        - name: 2 Fried Rice & 2 Regular Chips
+          price: 0.0
+        - name: 2 Rice & Beans & 2 Regular Chips
+          price: 0.0
+        - name: 4 Amma-Jamma Spaghetti
+          price: 0.0
+        - name: 2 Amma-Jamma Spaghetti & 2 Regular Chips
+          price: 0.0
+        multi: false
+        title: Rice or Chips
+      - items:
+        - name: 2 Moin Moin
+          price: 0.0
+        - name: 2 Vegetable Salads
+          price: 0.0
+        multi: false
+        title: Salad or Moin Moin
+      price: 5900
+      stickers:
+        new: 0
+        promo: 0
+        timer: 1
+      type: configurable
+      url: http://order.chicken-republic.com/pot-lovers-menu.html
+    - id: 497
+      imageLabel: Chickwizz
+      imageUrl: http://order.chicken-republic.com/media/catalog/product/cache/1/small_image/500x/9df78eab33525d08d6e5fb8d27136e95/c/h/chickwizz_CR-22130001.jpg
+      minimalPrice: 800
+      name: Chickwizz
+      oldPrice: 800
+      price: 800
+      stickers:
+        new: 0
+        promo: 0
+        timer: 0
+      type: simple
+      url: http://order.chicken-republic.com/chickwizz.html
+    - id: 499
+      imageLabel: 1/4 Rotisserie Chicken
+      imageUrl: http://order.chicken-republic.com/media/catalog/product/cache/1/small_image/500x/9df78eab33525d08d6e5fb8d27136e95/1/-/1-4-rotisserie_22120001.jpg
+      minimalPrice: 1000
+      name: 1/4 Rotisserie Chicken
+      oldPrice: 1000
+      price: 1000
+      stickers:
+        new: 0
+        promo: 0
+        timer: 0
+      type: simple
+      url: http://order.chicken-republic.com/1-4-rotisserie.html
+    - id: 520
+      imageLabel: 'Double Chickwizz '
+      imageUrl: http://order.chicken-republic.com/media/catalog/product/cache/1/small_image/500x/9df78eab33525d08d6e5fb8d27136e95/d/o/double-chickwizz_CR-22130003.jpg
+      minimalPrice: 1000
+      name: 'Double Chickwizz '
+      oldPrice: 1000
+      price: 1000
+      stickers:
+        new: 0
+        promo: 0
+        timer: 0
+      type: simple
+      url: http://order.chicken-republic.com/double-chickwizz.html
+    - id: 598
+      imageLabel: Chicken Salad
+      imageUrl: http://order.chicken-republic.com/media/catalog/product/cache/1/small_image/500x/9df78eab33525d08d6e5fb8d27136e95/f/r/freshroastchickensalad_22130003.jpg
+      minimalPrice: 850
+      name: Chicken Salad
+      oldPrice: 850
+      price: 850
+      stickers:
+        new: 0
+        promo: 0
+        timer: 0
+      type: simple
+      url: http://order.chicken-republic.com/freshroastchickensalad.html
+    - id: 599
+      imageLabel: Rotisserie Chicken
+      imageUrl: http://order.chicken-republic.com/media/catalog/product/cache/1/small_image/500x/9df78eab33525d08d6e5fb8d27136e95/w/h/whole-rotisserie-chicken_2260008.jpg
+      minimalPrice: 3900
+      name: Rotisserie Chicken
+      oldPrice: 3900
+      price: 3900
+      stickers:
+        new: 0
+        promo: 0
+        timer: 0
+      type: simple
+      url: http://order.chicken-republic.com/wholerotisseriechicken.html
+    - id: 603
+      imageLabel: Chicken Wrap
+      imageUrl: http://order.chicken-republic.com/media/catalog/product/cache/1/small_image/500x/9df78eab33525d08d6e5fb8d27136e95/c/h/chicken-wrap_CR-22130002.jpg
+      minimalPrice: 850
+      name: Chicken Wrap
+      oldPrice: 850
+      price: 850
+      stickers:
+        new: 0
+        promo: 0
+        timer: 0
+      type: simple
+      url: http://order.chicken-republic.com/chicken-wrap.html
+    - id: 604
+      imageLabel: Chief Burger
+      imageUrl: http://order.chicken-republic.com/media/catalog/product/cache/1/small_image/500x/9df78eab33525d08d6e5fb8d27136e95/c/h/chief-burger_CR-2210003.jpg
+      minimalPrice: 1050
+      name: Chief Burger
+      oldPrice: 1050
+      price: 1050
+      stickers:
+        new: 0
+        promo: 0
+        timer: 1
+      type: simple
+      url: http://order.chicken-republic.com/chief-burger.html
+    - id: 617
+      imageLabel: Spicy Crunchy Chicken
+      imageUrl: http://order.chicken-republic.com/media/catalog/product/cache/1/small_image/500x/9df78eab33525d08d6e5fb8d27136e95/s/p/spicy-crunchy-chicken.jpg
+      minimalPrice: 500
+      name: Spicy Crunchy Chicken
+      oldPrice: 500
+      options:
+      - items:
+        - name: 1 pcs
+          price: 0.0
+        - name: 2 pcs
+          price: 500.0
+        - name: 4 pcs
+          price: 1500.0
+        - name: 8 pcs
+          price: 3300.0
+        multi: false
+        title: Combo
+      price: 500
+      stickers:
+        new: 0
+        promo: 0
+        timer: 1
+      type: configurable
+      url: http://order.chicken-republic.com/spicy-crunchy-chicken.html
+    - id: 629
+      imageLabel: Zippy Burger
+      imageUrl: http://order.chicken-republic.com/media/catalog/product/cache/1/small_image/500x/9df78eab33525d08d6e5fb8d27136e95/z/i/zippy-burger_CR-2210001.jpg
+      minimalPrice: 500
+      name: Zippy Burger
+      oldPrice: 500
+      price: 500
+      stickers:
+        new: 0
+        promo: 0
+        timer: 1
+      type: simple
+      url: http://order.chicken-republic.com/zippy-burger.html
+    - id: 676
+      imageLabel: Crunchy Wings
+      imageUrl: http://order.chicken-republic.com/media/catalog/product/cache/1/small_image/500x/9df78eab33525d08d6e5fb8d27136e95/c/r/crunchy-wings.jpg
+      minimalPrice: 450
+      name: Crunchy Wings
+      oldPrice: 450
+      options:
+      - items:
+        - name: 4 pcs
+          price: 0.0
+        - name: 6 pcs
+          price: 150.0
+        - name: 8 pcs
+          price: 350.0
+        multi: false
+        title: Combo
+      price: 450
+      stickers:
+        new: 0
+        promo: 0
+        timer: 1
+      type: configurable
+      url: http://order.chicken-republic.com/crunchy-wings.html
+    - id: 752
+      imageLabel: Spicy Fried Chicken
+      imageUrl: http://order.chicken-republic.com/media/catalog/product/cache/1/small_image/500x/9df78eab33525d08d6e5fb8d27136e95/s/p/spicy-fried-chicken.jpg
+      minimalPrice: 500
+      name: Spicy Fried Chicken
+      oldPrice: 500
+      options:
+      - items:
+        - name: 1 pcs
+          price: 0.0
+        - name: 2 pcs
+          price: 500.0
+        - name: 4 pcs
+          price: 1500.0
+        - name: 8 pcs
+          price: 3500.0
+        - name: 12 pcs
+          price: 5300.0
+        multi: false
+        title: Combo
+      price: 500
+      stickers:
+        new: 0
+        promo: 0
+        timer: 0
+      type: configurable
+      url: http://order.chicken-republic.com/spicy-fried-chicken.html
+  Sides & Sauces:
+    items:
+    - id: 494
+      imageLabel: Chicken Pie
+      imageUrl: http://order.chicken-republic.com/media/catalog/product/cache/1/small_image/500x/9df78eab33525d08d6e5fb8d27136e95/c/h/chicken-pie_CR-22140007.jpg
+      minimalPrice: 350
+      name: Chicken Pie
+      oldPrice: 350
+      price: 350
+      stickers:
+        new: 0
+        promo: 0
+        timer: 0
+      type: simple
+      url: http://order.chicken-republic.com/chicken-pie.html
+    - id: 492
+      imageLabel: Meat Pie
+      imageUrl: http://order.chicken-republic.com/media/catalog/product/cache/1/small_image/500x/9df78eab33525d08d6e5fb8d27136e95/m/e/meat-pie_2270004.jpg
+      minimalPrice: 350
+      name: Meat Pie
+      oldPrice: 350
+      price: 350
+      stickers:
+        new: 0
+        promo: 0
+        timer: 0
+      type: simple
+      url: http://order.chicken-republic.com/meat-pie.html
+    - id: 1184
+      imageLabel: Amma-Jamma Spaghetti
+      imageUrl: http://order.chicken-republic.com/media/catalog/product/cache/1/small_image/500x/9df78eab33525d08d6e5fb8d27136e95/p/a/pasta_chicken_sauce_1.png
+      minimalPrice: 450
+      name: Amma-Jamma Spaghetti
+      oldPrice: 450
+      price: 450
+      stickers:
+        new: 0
+        promo: 0
+        timer: 0
+      type: simple
+      url: http://order.chicken-republic.com/amma-jamma-spaghetti.html
+    - id: 496
+      imageLabel: Moin-Moin
+      imageUrl: http://order.chicken-republic.com/media/catalog/product/cache/1/small_image/500x/9df78eab33525d08d6e5fb8d27136e95/m/o/moin-moin_2240009.jpg
+      minimalPrice: 300
+      name: Moin-Moin
+      oldPrice: 300
+      price: 300
+      stickers:
+        new: 0
+        promo: 0
+        timer: 0
+      type: simple
+      url: http://order.chicken-republic.com/moin-moin.html
+    - id: 602
+      imageLabel: Coleslaw
+      imageUrl: http://order.chicken-republic.com/media/catalog/product/cache/1/small_image/500x/9df78eab33525d08d6e5fb8d27136e95/c/o/coleslaw_CR-22140006.jpg
+      minimalPrice: 300
+      name: Coleslaw
+      oldPrice: 300
+      price: 300
+      stickers:
+        new: 0
+        promo: 0
+        timer: 0
+      type: simple
+      url: http://order.chicken-republic.com/coleslaw.html
+    - id: 791
+      imageLabel: Pasta Salad
+      imageUrl: http://order.chicken-republic.com/media/catalog/product/cache/1/small_image/500x/9df78eab33525d08d6e5fb8d27136e95/p/a/pasta-salad_22400091.jpg
+      minimalPrice: 300
+      name: Pasta Salad
+      oldPrice: 300
+      price: 300
+      stickers:
+        new: 0
+        promo: 0
+        timer: 0
+      type: simple
+      url: http://order.chicken-republic.com/side-pasta-salad.html
+    - id: 519
+      imageLabel: Rice &amp; Beans
+      imageUrl: http://order.chicken-republic.com/media/catalog/product/cache/1/small_image/500x/9df78eab33525d08d6e5fb8d27136e95/r/i/rice-and-beans_CR-2280003.jpg
+      minimalPrice: 600
+      name: Rice &amp; Beans
+      oldPrice: 600
+      price: 600
+      stickers:
+        new: 0
+        promo: 0
+        timer: 0
+      type: simple
+      url: http://order.chicken-republic.com/rice-and-beans-997.html
+    - id: 516
+      imageLabel: Spicy Rice
+      imageUrl: http://order.chicken-republic.com/media/catalog/product/cache/1/small_image/500x/9df78eab33525d08d6e5fb8d27136e95/s/p/spicy-rice_CR-2280002.jpg
+      minimalPrice: 450
+      name: Spicy Rice
+      oldPrice: 450
+      price: 450
+      stickers:
+        new: 0
+        promo: 0
+        timer: 0
+      type: simple
+      url: http://order.chicken-republic.com/spicy-rice.html
+    - id: 515
+      imageLabel: Fried Rice
+      imageUrl: http://order.chicken-republic.com/media/catalog/product/cache/1/small_image/500x/9df78eab33525d08d6e5fb8d27136e95/f/r/fried-rice_CR-2280001.jpg
+      minimalPrice: 450
+      name: Fried Rice
+      oldPrice: 450
+      price: 450
+      stickers:
+        new: 0
+        promo: 0
+        timer: 0
+      type: simple
+      url: http://order.chicken-republic.com/fried-rice.html
+    - id: 514
+      imageLabel: Chips
+      imageUrl: http://order.chicken-republic.com/media/catalog/product/cache/1/small_image/500x/9df78eab33525d08d6e5fb8d27136e95/c/h/chips_22200041.jpg
+      minimalPrice: 700
+      name: Chips
+      oldPrice: 700
+      price: 700
+      stickers:
+        new: 0
+        promo: 0
+        timer: 0
+      type: simple
+      url: http://order.chicken-republic.com/chips.html
+    - id: 792
+      imageLabel: 'Extra Sauce '
+      imageUrl: http://order.chicken-republic.com/media/catalog/product/cache/1/small_image/500x/9df78eab33525d08d6e5fb8d27136e95/e/x/extra-rice-and-beans-sauce_22140009.jpg
+      minimalPrice: 100
+      name: 'Extra Sauce '
+      oldPrice: 100
+      price: 100
+      stickers:
+        new: 0
+        promo: 0
+        timer: 0
+      type: simple
+      url: http://order.chicken-republic.com/extra-rice-and-beans-sauce.html
+    - id: 601
+      imageLabel: Amma-Jamma Rodo Sauce
+      imageUrl: http://order.chicken-republic.com/media/catalog/product/cache/1/small_image/500x/9df78eab33525d08d6e5fb8d27136e95/a/m/amma-jamma-rodo-sauce_CR-22140003.jpg
+      minimalPrice: 950
+      name: Amma-Jamma Rodo Sauce
+      oldPrice: 950
+      price: 950
+      stickers:
+        new: 0
+        promo: 0
+        timer: 0
+      type: simple
+      url: http://order.chicken-republic.com/amma-jamma-rodo-sauce.html
+    - id: 600
+      imageLabel: Amma-Jamma Shitor Sauce
+      imageUrl: http://order.chicken-republic.com/media/catalog/product/cache/1/small_image/500x/9df78eab33525d08d6e5fb8d27136e95/a/m/amma-jamma-shitor-sauce_CR-22140004.jpg
+      minimalPrice: 950
+      name: Amma-Jamma Shitor Sauce
+      oldPrice: 950
+      price: 950
+      stickers:
+        new: 0
+        promo: 0
+        timer: 0
+      type: simple
+      url: http://order.chicken-republic.com/amma-jamma-shitor-sauce.html

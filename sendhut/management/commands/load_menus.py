@@ -43,7 +43,12 @@ class Command(BaseCommand):
             with open(f) as _f:
                 data = yaml.load(_f)
                 # add 'name' key for menu to match scrapped data format
-                data['menus'] = [dict({'name': k}, **v) for k, v in data['menus'].items()]
+                try:
+                  data['menus'] = [dict({'name': k}, **v) for k, v in data['menus'].items()]
+                except:
+                    # chicken republic throws error
+                    pass
+
                 self.stdout.write(self.style.SUCCESS('CREATING {}'.format(data['name'])))
                 add_store(data, with_images=with_images)
 
