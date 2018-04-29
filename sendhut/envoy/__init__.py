@@ -1,4 +1,6 @@
 """
+order journey: received, in progress, on the way, delivered
+
 Trip fares start with a base amount, then increase with time and distance.
 
 distance between the pickup point and delivery point.

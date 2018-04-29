@@ -40,11 +40,15 @@ from templated_email import send_templated_mail
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django_rq import enqueue
 
+from decouple import config
 from jusibe.core import Jusibe
+from slackclient import SlackClient
 
 from sendhut import utils
 from sendhut.accounts.models import User
 
+
+SLACK_CHANNEL = '#orders'
 
 WELCOME_TEMPLATE = 'source/accounts/welcome'
 PASSWORD_RESET_TEMPLATE = 'source/accounts/password_reset'
@@ -110,18 +114,17 @@ def send_order_confirmation(user, order, async=True):
     ORDER_SMS = "Thanks for ordering. Your order will be delivered to {} at {}.".format(time, order.address)
 
     # alert Tade and me
-    ADMIN_ALERT = "NEW ORDER from {}. Delivery at {}. #{}".format(
-        user.get_full_name(), time, order.reference)
-
+    SLACK_ALERT = """
+    NEW ORDER #{} from {}.
+    Delivery time: {}
+    Address: {}
+    """.format(order.reference, user.get_full_name(), time, order.address)
     if async:
         enqueue(_send_email, user.email, CONFIRM_ORDER_TEMPLATE, {'order': order})
-        enqueue(_send_sms, '‭08096699966‬', ADMIN_ALERT)
-        enqueue(_send_sms, '08169567693', ADMIN_ALERT)
         enqueue(_send_sms, user.phone, ORDER_SMS.format(order.delivery_time, order.address))
+        enqueue(post_to_slack, SLACK_ALERT)
     else:
         _send_email(user.email, CONFIRM_ORDER_TEMPLATE, {'order': order})
-        _send_sms('‭08096699966‬', ADMIN_ALERT)
-        _send_sms('08169567693', ADMIN_ALERT)
         _send_sms(user.phone, ORDER_SMS)
 
 
@@ -147,3 +150,15 @@ def send_password_reset(email, token, async=True):
         return enqueue(_send_email, email, PASSWORD_RESET_TEMPLATE, ctx)
 
     return _send_email(email, PASSWORD_RESET_TEMPLATE, ctx)
+
+
+def post_to_slack(message, channel=SLACK_CHANNEL):
+    slack_token = config('SLACK_API_TOKEN')
+    sc = SlackClient(slack_token)
+    sc.api_call(
+        "chat.postMessage",
+        channel=channel,
+        text=message,
+        username='Envoy',
+        icon_emoji=':robot_face:'
+    )

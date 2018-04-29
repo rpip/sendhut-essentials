@@ -8,11 +8,6 @@ from sendhut.utils import unslugify
 register = template.Library()
 
 
-@register.filter(name='dietary_label')
-def dietary_label(label_id):
-    return Item.dietary_label_text(label_id)
-
-
 @register.filter(name='dietary_label_short')
 def dietary_labels(label):
     label = slugify(label)

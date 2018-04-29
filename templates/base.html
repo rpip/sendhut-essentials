@@ -6,6 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="Delivering Happiness">
     <meta name="author" content="Sendhut, Tade Faweya, Yao Adzaku">
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@sendhuthq" />
+    <meta name="twitter:creator" content="@sendhuthq" />
+    <meta property="og:url" content="sendhut.com" />
+    <meta property="og:title" content="Sendhut" />
+    <meta property="og:description" content="Delicious meals from your favourite restaurants - right to your door" />
+    <meta property="og:image" content="{% static 'images/icon-yellow.png' %}" />
+
+    {% block extra_head_meta %}{% endblock %}
     <title>Sendhut | {% block title %} {{ page_title }} {% endblock %}</title>
     <!-- Custom styles -->
     <link rel="stylesheet" href="{% static 'css/main.css' %}">

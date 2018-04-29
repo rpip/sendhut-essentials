@@ -26,7 +26,7 @@ class OrderAdmin(BaseModelAdmin):
         'address',
         'notes',
         'reference',
-        'group_order',
+        'group_order_link',
         'payment_reference',
     )
     list_filter = (
@@ -35,6 +35,18 @@ class OrderAdmin(BaseModelAdmin):
         'time_window_end',
         'address'
     )
+
+    def group_order_link(self, obj):
+        from sendhut.grouporder.models import GroupOrder
+        if not obj.group_order:
+            return ''
+
+        grouporder = GroupOrder.objects.get(token=obj.group_order)
+        return u'<a href="/admin/grouporder/grouporder/%s/">%s</a>' % (grouporder.id, grouporder.token)
+
+    group_order_link.allow_tags = True
+    group_order_link.short_description = "group order link"
+
     readonly_fields = ('group_order',)
     search_fields = ('reference',)
     inlines = [OrderLineInline]

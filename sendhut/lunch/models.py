@@ -12,6 +12,7 @@ from sorl.thumbnail import get_thumbnail
 
 from sendhut.utils import sane_repr, image_upload_path, unslugify
 from sendhut.db import BaseModel
+from . import FoodCategories, DietaryRestrictions
 
 
 class FOOD_TAGS:
@@ -136,54 +137,11 @@ class Menu(BaseModel):
 class Item(BaseModel):
 
     # TODO(yao): Generate thumbnails on save
-    # TODO(yao): Add issue_resolution field
-    # If issue arises:
-    #   Go with the store's recommendation
-    #   Leave out the selected item
-    #   Cancel the entire order
-    #   Contact me
-
-    # dietary restrictions
-    GLUTEN_FREE = 0
-    DAIRY_FREE = 1
-    VEGAN = 2
-    VEGETARIAN = 3
-    HALAL = 4
-
-    DIETARY_RESTRICTIONS = [
-        (GLUTEN_FREE, "Gluten Free"),
-        (DAIRY_FREE, "Dairy Free"),
-        (VEGAN, "Vegan"),
-        (VEGETARIAN, "Vegetarian"),
-        (HALAL, "Halal")
-    ]
-
-    # Food categories
-    LOCAL_GEMS = 1
-    HALAL = 2
-    VEGETARIAN = 3
-    DESSERTS_SWEET_TREATS = 4
-    GUILTY_PLEASURES = 5
-    BAKERY = 6
-    FRESH_JUICE = 7
-    HEALTHY_FOOD = 8
-
-    FOOD_CATEGORIES = (
-        (LOCAL_GEMS, 'Local gems'),
-        (HALAL, 'Halal'),
-        (VEGETARIAN, 'Vegetarian'),
-        (DESSERTS_SWEET_TREATS, 'Desserts'),
-        (DESSERTS_SWEET_TREATS, 'Sweet treats'),
-        (GUILTY_PLEASURES, 'guilty pleasures'),
-        (BAKERY, 'Bakery'),
-        (FRESH_JUICE, 'Fresh Juice'),
-        (HEALTHY_FOOD, 'Healthy Food')
-    )
 
     # TODO(yao): Use http://github.com/jazzband/django-model-utils
     categories = ArrayField(
         models.IntegerField(
-            choices=FOOD_CATEGORIES
+            choices=FoodCategories.CHOICES
         ),
         default=list,
         blank=True
@@ -197,18 +155,13 @@ class Item(BaseModel):
         default_currency='NGN', null=True, blank=True)
     dietary_labels = ArrayField(
         models.IntegerField(
-            choices=DIETARY_RESTRICTIONS
+            choices=DietaryRestrictions.CHOICES
         ),
         default=list,
         blank=True
     )
     image = models.ForeignKey('Image', related_name='items', blank=True, null=True)
     available = models.BooleanField(default=True)
-
-    @classmethod
-    def dietary_label_text(cls, label_id):
-        labels = {k: v for k, v in cls.DIETARY_RESTRICTIONS}
-        return labels[label_id]
 
     def get_price_per_item(self):
         return self.price if self.price else 0

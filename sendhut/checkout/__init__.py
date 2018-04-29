@@ -24,6 +24,8 @@ class PaymentStatus:
         (FAILED, pgettext_lazy('payment status', 'Rejected')),
     ]
 
+    # TODO(yao): Add issue_resolution field
+
 
 class PaymentSource:
     # TODO(yao): add user flag to mark users who can do CASH delivery
