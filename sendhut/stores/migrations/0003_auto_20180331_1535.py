@@ -11,7 +11,7 @@ import djmoney.models.fields
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('lunch', '0002_remove_image_thumbnail_path'),
+        ('stores', '0002_remove_image_thumbnail_path'),
     ]
 
     operations = [

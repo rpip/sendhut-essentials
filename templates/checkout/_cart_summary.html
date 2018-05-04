@@ -22,7 +22,7 @@
         {% endthumbnail %}
         <!-- </div> -->
         <h5 class="subcart-header">
-          <a href="{% url 'lunch:store_details' store.slug %}" class="no-deco">
+          <a href="{% url 'stores:store_details' store.slug %}" class="no-deco">
             {{ store.name }}
           </a>
         </h5>
@@ -35,6 +35,10 @@
           <div class="row">
             <div class="col-md-3 offset-sm-7">Delivery fee</div>
             <div class="col-md-1">{{ delivery_fee }}</div>
+          </div>
+          <div class="row">
+            <div class="col-md-3 offset-sm-7">Container charges</div>
+            <div class="col-md-1">{{ bowl_charge_total }}</div>
           </div>
         </div><!--// cart cost -->
         <br>

@@ -2,7 +2,7 @@ from djmoney.money import Money
 from django import template
 from django.utils.text import slugify
 
-from sendhut.lunch.models import Item
+from sendhut.stores.models import Item
 from sendhut.utils import unslugify
 
 register = template.Library()

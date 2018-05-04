@@ -9,7 +9,7 @@ import djmoney.models.fields
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('lunch', '0003_auto_20180331_1535'),
+        ('stores', '0003_auto_20180331_1535'),
     ]
 
     operations = [

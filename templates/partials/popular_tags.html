@@ -5,7 +5,7 @@
     <ul class="list-unstyled list-inline float-left tag-row">
       {% for tag in food_tags %}
       <li class="list-inline-item">
-        <a href="{% url 'lunch:search' tag %}" class="badge badge-light">{{ tag|unslugify }}</a>
+        <a href="{% url 'stores:search' tag %}" class="badge badge-light">{{ tag|unslugify }}</a>
       </li>
       {% endfor %}
     </ul>

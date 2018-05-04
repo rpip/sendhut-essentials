@@ -9,7 +9,7 @@
       <h6>Spending limit: {{ group_order.monetary_limit }}</h6>
     {% endif %}
     <h6>{{ group_order.members.count }} people in this group order</h6>
-    <a href="{% url 'lunch:store_details' group_order.store.slug %}">
+    <a href="{% url 'stores:store_details' group_order.store.slug %}">
       <button type="button" class="btn btn-info btn-sm">&laquo; Back to menu</button>
     </a>
   </div>
@@ -28,7 +28,7 @@
                     <div class="col-md-10">
                       {% if member.cart.token == cart.token %}
                         <a class="item-popup"
-                           data-href="{% url 'lunch:cartline_detail' line_id=line.id slug=line.item.slug %}?cart_ref={{ group_order.token }}">
+                           data-href="{% url 'stores:cartline_detail' line_id=line.id slug=line.item.slug %}?cart_ref={{ group_order.token }}">
                            {{ line.data.name }}
                            <ul class="text-muted">
                              {% for x in line.data.extras_meta %}
@@ -47,7 +47,7 @@
                     </div>
                     <div class="col-sm-1">{{ line.get_total }}<br>
                       {% if member.cart.token == cart.token %}
-                        <a data-href="{% url 'lunch:cartline_delete' line.id %}?cart_ref={{ group_order.token }}" href="#" class="x-delete" data-cart="{{ group_order.token }}">
+                        <a data-href="{% url 'stores:cartline_delete' line.id %}?cart_ref={{ group_order.token }}" href="#" class="x-delete" data-cart="{{ group_order.token }}">
                           Remove
                         </a>
                       {% endif %}
@@ -64,6 +64,12 @@
             <div class="col-md-3 offset-sm-7"><a>Subtotal</a></div>
             <div class="col-md-1"><a>{{ member.get_cart_total }}</a></div>
           </div>
+          {% if member.cart.bowl_charge_total %}
+          <div class="row">
+            <div class="col-md-3 offset-sm-7">Container charges</div>
+            <div class="col-md-1">{{ member.cart.bowl_charge_total }}</div>
+          </div>
+          {% endif %}
         </div><!--// cart cost -->
         <br>
       {% endfor %}

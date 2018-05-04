@@ -31,12 +31,12 @@
               {% if member.cart.token == cart.token %}
                 <div class="col-sm-10">
                   <a class="item-popup"
-                     data-href="{% url 'lunch:cartline_detail' line_id=line.id slug=line.item.slug %}?cart_ref={{ group_order.token }}">
+                     data-href="{% url 'stores:cartline_detail' line_id=line.id slug=line.item.slug %}?cart_ref={{ group_order.token }}">
                      {{ line.item.name }}
                   </a>
                 </div>
                 <div class="col-sm-1">{{ line.get_total }}<br>
-                  <a data-href="{% url 'lunch:cartline_delete' line.id %}?cart_ref={{ group_order.token }}"
+                  <a data-href="{% url 'stores:cartline_delete' line.id %}?cart_ref={{ group_order.token }}"
                      href="#" class="delete">Remove</a>
                 </div>
               {% else %}
@@ -72,6 +72,14 @@
         {{ delivery_fee }}
       </div>
     </div><!--//delivery -->
+    <div class="row">
+      <div class="col-sm-6 bold">
+        Container charges
+      </div>
+      <div class="col-sm-6 bold">
+        {{ bowl_charge_total }}
+      </div>
+    </div><!--//bowl costs -->
   </div>
 {% else %}
   <div class="clearfix"></div>

@@ -14,7 +14,7 @@ from .forms import CheckoutForm
 def cart_summary(request):
     # TODO(yao): group order summary
     form = CheckoutForm(data=request.POST)
-    context = get_cart_data(request.cart)
+    context = get_cart_data(request.cart, request.group_member)
     context['form'] = form
     return render(request, 'checkout/cart_summary.html', context)
 

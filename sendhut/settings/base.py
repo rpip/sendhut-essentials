@@ -53,7 +53,7 @@ INSTALLED_APPS = [
 
     'sendhut',
     'sendhut.accounts',
-    'sendhut.lunch',
+    'sendhut.stores',
     'sendhut.cart',
     'sendhut.grouporder',
     'sendhut.checkout'
@@ -284,3 +284,5 @@ except:
 GOOGLE_MAPS_API_KEY = 'AIzaSyDVZn9gbIfivvhXOI1eAY1tu2M-yo2LO9w'
 
 GROUP_ORDER_MESSAGE = "You can order in lunch with coworkers or friends with the group order."
+
+FOOD_CONTAINER_CHARGE = 1.50

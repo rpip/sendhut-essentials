@@ -15,7 +15,10 @@
      <div class="card-body">
        <h4 class="card-title">{{ item.name }} </h4>
        <p class="card-text text-muted">{{ item.description }}</p>
-       {% include  "lunch/_dietary_labels.html" with item=item %}
+       <p class="card-text text-muted">
+         {% if item.menu.bowl_charge %} food container cost: {{ item.menu.bowl_charge }} {% endif %}
+         </p>
+       {% include  "stores/_dietary_labels.html" with item=item %}
        <form id="item-form" data-cart-submit>
          <input type="hidden" name="uuid" value="{{ item.uuid }}" />
          <input type="hidden" name="item_id" value="{{ item.id }}" />

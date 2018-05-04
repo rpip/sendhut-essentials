@@ -5,7 +5,7 @@ from django.utils.encoding import smart_str
 from django.conf import settings
 from djmoney.money import Money
 
-from sendhut.lunch.models import Option
+from sendhut.stores.models import Option
 
 
 class ItemSet(object):
@@ -15,8 +15,11 @@ class ItemSet(object):
     def __iter__(self):
         raise NotImplementedError()
 
-    def get_total(self, **kwargs):
+    def get_subtotal(self, **kwargs):
         return sum([item.get_total(**kwargs) for item in self])
+
+    def get_total(self, **kwargs):
+        return self.get_subtotal()
 
     def count(self):
         """Return the total quantity in cart."""

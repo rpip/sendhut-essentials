@@ -13,7 +13,7 @@ from factory import (
 
 from sendhut.accounts.models import User, Address
 from sendhut.cart.models import Cart, CartLine
-from sendhut.lunch.models import (
+from sendhut.stores.models import (
     Store, Menu, Item, OptionGroup, Option, Image, FOOD_TAGS
 )
 from sendhut.checkout.models import Order, OrderLine

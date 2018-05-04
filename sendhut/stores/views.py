@@ -22,7 +22,7 @@ from .models import Item, Store, FOOD_TAGS
 
 
 def food_detail(request, slug):
-    template = 'lunch/_item_detail.html'
+    template = 'stores/_item_detail.html'
     item = Item.objects.get(slug=slug)
     context = {
         'item': item,
@@ -32,7 +32,7 @@ def food_detail(request, slug):
 
 
 def cartline_detail(request, line_id, slug):
-    template = 'lunch/_item_detail.html'
+    template = 'stores/_item_detail.html'
     item = Item.objects.get(slug=slug)
     context = {
         'item': item,
@@ -58,11 +58,11 @@ def search(request, tag):
         'search_term': utils.unslugify(tag),
         'restaurants': results.distinct()
     }
-    return render(request, 'lunch/search.html', context)
+    return render(request, 'stores/search.html', context)
 
 
 def store_page(request, slug):
-    template = 'lunch/store_details.html'
+    template = 'stores/store_details.html'
     store = get_object_or_404(Store, slug=slug)
     context = {
         'store': store,
@@ -119,7 +119,7 @@ def order_list(request):
     active_group_orders = get_active_user_group_orders(request.user)
     return render(
         request,
-        'lunch/order_history.html',
+        'stores/order_history.html',
         {'orders': orders, 'active_group_orders': active_group_orders}
     )
 
@@ -129,4 +129,4 @@ def order_details(request, ref):
     context = {
         'order': Order.objects.get(user=request.user, reference=ref)
     }
-    return render(request, 'lunch/order_details.html', context)
+    return render(request, 'stores/order_details.html', context)

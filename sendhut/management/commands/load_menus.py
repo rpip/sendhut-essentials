@@ -5,7 +5,7 @@ from random import shuffle, choice
 import yaml
 from django.core.management.base import BaseCommand, CommandError
 from django.utils.text import slugify
-from sendhut.lunch.models import (
+from sendhut.stores.models import (
     Store, Menu, Item, Image, ItemVariant,
     Option, OptionGroup
 )

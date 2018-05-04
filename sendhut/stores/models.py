@@ -100,7 +100,7 @@ class Store(BaseModel):
         return ', '.join([unslugify(x.name) for x in tags[:3]])
 
     def get_absolute_url(self):
-        return reverse('lunch:store_detail', args=(self.self.slug, ))
+        return reverse('stores:store_detail', args=(self.self.slug, ))
 
     class Meta:
         db_table = "store"
@@ -122,8 +122,13 @@ class Menu(BaseModel):
     # TODO(yao): Add related menus that'll show as options, e.g, soup, meat, fish
     name = models.CharField(max_length=40, null=True, blank=True)
     store = models.ForeignKey(Store, related_name='menus')
-    tags = TaggableManager()
+    tags = TaggableManager(blank=True)
     info = models.CharField(max_length=360, null=True, blank=True)
+    # does vendor charge for items in this menu?
+    bowl_charge = MoneyField(
+        max_digits=10, decimal_places=2,
+        default_currency='NGN',
+        null=True, blank=True)
 
     class Meta:
         db_table = "menu"
@@ -165,6 +170,10 @@ class Item(BaseModel):
 
     def get_price_per_item(self):
         return self.price if self.price else 0
+
+    @property
+    def bowl_charge(self):
+        return self.menu.bowl_charge if self.menu.bowl_charge else 0
 
     @property
     def store(self):

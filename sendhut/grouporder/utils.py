@@ -6,7 +6,7 @@ from uuid import uuid4
 from sendhut.cart.models import Cart
 from sendhut.cart import CartStatus
 from sendhut.cart.utils import get_or_create_anonymous_cart_from_token
-from sendhut.lunch.models import Store
+from sendhut.stores.models import Store
 
 from .models import GroupOrder, Member
 from . import MemberStatus

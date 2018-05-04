@@ -1,4 +1,4 @@
-default_app_config = 'sendhut.lunch.apps.LunchConfig'
+default_app_config = 'sendhut.stores.apps.StoresConfig'
 
 
 class DietaryRestrictions:
@@ -39,4 +39,14 @@ class FoodCategories():
         (BAKERY, 'Bakery'),
         (FRESH_JUICE, 'Fresh Juice'),
         (HEALTHY_FOOD, 'Healthy Food')
+    )
+
+
+class MenuTypes():
+    DRINKS = 'drinks'
+    FOOD = 'food'
+
+    CHOICES = (
+        (DRINKS, 'drinks'),
+        (FOOD, 'food')
     )

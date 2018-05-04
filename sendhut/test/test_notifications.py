@@ -7,7 +7,7 @@ from sendhut.factory import (
 )
 from sendhut.accounts.models import User
 from sendhut.management.commands.load_menus import create_lagos_stores
-from sendhut.lunch.models import Item, Store
+from sendhut.stores.models import Item, Store
 
 
 class NotificationsTestClass(TestCase):

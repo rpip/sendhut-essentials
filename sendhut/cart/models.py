@@ -6,7 +6,7 @@ from jsonfield import JSONField
 from django.core.validators import MaxValueValidator, MinValueValidator
 from sendhut.db import BaseModel
 from sendhut.utils import sane_repr
-from sendhut.lunch.models import Item
+from sendhut.stores.models import Item
 
 from . import CartStatus
 from .core import partition, ItemSet, ItemLine, ItemList
@@ -136,6 +136,13 @@ class Cart(BaseModel, ItemSet):
     def is_empty(self):
         return not(len(self))
 
+    @property
+    def bowl_charge_total(self):
+        return sum(x.bowl_charge for x in self)
+
+    def get_total(self, **kwargs):
+        return self.get_subtotal() + self.bowl_charge_total
+
     def __len__(self):
         return self.lines.count()
 
@@ -159,6 +166,10 @@ class CartLine(BaseModel, ItemLine):
     quantity = models.PositiveIntegerField(
         validators=[MinValueValidator(0), MaxValueValidator(999)])
     data = JSONField(blank=True, default={})
+
+    @property
+    def bowl_charge(self):
+        return self.item.bowl_charge * self.quantity
 
     class Meta:
         db_table = "cart_line"

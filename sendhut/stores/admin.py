@@ -96,7 +96,7 @@ class MenuAdmin(BaseModelAdmin):
         'store'
     )
     list_filter = ('created',)
-    search_fields = ('name',)
+    search_fields = ('name', 'store__name')
 
 
 class ImageForm(ModelForm):

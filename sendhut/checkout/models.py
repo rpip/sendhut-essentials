@@ -5,7 +5,7 @@ from jsonfield import JSONField
 from djmoney.models.fields import MoneyField
 
 from sendhut.db import BaseModel
-from sendhut.lunch.models import Item
+from sendhut.stores.models import Item
 from sendhut.cart.core import ItemLine, ItemSet, ItemList, partition
 from sendhut.grouporder.models import GroupOrder
 from sendhut.utils import generate_token, sane_repr, asap_delivery_estimate

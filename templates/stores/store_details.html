@@ -9,7 +9,7 @@
 {% block content %}
   <div class="container">
     {% if group_order and member.is_active %}
-      {% include "lunch/_group_order_header.html" %}
+      {% include "stores/_group_order_header.html" %}
     {% endif %}
     <div class="row">
       <div class="col-sm-6">
@@ -27,7 +27,7 @@
                 <button type="button" class="btn btn-primary">Create Group Order</button>
               </a>
             {% else %}
-              <a href="/login?next={% url 'lunch:store_details' store.slug %}">
+              <a href="/login?next={% url 'stores:store_details' store.slug %}">
                 <button type="button" class="btn btn-primary">Create Group Order</button>
               </a>
             {% endif %}
@@ -66,7 +66,7 @@
           {% for item in menu.items.all %}
             <div class="col-sm-5 rounded menu-item {% if not item.image %}menu-item-no-image{% endif %}">
               <a
-                data-href="{% url 'lunch:food_detail' slug=item.slug %}?cart_ref={{ group_cart.token }}"
+                data-href="{% url 'stores:food_detail' slug=item.slug %}?cart_ref={{ group_cart.token }}"
                 class="item-popup">
                 <div class="row">
                   {% if item.image %}
@@ -96,9 +96,9 @@
                         <h6 class="card-title">{{ item.name }}</h6>
                         <p class="card-text text-muted">{{ item.description }}</p>
                         <div class="item-meta">
-                          <span class="float-left item-price">{% if item.price %}{{item.price}}{% endif %}</span>
+                          <span class="float-left item-price">{% if item.price %}{{item.get_price_per_item}}{% endif %}</span>
                           <span class="float-right">
-                            {% include  "lunch/_dietary_labels.html" with item=item %}
+                            {% include  "stores/_dietary_labels.html" with item=item %}
                           </span>
                         </div>
                       </div>
@@ -132,12 +132,12 @@
   </div>
 
   {% if group_order %}
-    {% include "lunch/_group_share_modal.html" %}
-    {% include "lunch/_group_join_modal.html" %}
-    {% include "lunch/_group_cancel_modal.html" %}
+    {% include "stores/_group_share_modal.html" %}
+    {% include "stores/_group_join_modal.html" %}
+    {% include "stores/_group_cancel_modal.html" %}
   {% endif %}
 
-  {% include "lunch/_group_order_modal.html" %}
+  {% include "stores/_group_order_modal.html" %}
 
 {% endblock %}
 

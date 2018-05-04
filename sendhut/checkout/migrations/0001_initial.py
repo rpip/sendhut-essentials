@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('lunch', '0009_auto_20180410_0100'),
+        ('stores', '0009_auto_20180410_0100'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
@@ -61,7 +61,7 @@ class Migration(migrations.Migration):
                 ('unit_price', djmoney.models.fields.MoneyField(decimal_places=2, default=Decimal('0.0'), max_digits=10)),
                 ('special_instructions', models.TextField(blank=True, null=True)),
                 ('data', jsonfield.fields.JSONField(blank=True, default={})),
-                ('item', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='lunch.Item')),
+                ('item', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='stores.Item')),
                 ('order', models.ForeignKey(editable=False, on_delete=django.db.models.deletion.CASCADE, related_name='lines', to='checkout.Order')),
             ],
             options={

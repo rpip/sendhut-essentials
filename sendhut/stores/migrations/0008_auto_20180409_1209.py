@@ -10,7 +10,7 @@ import jsonfield.fields
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('lunch', '0007_auto_20180407_1923'),
+        ('stores', '0007_auto_20180407_1923'),
     ]
 
     operations = [
@@ -42,6 +42,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='orderline',
             name='order',
-            field=models.ForeignKey(editable=False, on_delete=django.db.models.deletion.CASCADE, related_name='lines', to='lunch.Order'),
+            field=models.ForeignKey(editable=False, on_delete=django.db.models.deletion.CASCADE, related_name='lines', to='stores.Order'),
         ),
     ]

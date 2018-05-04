@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 
 from sendhut.accounts.models import User, Address
-from sendhut.lunch.models import Store, Item
+from sendhut.stores.models import Store, Item
 from sendhut.checkout.models import Order
 
 

@@ -2,7 +2,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.shortcuts import render
 
-from sendhut.lunch.models import Store
+from sendhut.stores.models import Store
 
 
 def home(request):

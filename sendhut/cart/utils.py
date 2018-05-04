@@ -1,5 +1,8 @@
 from datetime import timedelta
 
+from django.conf import settings
+from djmoney.money import Money
+
 from sendhut.utils import unquantize_for_paystack
 from .models import Cart
 from uuid import UUID
@@ -77,20 +80,23 @@ def get_user_cart(user, cart_queryset=Cart.objects.all()):
     return cart_queryset.open().filter(user=user).first()
 
 
-def get_cart_data(cart):
+def get_cart_data(cart, group_member=None):
     """Return a JSON-serializable representation of the cart."""
-    from django.conf import settings
-    from djmoney.money import Money
-    sub_total = cart.get_total()
     delivery_fee = Money(settings.BASE_DELIVERY_FEE, settings.DEFAULT_CURRENCY)
-    total = sub_total + delivery_fee
+    bowl_charge_total = cart.bowl_charge_total
+    if group_member:
+        cart = group_member.group_order
+        total = cart.get_total()
+    else:
+        total = cart.get_total() + delivery_fee
 
     return {
-        'sub_total': sub_total,
+        'sub_total': cart.get_subtotal(),
         'delivery_fee': delivery_fee,
         'cart_delivery_fee': delivery_fee,
         'total': total,
-        'unquantized_total': unquantize_for_paystack(total.amount)
+        'unquantized_total': unquantize_for_paystack(total.amount),
+        'bowl_charge_total': bowl_charge_total
     }
 
 

@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 
 from sendhut.accounts.models import User, Address
-from sendhut.lunch.models import (
+from sendhut.stores.models import (
     Store, Menu, Item, OptionGroup, Option, Image
 )
 from sendhut.checkout.models import Order, OrderLine

@@ -84,7 +84,7 @@ $('body').on('click', '#item-modal #add-to-cart', function(e) {
     var item = ($('#item-form').serializeObject())
     $.ajax({
       type: "POST",
-      url: '/lunch/cart/?cart_ref='+ "{{ group_order.token }}",
+      url: '/stores/cart/?cart_ref='+ "{{ group_order.token }}",
       dataType: 'json',
       contentType: 'application/json',
       data: JSON.stringify(item),
@@ -128,7 +128,7 @@ $('body').on('click', '.cart-line .x-delete', function(e) {
       dataType: 'json',
       contentType: 'application/json',
       success: function(data, status) {
-      $('#cart-confirm').html('').load('/lunch/cart/reload?cart_ref='+cart, function() {});
+      $('#cart-confirm').html('').load('/stores/cart/reload?cart_ref='+cart, function() {});
       var href = $('[data-slidepanel]').data('href');
       $('#slidepanel').html('').load(href, function() {});
       var x = $('#cart-item-count').html();

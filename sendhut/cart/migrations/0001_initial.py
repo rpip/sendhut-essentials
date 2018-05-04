@@ -16,7 +16,7 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('lunch', '0005_auto_20180405_1917'),
+        ('stores', '0005_auto_20180405_1917'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
@@ -50,7 +50,7 @@ class Migration(migrations.Migration):
                 ('quantity', models.PositiveIntegerField(validators=[django.core.validators.MinValueValidator(0), django.core.validators.MaxValueValidator(999)])),
                 ('data', jsonfield.fields.JSONField(blank=True, default={})),
                 ('cart', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='lines', to='cart.Cart')),
-                ('item', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='+', to='lunch.Item')),
+                ('item', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='+', to='stores.Item')),
             ],
             options={
                 'db_table': 'cart_line',

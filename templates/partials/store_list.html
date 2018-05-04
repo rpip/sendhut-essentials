@@ -6,7 +6,7 @@
   <div class="card-row">
     {% for store in restaurants %}
       <div class="col-sm-4 store">
-        <a href="{% url 'lunch:store_details' store.slug %}" class="no-deco">
+        <a href="{% url 'stores:store_details' store.slug %}" class="no-deco">
           <div class="card">
             {% thumbnail store.banner.image "350x187" crop="center" as im %}
             <img class="card-img-top img-fluid"

@@ -4,7 +4,7 @@ from django.core.management.base import BaseCommand
 from sorl.thumbnail import get_thumbnail
 from django_rq import enqueue
 
-from sendhut.lunch.models import Store
+from sendhut.stores.models import Store
 
 
 class Command(BaseCommand):

@@ -2,10 +2,11 @@ from django.conf import settings
 from django.urls import reverse
 from django.db import models
 
+from djmoney.money import Money
 from djmoney.models.fields import MoneyField
 
 from sendhut.db import BaseModel
-from sendhut.lunch.models import Store
+from sendhut.stores.models import Store
 from sendhut.cart.models import Cart, CartStatus
 from sendhut.utils import generate_token
 
@@ -66,7 +67,11 @@ class GroupOrder(BaseModel):
 
     def get_total(self):
         # TODO(yao): get total + delivery
-        return self.get_subtotal()
+        return self.get_subtotal() + self.get_bowl_charge_total() + \
+            Money(settings.BASE_DELIVERY_FEE, 'NGN')
+
+    def get_bowl_charge_total(self):
+        return sum(x.cart.bowl_charge_total for x in self.members.all())
 
     def get_absolute_url(self):
         return reverse('cart_join', args=(self.token, ))
@@ -93,7 +98,7 @@ class Member(BaseModel):
         max_length=32, choices=MemberStatus.CHOICES, default=MemberStatus.IN)
 
     def get_cart_total(self):
-        return self.cart.get_total()
+        return self.cart.get_subtotal()
 
     def is_cart_owner(self):
         return self.user == self.group_order.user

@@ -19,7 +19,7 @@
               My Account
             </button>
             <div class="dropdown-menu">
-              <a class="dropdown-item" href="{% url 'lunch:order_history' %}">Order History</a>
+              <a class="dropdown-item" href="{% url 'stores:order_history' %}">Order History</a>
               <a class="dropdown-item" href="{% url 'accounts:profile' %}">Settings</a>
             </div>
           </div>
@@ -29,7 +29,7 @@
              Login
           </a>
         {% endif %}
-        <a href="#" data-href="{% url 'lunch:cart' %}?cart_ref={{group_order.token}}" data-slidepanel="panel">
+        <a href="#" data-href="{% url 'stores:cart' %}?cart_ref={{group_order.token}}" data-slidepanel="panel">
           <img class="icon" src="{% static 'images/icons/shopping-cart.svg' %}" alt="Your order">
           <span id="cart-item-count">{{ cart|length }}</span>
         </a>
