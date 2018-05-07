@@ -47,6 +47,14 @@ class OrderAdmin(BaseModelAdmin):
     group_order_link.allow_tags = True
     group_order_link.short_description = "group order link"
 
-    readonly_fields = ('group_order',)
+    def user_info(self, obj):
+        fullname = obj.user.get_full_name()
+        email = obj.user.email
+        phone = obj.user.phone
+        return '{} - {} - {}'.format(fullname, phone, email)
+
+    user_info.allow_tags = True
+
+    readonly_fields = ('group_order', 'user_info')
     search_fields = ('reference',)
     inlines = [OrderLineInline]
