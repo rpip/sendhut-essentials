@@ -83,7 +83,7 @@ class Store(BaseModel):
     logo = models.ForeignKey('Image', related_name='store', blank=True, null=True)
     # image displayed on restaurant's page
     banner = models.ForeignKey('Image', related_name='for_store', blank=True, null=True)
-    tags = TaggableManager()
+    tags = TaggableManager(blank=True)
     verified = models.BooleanField(default=False)
     # TODO(yao): add is partner field
     # TODO(yao): Use choices to display availability: 'Closed',​'Unavailable'
@@ -124,11 +124,15 @@ class Menu(BaseModel):
     store = models.ForeignKey(Store, related_name='menus')
     tags = TaggableManager(blank=True)
     info = models.CharField(max_length=360, null=True, blank=True)
-    # does vendor charge for items in this menu?
+    # menu wide bowl charge
     bowl_charge = MoneyField(
-        max_digits=10, decimal_places=2,
+        max_digits=4, decimal_places=2,
         default_currency='NGN',
-        null=True, blank=True)
+        null=True, blank=True,
+        help_text="How much to charge for food containers")
+    bowl_charge_multiplier = models.IntegerField(
+        null=True, blank=True,
+        help_text="Indicates how many multiples of this item come with bowl charge")
 
     class Meta:
         db_table = "menu"
@@ -167,13 +171,27 @@ class Item(BaseModel):
     )
     image = models.ForeignKey('Image', related_name='items', blank=True, null=True)
     available = models.BooleanField(default=True)
+    # menu wide bowl charge
+    bowl_charge = MoneyField(
+        max_digits=4, decimal_places=2,
+        default_currency='NGN',
+        null=True, blank=True,
+        help_text="How much to charge for food containers")
+    bowl_charge_multiplier = models.IntegerField(
+        null=True, blank=True,
+        help_text="Indicates how many multiples of this item come with bowl charge")
 
     def get_price_per_item(self):
         return self.price if self.price else 0
 
-    @property
-    def bowl_charge(self):
-        return self.menu.bowl_charge if self.menu.bowl_charge else 0
+    def get_bowl_charge(self):
+        "Returns item specific bowl charge if set, or menu wide bowl charge"
+        bowl_charge = self.bowl_charge or self.menu.bowl_charge
+        bowl_charge_multiplier = self.bowl_charge_multiplier or self.menu.bowl_charge_multiplier
+        if bowl_charge_multiplier:
+            return bowl_charge_multiplier * bowl_charge
+
+        return bowl_charge or 0
 
     @property
     def store(self):

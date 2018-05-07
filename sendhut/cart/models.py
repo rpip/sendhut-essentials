@@ -169,7 +169,7 @@ class CartLine(BaseModel, ItemLine):
 
     @property
     def bowl_charge(self):
-        return self.item.bowl_charge * self.quantity
+        return self.item.get_bowl_charge()
 
     class Meta:
         db_table = "cart_line"

@@ -2,13 +2,12 @@
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.admin.widgets import AdminFileWidget
-from django.utils.safestring import mark_safe
+from django.utils.html import format_html, mark_safe, format_html_join
 from django.shortcuts import get_object_or_404
 from django.forms import ModelForm
 
 from sorl.thumbnail import get_thumbnail
 from multiupload.admin import MultiUploadAdmin
-import nested_admin
 
 from sendhut.db import BaseModelAdmin
 from .models import (
@@ -38,25 +37,21 @@ class AdminImageWidget(AdminFileWidget):
         return mark_safe(u''.join(output))
 
 
-class ItemInline(nested_admin.NestedTabularInline):
-
-    model = Item
-    exclude = ('metadata', 'deleted', 'slug', 'price_currency',)
-    #fields = ['name', 'items']
-    extra = 0
-
-
-class MenuInline(nested_admin.NestedStackedInline):
+class MenuInline(admin.StackedInline):
 
     model = Menu
     exclude = ('metadata', 'deleted')
-    #fields = ['name', 'items']
+    readonly_fields = ('edit_link',)
     extra = 0
-    inlines = [ItemInline]
+
+    def edit_link(self, obj):
+        return mark_safe('<a href="{}">Edit Menu</a>'.format(obj.get_admin_url()))
+
+    edit_link.allow_tags = True
 
 
 @admin.register(Store)
-class StoreAdmin(BaseModelAdmin, nested_admin.NestedModelAdmin):
+class StoreAdmin(BaseModelAdmin):
 
     def toggle_display(self, request, queryset):
         for x in queryset:
@@ -79,12 +74,19 @@ class StoreAdmin(BaseModelAdmin, nested_admin.NestedModelAdmin):
     search_fields = ('name', 'address', 'phone')
     actions = [toggle_display]
     raw_id_fields = ('banner', 'logo')
-    #inlines = [MenuInline]
+    inlines = [MenuInline]
 
     def get_banner_img(self, obj):
         if obj.banner:
             t = get_thumbnail(obj.banner.image, "128x128", crop="center")
             return mark_safe('<img src="{}">'.format(t.url))
+
+
+class ItemInline(admin.StackedInline):
+
+    model = Item
+    exclude = ('metadata', 'deleted', 'slug', 'price_currency',)
+    extra = 0
 
 
 @admin.register(Menu)
@@ -97,6 +99,21 @@ class MenuAdmin(BaseModelAdmin):
     )
     list_filter = ('created',)
     search_fields = ('name', 'store__name')
+    readonly_fields = ('related_menus',)
+    inlines = [ItemInline]
+
+    def related_menus(self, obj):
+        ul = "<ul>{}</ul>"
+        li = "<li><a href='{}'>{}</a></li>"
+        other_menus = [x for x in obj.store.menus.all() if x.id != obj.id]
+        menus = format_html_join(
+            '', li, (
+                (x.get_admin_url(), x.name)
+                for x in other_menus)
+        )
+        return format_html(ul, menus)
+
+    related_menus.allow_tags = True
 
 
 class ImageForm(ModelForm):

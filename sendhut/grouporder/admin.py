@@ -63,8 +63,14 @@ class GroupOrderAdmin(BaseModelAdmin):
         'created'
     ]
 
+    def user(self):
+        fullname = self.user.get_full_name()
+        email = self.user.email
+        phone = self.user.phone
+        return '{} - {} - {}'.format(fullname, phone, email)
+
     exclude = ('deleted',)
-    readonly_fields = ('total', 'status')
+    readonly_fields = ('total', 'status', user)
     list_filter = ('status', 'created')
     inlines = [MemberInline]
 

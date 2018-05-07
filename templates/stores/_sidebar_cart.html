@@ -57,6 +57,7 @@
         {{ delivery_fee }}
       </div>
     </div><!--//delivery -->
+    {% if bowl_charge_total %}
     <div class="row">
       <div class="col-sm-6 bold">
         Container charges
@@ -65,6 +66,7 @@
         {{ bowl_charge_total }}
       </div>
     </div><!--//bowl costs -->
+    {% endif %}
   </div>
 {% else %}
   <div class="clearfix"></div>

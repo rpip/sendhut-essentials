@@ -2,6 +2,7 @@ from uuid import uuid4
 
 from django.db import models
 from jsonfield import JSONField
+from django.urls import reverse
 
 from safedelete.models import SafeDeleteModel
 from safedelete.models import HARD_DELETE
@@ -33,6 +34,10 @@ class BaseModel(SafeDeleteModel, UpdateMixin):
         default=uuid4, blank=True,
         editable=False, unique=True
     )
+
+    def get_admin_url(self):
+        return reverse('admin:%s_%s_change' % (self._meta.app_label, self._meta.model_name),
+                       args=[self.id])
 
     class Meta:
         abstract = True  # Set this model as Abstract
