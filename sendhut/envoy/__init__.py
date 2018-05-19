@@ -40,6 +40,9 @@ location of the envoy
 food preparation time (confirm with restaurants)
 amount of traffic
 the distance from the pickup location
+
+# multidrop:
+Pricing is based on distance, from pickup to drop off, driving down the price per drop.
 """
 from django.conf import settings
 from geopy.geocoders import GoogleV3
