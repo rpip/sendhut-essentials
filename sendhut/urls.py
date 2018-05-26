@@ -2,6 +2,7 @@ from django.conf.urls.static import static
 from django.conf.urls import include, url
 from django.conf import settings
 from django.contrib import admin
+from django.views.generic import RedirectView
 
 from sendhut.accounts.views import LoginView, LogoutView, SignupView
 from sendhut.grouporder.views import CartJoin
@@ -30,6 +31,7 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^admin/', include('loginas.urls')),
     url(r'^nested_admin/', include('nested_admin.urls')),
+    url(r'^go/$', RedirectView.as_view(url='/')),
 ]
 
 # Change admin site title
