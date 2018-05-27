@@ -9,7 +9,7 @@ echo "----------------------------------------------------------"
 # CREATE EXTENSION postgis;
 
 psql postgres <<EOF
-  CREATE DATABASE sendhut;
+  CREATE DATABASE essentials;
 
   CREATE USER sendhut WITH PASSWORD 'h4ppy!';
 
@@ -21,9 +21,9 @@ psql postgres <<EOF
 
   ALTER USER sendhut CREATEDB;
 
-  ALTER DATABASE sendhut OWNER TO sendhut;
+  ALTER DATABASE essentials OWNER TO sendhut;
 
-  GRANT ALL PRIVILEGES ON DATABASE sendhut TO sendhut;
+  GRANT ALL PRIVILEGES ON DATABASE essentials TO sendhut;
 EOF
 
 echo "----------------------------------------------------------"
