@@ -34,10 +34,12 @@ def delivery_schedule(request):
     }
 
 
-def vendor_configs(request):
+def base_configs(request):
     return {
         'PAYSTACK_PUBLIC_KEY': settings.PAYSTACK_PUBLIC_KEY,
-        'GOOGLE_MAPS_API_KEY': settings.GOOGLE_MAPS_API_KEY
+        'GOOGLE_MAPS_API_KEY': settings.GOOGLE_MAPS_API_KEY,
+        'SUPPORT_EMAIL': settings.SUPPORT_EMAIL,
+        'DEFAULT_DOMAIN': settings.DEFAULT_DOMAIN
     }
 
 # TODO(yao): add delivery fee context processor

@@ -46,7 +46,7 @@
       <mj-section background-color="#fff">
         <mj-column>
           <mj-text>
-            If you have any questions or concerns, you can just reply to this email or write to us at hello@sendhut.com.
+            If you have any questions or concerns, you can just reply to this email or write to us at {{SUPPORT_EMAIL}}.
           </mj-text>
           <mj-text>
             <p>Thank You,</p>

@@ -49,7 +49,7 @@ def create_orderlines(order, items=Item.objects.all()):
         )
 
 
-PHONE_NUMBERS = ('08096699966', '08169567693')
+# PHONE_NUMBERS = ('08096699966', '08169567693')
 
 MENU_NAMES = (
     'Drinks / Beverages',
@@ -105,7 +105,7 @@ class UserFactory(DjangoModelFactory):
     last_name = lazy_attribute(lambda o: fake.last_name())
     username = Sequence(lambda n: '{}_{}'.format(fake.user_name(), n))
     email = lazy_attribute(lambda o: o.username + "@example.com")
-    phone = choice(PHONE_NUMBERS)
+    phone = lazy_attribute(lambda o: fake.phone_number())
     identity_verified = choice([True, False])
 
 
@@ -142,7 +142,7 @@ class StoreFactory(DjangoModelFactory):
 
     name = lazy_attribute(lambda o: fake.company())
     address = lazy_attribute(lambda o: fake.address())
-    phone = choice(PHONE_NUMBERS)
+    phone = lazy_attribute(lambda o: fake.phone_number())
     logo = SubFactory(ImageFactory)
     banner = SubFactory(ImageFactory)
 

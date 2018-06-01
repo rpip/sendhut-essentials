@@ -92,7 +92,7 @@ TEMPLATES = [
                 'sendhut.context_processors.mobile_check',
                 'sendhut.context_processors.food_tags',
                 'sendhut.context_processors.delivery_schedule',
-                'sendhut.context_processors.vendor_configs',
+                'sendhut.context_processors.base_configs',
                 'sendhut.grouporder.context_processors.group_order',
             ],
         },
@@ -208,7 +208,7 @@ DEFAULT_CURRENCY = 'NGN'
 
 BASE_DELIVERY_FEE = 500
 
-SENDHUT_EMAIL = 'hello@sendhut.com'
+SUPPORT_EMAIL = config('SUPPORT_EMAIL', default='hello@sendhut.com')
 
 BETA_MODE = config('BETA_MODE', default=True, cast=bool)
 
@@ -248,7 +248,7 @@ MAILGUN_ACCESS_KEY = 'key-aae710e87fcc0a628b1fc9fbface936e'
 MAILGUN_SERVER_NAME = 'mg.sendhut.com'
 
 # TODO(yao): personalize email with 'Yao from Sendhut'
-DEFAULT_FROM_EMAIL = 'Sendhut <hello@sendhut.com>'
+DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default='Sendhut <hello@sendhut.com>')
 
 # SMS
 JUSIBE_PUBLIC_KEY = "a21e294d898ca47299bd575e5db983dd"
@@ -256,7 +256,7 @@ JUSIBE_ACCESS_TOKEN = "8dcdee5ff5d7504570ffb0d74e1fc755"
 
 SESSION_SERIALIZER = 'sendhut.utils.JSONSerializer'
 
-DEFAULT_DOMAIN = 'sendhut.com'
+DEFAULT_DOMAIN = config('DEFAULT_DOMAIN', default='food.sendhut.com')
 
 RQ_QUEUES = {
     'default': {
@@ -275,7 +275,7 @@ DEFAULT_CURRENCY = "NGN"
 try:
     site = Site.objects.get_current()
     site.name = 'Sendhut'
-    site.domain = 'sendhut.com'
+    site.domain = DEFAULT_DOMAIN
     site.save()
 except:
     pass

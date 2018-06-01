@@ -77,7 +77,7 @@
             </tbody>
           </mj-table>
           <mj-text>
-            If you have any questions or concerns, you can just reply to this email or write to us at hello@sendhut.com.
+            If you have any questions or concerns, you can just reply to this email or write to us at {{SUPPORT_EMAIL}}.
             <p>Thank You,</p>
             <p>Team Sendhut</p>
           </mj-text>

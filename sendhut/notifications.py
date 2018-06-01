@@ -68,7 +68,9 @@ def collect_data_for_email(email, template):
         domain=site.domain,
         site_url=utils.build_absolute_uri(reverse('home')),
         logo_url=staticfiles_storage.url('images/sendhut-yellow.png'),
-        banner_image_url=staticfiles_storage.url('images/banner-burgersushi.jpg')
+        banner_image_url=staticfiles_storage.url('images/banner-burgersushi.jpg'),
+        SUPPORT_EMAIL=settings.SUPPORT_EMAIL,
+        DEFAULT_DOMAIN=settings.DEFAULT_DOMAIN
       )
 
 

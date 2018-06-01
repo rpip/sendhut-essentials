@@ -14,12 +14,7 @@ class NotificationsTestClass(TestCase):
 
     def setUp(self):
         # TODO(yao): create group order
-        user = UserFactory.create(
-            first_name='Yao',
-            last_name='Adzaku',
-            email='yao@sendhut.com',
-            phone='08169567693'
-        )
+        user = UserFactory.create()
         create_lagos_stores(3)
         order = OrderFactory.create(user=user)
         create_orderlines(order, Item.objects.all()[:5])
@@ -27,9 +22,10 @@ class NotificationsTestClass(TestCase):
         group_order = OrderFactory.create(user=user)
         create_group_order(user, group_order)
 
-    @override_settings(EMAIL_BACKEND='django_mailgun.MailgunBackend')
+    # TODO(yao): re-route emails and send to a test email
+    @override_settings(EMAIL_BACKEND='django.core.mail.backends.console.EmailBackend')
     def test_send_emails(self):
-        user = User.objects.get(email='yao@sendhut.com')
+        user = User.objects.first()
         notifications.send_welcome_email(user.email, False)
         notifications.send_password_reset(user.email, 'jh5f5678', False)
         for order in user.orders.all():

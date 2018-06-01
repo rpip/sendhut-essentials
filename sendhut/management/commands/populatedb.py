@@ -1,5 +1,6 @@
 from random import choice, shuffle
 from django.core.management.base import BaseCommand, CommandError
+from django.conf import settings
 
 from sendhut.stores.models import Item, Store
 from sendhut.factory import (
@@ -59,7 +60,7 @@ class Command(BaseCommand):
 
         # create admin user
         self.stdout.write(self.style.SUCCESS('Creating admin user'))
-        admin = UserFactory.create(email='hello@sendhut.com', username='admin')
+        admin = UserFactory.create(email=settings.SUPPORT_EMAIL, username='admin')
         admin.is_staff = True
         admin.is_superuser = True
         admin.set_password(ADMIN_PASSWORD)
