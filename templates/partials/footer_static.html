@@ -32,6 +32,37 @@ $(function () {
         });
     });
 
+    // address modal
+    $('body').on('click', '.address-popup', function() {
+        var dataURL = $(this).attr('data-href');
+        $('.address-modal-body').load(dataURL, function(){
+            $('#address-modal').modal({show: true});
+        });
+    });
+
+  // add to cart
+  $('body').on('click', '#save-address', function(e) {
+    e.preventDefault();
+    var data = ($('.address-form').serializeObject());
+    var url = '/accounts/address/';
+    url = data.hasOwnProperty('id') ? url + data['id'] : url;
+    $.ajax({
+      type: "POST",
+      url: url,
+      dataType: 'json',
+      contentType: 'application/json',
+      data: JSON.stringify(data),
+      success: function(data, status) {
+        //$('#address-modal').modal('hide');
+        window.location.reload(false);
+      },
+      error: function(data, status) {
+        alert("Invalid data. Please check and try again")
+      }
+    });
+  });
+
+
     // side rail cart
     $('[data-slidepanel]').slidepanel({
         orientation: 'right',

@@ -334,6 +334,18 @@ button.close {
 }
 
 
+.addresses {
+  padding-left: 0;
+  .card {
+    min-height: 197px;
+    .card-footer {
+      border: none;
+      background-color: transparent;
+      box-shadow: 0 5px 17px rgba(34,46,58,.1);
+    }
+  }
+}
+
 #about-contact {
   margin-top: 40px;
   @include rem(border-left, 2px solid $grey);
@@ -379,6 +391,12 @@ button.close {
 
 #cash_delivery {
   font-size: 8px;
+}
+
+.address-form {
+  .row, .form-row {
+    padding-top: 10px;
+  }
 }
 
 #group-share-modal {

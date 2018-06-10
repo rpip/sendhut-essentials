@@ -7,8 +7,7 @@ from django.utils.text import slugify
 from faker import Faker
 from factory import (
     DjangoModelFactory, SubFactory,
-    LazyFunction, lazy_attribute, Sequence,
-    post_generation, SelfAttribute
+    LazyFunction, lazy_attribute, Sequence, post_generation
 )
 
 from sendhut.accounts.models import User, Address
@@ -18,7 +17,7 @@ from sendhut.stores.models import (
 )
 from sendhut.checkout.models import Order, OrderLine
 from sendhut.grouporder.models import GroupOrder, Member
-
+from sendhut.coupons.models import Campaign, Coupon, CampaignDropoff
 
 fake = Faker()
 
@@ -116,12 +115,12 @@ class AddressFactory(DjangoModelFactory):
 
     user = SubFactory(UserFactory)
     # apt number or company name
-    apt_number = 'Q9'
-    name = lazy_attribute(lambda x: choice([None, 'Yao Adzaku']))
+    building_name = lazy_attribute(lambda x: fake.company())
+    name = lazy_attribute(lambda x: fake.name())
     phone = lazy_attribute(lambda x: choice([None, '08169567693']))
     # TODO(yao): build list of valid Lagos addresses
     address = lazy_attribute(lambda x: fake.address())
-    instructions = lazy_attribute(lambda x: choice([None, fake.sentence()]))
+    notes = lazy_attribute(lambda x: choice([None, fake.sentence()]))
 
 
 class ImageFactory(DjangoModelFactory):
@@ -210,7 +209,7 @@ class OrderFactory(DjangoModelFactory):
         model = Order
 
     user = SubFactory(UserFactory)
-    address = 'Lekki phase 1'
+    # address = SubFactory(AddressFactory)
     notes = lazy_attribute(lambda o: fake.sentence())
     delivery_fee = settings.BASE_DELIVERY_FEE
     total_gross = choice([2300, 1200, 8000, 12000])
@@ -287,3 +286,33 @@ class MemberFactory(DjangoModelFactory):
     group_order = SubFactory(GroupOrderFactory)
     name = lazy_attribute(lambda o: choice([fake.name(), fake.email()]))
     cart = SubFactory(CartFactory)
+
+
+class CampaignFactory(DjangoModelFactory):
+
+    class Meta:
+        model = Campaign
+
+    name = lazy_attribute(lambda x: fake.catch_phrase())
+    description = lazy_attribute(lambda x: fake.sentence())
+    value = choice([1500, 4000, 3500, 2000])
+    created_by = SubFactory(UserFactory)
+    user_limit = lazy_attribute(lambda x: choice(range(1, 20)))
+
+
+class CouponFactory(DjangoModelFactory):
+
+    class Meta:
+        model = Coupon
+
+    code = lazy_attribute(lambda x: Coupon.generate_code())
+    campaign = SubFactory(CampaignFactory)
+
+
+class CampaignDropoffFactory(DjangoModelFactory):
+
+    class Meta:
+        model = CampaignDropoff
+
+    campaign = SubFactory(CampaignFactory)
+    address = SubFactory(AddressFactory)

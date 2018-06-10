@@ -1,7 +1,9 @@
 from django import forms
 from django.forms import ValidationError
-from django.contrib.auth.forms import AuthenticationForm, UsernameField, SetPasswordForm
-from .models import User
+from django.contrib.auth.forms import (
+    AuthenticationForm, UsernameField, SetPasswordForm
+)
+from .models import User, Address
 
 
 class PasswordResetForm(forms.Form):
@@ -109,3 +111,14 @@ class ProfileForm(forms.ModelForm):
                 raise ValidationError('This email is already in use.')
 
         return email
+
+
+class AddressForm(forms.ModelForm):
+
+    class Meta:
+        model = Address
+        exclude = ('location', 'deleted', 'metadata')
+        widgets = {
+            'notes': forms.Textarea(),
+            'user': forms.HiddenInput()
+        }

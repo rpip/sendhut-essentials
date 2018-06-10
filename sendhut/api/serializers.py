@@ -6,6 +6,7 @@ from sendhut.stores.models import (
     Store, Menu, Item, OptionGroup, Option, Image
 )
 from sendhut.checkout.models import Order, OrderLine
+from sendhut.coupons.models import Coupon, Campaign
 
 
 class AddressSerializer(serializers.ModelSerializer):
@@ -102,3 +103,20 @@ class OrderSerializer(serializers.ModelSerializer):
         fields = ('reference', 'delivery_time', 'delivery_address',
                   'delivery_fee', 'notes', 'total_cost', 'payment',
                   'payment_source', 'group_cart', 'items')
+
+
+class CampaignSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Campaign
+        fields = ('name', 'description', 'created_by', 'user_limit',
+                  'value', 'valid_until')
+
+
+class CouponSerializer(serializers.ModelSerializer):
+    campaign = CampaignSerializer(read_only=True)
+
+    class Meta:
+        model = Coupon
+        fields = ('user', 'code', 'monetary_value', 'status', 'campaign',
+                  'order', 'redeemed_at')

@@ -24,7 +24,7 @@
           <div class="row">
             <div class="col-sm-10">
               <a class="item-popup"
-                 data-href="{% url 'stores:cartline_detail' line_id=line.id slug=line.data.slug %}">
+                 data-href="{% url 'stores:cartline_detail' line_id=line.id slug=line.item.slug %}">
                  {{ line.item.name }}
               </a>
             </div>

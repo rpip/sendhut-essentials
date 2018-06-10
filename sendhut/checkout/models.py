@@ -1,10 +1,11 @@
 from django.urls import reverse
 from django.conf import settings
-from django.db import models
+from django.contrib.gis.db import models
 from jsonfield import JSONField
 from djmoney.models.fields import MoneyField
 
 from sendhut.db import BaseModel
+from sendhut.accounts.models import Address
 from sendhut.stores.models import Item
 from sendhut.cart.core import ItemLine, ItemSet, ItemList, partition
 from sendhut.grouporder.models import GroupOrder
@@ -30,15 +31,8 @@ class OrderQueryset(models.QuerySet):
 
 class Order(BaseModel, ItemSet):
 
-    DELIVERY_TIMES = (
-        '11:30 AM - 12:00 PM',
-        '12:00 PM - 12:30 PM',
-        '12:30 PM - 1:00 PM',
-        '1:00 PM - 1:30 PM',
-        '1:30 PM - 2:00 PM',
-        '2:00 PM - 2:30 PM',
-        '2:30 PM - 3:00 PM'
-    )
+    ID_PREFIX = 'ord'
+
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='orders')
     reference = models.CharField(max_length=8, unique=True)
     # TODO(yao): Add types of orders:
@@ -47,7 +41,7 @@ class Order(BaseModel, ItemSet):
     #   Manual payment and order:
     time_window_start = models.DateTimeField(default=asap_delivery_estimate)
     time_window_end = models.DateTimeField(default=asap_delivery_estimate)
-    address = models.CharField(max_length=120)
+    # address = models.ForeignKey(Address)
     delivery_fee = MoneyField(
         max_digits=10,
         decimal_places=2,
@@ -103,10 +97,6 @@ class Order(BaseModel, ItemSet):
         """
         return self.lines.all().iterator()
 
-    @classmethod
-    def get_today_delivery_schedules(cls):
-        return cls.DELIVERY_TIMES
-
     def partitions(self):
         "Return the cart split into pickup/store groups"
         # TODO(yao): Add partitions for delivery time, address zone
@@ -134,6 +124,8 @@ class Order(BaseModel, ItemSet):
 
 
 class OrderLine(BaseModel, ItemLine):
+
+    ID_PREFIX = 'ordl'
 
     item = models.ForeignKey(Item)
     quantity = models.IntegerField()

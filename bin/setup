@@ -21,9 +21,13 @@ psql postgres <<EOF
 
   ALTER USER sendhut CREATEDB;
 
+  ALTER USER sendhut WITH SUPERUSER;
+
   ALTER DATABASE essentials OWNER TO sendhut;
 
   GRANT ALL PRIVILEGES ON DATABASE essentials TO sendhut;
+
+  CREATE EXTENSION IF NOT EXISTS postgis;
 EOF
 
 echo "----------------------------------------------------------"

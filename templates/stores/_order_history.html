@@ -10,7 +10,7 @@
   </thead>
   <tbody>
     {% for order in orders %}
-    <tr data-href="{% url 'lunch:order_details' order.reference %}">
+    <tr data-href="{% url 'stores:order_details' order.reference %}">
       <td>
         {{ order.created }}
       </td>

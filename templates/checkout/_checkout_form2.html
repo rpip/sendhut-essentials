@@ -1,27 +1,27 @@
 <form id="checkout" action="{% url 'checkout:getit' %}?cart_ref={{ group_order.token }}" method="POST">
   {% csrf_token %}
   <div class="form-group">
-    <label for="address">Delivery Address</label>
-    <br>
     {% if user.addresses.all %}
-      {% for x in user.addresses.all %}
-        <div class="form-check">
-          <label class="form-check-label">
-            <input class="form-check-input" type="radio" value="{{ x.id }}" name="address">
-            {{ x.address }}
-          </label>
-        </div>
-      {% endfor %}
-      <div class="form-check">
-        <label class="form-check-label" style=" width: 100%;">
-          <input class="form-check-input" type="radio" name="address">
-          <input type="text" class="form-control" name="address" id="address"
-                 placeholder="Add new address" required/>
-        </label>
-      </div>
-
-{% endif %}
+      <label for="address">Delivery Address</label>
+      <select class="form-control" id="address">
+        {% for x in user.addresses.all %}
+          <option vakue="{{ x }}">{{ x.address }}</option>
+        {% endfor %}
+      </select>
+      <br>
+      <a data-href="{% url 'accounts:address' %}" class="address-popup">
+        Add new address &raquo;
+      </a>
+      {% else %}
+    <br>
+    <a data-href="{% url 'accounts:address' %}" class="btn btn-secondary address-popup">
+      Add delivery address
+    </a>
+      <input type="text" class="form-control" name="address" id="address"
+             placeholder="Enter location or landmark" required/>
+  {% endif %}
   </div>
+  <br>
   <div class="form-group">
     <label for="time">Delivery Time</label>
     <div class="row">
@@ -40,19 +40,6 @@
         </select>
       </div>
     </div>
-  </div>
-  <div class="form-row">
-    <label for="instructions">Special instructions</label>
-    <textarea class="form-control" rows="3"
-              name="notes"
-              placeholder="Delivery Instructions. Ex. Call me when you’re outside!"></textarea>
-              {% with field_errors=form.errors.notes %}
-                {% for error in field_errors %}
-                  <div class="invalid-feedback">
-                    {{ error }}
-                  </div>
-                {% endfor %}
-              {% endwith %}
   </div>
   <br>
   <div id="paystackEmbedContainer"></div>

@@ -1,12 +1,12 @@
 from random import choice, shuffle
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 from django.conf import settings
 
 from sendhut.stores.models import Item, Store
 from sendhut.factory import (
     ImageFactory, UserFactory, OptionGroupFactory,
-    CartFactory, GroupOrderFactory, OptionFactory,
-    OrderFactory, create_orderlines,
+    CartFactory, OptionFactory, OrderFactory, create_orderlines,
+    CampaignFactory, CouponFactory, AddressFactory
 )
 from .load_menus import create_lagos_stores
 
@@ -22,7 +22,11 @@ def get_random_food_categories():
 
 
 class Command(BaseCommand):
+    # TODO(yao): group order factory
     help = 'Populates the database with dummy Sendhut data'
+
+    def add_arguments(self, parser):
+        parser.add_argument('--with-campaigns', type=bool, default=False)
 
     def _setup_store(self, store):
         self.stdout.write(self.style.SUCCESS('Creating menus'))
@@ -50,7 +54,8 @@ class Command(BaseCommand):
 
         # raise CommandError()
         self.stdout.write(self.style.SUCCESS('Creating users'))
-        UserFactory.create_batch(3, password=USER_PASSWORD)
+        users = UserFactory.create_batch(3, password=USER_PASSWORD)
+        self._create_addresses(users)
 
         self.stdout.write(self.style.SUCCESS('Creating stores'))
         ImageFactory.create_batch(12)
@@ -65,6 +70,7 @@ class Command(BaseCommand):
         admin.is_superuser = True
         admin.set_password(ADMIN_PASSWORD)
         admin.save()
+        AddressFactory.create_batch(3, user=admin)
 
         self.stdout.write(self.style.SUCCESS('Creating admin cart'))
         # TODO(yao): add cart items from specific stores
@@ -74,9 +80,17 @@ class Command(BaseCommand):
         for x in orders:
             create_orderlines(x, [x.item for x in cart])
 
+        self._create_campaigns(admin, num_coupons=10)
+        self._create_campaigns(users[0], num_coupons=5)
+
         self.stdout.write(self.style.SUCCESS('DONE'))
 
+    def _create_campaigns(self, user, num_coupons=10):
+        self.stdout.write(self.style.SUCCESS('CREATING CAMPAIGNS'))
+        campaign = CampaignFactory(created_by=user)
+        CouponFactory.create_batch(num_coupons, campaign=campaign)
 
-# IDEA(yao):
-# create_fixture(store, menu_config)
-# menu_config = {menu_1: [category, n_items], menu_2: [category, n_items]}
+    def _create_addresses(self, users):
+        self.stdout.write(self.style.SUCCESS('Creating Addresses'))
+        for u in users:
+            AddressFactory.create_batch(3, user=u)

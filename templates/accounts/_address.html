@@ -1,0 +1,116 @@
+{% load widget_tweaks %}
+{% load debug %}
+
+<form class="address-form" method="POST" action="{% url 'accounts:address' form.instance.id %}">
+  {% csrf_token %}
+  {% for hidden in form.hidden_fields %}
+    {{ hidden }}
+  {% endfor %}
+  <div class="row">
+    {% with field=form.address %}
+      <div class="col">
+        {% if form.is_bound %}
+          {% if field.errors %}
+            {% render_field field class="form-control is-invalid" placeholder="Address" %}
+            {% for error in form.errors.address %}
+              <div class="invalid-feedback">
+                {{ error }}
+              </div>
+            {% endfor %}
+          {% else %}
+            {% render_field field class="form-control is-valid" placeholder="Address" %}
+          {% endif %}
+        {% else %}
+          {% render_field field class="form-control" placeholder="Address" %}
+        {% endif %}
+      </div>
+    {% endwith %}
+  </div>
+  <div class="row">
+    {% with field=form.building_name %}
+      <div class="col">
+        {% if form.is_bound %}
+          {% if field.errors %}
+            {% render_field field class="form-control is-invalid" placeholder="Building name or apartment number" %}
+            {% for error in form.errors.building_name %}
+              <div class="invalid-feedback">
+                {{ error }}
+              </div>
+            {% endfor %}
+          {% else %}
+            {% render_field field class="form-control is-valid" placeholder="Company name or apartment number" %}
+          {% endif %}
+        {% else %}
+          {% render_field field class="form-control" placeholder="Company name or apartment number" %}
+        {% endif %}
+      </div>
+    {% endwith %}
+  </div>
+  <div class="form-row">
+    {% with field=form.name %}
+      <div class="col">
+        {% if form.is_bound %}
+          {% if field.errors %}
+            {% render_field field class="form-control is-invalid" placeholder="Name" %}
+            {% for error in form.errors.name %}
+              <div class="invalid-feedback">
+                {{ error }}
+              </div>
+            {% endfor %}
+          {% else %}
+            {% render_field field class="form-control is-valid" placeholder="Name" %}
+          {% endif %}
+        {% else %}
+          {% render_field field class="form-control" placeholder="Name" %}
+        {% endif %}
+      </div>
+    {% endwith %}
+    {% with field=form.phone %}
+      <div class="col">
+        {% if form.is_bound %}
+          {% if field.errors %}
+            {% render_field field class="form-control is-invalid" placeholder="Phone" %}
+            {% for error in form.errors.phone %}
+              <div class="invalid-feedback">
+                {{ error }}
+              </div>
+            {% endfor %}
+          {% else %}
+            {% render_field field class="form-control is-valid" placeholder="Phone" %}
+          {% endif %}
+        {% else %}
+          {% render_field field class="form-control" placeholder="Phone" %}
+        {% endif %}
+      </div>
+    {% endwith %}
+  </div>
+  <div class="row">
+    {% with field=form.notes %}
+      <div class="col">
+        {% if form.is_bound %}
+          {% if field.errors %}
+            {% render_field field class="form-control is-invalid" placeholder="Delivery Instructions. Ex. Call me when you’re outside!" %}
+            {% for error in form.errors.notes %}
+              <div class="invalid-feedback">
+                {{ error }}
+              </div>
+            {% endfor %}
+          {% else %}
+            {% render_field field class="form-control is-valid" placeholder="Delivery Instructions. Ex. Call me when you’re outside!" %}
+          {% endif %}
+        {% else %}
+          {% render_field field class="form-control" placeholder="Delivery Instructions. Ex. Call me when you’re outside!" %}
+        {% endif %}
+      </div>
+    {% endwith %}
+  </div>
+  <div class="row">
+    <div class="col-md-2">
+      <a class="btn btn-secondary" data-dismiss="modal">Cancel</a>
+    </div>
+    <div class="col-md-9 text-right">
+      <button type="submit" class="btn btn-success" id="save-address">
+        Save
+      </button>
+    </div>
+</form>

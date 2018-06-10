@@ -39,10 +39,10 @@ class AddressAdmin(BaseModelAdmin):
         'id',
         'created',
         'user',
-        'apt_number',
+        'building_name',
         'name',
         'phone',
         'address',
-        'instructions'
+        'notes'
     )
     list_filter = ('created',)

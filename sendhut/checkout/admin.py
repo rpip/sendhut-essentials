@@ -23,7 +23,7 @@ class OrderAdmin(BaseModelAdmin):
         'created',
         'user',
         'delivery_time',
-        'address',
+        #'address',
         'notes',
         'reference',
         'group_order_link',
@@ -33,7 +33,7 @@ class OrderAdmin(BaseModelAdmin):
         'created',
         'time_window_start',
         'time_window_end',
-        'address'
+        #'address'
     )
 
     def group_order_link(self, obj):

@@ -1,28 +1,67 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block page_header %}
-Profile
+  Profile
 {% endblock %}
 
 {% block content %}
-<div class="row">
-  <div class="col-md-4">
-    <br>
-    <form method="post">
-      {% csrf_token %}
-      {% include 'partials/form.html' %}
-      <div class="form-group">
-        <button type="submit" class="btn btn-success">
-          <span class="glyphicon glyphicon-ok"></span> Save
-        </button>
-      </div>
-    </form>
+  <div class="row">
+    <div class="col-md-5">
+      <br>
+      <form method="post">
+        {% csrf_token %}
+        {% include 'partials/form.html' %}
+        <div class="form-group">
+          <button type="submit" class="btn btn-success">
+            Save
+          </button>
+        </div>
+      </form>
+    </div>
   </div>
-</div>
 
-<hr>
-<nav class="nav">
-  <a class="nav-link" href="{% url 'accounts:change_password' %}">Change password</a>
-  <a class="nav-link disabled" href="{% url 'logout' %}">Logout</a>
-</nav>
+  {# <h4 class="menu-header bold">Your Addresses</h4> #}
+  {# <br> #}
+  {# <a data-href="{% url 'accounts:address' %}" class="address-popup"> #}
+  {#   Add new address &raquo; #}
+  {# </a> #}
+  {# <br> #}
+  {# <br> #}
+
+  {# <div class="row addresses"> #}
+  {#   {% for address in request.user.addresses.all %} #}
+  {#     <div class="col-md-4 left"> #}
+  {#       <div class="card"> #}
+  {#         <div class="card-body"> #}
+  {#           {% if address.is_default %} #}
+  {#             <span class="badge badge-secondary">Default</span> #}
+  {#           {% endif %} #}
+  {#           <div>{{ address.address }}</div> #}
+  {#           <div>{{ address.building_number }}</div> #}
+  {#           {{ address.name }}<br> #}
+  {#           {{ address.phone }} #}
+  {#         </div> #}
+  {#         <div class="card-footer"> #}
+  {#           <ul class="list-inline"> #}
+  {#             <li class="list-inline-item"> #}
+  {#               <a data-href="{% url 'accounts:address' address.id %}" class="address-popup"> #}
+  {#                 Edit #}
+  {#               </a> #}
+  {#             </li>| #}
+  {#             <li class="list-inline-item"><a href="{% url 'accounts:delete_address' id=address.id %}">Delete</a></li>| #}
+  {#             <li class="list-inline-item"><a href="{% url 'accounts:promote_address' id=address.id %}">Set as Default</a></li> #}
+  {#           </ul> #}
+  {#         </div> #}
+  {#       </div> #}
+  {#     </div> #}
+  {#   {% endfor %} #}
+  {# </div> #}
+
+  <hr>
+  <br>
+  <nav class="nav">
+    <a class="nav-link" href="{% url 'accounts:change_password' %}">Change password</a>
+    <a class="nav-link disabled" href="{% url 'logout' %}">Logout</a>
+  </nav>
 {% endblock %}

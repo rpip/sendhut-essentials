@@ -26,6 +26,12 @@ class BaseModel(SafeDeleteModel, UpdateMixin):
     """
     _safedelete_policy = SOFT_DELETE_CASCADE
 
+    # def make_id(self):
+    #     return '{}_{}'.format(self.ID_PREFIX, generate_token(19))
+
+    # id = models.CharField(
+    #     max_length=17, unique=True, primary_key=True,
+    #     editable=False, blank=True)
     created = models.DateTimeField(auto_now_add=True, blank=True)
     updated = models.DateTimeField(auto_now=True, blank=True)
     deleted = models.DateTimeField(null=True, blank=True)

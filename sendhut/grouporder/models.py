@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.urls import reverse
-from django.db import models
+from django.contrib.gis.db import models
 
 from djmoney.money import Money
 from djmoney.models.fields import MoneyField
@@ -18,6 +18,8 @@ class GroupOrder(BaseModel):
     Model for holding group orders.
     """
     # TODO(yao): enforce group order limit
+    ID_PREFIX = 'gord'
+
     class Meta:
         db_table = "group_order"
 
@@ -82,6 +84,8 @@ class GroupOrder(BaseModel):
 
 class Member(BaseModel):
 
+    ID_PREFIX = 'mbr'
+
     class Meta:
         db_table = "member"
         unique_together = ('group_order', 'user')
@@ -104,6 +108,7 @@ class Member(BaseModel):
         return self.user == self.group_order.user
 
     def get_name(self):
+        # return self.name or self.user.get_full_name()
         return self.user.get_full_name() if self.is_cart_owner() else self.name
 
     def leave(self):

@@ -1,7 +1,7 @@
 from uuid import uuid4
 import six
 
-from django.db import models
+from django.contrib.gis.db import models
 from django.contrib.postgres.fields import ArrayField
 from django.urls import reverse
 from django.conf import settings
@@ -49,6 +49,9 @@ class FOOD_TAGS:
 
 class Partner(BaseModel):
     "Partner is the parent org/merchant that owns the stores"
+
+    ID_PREFIX = 'par'
+
     class Meta:
         db_table = "partner"
 
@@ -70,10 +73,13 @@ class Store(BaseModel):
     # TODO(yao): add allergy information
     # TODO(yao): add restaurant notes
     # TODO(yao): display 'Pre-order.' for Restaurants allowing orders ahead of opening
+
+    ID_PREFIX = 'str'
+
     name = models.CharField(max_length=100)
     manager_name = models.CharField(max_length=100, null=True, blank=True)
     partner = models.ForeignKey('Partner', related_name='store', blank=True, null=True)
-    # TODO(yao): replace address with branches
+    # TODO(yao): replace address with Address model (and maybe branches)
     address = models.CharField(max_length=200, null=True, blank=True)
     # TODO(yao): add multiple store phones
     phone = models.CharField(max_length=30, null=True, blank=True, unique=True)
@@ -120,6 +126,9 @@ class Menu(BaseModel):
     or on special occassions, menu labels can be used to group these menus.
     """
     # TODO(yao): Add related menus that'll show as options, e.g, soup, meat, fish
+
+    ID_PREFIX = 'men'
+
     name = models.CharField(max_length=40, null=True, blank=True)
     store = models.ForeignKey(Store, related_name='menus')
     tags = TaggableManager(blank=True)
@@ -146,8 +155,8 @@ class Menu(BaseModel):
 class Item(BaseModel):
 
     # TODO(yao): Generate thumbnails on save
+    ID_PREFIX = 'itm'
 
-    # TODO(yao): Use http://github.com/jazzband/django-model-utils
     categories = ArrayField(
         models.IntegerField(
             choices=FoodCategories.CHOICES
@@ -205,6 +214,9 @@ class Item(BaseModel):
 
 
 class ItemVariant(BaseModel):
+
+    ID_PREFIX = 'itv'
+
     name = models.CharField(max_length=100, blank=True)
     price_override = MoneyField(
         default_currency=settings.DEFAULT_CURRENCY,
@@ -226,6 +238,8 @@ class ItemVariant(BaseModel):
 
 
 class Image(BaseModel):
+
+    ID_PREFIX = 'img'
 
     ONE_DAY = 60 * 60 * 24
 
@@ -271,6 +285,9 @@ class OptionGroup(BaseModel):
     - Would you like to add XYZ? [x] Add XYZ
     """
     # TODO(yao): better error: You have selected too few options for "Choose Your Size"
+
+    ID_PREFIX = 'optg'
+
     name = models.CharField(max_length=120)
     item = models.ForeignKey(
         Item,
@@ -289,6 +306,8 @@ class OptionGroup(BaseModel):
 
 
 class Option(BaseModel):
+
+    ID_PREFIX = 'opt'
 
     name = models.CharField(max_length=60)
     price = MoneyField(
@@ -309,6 +328,8 @@ class Option(BaseModel):
 
 
 class MenuOption(BaseModel):
+
+    ID_PREFIX = 'mopt'
 
     menu = models.ForeignKey(Menu)
     option_group = models.ForeignKey(OptionGroup)

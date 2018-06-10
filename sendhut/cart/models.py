@@ -1,6 +1,6 @@
 from collections import namedtuple
 
-from django.db import models
+from django.contrib.gis.db import models
 from django.conf import settings
 from jsonfield import JSONField
 from django.core.validators import MaxValueValidator, MinValueValidator
@@ -34,6 +34,8 @@ class CartQueryset(models.QuerySet):
 class Cart(BaseModel, ItemSet):
     """A shopping cart."""
     from uuid import uuid4
+
+    ID_PREFIX = 'cart'
 
     class Meta:
         db_table = "cart"
@@ -160,6 +162,8 @@ class CartLine(BaseModel, ItemLine):
     Multiple lines in the same cart can refer to the same product if
     their `data` field is different.
     """
+    ID_PREFIX = 'cart'
+
     cart = models.ForeignKey(
         Cart, related_name='lines', on_delete=models.CASCADE)
     item = models.ForeignKey(Item, related_name='+', on_delete=models.CASCADE)

@@ -3,7 +3,6 @@ from functools import reduce
 import operator
 
 from django.views import View
-from django.views.generic.edit import FormView
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.contrib import messages
