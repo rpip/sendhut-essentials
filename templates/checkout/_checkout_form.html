@@ -1,32 +1,35 @@
 <form id="checkout" action="{% url 'checkout:getit' %}?cart_ref={{ group_order.token }}" method="POST">
   {% csrf_token %}
-  <div class="form-group">
-    <label for="address">Delivery Address</label>
-    <br>
+  {% if user.current_coupon %}
     {% if user.addresses.all %}
-      {% for x in user.addresses.all %}
-        <div class="form-check">
-          <label class="form-check-label">
-            <input class="form-check-input" type="radio" value="{{ x.id }}" name="address">
-            {{ x.address }}
-          </label>
-        </div>
-      {% endfor %}
-      <div class="form-check">
-        <label class="form-check-label" style=" width: 100%;">
-          <input class="form-check-input" type="radio" name="address">
-          <input type="text" class="form-control" name="address" id="address"
-                 placeholder="Add new address" required/>
-        </label>
+      <div class="form-group">
+        <label for="address">Select Delivery Address</label>
+        <br>
+        <select class="form-control" id="delivery_point" name="delivery_point">
+          {% for x in user.addresses.all %}
+            <option value="{{ x.id }}" >{{ x.address }}</option>
+          {% endfor %}
+        </select>
       </div>
-
-{% endif %}
-  </div>
+    {% else %}
+      <div class="form-group">
+        <label>Delivery Address </label>
+        <input type="text" class="form-control" name="address" id="address"
+               placeholder="Add new address" />
+      </div>
+    {% endif %}
+  {% else %}
+    <div class="form-group">
+      <label>Delivery Address </label>
+      <input type="text" class="form-control" name="address" id="address"
+             placeholder="Add new address" />
+    </div>
+  {% endif %}
   <div class="form-group">
-    <label for="time">Delivery Time</label>
+    <label for="date">Delivery Time</label>
     <div class="row">
       <div class="col-md">
-        <select class="form-control" name="time">
+        <select class="form-control" name="date">
           {% for k, v in delivery_schedule.dates.items %}
             <option value="{{ v }}">{{ k }}</option>
           {% endfor %}

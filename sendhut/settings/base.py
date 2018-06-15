@@ -57,7 +57,7 @@ INSTALLED_APPS = [
     'sendhut.cart',
     'sendhut.grouporder',
     'sendhut.checkout',
-    'sendhut.coupons'
+    'sendhut.giveaways'
 ]
 
 MIDDLEWARE = [
@@ -70,7 +70,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'sendhut.middleware.site',
-    'sendhut.middleware.cart'
+    'sendhut.middleware.cart',
+    'sendhut.middleware.coupon'
 ]
 
 ROOT_URLCONF = 'sendhut.urls'
@@ -94,7 +95,7 @@ TEMPLATES = [
                 'sendhut.context_processors.food_tags',
                 'sendhut.context_processors.delivery_schedule',
                 'sendhut.context_processors.base_configs',
-                'sendhut.grouporder.context_processors.group_order',
+                'sendhut.grouporder.context_processors.group_order'
             ],
         },
     },
@@ -207,7 +208,7 @@ MESSAGE_TAGS = {
 
 DEFAULT_CURRENCY = 'NGN'
 
-BASE_DELIVERY_FEE = 500
+BASE_DELIVERY_FEE = 600
 
 SUPPORT_EMAIL = config('SUPPORT_EMAIL', default='hello@sendhut.com')
 

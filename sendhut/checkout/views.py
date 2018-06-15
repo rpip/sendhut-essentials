@@ -32,7 +32,15 @@ def checkout(request):
     user = request.user
     checkout = Checkout(cart, user)
     order = Order.objects.first()
-    order = checkout.create_order(**form.cleaned_data)
+    from dateutil.parser import parse
+
+    params = dict(
+        time=form.cleaned_data['time'],
+        date=parse(form.cleaned_data['date']),
+        address=form.cleaned_data['address'],
+        notes=form.cleaned_data['notes']
+    )
+    order = checkout.create_order(**params)
     # TODO(yao): also notify group cart owner participants
     confirm_msg = "Order submitted for processing. reference {}".format(order.reference)
     messages.info(request, confirm_msg)

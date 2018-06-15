@@ -1,6 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.contrib.gis.db import models
 
+from sendhut.cart.utils import get_or_create_user_cart
 from sendhut.utils import sane_repr
 from sendhut.db import BaseModel
 
@@ -12,6 +13,16 @@ class User(AbstractUser, BaseModel):
     phone = models.CharField(max_length=20, unique=True)
     last_login = models.DateTimeField(null=True, blank=True)
     identity_verified = models.BooleanField(default=False)
+
+    @property
+    def current_coupon(self):
+        # can be in only one coupon session at a time
+        result = [x for x in self.coupon_set.all() if x.in_session()]
+        return result[0] if result else None
+
+    @property
+    def cart(self):
+        return get_or_create_user_cart(self)
 
     __repr__ = sane_repr('id')
 
@@ -27,7 +38,7 @@ class Address(BaseModel):
     ID_PREFIX = 'adr'
 
     # name and phone number default to user name and tel
-    user = models.ForeignKey(User, related_name='addresses')
+    user = models.ForeignKey(User, related_name='addresses', null=True, blank=True)
     # contact name
     name = models.CharField(max_length=120, null=True, blank=True)
     # actual address

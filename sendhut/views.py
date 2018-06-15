@@ -6,12 +6,14 @@ from sendhut.stores.models import Store
 
 
 def home(request):
-    if settings.BETA_MODE:
-        messages.info(request, settings.BETA_MESSAGE)
+    # if settings.BETA_MODE:
+    #     messages.info(request, settings.BETA_MESSAGE)
+    coupon = request.coupon
+    stores = coupon.giveaway.get_stores() if coupon else Store.featured.all()
 
     context = {
         'page_title': 'Home',
-        'restaurants': Store.featured.all()
+        'stores': stores
     }
     return render(request, 'home.html', context)
 

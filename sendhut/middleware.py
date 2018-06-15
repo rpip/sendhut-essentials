@@ -19,6 +19,19 @@ def site(get_response):
     return middleware
 
 
+def coupon(get_response):
+    """Set's current giveaway and related coupon"""
+    def middleware(request):
+        if request.user.is_authenticated():
+            request.coupon = request.user.current_coupon
+        else:
+            request.coupon = None
+
+        return get_response(request)
+
+    return middleware
+
+
 def cart(get_response):
     """
     Get or create cart. Ensure views always receive a saved cart instance

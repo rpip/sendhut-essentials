@@ -1,6 +1,4 @@
-default_app_config = 'sendhut.grouporder.apps.GrouporderConfig'
-
-
+# default_app_config = 'sendhut.grouporder.apps.GrouporderConfig'
 class MemberStatus:
     """Enum of possible member modes/states"""
     IN = 'in'

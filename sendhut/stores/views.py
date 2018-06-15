@@ -81,7 +81,7 @@ def store_page(request, slug):
                 except GroupOrder.DoesNotExist:
                     pass
 
-    if not request.group_member:
+    if (not request.group_member) and (not request.user.current_coupon):
         messages.info(request, settings.GROUP_ORDER_MESSAGE)
 
     return render(request, template, context)

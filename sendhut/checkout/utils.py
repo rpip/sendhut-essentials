@@ -2,6 +2,7 @@ from django.conf import settings
 from djmoney.money import Money
 
 from sendhut.grouporder.utils import get_store_group_order_cookie_name
+from sendhut.accounts.models import Address
 from sendhut.utils import windows_from_time_string
 from .models import Order, OrderLine
 
@@ -23,7 +24,13 @@ class Checkout:
         will also get saved to that user's address book.
         """
         payment_reference = kwargs.pop('payment_reference', None)
-        cash = kwargs.pop('cash')
+        cash = kwargs.pop('cash', None)
+        # address = kwargs.get('address')
+        # delivery_point = kwargs.get('delivery_point')
+        # if address:
+        #     kwargs['address'] = Address.objects.create(user=self.user, address=address)
+        # else:
+        #     kwargs['address'] = Address.objects.get(id=delivery_point)
 
         if self.cart.is_in_group_order():
             order = self._create_group_order(**kwargs)
@@ -33,16 +40,20 @@ class Checkout:
         if not(cash):
             order.set_payment_online(payment_reference)
 
+        if self.user.current_coupon:
+            order.coupon = self.user.current_coupon
+            order.save(update_fields=['coupon'])
+            self.user.current_coupon.leave()
+
         return order
 
-    def _create_group_order(self, time, address=None, notes=None):
-        time_window_start, time_window_end = windows_from_time_string(time)
+    def _create_group_order(self, time, date, address, notes=None):
         group_order = self.cart.get_group_order()
         group_order.lock()
         self.order = Order.objects.create(
             user=self.user,
-            time_window_start=time_window_start,
-            time_window_end=time_window_end,
+            delivery_time=time,
+            delivery_date=date,
             address=address,
             notes=notes,
             total_gross=self.get_total(),
@@ -51,12 +62,11 @@ class Checkout:
         )
         return self.order
 
-    def _create_single_order(self, time, address=None, notes=None):
-        time_window_start, time_window_end = windows_from_time_string(time)
+    def _create_single_order(self, time, date, address, notes=None):
         self.order = Order.objects.create(
             user=self.user,
-            time_window_start=time_window_start,
-            time_window_end=time_window_end,
+            delivery_time=time,
+            delivery_date=date,
             address=address,
             delivery_fee=self.calculate_delivery_cost(),
             total_gross=self.get_total(),

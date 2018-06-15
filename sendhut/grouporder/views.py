@@ -81,5 +81,5 @@ def cancel(request, ref):
 
 def rejoin(request, ref):
     group = get_object_or_404(GroupOrder, token=ref)
-    group.find_member(request.user).rejoin()
+    group.find_member(request.user).join()
     return redirect(reverse('stores:store_details', args=(group.store.slug,)))

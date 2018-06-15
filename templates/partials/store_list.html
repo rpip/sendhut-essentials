@@ -5,7 +5,7 @@
 
 <div class="store-list" id="stores">
   <div class="card-row">
-    {% for store in restaurants %}
+    {% for store in stores %}
       <div class="col-sm-4 store">
         <a href="{% url 'stores:store_details' store.slug %}" class="no-deco">
           <div class="card">

@@ -17,9 +17,23 @@ from sendhut.stores.models import (
 )
 from sendhut.checkout.models import Order, OrderLine
 from sendhut.grouporder.models import GroupOrder, Member
-from sendhut.coupons.models import Campaign, Coupon, CampaignDropoff
+from sendhut.giveaways.models import (
+    GiveAway, Coupon, GiveAwayDropoff, GiveAwayStore
+)
+from sendhut.envoy import get_delivery_schedule, build_time_slots
 
 fake = Faker()
+
+
+def random_delivery_date():
+    dates = list(get_delivery_schedule()['dates'].values())
+    return choice(dates)
+
+
+def random_delivery_time():
+    slot = choice(list(build_time_slots()))
+    # return the slot end window
+    return slot[1]
 
 
 def get_food_tags():
@@ -198,7 +212,7 @@ class OptionFactory(DjangoModelFactory):
     class Meta:
         model = Option
 
-    name = lazy_attribute(lambda o: fake.catch_phrase())
+    name = lazy_attribute(lambda o: fake.catch_phrase()[:15])
     price = choice([1200, 900, 3500, 800, 400, 1400, 1650, 850])
     group = SubFactory(OptionGroupFactory)
 
@@ -209,9 +223,11 @@ class OrderFactory(DjangoModelFactory):
         model = Order
 
     user = SubFactory(UserFactory)
-    # address = SubFactory(AddressFactory)
+    address = SubFactory(AddressFactory)
     notes = lazy_attribute(lambda o: fake.sentence())
     delivery_fee = settings.BASE_DELIVERY_FEE
+    delivery_date = lazy_attribute(lambda x: random_delivery_date())
+    delivery_time = lazy_attribute(lambda x: random_delivery_time())
     total_gross = choice([2300, 1200, 8000, 12000])
 
 
@@ -288,16 +304,15 @@ class MemberFactory(DjangoModelFactory):
     cart = SubFactory(CartFactory)
 
 
-class CampaignFactory(DjangoModelFactory):
+class GiveAwayFactory(DjangoModelFactory):
 
     class Meta:
-        model = Campaign
+        model = GiveAway
 
     name = lazy_attribute(lambda x: fake.catch_phrase())
     description = lazy_attribute(lambda x: fake.sentence())
-    value = choice([1500, 4000, 3500, 2000])
+    discount_value = choice([1500, 4000, 3500, 2000])
     created_by = SubFactory(UserFactory)
-    user_limit = lazy_attribute(lambda x: choice(range(1, 20)))
 
 
 class CouponFactory(DjangoModelFactory):
@@ -306,13 +321,23 @@ class CouponFactory(DjangoModelFactory):
         model = Coupon
 
     code = lazy_attribute(lambda x: Coupon.generate_code())
-    campaign = SubFactory(CampaignFactory)
+    giveaway = SubFactory(GiveAwayFactory)
+    user = SubFactory(UserFactory)
 
 
-class CampaignDropoffFactory(DjangoModelFactory):
+class GiveAwayDropoffFactory(DjangoModelFactory):
 
     class Meta:
-        model = CampaignDropoff
+        model = GiveAwayDropoff
 
-    campaign = SubFactory(CampaignFactory)
+    giveaway = SubFactory(GiveAwayFactory)
     address = SubFactory(AddressFactory)
+
+
+class GiveAwayStoreFactory(DjangoModelFactory):
+
+    class Meta:
+        model = GiveAwayStore
+
+    giveaway = SubFactory(GiveAwayFactory)
+    store = SubFactory(StoreFactory)

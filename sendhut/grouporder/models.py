@@ -1,38 +1,20 @@
+from django.db import models
 from django.conf import settings
 from django.urls import reverse
-from django.contrib.gis.db import models
 
 from djmoney.money import Money
 from djmoney.models.fields import MoneyField
 
 from sendhut.db import BaseModel
 from sendhut.stores.models import Store
-from sendhut.cart.models import Cart, CartStatus
-from sendhut.utils import generate_token
-
+from sendhut.cart import CartStatus
+from sendhut.cart.models import Cart
+from sendhut.utils import generate_token, sane_repr
 from . import MemberStatus
 
 
-class GroupOrder(BaseModel):
-    """
-    Model for holding group orders.
-    """
-    # TODO(yao): enforce group order limit
-    ID_PREFIX = 'gord'
-
-    class Meta:
-        db_table = "group_order"
-
+class GroupOrderMixin(models.Model):
     token = models.CharField(max_length=10)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='group_orders')
-    store = models.ForeignKey(Store)
-    monetary_limit = MoneyField(
-        max_digits=10,
-        decimal_places=2,
-        default_currency=settings.DEFAULT_CURRENCY,
-        null=True,
-        blank=True
-    )
     status = models.CharField(
         max_length=32, choices=CartStatus.CHOICES, default=CartStatus.OPEN)
 
@@ -44,6 +26,7 @@ class GroupOrder(BaseModel):
         return self
 
     def lock(self):
+        # TODO(yao): run check to lock all expired groups orders
         self.update(status=CartStatus.LOCKED)
         for member in self.members.all():
             member.cart.lock()
@@ -55,14 +38,73 @@ class GroupOrder(BaseModel):
         return self.status == CartStatus.OPEN
 
     def find_member(self, user):
-        return Member.objects.filter(user=user).first()
+        raise NotImplementedError
 
     def cancel(self):
         for x in self.members.all():
             x.cart.hard_delete()
             x.hard_delete()
 
-        self.hard_delete()
+        self.delete()
+
+    def get_subtotal(self):
+        raise NotImplementedError
+
+    def get_total(self):
+        raise NotImplementedError
+
+    def __str__(self):
+        return self.token
+
+    class Meta:
+        abstract = True
+
+
+class GroupOrderMemberMixin(models.Model):
+
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True)
+
+    def get_cart_total(self):
+        return self.cart.get_subtotal()
+
+    def get_name(self):
+        # return self.name or self.user.get_full_name()
+        return self.user.get_full_name() if self.is_cart_owner() else self.name
+
+    def leave(self):
+        self.state = MemberStatus.OUT
+        self.save(update_fields=['state'])
+
+    def join(self):
+        self.update(state=MemberStatus.IN)
+
+    def is_active(self):
+        return self.state == MemberStatus.IN
+
+    class Meta:
+        abstract = True
+
+
+class GroupOrder(GroupOrderMixin, BaseModel):
+    """
+    Model for holding group orders.
+    """
+    # TODO(yao): enforce group order limit
+    ID_PREFIX = 'gord'
+
+    monetary_limit = MoneyField(
+        max_digits=10,
+        decimal_places=2,
+        default_currency=settings.DEFAULT_CURRENCY,
+        null=True,
+        blank=True
+    )
+    # TODO(yao): rename user -> created_by
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='group_orders')
+    store = models.ForeignKey(Store)
+
+    def find_member(self, user):
+        return Member.objects.filter(user=user).first()
 
     def get_subtotal(self):
         return sum(x.get_cart_total() for x in self.members.all())
@@ -78,11 +120,13 @@ class GroupOrder(BaseModel):
     def get_absolute_url(self):
         return reverse('cart_join', args=(self.token, ))
 
-    def __str__(self):
-        return self.token
+    class Meta:
+        db_table = "group_order"
+
+    __repr__ = sane_repr('token')
 
 
-class Member(BaseModel):
+class Member(BaseModel, GroupOrderMemberMixin):
 
     ID_PREFIX = 'mbr'
 
@@ -90,33 +134,16 @@ class Member(BaseModel):
         db_table = "member"
         unique_together = ('group_order', 'user')
 
+    name = models.CharField(max_length=40)
     group_order = models.ForeignKey(
         GroupOrder, related_name='members',
         on_delete=models.CASCADE)
-    name = models.CharField(max_length=40)
     cart = models.OneToOneField(
         Cart, related_name='group_member', on_delete=models.CASCADE)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True)
-    # if group order isn't locked/cancelled, user can go in/out anytime
     state = models.CharField(
-        max_length=32, choices=MemberStatus.CHOICES, default=MemberStatus.IN)
-
-    def get_cart_total(self):
-        return self.cart.get_subtotal()
+        max_length=32, choices=MemberStatus.CHOICES, default=MemberStatus.OUT)
 
     def is_cart_owner(self):
         return self.user == self.group_order.user
 
-    def get_name(self):
-        # return self.name or self.user.get_full_name()
-        return self.user.get_full_name() if self.is_cart_owner() else self.name
-
-    def leave(self):
-        self.state = MemberStatus.OUT
-        self.save(update_fields=['state'])
-
-    def rejoin(self):
-        self.update(state=MemberStatus.IN)
-
-    def is_active(self):
-        return self.state == MemberStatus.IN
+    __repr__ = sane_repr('id', 'name')

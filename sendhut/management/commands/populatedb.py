@@ -1,4 +1,4 @@
-from random import choice, shuffle
+from random import choice, shuffle, sample
 from django.core.management.base import BaseCommand
 from django.conf import settings
 
@@ -6,7 +6,7 @@ from sendhut.stores.models import Item, Store
 from sendhut.factory import (
     ImageFactory, UserFactory, OptionGroupFactory,
     CartFactory, OptionFactory, OrderFactory, create_orderlines,
-    CampaignFactory, CouponFactory, AddressFactory
+    GiveAwayFactory, CouponFactory, AddressFactory, GiveAwayStoreFactory
 )
 from .load_menus import create_lagos_stores
 
@@ -26,7 +26,7 @@ class Command(BaseCommand):
     help = 'Populates the database with dummy Sendhut data'
 
     def add_arguments(self, parser):
-        parser.add_argument('--with-campaigns', type=bool, default=False)
+        parser.add_argument('--with-giveaways', type=bool, default=False)
 
     def _setup_store(self, store):
         self.stdout.write(self.style.SUCCESS('Creating menus'))
@@ -74,21 +74,27 @@ class Command(BaseCommand):
 
         self.stdout.write(self.style.SUCCESS('Creating admin cart'))
         # TODO(yao): add cart items from specific stores
-        cart = CartFactory.create(user=admin, stores=Store.objects.all()[:2])
+        stores = Store.objects.all()
+        cart = CartFactory.create(user=admin, stores=sample(list(stores), 2))
         self.stdout.write(self.style.SUCCESS('Creating Orders'))
         orders = OrderFactory.create_batch(2, user=admin)
         for x in orders:
             create_orderlines(x, [x.item for x in cart])
 
-        self._create_campaigns(admin, num_coupons=10)
-        self._create_campaigns(users[0], num_coupons=5)
+        self._create_giveaways(admin, num_coupons=10, stores=sample(list(stores), 3))
+        self._create_giveaways(users[0], num_coupons=5)
 
         self.stdout.write(self.style.SUCCESS('DONE'))
 
-    def _create_campaigns(self, user, num_coupons=10):
-        self.stdout.write(self.style.SUCCESS('CREATING CAMPAIGNS'))
-        campaign = CampaignFactory(created_by=user)
-        CouponFactory.create_batch(num_coupons, campaign=campaign)
+    def _create_giveaways(self, user, num_coupons=10, stores=None):
+        self.stdout.write(self.style.SUCCESS('CREATING GIVEAWAYS'))
+        giveaway = GiveAwayFactory(created_by=user)
+        CouponFactory.create_batch(num_coupons, giveaway=giveaway)
+        if stores:
+            for store in stores:
+                GiveAwayStoreFactory.create(giveaway=giveaway, store=store)
+
+        CouponFactory.create_batch(num_coupons, giveaway=giveaway)
 
     def _create_addresses(self, users):
         self.stdout.write(self.style.SUCCESS('Creating Addresses'))

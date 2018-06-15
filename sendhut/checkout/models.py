@@ -9,6 +9,7 @@ from sendhut.accounts.models import Address
 from sendhut.stores.models import Item
 from sendhut.cart.core import ItemLine, ItemSet, ItemList, partition
 from sendhut.grouporder.models import GroupOrder
+from sendhut.giveaways.models import Coupon
 from sendhut.utils import generate_token, sane_repr, asap_delivery_estimate
 from . import PaymentStatus, PaymentSource, OrderStatus
 
@@ -39,9 +40,10 @@ class Order(BaseModel, ItemSet):
     #   Orders that have already been placed:
     #   Orders that are placed and paid for
     #   Manual payment and order:
-    time_window_start = models.DateTimeField(default=asap_delivery_estimate)
-    time_window_end = models.DateTimeField(default=asap_delivery_estimate)
-    # address = models.ForeignKey(Address)
+    delivery_date = models.DateTimeField()
+    delivery_time = models.DateTimeField(default=asap_delivery_estimate)
+    # TODO(yao): save address as Address model
+    address = models.ForeignKey(Address)
     delivery_fee = MoneyField(
         max_digits=10,
         decimal_places=2,
@@ -71,6 +73,8 @@ class Order(BaseModel, ItemSet):
     )
     group_order = models.OneToOneField(
         GroupOrder, related_name='order', null=True, blank=True)
+    coupon = models.OneToOneField(
+        Coupon, related_name='order', null=True, blank=True)
 
     def update_payment(self, status):
         self.payment_status = status
@@ -111,12 +115,6 @@ class Order(BaseModel, ItemSet):
     def is_open(self):
         statuses = {OrderStatus.UNFULFILLED, OrderStatus.PARTIALLY_FULFILLED}
         return self.status in statuses
-
-    @property
-    def delivery_time(self):
-        start = self.time_window_start.strftime('%-I:%M %p')
-        end = self.time_window_end.strftime('%-I:%M %p')
-        return '{} - {}'.format(start, end)
 
     class Meta:
         db_table = "order"

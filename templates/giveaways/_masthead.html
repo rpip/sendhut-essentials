@@ -1,0 +1,11 @@
+<div class="row" id="group-order-header">
+  <div class="col-sm-6" id="group-order-help">
+    <h4>Lunch Gift - {{ user.current_coupon.get_store.name }}</h4>
+    <p>By {{ user.get_full_name }}. Add your meals to the cart. Checkout when ready</p>
+  </div>
+  <div class="offset-sm-4 col-sm-2" id="group-order-actions">
+    <a href="{% url 'giveaways:leave' code=user.current_coupon.code %}">
+      <button type="button" class="btn btn-outline-danger">Leave</button>
+    </a>
+  </div>
+</div>

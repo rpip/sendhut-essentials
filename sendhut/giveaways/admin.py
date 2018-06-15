@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.contrib import admin
 
-from .models import Coupon, Campaign, CampaignDropoff
+from .models import Coupon, GiveAway, GiveAwayDropoff, GiveAwayStore
 
 
 @admin.register(Coupon)
@@ -9,26 +9,15 @@ class CouponAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'created',
-        'updated',
-        'deleted',
-        'metadata',
-        'uuid',
+        'redeemed_at',
+        'user',
+        'state',
+        'cart',
         'code',
-        'value_currency',
-        'value',
-        'user',
         'status',
-        'campaign',
-        'redeemed_at',
+        'giveaway',
     )
-    list_filter = (
-        'created',
-        'updated',
-        'deleted',
-        'user',
-        'campaign',
-        'redeemed_at',
-    )
+    list_filter = ('created', 'updated', 'deleted')
 
 
 class CouponInline(admin.TabularInline):
@@ -37,37 +26,33 @@ class CouponInline(admin.TabularInline):
     exclude = ('metadata', 'deleted', 'value')
     extra = 0
     readonly_fields = (
-        'campaign',
-        'monetary_value',
+        'giveaway',
         'code',
         'user',
         'status',
         'redeemed_at'
     )
 
-    def has_add_permission(self, request):
-        return False
 
-
-@admin.register(Campaign)
-class CampaignAdmin(admin.ModelAdmin):
-    exclude = ('metadata', 'deleted')
+@admin.register(GiveAway)
+class GiveAwayAdmin(admin.ModelAdmin):
     list_display = (
         'id',
+        'created',
+        'token',
+        'status',
         'name',
         'description',
         'created_by',
-        'user_limit',
-        'value_currency',
-        'value',
         'valid_until',
-        'is_expired',
+        'discount_value_currency',
+        'discount_value',
         'num_coupons',
         'num_coupons_used',
         'num_coupons_unused',
         'num_coupons_expired'
     )
-    list_filter = ('created_by', 'valid_until')
+    list_filter = ('created_by', 'created', 'valid_until')
     search_fields = ('name', 'description', )
     inlines = [CouponInline]
 
@@ -88,13 +73,17 @@ class CampaignAdmin(admin.ModelAdmin):
     num_coupons_expired.short_description = "expired"
 
 
-@admin.register(CampaignDropoff)
-class CampaignDropoffAdmin(admin.ModelAdmin):
-    exclude = ('metadata', 'deleted')
+@admin.register(GiveAwayDropoff)
+class GiveAwayDropoffAdmin(admin.ModelAdmin):
     list_display = (
-        'id',
-        'created',
-        'campaign',
+        'giveaway',
         'address',
     )
-    list_filter = ('created', 'campaign', 'address')
+
+
+@admin.register(GiveAwayStore)
+class GiveAwayStoreAdmin(admin.ModelAdmin):
+    list_display = (
+        'giveaway',
+        'store',
+    )

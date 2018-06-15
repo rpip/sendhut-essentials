@@ -84,20 +84,29 @@ def get_cart_data(cart, group_member=None):
     """Return a JSON-serializable representation of the cart."""
     delivery_fee = Money(settings.BASE_DELIVERY_FEE, settings.DEFAULT_CURRENCY)
     bowl_charge_total = cart.bowl_charge_total
+    coupon = cart.user.current_coupon
+    discount = coupon.giveaway.discount_value if coupon else None
+
     if group_member:
         cart = group_member.group_order
         total = cart.get_total()
     else:
         total = cart.get_total() + delivery_fee
 
+    total = apply_discount(discount, total) if coupon else total
     return {
         'sub_total': cart.get_subtotal(),
         'delivery_fee': delivery_fee,
         'cart_delivery_fee': delivery_fee,
         'total': total,
+        'discount': discount,
         'unquantized_total': unquantize_for_paystack(total.amount),
         'bowl_charge_total': bowl_charge_total
     }
+
+
+def apply_discount(discount, total):
+    return total - discount
 
 
 def transfer_prelogin_cart(prelogin_cart, user):

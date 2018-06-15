@@ -22,7 +22,7 @@ urlpatterns = [
     url(r'^accounts/', include('sendhut.accounts.urls', namespace='accounts')),
     url(r'^stores/', include('sendhut.stores.urls', namespace='stores')),
     url(r'^group/', include('sendhut.grouporder.urls', namespace='group')),
-    url(r'^promos/', include('sendhut.coupons.urls', namespace='coupons')),
+    url(r'^gifts/', include('sendhut.giveaways.urls', namespace='giveaways')),
     url(r'^cart/(?P<ref>[a-zA-Z0-9-]+)$', CartJoin.as_view(), name='join-group-order'),
     url(r'^checkout/', include('sendhut.checkout.urls', namespace='checkout')),
     url(r'^api-auth/', include('rest_framework.urls')),

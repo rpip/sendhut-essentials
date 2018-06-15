@@ -23,7 +23,8 @@ class OrderAdmin(BaseModelAdmin):
         'created',
         'user',
         'delivery_time',
-        #'address',
+        'delivery_date',
+        'address',
         'notes',
         'reference',
         'group_order_link',
@@ -31,9 +32,9 @@ class OrderAdmin(BaseModelAdmin):
     )
     list_filter = (
         'created',
-        'time_window_start',
-        'time_window_end',
-        #'address'
+        'delivery_time',
+        'delivery_date',
+        'address'
     )
 
     def group_order_link(self, obj):
