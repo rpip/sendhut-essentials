@@ -98,7 +98,7 @@ class Command(BaseCommand):
         admin.is_superuser = True
         gtbank_user.set_password(GTBANK_PASSWORD)
         # set permissions on only giveaways
-        gtbank_user.user_permissions.add()
+        # gtbank_user.user_permissions.add()
         gtbank_user.save()
 
         self._create_giveaways(
