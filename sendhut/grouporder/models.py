@@ -14,38 +14,8 @@ from . import MemberStatus
 
 
 class GroupOrderMixin(models.Model):
-    token = models.CharField(max_length=10)
     status = models.CharField(
         max_length=32, choices=CartStatus.CHOICES, default=CartStatus.OPEN)
-
-    def save(self, *args, **kwargs):
-        # TODO(yao): generate Heroku-style names for the group order
-        if not self.created:
-            self.token = generate_token(6)
-        super().save(*args, **kwargs)
-        return self
-
-    def lock(self):
-        # TODO(yao): run check to lock all expired groups orders
-        self.update(status=CartStatus.LOCKED)
-        for member in self.members.all():
-            member.cart.lock()
-
-    def unlock(self):
-        self.update(status=CartStatus.OPEN)
-
-    def is_open(self):
-        return self.status == CartStatus.OPEN
-
-    def find_member(self, user):
-        raise NotImplementedError
-
-    def cancel(self):
-        for x in self.members.all():
-            x.cart.hard_delete()
-            x.hard_delete()
-
-        self.delete()
 
     def get_subtotal(self):
         raise NotImplementedError
@@ -102,6 +72,33 @@ class GroupOrder(GroupOrderMixin, BaseModel):
     # TODO(yao): rename user -> created_by
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='group_orders')
     store = models.ForeignKey(Store)
+    token = models.CharField(max_length=10)
+
+    def save(self, *args, **kwargs):
+        # TODO(yao): generate Heroku-style names for the group order
+        if not self.created:
+            self.token = generate_token(6)
+        super().save(*args, **kwargs)
+        return self
+
+    def lock(self):
+        # TODO(yao): run check to lock all expired groups orders
+        self.update(status=CartStatus.LOCKED)
+        for member in self.members.all():
+            member.cart.lock()
+
+    def unlock(self):
+        self.update(status=CartStatus.OPEN)
+
+    def cancel(self):
+        for x in self.members.all():
+            x.cart.hard_delete()
+            x.hard_delete()
+
+        self.delete()
+
+    def is_open(self):
+        return self.status == CartStatus.OPEN
 
     def find_member(self, user):
         return Member.objects.filter(user=user).first()

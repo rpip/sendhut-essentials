@@ -47,6 +47,7 @@ def get_or_create_cart_from_request(request, cart_queryset=Cart.objects.all()):
     """Fetch cart from database or create a new one based on cookie."""
     if request.user.is_authenticated:
         return get_or_create_user_cart(request.user, cart_queryset)
+
     token = request.get_signed_cookie(COOKIE_NAME, default=None)
     return get_or_create_anonymous_cart_from_token(token, cart_queryset)
 
@@ -80,12 +81,10 @@ def get_user_cart(user, cart_queryset=Cart.objects.all()):
     return cart_queryset.open().filter(user=user).first()
 
 
-def get_cart_data(cart, group_member=None):
+def get_cart_data(cart, group_member=None, coupon=None):
     """Return a JSON-serializable representation of the cart."""
     delivery_fee = Money(settings.BASE_DELIVERY_FEE, settings.DEFAULT_CURRENCY)
     bowl_charge_total = cart.bowl_charge_total
-    coupon = cart.user.current_coupon
-    discount = coupon.giveaway.discount_value if coupon else None
 
     if group_member:
         cart = group_member.group_order
@@ -93,20 +92,23 @@ def get_cart_data(cart, group_member=None):
     else:
         total = cart.get_total() + delivery_fee
 
-    total = apply_discount(discount, total) if coupon else total
-    return {
+    data = {
         'sub_total': cart.get_subtotal(),
         'delivery_fee': delivery_fee,
         'cart_delivery_fee': delivery_fee,
         'total': total,
-        'discount': discount,
         'unquantized_total': unquantize_for_paystack(total.amount),
         'bowl_charge_total': bowl_charge_total
     }
+    # TODO(yao): filter out items not in giveaway stores
+    return apply_discount(data, coupon) if coupon else data
 
 
-def apply_discount(discount, total):
-    return total - discount
+def apply_discount(cart_data, coupon):
+    balance_total = cart_data['total'] - coupon.giveaway.discount_value
+    cart_data['pay_balance'] = pay_balance = balance_total.amount > 0
+    cart_data['total'] = balance_total if pay_balance else 0
+    return cart_data
 
 
 def transfer_prelogin_cart(prelogin_cart, user):

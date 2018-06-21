@@ -2,6 +2,7 @@ from django.contrib.sites.models import Site
 
 from sendhut.cart.utils import get_or_create_cart_from_request, set_cart_cookie
 from sendhut.grouporder.utils import get_group_member_from_request
+from sendhut.giveaways.utils import get_coupon_from_request
 
 
 def site(get_response):
@@ -22,11 +23,7 @@ def site(get_response):
 def coupon(get_response):
     """Set's current giveaway and related coupon"""
     def middleware(request):
-        if request.user.is_authenticated():
-            request.coupon = request.user.current_coupon
-        else:
-            request.coupon = None
-
+        request.coupon = get_coupon_from_request(request)
         return get_response(request)
 
     return middleware
@@ -48,7 +45,7 @@ def cart(get_response):
             request.cart = cart
 
         response = get_response(request)
-        if not request.user.is_authenticated:
+        if not request.user.is_authenticated():
             set_cart_cookie(cart, response)
 
         return response

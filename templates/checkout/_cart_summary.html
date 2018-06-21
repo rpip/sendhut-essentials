@@ -40,10 +40,22 @@
             <div class="col-md-4">Container charges</div>
             <div class="col-md-1">{{ bowl_charge_total }}</div>
           </div>
-          {% if user.current_coupon %}
+          {% if coupon %}
           <div class="row">
-            <div class="col-md-4">Discount</div>
-            <div class="col-md">{{ user.current_coupon.giveaway.discount_value }}</div>
+            <div class="col-sm-6 bold">
+              Discount
+            </div>
+            <div class="col-sm-6 bold">
+              {{ coupon.giveaway.discount_value }}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6 bold">
+              What you pay
+            </div>
+            <div class="col-sm-6 bold">
+              {% if total %} {{ total }} {% else %} FREE {% endif %}
+            </div>
           </div>
           {% endif %}
           <hr>

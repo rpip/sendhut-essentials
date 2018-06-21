@@ -70,8 +70,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'sendhut.middleware.site',
+    'sendhut.middleware.coupon',
     'sendhut.middleware.cart',
-    'sendhut.middleware.coupon'
 ]
 
 ROOT_URLCONF = 'sendhut.urls'
@@ -95,7 +95,8 @@ TEMPLATES = [
                 'sendhut.context_processors.food_tags',
                 'sendhut.context_processors.delivery_schedule',
                 'sendhut.context_processors.base_configs',
-                'sendhut.grouporder.context_processors.group_order'
+                'sendhut.grouporder.context_processors.group_order',
+                'sendhut.giveaways.context_processors.coupon'
             ],
         },
     },

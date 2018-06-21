@@ -105,18 +105,25 @@ class OrderSerializer(serializers.ModelSerializer):
                   'payment_source', 'group_cart', 'items')
 
 
-class CampaignSerializer(serializers.ModelSerializer):
+class GiveAwaySerializer(serializers.ModelSerializer):
+
+    coupons = CouponSerializer(many=True, read_only=True)
 
     class Meta:
         model = Campaign
-        fields = ('name', 'description', 'created_by', 'user_limit',
-                  'value', 'valid_until')
+        fields = ('name', 'description', 'created_by',
+                  'discount_value', 'valid_until', 'addresses',
+                  'coupons')
 
 
 class CouponSerializer(serializers.ModelSerializer):
-    campaign = CampaignSerializer(read_only=True)
+    giveaway = GiveAwaySerializer(read_only=True)
+    link = serializers.SerializerMethodField()
+
+    def get_link(self, obj):
+        return obj.get_absolute_url()
 
     class Meta:
         model = Coupon
-        fields = ('user', 'code', 'monetary_value', 'status', 'campaign',
-                  'order', 'redeemed_at')
+        fields = ('code', 'discount_value', 'giveaway',
+                  'redeemed_at')

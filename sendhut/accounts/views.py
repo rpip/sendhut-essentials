@@ -63,7 +63,6 @@ class LoginView(View):
             remember_me = login_form.cleaned_data['remember_me']
             user = authenticate(request, username=username, password=password)
             if user:
-                # restore cart from anonymous user sesssion
                 transfer_prelogin_cart(request.cart, user)
                 login(request, user)
                 if not remember_me:

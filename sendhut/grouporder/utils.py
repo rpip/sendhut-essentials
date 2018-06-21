@@ -18,6 +18,7 @@ def set_group_order_cookie(group_order, response, token=None):
     """Update response with a group ordr token cookie."""
     ten_years = timedelta(days=(365 * 10))
     COOKIE_NAME = get_store_group_order_cookie_name(group_order.store)
+    # TODO(yao): why this 'or'? token must always be set
     token = token or uuid4()
     response.set_signed_cookie(
         COOKIE_NAME, token, max_age=int(ten_years.total_seconds()))

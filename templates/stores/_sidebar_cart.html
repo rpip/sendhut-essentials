@@ -67,13 +67,13 @@
       </div>
     </div><!--//bowl costs -->
     {% endif %}
-    {% if user.current_coupon %}
+    {% if coupon %}
     <div class="row">
       <div class="col-sm-6 bold">
         Discount
       </div>
       <div class="col-sm-6 bold">
-        {{ user.current_coupon.giveaway.discount_value }}
+        {{ coupon.giveaway.discount_value }}
       </div>
     </div>
     <div class="row">
@@ -81,7 +81,7 @@
         What you pay
       </div>
       <div class="col-sm-6 bold">
-        {{ total }}
+        {% if total %} {{ total }} {% else %} FREE {% endif %}
       </div>
     </div>
     {% endif %}

@@ -15,12 +15,6 @@ class User(AbstractUser, BaseModel):
     identity_verified = models.BooleanField(default=False)
 
     @property
-    def current_coupon(self):
-        # can be in only one coupon session at a time
-        result = [x for x in self.coupon_set.all() if x.in_session()]
-        return result[0] if result else None
-
-    @property
     def cart(self):
         return get_or_create_user_cart(self)
 

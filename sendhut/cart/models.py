@@ -108,12 +108,11 @@ class Cart(BaseModel, ItemSet):
             self.status = status
             self.save()
 
-    def change_user(self, user):
-        """Assign cart to a user."""
-        # TODO(yao): what if user has carts across devices?
-        # TODO(yao): delete old carts. no activity after 1 hr
-        self.user = user
-        self.save(update_fields=['user'])
+    # def change_user(self, user):
+    #     """Assign cart to a user."""
+    #     # TODO(yao): what if user has carts across devices?
+    #     self.user = user
+    #     self.save(update_fields=['user'])
 
     def remove_line(self, line_id):
         self.lines.get(id=line_id).hard_delete()

@@ -9,25 +9,25 @@ from .models import Coupon, redeem_done
 COOKIE_NAME = 'coupon'
 
 
-def set_coupon_cookie(coupon, response, token=None):
-    """Update response with a group ordr token cookie."""
+def set_coupon_cookie(coupon, req, resp):
     ten_years = timedelta(days=(365 * 10))
-    token = token or uuid4()
-    response.set_signed_cookie(
-        COOKIE_NAME, token, max_age=int(ten_years.total_seconds()))
+    resp.set_signed_cookie(
+        COOKIE_NAME, coupon.code, max_age=int(ten_years.total_seconds()))
+
+    return get_coupon_token(req)
 
 
-def get_anonymous_coupon_token(request):
+def get_coupon_token(request):
     return request.get_signed_cookie(COOKIE_NAME, default=None)
 
 
-def get_anonymous_coupon(request):
-    token = get_anonymous_coupon_token(request)
-    return Coupon.unused.filter(code=token).first()
+def get_coupon_from_request(request):
+    token = get_coupon_token(request)
+    return Coupon.objects.unused().filter(code=token).first()
 
 
-# def leave_giveaway_session(code, user):
-#     user.coupon_set.get(code=code).leave()
+def leave_giveaway_session(response):
+    return response.delete_cookie(COOKIE_NAME)
 
 
 # def redeem_coupon(coupon, user):

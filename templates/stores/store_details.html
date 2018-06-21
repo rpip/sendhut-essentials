@@ -20,7 +20,7 @@
             <li class="text-muted">{{ store.address }}</li>
           </ol>
         </div>
-        {% if not request.user.current_coupon %}
+        {% if not request.coupon %}
         <div>
           {% if not group_order or not member.is_active %}
             {% if user.is_authenticated %}

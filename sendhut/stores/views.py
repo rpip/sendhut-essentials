@@ -81,7 +81,7 @@ def store_page(request, slug):
                 except GroupOrder.DoesNotExist:
                     pass
 
-    if (not request.group_member) and (not request.user.current_coupon):
+    if (not request.group_member) and (not request.coupon):
         messages.info(request, settings.GROUP_ORDER_MESSAGE)
 
     return render(request, template, context)
@@ -92,7 +92,7 @@ class CartView(View):
 
     def get(self, request):
         cart = request.cart
-        context = get_cart_data(cart)
+        context = get_cart_data(cart, coupon=request.coupon)
         return render(request, 'partials/sidebar_cart.html', context)
 
     def post(self, request):

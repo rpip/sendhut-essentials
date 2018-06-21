@@ -40,10 +40,10 @@ class Checkout:
         if not(cash):
             order.set_payment_online(payment_reference)
 
-        if self.user.current_coupon:
-            order.coupon = self.user.current_coupon
+        if self.user.coupon:
+            order.coupon = self.user.coupon
             order.save(update_fields=['coupon'])
-            self.user.current_coupon.leave()
+            self.user.coupon.leave()
 
         return order
 

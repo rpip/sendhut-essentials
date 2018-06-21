@@ -5,6 +5,8 @@
 - checkout: select delivery address and (time [confirm if must select same delivery time for
 all orders, deliver orders to the addresses at the same time]).
 """
+from django.urls import reverse
+from datetime import datetime
 from django.conf import settings
 from django.contrib.gis.db import models
 from django.utils import timezone
@@ -15,11 +17,8 @@ from safedelete.managers import SafeDeleteManager
 from sendhut.db import BaseModel
 from sendhut.grouporder.models import GroupOrderMixin, GroupOrderMemberMixin
 from sendhut.utils import generate_token, sane_repr
-from sendhut.cart.models import Cart
 from sendhut.stores.models import Store
 from sendhut.accounts.models import Address
-from sendhut.grouporder.models import MemberStatus
-from . import CouponStatus
 
 
 redeem_done = Signal(providing_args=["coupon"])
@@ -48,22 +47,33 @@ class CouponManager(SafeDeleteManager):
 
 
 class Coupon(GroupOrderMemberMixin, BaseModel):
+    # TODOY(yao): don't cascade coupons to giveaway.
     ID_PREFIX = 'givc'
 
     code = models.CharField("Code", max_length=30, unique=True, blank=True)
-    status = models.CharField(
-        "Status", max_length=20,
-        choices=CouponStatus.CHOICES, default=CouponStatus.UNUSED)
     giveaway = models.ForeignKey('GiveAway', verbose_name="GiveAway", related_name='coupons')
     redeemed_at = models.DateTimeField(null=True, blank=True)
-    state = models.CharField(
-        max_length=32, choices=MemberStatus.CHOICES, default=MemberStatus.OUT)
 
     objects = CouponManager()
+
+    def get_absolute_url(self):
+        return reverse('join', args=(self.code, ))
+
+    @property
+    def stores(self):
+        return [x.address for x in self.giveaway.addresses.all()]
+
+    @property
+    def addresses(self):
+        return [x.address for x in self.giveaway.addresses.all()]
 
     @property
     def cart(self):
         return self.user.cart
+
+    @property
+    def discount_value(self):
+        return self.giveaway.discount_value
 
     @property
     def get_store(self):
@@ -73,21 +83,14 @@ class Coupon(GroupOrderMemberMixin, BaseModel):
         if self.cart.lines.first():
             return self.cart.lines.first().item.store
 
-    # def enter_giveaway(self):
-    #     # turn off
-    #     redeemed = self.user.coupon_set.redeemed()
-    #     for obj in redeemed:
-    #         obj.leave()
-
-    #     self.join()
+    def mark_redeemed(self):
+        self.redeemed_at = datetime.now()
+        self.save(update_fields=['redeemed_at'])
 
     def save(self, *args, **kwargs):
         if not self.code:
             self.code = Coupon.generate_code()
         super().save(*args, **kwargs)
-
-    def in_session(self):
-        return self.state == MemberStatus.IN
 
     @classmethod
     def generate_code(cls, length=6):
@@ -150,6 +153,16 @@ class GiveAway(GroupOrderMixin, BaseModel):
         return self.valid_until is not None \
             and self.valid_until < timezone.now()
 
+    def lock(self):
+        # TODO(yao): run check to lock all expired groups orders
+        self.update(status=CartStatus.LOCKED)
+
+    def get_subtotal(self):
+        return self.discount_value * self.coupons.redeemed().count()
+
+    def get_total(self):
+        return self.get_subtotal()
+
     class Meta:
         db_table = 'giveaway'
         verbose_name = "GiveAway"
@@ -175,9 +188,6 @@ class GiveAwayDropoff(BaseModel):
 
     __repr__ = sane_repr('giveaway', 'address')
 
-    def __str__(self):
-        return self.id
-
 
 class GiveAwayStore(BaseModel):
     "Stores linked to giveaways for delivery"
@@ -192,6 +202,3 @@ class GiveAwayStore(BaseModel):
         unique_together = (('giveaway', 'store'),)
 
     __repr__ = sane_repr('giveaway', 'store')
-
-    def __str__(self):
-        return self.id

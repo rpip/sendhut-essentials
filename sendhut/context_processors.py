@@ -38,5 +38,3 @@ def base_configs(request):
         'BASE_DELIVERY_FEE': settings.BASE_DELIVERY_FEE,
         'DEFAULT_DOMAIN': settings.DEFAULT_DOMAIN
     }
-
-# TODO(yao): add delivery fee context processor

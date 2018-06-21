@@ -11,10 +11,8 @@ class CouponAdmin(admin.ModelAdmin):
         'created',
         'redeemed_at',
         'user',
-        'state',
         'cart',
         'code',
-        'status',
         'giveaway',
     )
     list_filter = ('created', 'updated', 'deleted')
@@ -29,48 +27,65 @@ class CouponInline(admin.TabularInline):
         'giveaway',
         'code',
         'user',
-        'status',
         'redeemed_at'
     )
 
 
+class GiveAwayStoresInline(admin.TabularInline):
+
+    model = GiveAwayStore
+    extra = 0
+    exclude = ('metadata', 'deleted', 'created')
+
+
+class GiveAwayDropoffInline(admin.TabularInline):
+
+    model = GiveAwayDropoff
+    extra = 0
+    exclude = ('metadata', 'deleted', 'created')
+    readonly_fields = ('address',)
+
+
 @admin.register(GiveAway)
 class GiveAwayAdmin(admin.ModelAdmin):
+    exclude = ('metadata', 'deleted', 'created')
     list_display = (
         'id',
         'created',
-        'token',
         'status',
         'name',
         'description',
         'created_by',
         'valid_until',
-        'discount_value_currency',
         'discount_value',
         'num_coupons',
-        'num_coupons_used',
+        'num_coupons_redeemed',
         'num_coupons_unused',
-        'num_coupons_expired'
+        'total_order',
     )
     list_filter = ('created_by', 'created', 'valid_until')
     search_fields = ('name', 'description', )
-    inlines = [CouponInline]
+    inlines = (
+        CouponInline,
+        GiveAwayStoresInline,
+        GiveAwayDropoffInline
+    )
+    readonly_fields = ('total_order',)
+
+    def total_order(self, obj):
+        return obj.get_total()
 
     def num_coupons(self, obj):
         return obj.coupons.count()
     num_coupons.short_description = "coupons"
 
-    def num_coupons_used(self, obj):
-        return obj.coupons.used().count()
-    num_coupons_used.short_description = "used"
+    def num_coupons_redeemed(self, obj):
+        return obj.coupons.redeemed().count()
+    num_coupons_redeemed.short_description = "redeemed"
 
     def num_coupons_unused(self, obj):
-        return obj.coupons.used().count()
+        return obj.coupons.unused().count()
     num_coupons_unused.short_description = "unused"
-
-    def num_coupons_expired(self, obj):
-        return obj.coupons.expired().count()
-    num_coupons_expired.short_description = "expired"
 
 
 @admin.register(GiveAwayDropoff)

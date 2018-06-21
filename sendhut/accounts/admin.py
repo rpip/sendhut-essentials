@@ -29,7 +29,7 @@ class UserAdmin(BaseModelAdmin):
         'last_login',
         'identity_verified',
     )
-
+    search_fields = ('email', 'phone',)
     change_form_template = 'loginas/change_form.html'
 
 

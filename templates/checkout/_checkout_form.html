@@ -1,12 +1,12 @@
 <form id="checkout" action="{% url 'checkout:getit' %}?cart_ref={{ group_order.token }}" method="POST">
   {% csrf_token %}
-  {% if user.current_coupon %}
-    {% if user.addresses.all %}
+  {% if coupon %}
+    {% if coupon.addresses %}
       <div class="form-group">
         <label for="address">Select Delivery Address</label>
         <br>
         <select class="form-control" id="delivery_point" name="delivery_point">
-          {% for x in user.addresses.all %}
+          {% for x in coupon.addresses %}
             <option value="{{ x.id }}" >{{ x.address }}</option>
           {% endfor %}
         </select>

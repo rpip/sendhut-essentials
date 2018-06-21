@@ -51,9 +51,7 @@
    <div class="overlay"></div>
     {% include "partials/top_nav.html" %}
    <main role="main" class="container">
-     <div class="container">
-       {#% pdb %#}
-       {% if user.current_coupon %}
+       {% if coupon %}
          {% include "giveaways/_masthead.html" %}
        {% endif %}
        {% include "partials/messages.html" %}
