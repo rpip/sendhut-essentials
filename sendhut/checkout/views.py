@@ -10,8 +10,19 @@ from .utils import Checkout, do_checkout_cleanup
 from .forms import CheckoutForm
 
 
-@login_required
 def cart_summary(request):
+    if not request.coupon:
+        return normal_cart_summary(request)
+
+    # TODO(yao): group order summary
+    form = CheckoutForm(data=request.POST)
+    context = get_cart_data(request.cart, request.group_member)
+    context['form'] = form
+    return render(request, 'checkout/cart_summary.html', context)
+
+
+@login_required
+def normal_cart_summary(request):
     # TODO(yao): group order summary
     form = CheckoutForm(data=request.POST)
     context = get_cart_data(request.cart, request.group_member)

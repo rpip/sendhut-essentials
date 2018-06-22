@@ -17,8 +17,9 @@
 <script src="https://js.paystack.co/v1/inline.js"></script>
 <script>
   PaystackPop.setup({
-    key: '{{ PAYSTACK_PUBLIC_KEY }}',
-    email: '{{ request.user.email }}',
+  key: '{{ PAYSTACK_PUBLIC_KEY }}',
+   // coupon not logged in
+    email: {% if coupon %} 'hello@sendhut.com' {% else %} '{{ request.user.email }}' {% endif %},
     amount: {{ unquantized_total }},
     container: 'paystackEmbedContainer',
     callback: function(response){

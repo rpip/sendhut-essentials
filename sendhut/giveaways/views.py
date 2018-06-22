@@ -14,8 +14,9 @@ def join_giveaway(request, code):
 
 def leave_giveaway(request, code):
     if request.user.is_authenticated():
-        # delete coupon session cart. it's transient on login/logout
-        request.cart.hard_delete()
+        # NOTE(yao): don't delete cart on giveaway leave
+        # request.cart.hard_delete()
+        pass
 
     response = redirect('home')
     leave_giveaway_session(response)

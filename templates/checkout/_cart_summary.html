@@ -68,7 +68,11 @@
       {% endfor %}
     </div> <!--//left-pane -->
     <div class="col-md-6 right-pane">
-      {% include "checkout/_checkout_form.html" %}
+      {% if coupon %}
+        {% include "giveaways/_checkout_form.html" %}
+      {% else %}
+        {% include "checkout/_checkout_form.html" %}
+      {% endif %}
     </div>
   </div> <!-- right-pane-->
 </div>
