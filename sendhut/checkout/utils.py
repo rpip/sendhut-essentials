@@ -25,12 +25,14 @@ class Checkout:
         """
         payment_reference = kwargs.pop('payment_reference', None)
         cash = kwargs.pop('cash', None)
-        # address = kwargs.get('address')
-        # delivery_point = kwargs.get('delivery_point')
-        # if address:
-        #     kwargs['address'] = Address.objects.create(user=self.user, address=address)
-        # else:
-        #     kwargs['address'] = Address.objects.get(id=delivery_point)
+        address = kwargs.get('address')
+        delivery_point = kwargs.get('delivery_point')
+        if address:
+            # create address for user if doesn't exist for user
+            kwargs['address'] = Address.objects.create(
+                user=self.user, address=address)
+        else:
+            kwargs['address'] = Address.objects.get(id=delivery_point)
 
         if self.cart.is_in_group_order():
             order = self._create_group_order(**kwargs)

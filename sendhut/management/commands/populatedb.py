@@ -79,11 +79,11 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS('Creating admin cart'))
         # TODO(yao): add cart items from specific stores
         stores = Store.objects.all()
-        cart = CartFactory.create(user=admin, stores=sample(list(stores), 2))
-        self.stdout.write(self.style.SUCCESS('Creating Orders'))
-        orders = OrderFactory.create_batch(2, user=admin)
-        for x in orders:
-            create_orderlines(x, [x.item for x in cart])
+        # cart = CartFactory.create(user=admin, stores=sample(list(stores), 2))
+        # self.stdout.write(self.style.SUCCESS('Creating Orders'))
+        # orders = OrderFactory.create_batch(2, user=admin)
+        # for x in orders:
+        #     create_orderlines(x, [x.item for x in cart])
 
         self._create_giveaways(
             admin, sample(list(stores), 3), num_coupons=10)
