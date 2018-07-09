@@ -39,6 +39,8 @@ from django.contrib.sites.models import Site
 from templated_email import send_templated_mail
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django_rq import enqueue
+from django.template import Template
+from django.template import Context
 
 from decouple import config
 from jusibe.core import Jusibe
@@ -110,17 +112,46 @@ def send_phone_verification(phone, code):
     _send_sms(phone, message)
 
 
+def build_slack_message(order, user):
+    temp = """NEW {% if order.group_order %} GROUP {% endif %} ORDER
+    *store*: {{ order.store.name }}
+    *user*: {{ user.get_full_name }}
+    *delivery time*: {{ order.delivery_time }}
+    *address*: {{ order.address }}
+    *notes*: {{ order.notes }}
+    *admin link*: {{ order.get_admin_url }}
+    *items*:
+    {% if order.group_order %}
+      {% for member in order.group_order.members.all %}
+        {% for line in member.cart.lines.all %}
+          {% with item=line.item %}
+             * {{ item.name }} -  {{ line.quantity }} - {{ item.price }} - {{ line.special_instructions }}
+          {% endwith %}
+        {% endfor %}
+      {% endfor %}
+      {% else %}
+      {% for line in order.lines.all %}
+        {% with item=line.item %}
+           * {{ item.name }} -  {{ line.quantity }} - {{ item.price }} - {{ line.special_instructions }}
+        {% endwith %}
+      {% endfor %}
+    {% endif %}
+    """
+    import re
+    ws = re.compile('^\s*\n', re.MULTILINE)
+    ctx = Context({'order': order, 'user': user})
+    t = Template(temp).render(ctx)
+    return ws.sub('', t)
+
+
 def send_order_confirmation(user, order, async=True):
     "Receive a text message when you place an order"
     time = order.delivery_time
     ORDER_SMS = "Thanks for ordering. Your order will be delivered to {} at {}.".format(time, order.address)
 
-    # alert Tade and me
-    SLACK_ALERT = """
-    NEW ORDER #{} from {}.
-    Delivery time: {}
-    Address: {}
-    """.format(order.reference, user.get_full_name(), time, order.address)
+    SLACK_ALERT = build_slack_message(order, order.user)
+
+    # async here means prod
     if async:
         enqueue(_send_email, user.email, CONFIRM_ORDER_TEMPLATE, {'order': order})
         enqueue(_send_sms, user.phone, ORDER_SMS.format(order.delivery_time, order.address))
@@ -162,5 +193,6 @@ def post_to_slack(message, channel=SLACK_CHANNEL):
         channel=channel,
         text=message,
         username='Envoy',
-        icon_emoji=':robot_face:'
+        icon_emoji=':robot_face:',
+        mrkdwn=True
     )

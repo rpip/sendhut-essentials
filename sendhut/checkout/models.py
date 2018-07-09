@@ -40,7 +40,6 @@ class Order(BaseModel, ItemSet):
     #   Orders that have already been placed:
     #   Orders that are placed and paid for
     #   Manual payment and order:
-    delivery_date = models.DateTimeField()
     delivery_time = models.DateTimeField(default=asap_delivery_estimate)
     # TODO(yao): save address as Address model
     address = models.ForeignKey(Address)
@@ -95,6 +94,10 @@ class Order(BaseModel, ItemSet):
         super().save(*args, **kwargs)
         return self
 
+    @property
+    def store(self):
+        return self.lines.first().item.store
+
     def __iter__(self):
         """
         Iterate over the items in the cart and get the items from the database
@@ -105,9 +108,6 @@ class Order(BaseModel, ItemSet):
         "Return the cart split into pickup/store groups"
         # TODO(yao): Add partitions for delivery time, address zone
         return partition(self, lambda line: line.item.store, ItemList)
-
-    def get_absolute_url(self):
-        return reverse('order:details', kwargs={'token': self.token})
 
     def is_pending(self):
         return self.status == OrderStatus.PENDING

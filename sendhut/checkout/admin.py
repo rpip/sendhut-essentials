@@ -23,7 +23,6 @@ class OrderAdmin(BaseModelAdmin):
         'created',
         'user',
         'delivery_time',
-        'delivery_date',
         'address',
         'notes',
         'reference',
@@ -33,7 +32,6 @@ class OrderAdmin(BaseModelAdmin):
     list_filter = (
         'created',
         'delivery_time',
-        'delivery_date',
         'address'
     )
 

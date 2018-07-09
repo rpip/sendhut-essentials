@@ -3,7 +3,7 @@ from djmoney.money import Money
 
 from sendhut.grouporder.utils import get_store_group_order_cookie_name
 from sendhut.accounts.models import Address
-from sendhut.utils import windows_from_time_string
+from sendhut.utils import create_datetime
 from .models import Order, OrderLine
 
 
@@ -23,15 +23,21 @@ class Checkout:
         If any of the addresses is new and the user is logged in the address
         will also get saved to that user's address book.
         """
+        # TODO(yao): valid kwargs
+        # TODO(yao): save coupon to order
         payment_reference = kwargs.pop('payment_reference', None)
         cash = kwargs.pop('cash', None)
         address = kwargs.get('address')
-        delivery_point = kwargs.get('delivery_point')
+        delivery_point = kwargs.pop('delivery_point', None)
+        datetime = create_datetime(kwargs.pop('date'), kwargs.pop('time'))
+        kwargs['datetime'] = datetime
+
         if address:
             # create address for user if doesn't exist for user
             kwargs['address'] = Address.objects.create(
                 user=self.user, address=address)
         else:
+            # TODO(yao): Giveaways orders are delivered to one of the preset addreses
             kwargs['address'] = Address.objects.get(id=delivery_point)
 
         if self.cart.is_in_group_order():
@@ -42,20 +48,14 @@ class Checkout:
         if not(cash):
             order.set_payment_online(payment_reference)
 
-        if self.user.coupon:
-            order.coupon = self.user.coupon
-            order.save(update_fields=['coupon'])
-            self.user.coupon.leave()
-
         return order
 
-    def _create_group_order(self, time, date, address, notes=None):
+    def _create_group_order(self, datetime, address, notes=None):
         group_order = self.cart.get_group_order()
         group_order.lock()
         self.order = Order.objects.create(
             user=self.user,
-            delivery_time=time,
-            delivery_date=date,
+            delivery_time=datetime,
             address=address,
             notes=notes,
             total_gross=self.get_total(),
@@ -64,11 +64,10 @@ class Checkout:
         )
         return self.order
 
-    def _create_single_order(self, time, date, address, notes=None):
+    def _create_single_order(self, datetime, address, notes=None):
         self.order = Order.objects.create(
             user=self.user,
-            delivery_time=time,
-            delivery_date=date,
+            delivery_time=datetime,
             address=address,
             delivery_fee=self.calculate_delivery_cost(),
             total_gross=self.get_total(),

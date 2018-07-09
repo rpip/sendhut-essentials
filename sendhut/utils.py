@@ -9,7 +9,7 @@ import hashlib
 import binascii
 import re
 
-from dateutil import parser
+from dateutil.parser import parse
 from django.conf import settings
 from django.utils.encoding import iri_to_uri
 from django.contrib.sites.models import Site
@@ -172,6 +172,7 @@ def asap_delivery_estimate():
     return datetime.now() + timedelta(minutes=35)
 
 
-def windows_from_time_string(time_str):
-    start, end = time_str.split('-')
-    return parser.parse(start.strip()), parser.parse(end.strip())
+def create_datetime(date, time):
+    dt = parse(date)
+    tt = parse(time)
+    return dt.replace(hour=tt.hour, minute=tt.minute)

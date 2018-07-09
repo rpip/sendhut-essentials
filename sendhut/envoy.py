@@ -29,11 +29,3 @@ def get_delivery_schedule(start_date=None):
         for t_start, t_end in build_time_slots()
     ]
     return {'dates': dates, 'time_slots': time_slots}
-
-
-def get_eta():
-    pass
-
-
-def calculate_delivery_cost():
-    pass

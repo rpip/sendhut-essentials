@@ -33,7 +33,9 @@ def random_delivery_date():
 def random_delivery_time():
     slot = choice(list(build_time_slots()))
     # return the slot end window
-    return slot[1]
+    d = random_delivery_date()
+    t = slot[1]
+    return d.replace(hour=t.hour, minutes=t.minutes)
 
 
 def get_food_tags():
@@ -226,7 +228,6 @@ class OrderFactory(DjangoModelFactory):
     address = SubFactory(AddressFactory)
     notes = lazy_attribute(lambda o: fake.sentence())
     delivery_fee = settings.BASE_DELIVERY_FEE
-    delivery_date = lazy_attribute(lambda x: random_delivery_date())
     delivery_time = lazy_attribute(lambda x: random_delivery_time())
     total_gross = choice([2300, 1200, 8000, 12000])
 
