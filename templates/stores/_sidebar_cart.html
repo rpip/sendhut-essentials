@@ -67,24 +67,6 @@
       </div>
     </div><!--//bowl costs -->
     {% endif %}
-    {% if coupon %}
-    <div class="row">
-      <div class="col-sm-6 bold">
-        Discount
-      </div>
-      <div class="col-sm-6 bold">
-        {{ coupon.giveaway.discount_value }}
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-sm-6 bold">
-        What you pay
-      </div>
-      <div class="col-sm-6 bold">
-        {% if total %} {{ total }} {% else %} FREE {% endif %}
-      </div>
-    </div>
-    {% endif %}
   </div>
 {% else %}
   <div class="clearfix"></div>

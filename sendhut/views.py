@@ -1,13 +1,10 @@
-from django.conf import settings
-from django.contrib import messages
 from django.shortcuts import render
 
 from sendhut.stores.models import Store
 
 
 def home(request):
-    coupon = request.coupon
-    stores = coupon.giveaway.get_stores() if coupon else Store.featured.all()
+    stores = Store.featured.all()
     context = {
         'page_title': 'Home',
         'stores': stores

@@ -81,7 +81,7 @@ def store_page(request, slug):
                 except GroupOrder.DoesNotExist:
                     pass
 
-    if (not request.group_member) and (not request.coupon):
+    if not request.group_member:
         messages.info(request, settings.GROUP_ORDER_MESSAGE)
 
     return render(request, template, context)
@@ -91,8 +91,7 @@ class CartView(View):
     # TODO(yao): implement dynamic delivery cost calculation
 
     def get(self, request):
-        cart = request.cart
-        context = get_cart_data(cart, coupon=request.coupon)
+        context = get_cart_data(request.cart)
         return render(request, 'partials/sidebar_cart.html', context)
 
     def post(self, request):

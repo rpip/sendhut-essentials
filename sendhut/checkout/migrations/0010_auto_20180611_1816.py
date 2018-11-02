@@ -9,16 +9,10 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('giveaways', '0002_coupon_redeemed_at'),
-        ('checkout', '0009_auto_20180611_1725'),
+        ('checkout', '0008_remove_order_address'),
     ]
 
     operations = [
-        migrations.AddField(
-            model_name='order',
-            name='coupon',
-            field=models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='order', to='giveaways.Coupon'),
-        ),
         migrations.AlterField(
             model_name='order',
             name='group_order',

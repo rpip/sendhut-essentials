@@ -9,7 +9,6 @@ from sendhut.accounts.models import Address
 from sendhut.stores.models import Item
 from sendhut.cart.core import ItemLine, ItemSet, ItemList, partition
 from sendhut.grouporder.models import GroupOrder
-from sendhut.giveaways.models import Coupon
 from sendhut.utils import generate_token, sane_repr, asap_delivery_estimate
 from . import PaymentStatus, PaymentSource, OrderStatus
 
@@ -72,8 +71,6 @@ class Order(BaseModel, ItemSet):
     )
     group_order = models.OneToOneField(
         GroupOrder, related_name='order', null=True, blank=True)
-    coupon = models.OneToOneField(
-        Coupon, related_name='order', null=True, blank=True)
 
     def update_payment(self, status):
         self.payment_status = status

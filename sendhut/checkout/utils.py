@@ -24,21 +24,15 @@ class Checkout:
         will also get saved to that user's address book.
         """
         # TODO(yao): valid kwargs
-        # TODO(yao): save coupon to order
         payment_reference = kwargs.pop('payment_reference', None)
         cash = kwargs.pop('cash', None)
         address = kwargs.get('address')
-        delivery_point = kwargs.pop('delivery_point', None)
         datetime = create_datetime(kwargs.pop('date'), kwargs.pop('time'))
         kwargs['datetime'] = datetime
 
-        if address:
-            # create address for user if doesn't exist for user
-            kwargs['address'] = Address.objects.create(
-                user=self.user, address=address)
-        else:
-            # TODO(yao): Giveaways orders are delivered to one of the preset addreses
-            kwargs['address'] = Address.objects.get(id=delivery_point)
+        # create address for user if doesn't exist for user
+        kwargs['address'] = Address.objects.create(
+            user=self.user, address=address)
 
         if self.cart.is_in_group_order():
             order = self._create_group_order(**kwargs)

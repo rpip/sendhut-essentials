@@ -17,9 +17,6 @@ from sendhut.stores.models import (
 )
 from sendhut.checkout.models import Order, OrderLine
 from sendhut.grouporder.models import GroupOrder, Member
-from sendhut.giveaways.models import (
-    GiveAway, Coupon, GiveAwayDropoff, GiveAwayStore
-)
 from sendhut.envoy import get_delivery_schedule, build_time_slots
 
 fake = Faker()
@@ -303,42 +300,3 @@ class MemberFactory(DjangoModelFactory):
     group_order = SubFactory(GroupOrderFactory)
     name = lazy_attribute(lambda o: choice([fake.name(), fake.email()]))
     cart = SubFactory(CartFactory)
-
-
-class GiveAwayFactory(DjangoModelFactory):
-
-    class Meta:
-        model = GiveAway
-
-    name = lazy_attribute(lambda x: fake.catch_phrase())
-    description = lazy_attribute(lambda x: fake.sentence())
-    discount_value = choice([1500, 4000, 3500, 2000])
-    created_by = SubFactory(UserFactory)
-
-
-class CouponFactory(DjangoModelFactory):
-
-    class Meta:
-        model = Coupon
-
-    code = lazy_attribute(lambda x: Coupon.generate_code())
-    giveaway = SubFactory(GiveAwayFactory)
-    user = SubFactory(UserFactory)
-
-
-class GiveAwayDropoffFactory(DjangoModelFactory):
-
-    class Meta:
-        model = GiveAwayDropoff
-
-    giveaway = SubFactory(GiveAwayFactory)
-    address = SubFactory(AddressFactory)
-
-
-class GiveAwayStoreFactory(DjangoModelFactory):
-
-    class Meta:
-        model = GiveAwayStore
-
-    giveaway = SubFactory(GiveAwayFactory)
-    store = SubFactory(StoreFactory)

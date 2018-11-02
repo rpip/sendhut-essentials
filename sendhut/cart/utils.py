@@ -81,7 +81,7 @@ def get_user_cart(user, cart_queryset=Cart.objects.all()):
     return cart_queryset.open().filter(user=user).first()
 
 
-def get_cart_data(cart, group_member=None, coupon=None):
+def get_cart_data(cart, group_member=None):
     """Return a JSON-serializable representation of the cart."""
     delivery_fee = Money(settings.BASE_DELIVERY_FEE, settings.DEFAULT_CURRENCY)
     bowl_charge_total = cart.bowl_charge_total
@@ -92,7 +92,7 @@ def get_cart_data(cart, group_member=None, coupon=None):
     else:
         total = cart.get_total() + delivery_fee
 
-    data = {
+    return {
         'sub_total': cart.get_subtotal(),
         'delivery_fee': delivery_fee,
         'cart_delivery_fee': delivery_fee,
@@ -100,15 +100,6 @@ def get_cart_data(cart, group_member=None, coupon=None):
         'unquantized_total': unquantize_for_paystack(total.amount),
         'bowl_charge_total': bowl_charge_total
     }
-    # TODO(yao): filter out items not in giveaway stores
-    return apply_discount(data, coupon) if coupon else data
-
-
-def apply_discount(cart_data, coupon):
-    balance_total = cart_data['total'] - coupon.giveaway.discount_value
-    cart_data['pay_balance'] = pay_balance = balance_total.amount > 0
-    cart_data['total'] = balance_total if pay_balance else 0
-    return cart_data
 
 
 def transfer_prelogin_cart(prelogin_cart, user):

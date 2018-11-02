@@ -40,24 +40,6 @@
             <div class="col-md-4">Container charges</div>
             <div class="col-md-1">{{ bowl_charge_total }}</div>
           </div>
-          {% if coupon %}
-          <div class="row">
-            <div class="col-sm-6 bold">
-              Discount
-            </div>
-            <div class="col-sm-6 bold">
-              {{ coupon.giveaway.discount_value }}
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-sm-6 bold">
-              What you pay
-            </div>
-            <div class="col-sm-6 bold">
-              {% if total %} {{ total }} {% else %} FREE {% endif %}
-            </div>
-          </div>
-          {% endif %}
           <hr>
           <div class="row">
             <div><h5 class="bold">Total</h5></div>
@@ -68,11 +50,7 @@
       {% endfor %}
     </div> <!--//left-pane -->
     <div class="col-md-6 right-pane">
-      {% if coupon %}
-        {% include "giveaways/_checkout_form.html" %}
-      {% else %}
-        {% include "checkout/_checkout_form.html" %}
-      {% endif %}
+      {% include "checkout/_checkout_form.html" %}
     </div>
   </div> <!-- right-pane-->
 </div>

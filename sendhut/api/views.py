@@ -3,7 +3,6 @@ from rest_framework import viewsets
 from sendhut.accounts.models import User, Address
 from sendhut.stores.models import Store, Item
 from sendhut.checkout.models import Order
-from sendhut..models import GiveAway, Coupon
 
 
 from . import serializers
@@ -34,13 +33,3 @@ class ItemViewSet(viewsets.ModelViewSet):
 class OrderViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.OrderSerializer
     queryset = Order.objects.all()
-
-
-class GiveAwayViewSet(viewsets.ModelViewSet):
-    serializer_class = serializers.GiveAwaySerializer
-    queryset = GiveAway.objects.all()
-
-
-class CouponViewSet(viewsets.ModelViewSet):
-    serializer_class = serializers.CouponSerializer
-    queryset = Coupon.objects.all()
