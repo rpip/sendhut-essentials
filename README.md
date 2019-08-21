@@ -1,10 +1,12 @@
-# Django 1.11+ project template
+# Food develivery
 
-[![Dependency Status](https://gemnasium.com/jpadilla/django-project-template.svg)](https://gemnasium.com/jpadilla/django-project-template)
+## Install
 
-This is a simple Django 1.11+ project template with my preferred setup. Most Django project templates make way too many assumptions or are just way too complicated. I try to make the least amount of assumptions possible while still trying provide a useful setup. Most of my projects are deployed to Heroku, so this is optimized for that but is not necessary.
-
-**Note**: If you're looking for the previous Django 1.7+ project template layout check out the [1.7](https://github.com/jpadilla/django-project-template/tree/1.7) branch.
+``` shell
+$ bin/setup
+$ ./manage.py migrate
+$ ./manage.py runserver
+```
 
 ## Features
 
@@ -16,18 +18,6 @@ This is a simple Django 1.11+ project template with my preferred setup. Most Dja
 - HTTPS and other security related settings on Staging and Production.
 - Procfile for running gunicorn with New Relic's Python agent.
 - PostgreSQL database support with psycopg2.
-
-## How to install
-
-```bash
-$ django-admin.py startproject \
-  --template=https://github.com/jpadilla/django-project-template/archive/master.zip \
-  --name=Procfile \
-  --extension=py,md,env \
-  project_name
-$ mv example.env .env
-$ pip install -r requirements.txt -r requirements/dev.txt
-```
 
 ## Environment variables
 
@@ -53,11 +43,7 @@ DJANGO_SECURE_SSL_REDIRECT='yes'
 DJANGO_SECURE_PROXY_SSL_HEADER='HTTP_X_FORWARDED_PROTO,https'
 ```
 
-## Deployment
-
-It is possible to deploy to Heroku or to your own server.
-
-### Heroku
+## Heroku
 
 ```bash
 $ heroku create
@@ -67,27 +53,3 @@ $ heroku pg:promote DATABASE_URL
 $ heroku config:set ENVIRONMENT=PRODUCTION
 $ heroku config:set DJANGO_SECRET_KEY=`./manage.py generate_secret_key`
 ```
-
-## License
-
-The MIT License (MIT)
-
-Copyright (c) 2012-2016 José Padilla
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
