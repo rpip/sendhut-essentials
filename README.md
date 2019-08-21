@@ -1,4 +1,4 @@
-# Food develivery
+# Food delivery
 
 ## Install
 
